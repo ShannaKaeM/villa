@@ -34,6 +34,15 @@ require_once get_stylesheet_directory() . '/inc/carbon-fields-setup.php';
 // Include CPT and taxonomy registration
 require_once get_stylesheet_directory() . '/inc/mi-cpt-registration.php';
 
+// Include Carbon Fields property fields
+require_once get_stylesheet_directory() . '/inc/mi-property-fields.php';
+
+// Include taxonomy importer
+require_once get_stylesheet_directory() . '/inc/mi-taxonomy-importer.php';
+
+// Include property importer
+require_once get_stylesheet_directory() . '/inc/mi-property-importer.php';
+
 /**
  * Add your custom functions below this line
  */
