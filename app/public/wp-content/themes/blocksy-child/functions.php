@@ -43,6 +43,12 @@ require_once get_stylesheet_directory() . '/inc/mi-taxonomy-importer.php';
 // Include property importer
 require_once get_stylesheet_directory() . '/inc/mi-property-importer.php';
 
+// Include cleanup script
+require_once get_stylesheet_directory() . '/inc/mi-cleanup.php';
+
+// Include site migration script
+require_once get_stylesheet_directory() . '/inc/mi-site-migration.php';
+
 /**
  * Add your custom functions below this line
  */
