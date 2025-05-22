@@ -67,14 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
       this.classList.add('active', 'bg-[--color-neutral-light]', 'text-[--color-secondary-med]');
       
       // Toggle grid/list view
-      const propertyGrid = document.querySelector('.property-grid');
-      if (propertyGrid) {
+      const itemsGrid = document.querySelector('.items-grid');
+      if (itemsGrid) {
         if (this.dataset.view === 'list') {
-          propertyGrid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
-          propertyGrid.classList.add('grid-cols-1');
+          itemsGrid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
+          itemsGrid.classList.add('grid-cols-1');
         } else {
-          propertyGrid.classList.remove('grid-cols-1');
-          propertyGrid.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
+          itemsGrid.classList.remove('grid-cols-1');
+          itemsGrid.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
         }
       }
       
@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Apply filters based on selected options
   function applyFilters() {
-    // Get selected property types
-    const selectedPropertyTypes = Array.from(
-      document.querySelectorAll('input[type="checkbox"].property-type-filter:checked')
+    // Get selected types (property or business types)
+    const selectedTypes = Array.from(
+      document.querySelectorAll('input[type="checkbox"].type-filter:checked')
     ).map(checkbox => checkbox.value);
     
     // Get selected locations
@@ -107,26 +107,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get price range
     const selectedPrice = priceSlider ? parseInt(priceSlider.value) : 0;
     
-    // Get bedrooms
+    // Get bedrooms (only applies to properties)
     const selectedBedrooms = bedroomsSlider ? parseInt(bedroomsSlider.value) : 0;
     
-    // Get bathrooms
+    // Get bathrooms (only applies to properties)
     const selectedBathrooms = bathroomsSlider ? parseInt(bathroomsSlider.value) : 0;
     
-    // Get guests
+    // Get guests (only applies to properties)
     const selectedGuests = guestsSlider ? parseInt(guestsSlider.value) : 0;
     
-    // Get all property cards
-    const propertyCards = document.querySelectorAll('.property-card');
+    // Get all cards
+    const cards = document.querySelectorAll('.card');
     
-    // Loop through each property card and check if it matches the filters
-    propertyCards.forEach(card => {
+    // Loop through each card and check if it matches the filters
+    cards.forEach(card => {
       let showCard = true;
       
-      // Check property type
-      if (selectedPropertyTypes.length > 0) {
-        const cardPropertyType = card.getAttribute('data-property-type');
-        if (!selectedPropertyTypes.includes(cardPropertyType)) {
+      // Check type (property type or business type)
+      if (selectedTypes.length > 0) {
+        const cardType = card.getAttribute('data-type');
+        if (!selectedTypes.includes(cardType)) {
           showCard = false;
         }
       }
@@ -139,24 +139,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
       
-      // Check bedrooms
-      if (showCard && selectedBedrooms > 0) {
+      // Check bedrooms (only for properties)
+      if (showCard && selectedBedrooms > 0 && card.hasAttribute('data-bedrooms')) {
         const cardBedrooms = parseInt(card.getAttribute('data-bedrooms') || '0');
         if (cardBedrooms < selectedBedrooms) {
           showCard = false;
         }
       }
       
-      // Check bathrooms
-      if (showCard && selectedBathrooms > 0) {
+      // Check bathrooms (only for properties)
+      if (showCard && selectedBathrooms > 0 && card.hasAttribute('data-bathrooms')) {
         const cardBathrooms = parseInt(card.getAttribute('data-bathrooms') || '0');
         if (cardBathrooms < selectedBathrooms) {
           showCard = false;
         }
       }
       
-      // Check guests
-      if (showCard && selectedGuests > 0) {
+      // Check guests (only for properties)
+      if (showCard && selectedGuests > 0 && card.hasAttribute('data-guests')) {
         const cardGuests = parseInt(card.getAttribute('data-guests') || '0');
         if (cardGuests < selectedGuests) {
           showCard = false;
@@ -165,10 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Check amenities
       if (showCard && selectedAmenities.length > 0) {
-        const cardAmenities = (card.getAttribute('data-amenities') || '').split(',');
+        const cardAmenities = (card.getAttribute('data-amenities') || '').split(',').filter(Boolean);
         // Check if the card has ALL selected amenities
         const hasAllAmenities = selectedAmenities.every(amenity => 
-          cardAmenities.includes(amenity)
+          cardAmenities.some(cardAmenity => cardAmenity.trim().toLowerCase() === amenity.trim().toLowerCase())
         );
         if (!hasAllAmenities) {
           showCard = false;
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Show or hide the card
-      card.style.display = showCard ? 'block' : 'none';
+      card.style.display = showCard ? '' : 'none';
     });
   }
   
