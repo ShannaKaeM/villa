@@ -1,0 +1,65 @@
+/**
+ * Card Loop Block - Editor Styles
+ * These styles only apply in the Gutenberg editor
+ */
+
+/* Block preview container */
+.wp-block-carbon-fields-block-card-loop {
+  padding: 20px;
+  background-color: #f8f9fb;
+  border-radius: 8px;
+}
+
+/* Block preview content */
+.wp-block-carbon-fields-block-card-loop .block-editor-block-list__layout {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Block preview placeholder */
+.wp-block-carbon-fields-block-card-loop .components-placeholder {
+  background-color: #fff;
+  border: 1px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Make sure the sidebar is wide enough for our options */
+.block-editor-block-inspector .components-panel__body {
+  width: 100%;
+}
+
+/* Improve spacing in the sidebar */
+.block-editor-block-inspector .cf-field {
+  margin-bottom: 16px;
+}
+
+/* Improve select field appearance */
+.block-editor-block-inspector .cf-field select {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Checkbox styling */
+.block-editor-block-inspector .cf-field__body .cf-checkbox__input {
+  accent-color: var(--wp-admin-theme-color);
+}
+
+/* Range input styling */
+.block-editor-block-inspector input[type="range"] {
+  width: 100%;
+}
+
+/* Separator styling */
+.block-editor-block-inspector .cf-separator {
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+/* Help text styling */
+.block-editor-block-inspector .cf-field__help {
+  font-style: italic;
+  opacity: 0.8;
+}

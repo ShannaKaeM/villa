@@ -18,6 +18,9 @@ use Carbon_Fields\Field;
  */
 function mi_register_card_loop_block() {
     Block::make(__('Card Loop'))
+        ->set_mode('edit')  // This ensures the block is always in edit mode
+        ->set_inner_blocks(false)  // No inner blocks allowed
+        ->set_editor_style('mi-block-card-loop-editor')  // Editor-specific styles
         ->add_fields([
             // General Settings
             Field::make('separator', 'general_settings', __('General Settings')),

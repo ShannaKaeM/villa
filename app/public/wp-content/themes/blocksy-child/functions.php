@@ -87,7 +87,7 @@ function mi_load_custom_blocks() {
 add_action('after_setup_theme', 'mi_load_custom_blocks');
 
 /**
- * Enqueue block assets
+ * Enqueue block assets for frontend
  */
 function mi_enqueue_block_assets() {
     // Get all block directories
@@ -130,3 +130,36 @@ function mi_enqueue_block_assets() {
     }
 }
 add_action('wp_enqueue_scripts', 'mi_enqueue_block_assets');
+
+/**
+ * Enqueue block assets for editor
+ */
+function mi_enqueue_block_editor_assets() {
+    // Get all block directories
+    $blocks_dir = get_stylesheet_directory() . '/blocks';
+    
+    // Check if directory exists
+    if (!is_dir($blocks_dir)) {
+        return;
+    }
+    
+    // Get all subdirectories
+    $block_folders = array_filter(glob($blocks_dir . '/*'), 'is_dir');
+    
+    // Enqueue each block's editor assets
+    foreach ($block_folders as $block_folder) {
+        $block_name = basename($block_folder);
+        $editor_style_file = $block_folder . '/editor.css';
+        
+        // Enqueue editor style if it exists
+        if (file_exists($editor_style_file)) {
+            wp_enqueue_style(
+                'mi-block-' . $block_name . '-editor',
+                get_stylesheet_directory_uri() . '/blocks/' . $block_name . '/editor.css',
+                array('wp-edit-blocks'),
+                filemtime($editor_style_file)
+            );
+        }
+    }
+}
+add_action('enqueue_block_editor_assets', 'mi_enqueue_block_editor_assets');
