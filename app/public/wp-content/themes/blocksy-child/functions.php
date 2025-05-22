@@ -164,6 +164,26 @@ function mi_enqueue_block_editor_assets() {
     
     // Add inline CSS to improve the Carbon Fields sidebar appearance
     $custom_css = "
+        /* Force Carbon Fields to display in the sidebar */
+        .block-editor-block-inspector .components-panel__body {
+            display: block !important;
+        }
+        
+        /* Hide the 'Edit as HTML' button for our blocks */
+        .wp-block-carbon-fields-block-property-card-loop .block-editor-block-toolbar__slot .components-dropdown-menu,
+        .wp-block-carbon-fields-block-property-card-loop .block-editor-block-contextual-toolbar .components-dropdown-menu {
+            display: none;
+        }
+        
+        /* Make the block preview cleaner */
+        .wp-block-carbon-fields-block-property-card-loop {
+            padding: 15px;
+            background-color: #f8f9fb;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
+        
+        /* Style the fields in the sidebar */
         .cf-field__label {
             font-weight: 600;
             margin-bottom: 5px;

@@ -17,33 +17,38 @@ use Carbon_Fields\Field;
  * Register the Card Loop Block
  */
 function mi_register_card_loop_block() {
-    Block::make(__('Card Loop'))
+    Block::make(__('Property Card Loop'))
         ->set_mode('edit')  // This ensures the block is always in edit mode
         ->set_inner_blocks(false)  // No inner blocks allowed
+        ->set_preview_mode('auto')  // Auto preview mode
         ->add_fields([
             // General Settings
             Field::make('separator', 'general_settings', __('General Settings')),
             Field::make('text', 'title', __('Title'))
                 ->set_help_text('Main title for the block'),
-            Field::make('select', 'post_type', __('Post Type'))
-                ->set_options([
-                    'property' => 'Properties',
-                    'business' => 'Businesses',
-                    'article' => 'Articles',
-                    'user_profile' => 'User Profiles',
-                ])
-                ->set_default_value('property')
-                ->set_help_text('Select which post type to display'),
+            // Post type is fixed to properties
+            Field::make('hidden', 'post_type', __('Post Type'))
+                ->set_default_value('property'),
             Field::make('checkbox', 'show_filters', __('Show Filters'))
                 ->set_default_value(true)
                 ->set_help_text('Whether to show the filter sidebar'),
             
             // Query Settings
             Field::make('separator', 'query_settings', __('Query Settings')),
-            Field::make('text', 'posts_per_page', __('Posts Per Page'))
-                ->set_attribute('type', 'number')
-                ->set_default_value(6)
-                ->set_help_text('Number of items to display'),
+            Field::make('select', 'posts_per_page', __('Number of Properties'))
+                ->set_options([
+                    '3' => '3 Properties',
+                    '6' => '6 Properties',
+                    '9' => '9 Properties',
+                    '12' => '12 Properties',
+                    '15' => '15 Properties',
+                    '18' => '18 Properties',
+                    '24' => '24 Properties',
+                    '-1' => 'All Properties',
+                ])
+                ->set_default_value('6')
+                ->set_width(100)
+                ->set_help_text('Select how many properties to display per page'),
             Field::make('multiselect', 'taxonomies', __('Filter by Taxonomies'))
                 ->set_options(function() {
                     $options = [];
