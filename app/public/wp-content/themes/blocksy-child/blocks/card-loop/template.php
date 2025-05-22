@@ -191,49 +191,45 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
               }
               $amenities_string = esc_attr(implode(',', $amenities_array));
             ?>
-            <div class="property-card bg-white rounded-lg shadow-md overflow-hidden"
+            <div class="card <?php echo esc_attr($card_style !== 'default' ? 'card-' . $card_style : ''); ?>"
                  data-property-type="<?php echo $property_type; ?>"
                  data-location="<?php echo $location; ?>"
                  data-bedrooms="<?php echo $bedrooms; ?>"
                  data-bathrooms="<?php echo $bathrooms; ?>"
                  data-guests="<?php echo $guests; ?>"
                  data-amenities="<?php echo $amenities_string; ?>">
-              <div class="relative">
-                <div class="aspect-[6/4] overflow-hidden">
-                  <?php if (!empty($property['image'])) : ?>
-                    <img src="<?php echo esc_url($property['image']); ?>" alt="<?php echo esc_attr($property['title']); ?>" class="w-full h-full object-cover object-center">
-                  <?php else : ?>
-                    <div class="w-full h-full bg-[--color-neutral-light] flex items-center justify-center">
-                      <span class="text-4xl">🏠</span>
-                    </div>
-                  <?php endif; ?>
-                </div>
-                <div class="absolute top-3 left-3 bg-[--color-primary-med] text-white px-3 py-1 rounded-md text-sm font-medium">
+              <div class="card-image">
+                <?php if (!empty($property['image'])) : ?>
+                  <img src="<?php echo esc_url($property['image']); ?>" alt="<?php echo esc_attr($property['title']); ?>">
+                <?php else : ?>
+                  <div class="w-full h-full bg-[--color-neutral-light] flex items-center justify-center">
+                    <span class="text-4xl">🏠</span>
+                  </div>
+                <?php endif; ?>
+                <div class="badge badge-primary">
                   <?php echo esc_html($property['price']); ?>
                 </div>
-                <div class="absolute top-3 right-3 bg-[--color-secondary-med] text-white px-3 py-1 rounded-md text-xs font-medium">
-                  <span class="flex items-center">
-                    <span class="mr-1"><?php echo esc_html($property['property_type_icon']); ?></span>
-                    <?php echo esc_html($property['property_type']); ?>
-                  </span>
+                <div class="badge badge-secondary">
+                  <span class="icon"><?php echo esc_html($property['property_type_icon']); ?></span>
+                  <?php echo esc_html($property['property_type']); ?>
                 </div>
               </div>
-              <div class="p-4 flex flex-col h-[calc(100%-240px)]">
+              <div class="card-content">
                 <div class="mb-auto">
-                  <h3 class="text-lg font-semibold mb-0 h-[52px] line-clamp-2"><?php echo esc_html($property['title']); ?></h3>
-                  <p class="text-xs text-[--color-neutral-med] mb-3 line-clamp-2"><?php echo esc_html($property['description']); ?></p>
+                  <h3 class="card-title line-clamp-2"><?php echo esc_html($property['title']); ?></h3>
+                  <p class="card-description line-clamp-2"><?php echo esc_html($property['description']); ?></p>
                 </div>
-                <div class="flex flex-wrap gap-2 mb-3">
-                  <span class="inline-flex items-center text-xs bg-[--color-neutral-light] px-2 py-1 rounded-md">
-                    <span class="mr-1">🛏️</span>
+                <div class="card-tags">
+                  <span class="tag">
+                    <span class="icon">🛏️</span>
                     <?php echo esc_html($property['bedrooms']); ?> Beds
                   </span>
-                  <span class="inline-flex items-center text-xs bg-[--color-neutral-light] px-2 py-1 rounded-md">
-                    <span class="mr-1">🛁</span>
+                  <span class="tag">
+                    <span class="icon">🛁</span>
                     <?php echo esc_html($property['bathrooms']); ?> Baths
                   </span>
-                  <span class="inline-flex items-center text-xs bg-[--color-neutral-light] px-2 py-1 rounded-md">
-                    <span class="mr-1">👥</span>
+                  <span class="tag">
+                    <span class="icon">👥</span>
                     <?php echo esc_html($property['guests'] ?? $property['max_guests']); ?> Guests
                   </span>
                 </div>
@@ -253,14 +249,14 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
                         else $amenity_icon = '✨';
                       }
                     ?>
-                    <span class="inline-flex items-center text-xs text-[--color-primary-dark] bg-[--color-primary-light]/10 px-2 py-1 rounded-md shadow-sm">
-                      <span class="mr-1"><?php echo esc_html($amenity_icon); ?></span>
+                    <span class="feature-tag">
+                      <span class="icon"><?php echo esc_html($amenity_icon); ?></span>
                       <?php echo esc_html($amenity_name); ?>
                     </span>
                   <?php endforeach; endif; ?>
                 </div>
-                <div class="mt-auto">
-                  <a href="<?php echo esc_url($property['permalink']); ?>" class="w-full ct-button">View Details</a>
+                <div class="card-button">
+                  <a href="<?php echo esc_url($property['permalink']); ?>" class="ct-button">View Details</a>
                 </div>
               </div>
             </div>

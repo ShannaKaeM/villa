@@ -83,11 +83,14 @@ function mi_register_card_loop_block() {
             Field::make('select', 'card_style', __('Card Style'))
                 ->set_options([
                     'default' => 'Default',
-                    'compact' => 'Compact',
-                    'expanded' => 'Expanded',
+                    'sm' => 'Small',
+                    'lg' => 'Large',
+                    'primary' => 'Primary',
+                    'secondary' => 'Secondary',
+                    'neutral' => 'Neutral'
                 ])
                 ->set_default_value('default')
-                ->set_help_text('Style of the property cards'),
+                ->set_help_text('Style of the cards - size or color variants'),
         ])
         ->set_description(__('Displays a filterable grid of property cards'))
         ->set_category('miblocks')  // IMPORTANT: Use 'miblocks' (lowercase) to match the category slug
