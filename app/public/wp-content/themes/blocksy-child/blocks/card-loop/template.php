@@ -222,11 +222,12 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
               </div>
               <div class="p-4 flex flex-col h-[calc(100%-240px)]">
                 <div class="mb-auto">
-                  <h3 class="text-lg font-semibold mb-1 h-[56px] line-clamp-2"><?php echo esc_html($property['title']); ?></h3>
-                  <div class="flex items-center text-sm text-[--color-neutral-dark] mb-4">
+                  <h3 class="text-lg font-semibold mb-1 h-[48px] line-clamp-2"><?php echo esc_html($property['title']); ?></h3>
+                  <div class="flex items-center text-sm text-[--color-neutral-dark] mb-2">
                     <span class="mr-1"><?php echo esc_html($property['location_icon']); ?></span>
                     <?php echo esc_html($property['location']); ?>
                   </div>
+                  <p class="text-xs text-[--color-neutral-med] mb-3 line-clamp-2"><?php echo esc_html($property['description']); ?></p>
                 </div>
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span class="inline-flex items-center text-xs bg-[--color-neutral-light] px-2 py-1 rounded-md">

@@ -82,7 +82,18 @@ input[type="range"]::-moz-range-thumb {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 56px;
+  min-height: 48px;
+}
+
+/* Description styling */
+.mi-card-loop .property-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 0;
+  color: var(--color-neutral-med, #6B7280);
 }
 
 /* Tag styling with subtle shadows */
