@@ -18,7 +18,7 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
   <div class="container mx-auto px-4 py-8">
     <!-- Results Header -->
     <div class="mb-6">
-      <h2 class="text-2xl font-bold text-[--color-base-dark]"><?php echo esc_html($count); ?> results for properties</h2>
+      <h2 class="text-2xl font-bold text-[--color-base-dark]"><span class="results-count"><?php echo esc_html($count); ?></span> results for properties</h2>
     </div>
 
     <!-- Main Content Grid -->
@@ -176,7 +176,30 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
         <div class="property-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-<?php echo esc_attr($columns); ?> gap-6">
           <?php if (!empty($properties)) : 
             foreach ($properties as $index => $property) : ?>
-            <div class="property-card bg-white rounded-lg shadow-md overflow-hidden">
+            <?php
+              // Prepare data attributes for filtering
+              $property_type = esc_attr($property['property_type'] ?? '');
+              $location = esc_attr($property['location'] ?? '');
+              $bedrooms = esc_attr($property['bedrooms'] ?? 0);
+              $bathrooms = esc_attr($property['bathrooms'] ?? 0);
+              $guests = esc_attr($property['guests'] ?? $property['max_guests'] ?? 0);
+              
+              // Prepare amenities as a comma-separated list
+              $amenities_array = [];
+              if (!empty($property['amenities'])) {
+                foreach ($property['amenities'] as $amenity) {
+                  $amenities_array[] = is_array($amenity) ? $amenity['name'] : $amenity;
+                }
+              }
+              $amenities_string = esc_attr(implode(',', $amenities_array));
+            ?>
+            <div class="property-card bg-white rounded-lg shadow-md overflow-hidden"
+                 data-property-type="<?php echo $property_type; ?>"
+                 data-location="<?php echo $location; ?>"
+                 data-bedrooms="<?php echo $bedrooms; ?>"
+                 data-bathrooms="<?php echo $bathrooms; ?>"
+                 data-guests="<?php echo $guests; ?>"
+                 data-amenities="<?php echo $amenities_string; ?>">
               <div class="relative">
                 <div class="aspect-[6/4] overflow-hidden">
                   <?php if (!empty($property['image'])) : ?>

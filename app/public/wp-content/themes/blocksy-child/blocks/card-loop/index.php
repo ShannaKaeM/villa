@@ -17,18 +17,26 @@ use Carbon_Fields\Field;
  * Register the Card Loop Block
  */
 function mi_register_card_loop_block() {
-    Block::make(__('Property Card Loop'))
+    Block::make(__('Card Loop'))
         ->set_mode('edit')  // This ensures the block is always in edit mode
         ->set_inner_blocks(false)  // No inner blocks allowed
         ->set_preview_mode('auto')  // Auto preview mode
+        ->set_render_callback_priority(11)  // Higher priority to ensure sidebar controls
         ->add_fields([
             // General Settings
             Field::make('separator', 'general_settings', __('General Settings')),
             Field::make('text', 'title', __('Title'))
                 ->set_help_text('Main title for the block'),
-            // Post type is fixed to properties
-            Field::make('hidden', 'post_type', __('Post Type'))
-                ->set_default_value('property'),
+            Field::make('select', 'post_type', __('Post Type'))
+                ->set_options([
+                    'property' => 'Properties',
+                    'business' => 'Businesses',
+                    'article' => 'Articles',
+                    'user_profile' => 'User Profiles',
+                ])
+                ->set_default_value('property')
+                ->set_width(100)
+                ->set_help_text('Select which post type to display'),
             Field::make('checkbox', 'show_filters', __('Show Filters'))
                 ->set_default_value(true)
                 ->set_help_text('Whether to show the filter sidebar'),

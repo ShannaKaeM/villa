@@ -121,21 +121,70 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Loop through each property card and check if it matches the filters
     propertyCards.forEach(card => {
-      // In a real implementation, we would check if the card matches the filters
-      // For now, we'll just log the filter criteria
-      console.log('Applying filters with criteria:', {
-        propertyTypes: selectedPropertyTypes,
-        locations: selectedLocations,
-        amenities: selectedAmenities,
-        price: selectedPrice,
-        bedrooms: selectedBedrooms,
-        bathrooms: selectedBathrooms,
-        guests: selectedGuests
-      });
+      let showCard = true;
       
-      // For demonstration, we'll show all cards
-      card.style.display = 'block';
+      // Check property type
+      if (selectedPropertyTypes.length > 0) {
+        const cardPropertyType = card.getAttribute('data-property-type');
+        if (!selectedPropertyTypes.includes(cardPropertyType)) {
+          showCard = false;
+        }
+      }
+      
+      // Check location
+      if (showCard && selectedLocations.length > 0) {
+        const cardLocation = card.getAttribute('data-location');
+        if (!selectedLocations.includes(cardLocation)) {
+          showCard = false;
+        }
+      }
+      
+      // Check bedrooms
+      if (showCard && selectedBedrooms > 0) {
+        const cardBedrooms = parseInt(card.getAttribute('data-bedrooms') || '0');
+        if (cardBedrooms < selectedBedrooms) {
+          showCard = false;
+        }
+      }
+      
+      // Check bathrooms
+      if (showCard && selectedBathrooms > 0) {
+        const cardBathrooms = parseInt(card.getAttribute('data-bathrooms') || '0');
+        if (cardBathrooms < selectedBathrooms) {
+          showCard = false;
+        }
+      }
+      
+      // Check guests
+      if (showCard && selectedGuests > 0) {
+        const cardGuests = parseInt(card.getAttribute('data-guests') || '0');
+        if (cardGuests < selectedGuests) {
+          showCard = false;
+        }
+      }
+      
+      // Check amenities
+      if (showCard && selectedAmenities.length > 0) {
+        const cardAmenities = (card.getAttribute('data-amenities') || '').split(',');
+        // Check if the card has ALL selected amenities
+        const hasAllAmenities = selectedAmenities.every(amenity => 
+          cardAmenities.includes(amenity)
+        );
+        if (!hasAllAmenities) {
+          showCard = false;
+        }
+      }
+      
+      // Show or hide the card
+      card.style.display = showCard ? 'block' : 'none';
     });
+    
+    // Update results count
+    const visibleCards = document.querySelectorAll('.property-card[style="display: block"]');
+    const resultsCount = document.querySelector('.results-count');
+    if (resultsCount) {
+      resultsCount.textContent = visibleCards.length;
+    }
   }
   
   // Reset all filters to default values

@@ -132,6 +132,34 @@ function mi_enqueue_block_assets() {
 add_action('wp_enqueue_scripts', 'mi_enqueue_block_assets');
 
 /**
+ * Force Carbon Fields blocks to use sidebar controls
+ * This is a workaround for a known issue with Carbon Fields
+ */
+function mi_carbon_fields_force_sidebar_controls() {
+    add_filter('carbon_fields_should_save_field_value', function($save, $value, $field) {
+        return $save;
+    }, 10, 3);
+    
+    // This script forces the controls to appear in the sidebar
+    echo '<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            wp.data.subscribe(function() {
+                setTimeout(function() {
+                    var carbonBlocks = document.querySelectorAll(".wp-block-carbon-fields-block-card-loop");
+                    carbonBlocks.forEach(function(block) {
+                        var controls = block.querySelectorAll(".cf-container__fields");
+                        controls.forEach(function(control) {
+                            control.style.display = "none";
+                        });
+                    });
+                }, 100);
+            });
+        });
+    </script>';
+}
+add_action('admin_footer', 'mi_carbon_fields_force_sidebar_controls');
+
+/**
  * Enqueue block assets for editor
  */
 function mi_enqueue_block_editor_assets() {
