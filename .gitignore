@@ -1,0 +1,47 @@
+# Ignore project docs directory (for collaborative work)
+/project_docs/
+
+# WordPress core files that shouldn't be tracked
+/app/public/wp-config.php
+/app/public/wp-content/uploads/
+/app/public/wp-content/upgrade/
+/app/public/wp-content/cache/
+/app/public/wp-admin/
+/app/public/wp-includes/
+/app/public/index.php
+/app/public/license.txt
+/app/public/readme.html
+/app/public/wp-*.php
+/app/public/xmlrpc.php
+/app/public/.htaccess
+
+# Ignore bundled themes
+/app/public/wp-content/themes/twenty*/
+/app/public/wp-content/themes/blocksy/
+/app/public/wp-content/themes/index.php
+
+# Ignore plugins directory except custom plugins
+/app/public/wp-content/plugins/*
+!/app/public/wp-content/plugins/mi-*/
+
+# Local development files
+.DS_Store
+.env
+.env.*
+!.env.example
+local-xdebuginfo.php
+
+# Log files
+/logs/
+*.log
+
+# Database backups
+*.sql
+*.sql.gz
+
+# Dependency directories
+/node_modules/
+/vendor/
+
+# Local development environment files
+/conf/
