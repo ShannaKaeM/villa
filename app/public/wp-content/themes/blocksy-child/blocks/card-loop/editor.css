@@ -3,11 +3,47 @@
  * These styles only apply in the Gutenberg editor
  */
 
+/* Block-level theme variables that match the frontend */
+.wp-block-carbon-fields-block-card-loop {
+  /* Card specific colors */
+  --card-bg: var(--color-card-background, var(--color-base-white, #ffffff));
+  --card-title-color: var(--color-base-dark, #464646);
+  --card-desc-color: var(--color-neutral-med, #a29d94);
+  --card-border-color: var(--color-base-light, #c9c9c9);
+  
+  /* Card specific dimensions */
+  --card-border-radius: var(--radius-md, 0.5rem);
+  --card-padding: var(--spacing-4, 1rem);
+  --card-image-ratio: 6/4;
+  
+  /* Card specific effects */
+  --card-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));
+  --card-shadow-hover: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
+  
+  /* Tag and badge variables */
+  --tag-bg: var(--color-neutral-light, #d9d8d5);
+  --tag-color: var(--color-neutral-dark, #4f4d46);
+  --tag-radius: var(--radius-sm, 0.375rem);
+  --tag-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  
+  /* Badge variables */
+  --badge-primary-bg: var(--color-primary-med, #598992);
+  --badge-primary-color: white;
+  --badge-secondary-bg: var(--color-secondary-med, #ac727a);
+  --badge-secondary-color: white;
+  
+  /* Admin-specific variables */
+  --admin-accent-color: var(--wp-admin-theme-color, #007cba);
+  --admin-border-color: #e0e0e0;
+  --admin-bg-light: #f8f9fb;
+}
+
 /* Block preview container */
 .wp-block-carbon-fields-block-card-loop {
   padding: 20px;
-  background-color: #f8f9fb;
-  border-radius: 8px;
+  background-color: var(--admin-bg-light);
+  border-radius: var(--card-border-radius);
+  border: 1px solid var(--admin-border-color);
 }
 
 /* Block preview content */
@@ -20,10 +56,24 @@
 
 /* Block preview placeholder */
 .wp-block-carbon-fields-block-card-loop .components-placeholder {
-  background-color: #fff;
-  border: 1px dashed #ccc;
+  background-color: white;
+  border: 1px dashed var(--admin-border-color);
   padding: 20px;
   text-align: center;
+  border-radius: var(--card-border-radius);
+}
+
+/* Block title in editor */
+.wp-block-carbon-fields-block-card-loop .block-editor-block-card__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--card-title-color);
+}
+
+/* Block description in editor */
+.wp-block-carbon-fields-block-card-loop .block-editor-block-card__description {
+  font-size: 13px;
+  color: var(--card-desc-color);
 }
 
 /* Make sure the sidebar is wide enough for our options */
@@ -31,35 +81,192 @@
   width: 100%;
 }
 
+/* Panel header styling */
+.block-editor-block-inspector .components-panel__body-title {
+  background-color: var(--admin-bg-light);
+  border-bottom: 1px solid var(--admin-border-color);
+  margin-bottom: 16px;
+}
+
+/* Panel toggle button */
+.block-editor-block-inspector .components-panel__body-toggle.components-button {
+  font-weight: 600;
+  color: var(--card-title-color);
+}
+
 /* Improve spacing in the sidebar */
 .block-editor-block-inspector .cf-field {
   margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--admin-border-color);
+}
+
+.block-editor-block-inspector .cf-field:last-child {
+  border-bottom: none;
+}
+
+/* Field label styling */
+.block-editor-block-inspector .cf-field__label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--card-title-color);
 }
 
 /* Improve select field appearance */
 .block-editor-block-inspector .cf-field select {
   width: 100%;
   max-width: 100%;
+  height: 36px;
+  border-radius: 4px;
+  border-color: var(--admin-border-color);
+}
+
+/* Improve text field appearance */
+.block-editor-block-inspector .cf-field input[type="text"],
+.block-editor-block-inspector .cf-field input[type="number"] {
+  width: 100%;
+  height: 36px;
+  border-radius: 4px;
+  border-color: var(--admin-border-color);
 }
 
 /* Checkbox styling */
 .block-editor-block-inspector .cf-field__body .cf-checkbox__input {
-  accent-color: var(--wp-admin-theme-color);
+  accent-color: var(--admin-accent-color);
 }
 
 /* Range input styling */
 .block-editor-block-inspector input[type="range"] {
   width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 5px;
+  background: var(--tag-bg);
+  outline: none;
+}
+
+.block-editor-block-inspector input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--admin-accent-color);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.block-editor-block-inspector input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--admin-accent-color);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Separator styling */
 .block-editor-block-inspector .cf-separator {
   margin-top: 24px;
   margin-bottom: 16px;
+  border-top: 1px solid var(--admin-border-color);
 }
 
 /* Help text styling */
 .block-editor-block-inspector .cf-field__help {
   font-style: italic;
   opacity: 0.8;
+  font-size: 12px;
+  margin-top: 4px;
+  color: var(--card-desc-color);
+}
+
+/* Radio button styling */
+.block-editor-block-inspector .cf-radio__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.block-editor-block-inspector .cf-radio__label {
+  display: flex;
+  align-items: center;
+}
+
+.block-editor-block-inspector .cf-radio__input {
+  margin-right: 8px;
+  accent-color: var(--admin-accent-color);
+}
+
+/* Complex field styling */
+.block-editor-block-inspector .cf-complex__groups {
+  border: 1px solid var(--admin-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.block-editor-block-inspector .cf-complex__group {
+  border-bottom: 1px solid var(--admin-border-color);
+  padding: 12px;
+  background-color: white;
+}
+
+.block-editor-block-inspector .cf-complex__group:last-child {
+  border-bottom: none;
+}
+
+.block-editor-block-inspector .cf-complex__group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block-editor-block-inspector .cf-complex__group-title {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.block-editor-block-inspector .cf-complex__group-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* Button styling */
+.block-editor-block-inspector .cf-complex__group-action {
+  padding: 4px;
+  border-radius: 4px;
+  background-color: var(--admin-bg-light);
+  border: 1px solid var(--admin-border-color);
+  cursor: pointer;
+}
+
+.block-editor-block-inspector .cf-complex__group-action:hover {
+  background-color: var(--admin-accent-color);
+  color: white;
+}
+
+/* Association field styling */
+.block-editor-block-inspector .cf-association__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: var(--admin-bg-light);
+  border: 1px solid var(--admin-border-color);
+  border-radius: 4px 4px 0 0;
+}
+
+.block-editor-block-inspector .cf-association__container {
+  border: 1px solid var(--admin-border-color);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+.block-editor-block-inspector .cf-association__counter {
+  font-size: 12px;
+  color: var(--card-desc-color);
 }

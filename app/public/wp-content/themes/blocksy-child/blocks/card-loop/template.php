@@ -17,19 +17,19 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container">
     <!-- View Switcher Controls -->
-    <div class="flex justify-end mb-6">
+    <!-- View Switcher Controls section removed as it's duplicated below -->
 
     <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div class="main-content-grid grid grid-cols-1 lg:grid-cols-4 gap-6">
       <?php if ($show_filters) : ?>
       <!-- Filter Sidebar -->
       <div class="lg:col-span-1">
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold">Filter</h2>
-            <button class="text-[--color-secondary-med] hover:text-[--color-secondary-dark] text-sm">Advanced</button>
+        <div class="filter-sidebar">
+          <div class="filter-header">
+            <h2 class="filter-title">Filter</h2>
+            <button class="filter-advanced">Advanced</button>
           </div>
 
           <!-- Type Filter -->
