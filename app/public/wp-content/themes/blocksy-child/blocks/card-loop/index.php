@@ -21,7 +21,6 @@ function mi_register_card_loop_block() {
         ->set_mode('edit')  // This ensures the block is always in edit mode
         ->set_inner_blocks(false)  // No inner blocks allowed
         ->set_preview_mode('auto')  // Auto preview mode
-        ->set_render_callback_priority(11)  // Higher priority to ensure sidebar controls
         ->add_fields([
             // General Settings
             Field::make('separator', 'general_settings', __('General Settings')),
