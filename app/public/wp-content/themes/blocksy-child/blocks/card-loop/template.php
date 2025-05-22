@@ -34,9 +34,8 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Property Type Filter -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h5 class="flex items-center justify-between mb-3">
-              <span class="flex items-center">
-                <span class="mr-2">🏠</span>
+            <h5 class="flex items-center justify-between mb-3 text-[--color-primary-med]">
+              <span>
                 Property Type
               </span>
             </h5>
@@ -57,9 +56,8 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Location Filter -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h5 class="flex items-center justify-between mb-3">
-              <span class="flex items-center">
-                <span class="mr-2">📍</span>
+            <h5 class="flex items-center justify-between mb-3 text-[--color-primary-med]">
+              <span>
                 Location
               </span>
             </h5>
@@ -80,10 +78,11 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Bedrooms Slider -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h4 class="mb-3 flex items-center">
-              <span class="mr-2">🛏️</span>
-              Bedrooms
-            </h4>
+            <h5 class="flex items-center justify-between mb-3">
+              <span>
+                Bedrooms
+              </span>
+            </h5>
             <div class="mb-2">
               <input type="range" id="bedrooms-slider" min="0" max="5" value="0" class="w-full" style="--thumb-color: var(--color-secondary-med); --thumb-border: white;">
               <div class="mt-1 text-sm">
@@ -94,10 +93,11 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Bathrooms Slider -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h4 class="mb-3 flex items-center">
-              <span class="mr-2">🛁</span>
-              Bathrooms
-            </h4>
+            <h5 class="flex items-center justify-between mb-3">
+              <span>
+                Bathrooms
+              </span>
+            </h5>
             <div class="mb-2">
               <input type="range" id="bathrooms-slider" min="0" max="4" value="0" class="w-full" style="--thumb-color: var(--color-secondary-med); --thumb-border: white;">
               <div class="mt-1 text-sm">
@@ -108,10 +108,11 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Guests Slider -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h4 class="mb-3 flex items-center">
-              <span class="mr-2">👥</span>
-              Guests
-            </h4>
+            <h5 class="flex items-center justify-between mb-3">
+              <span>
+                Guests
+              </span>
+            </h5>
             <div class="mb-2">
               <input type="range" id="guests-slider" min="0" max="10" value="0" class="w-full" style="--thumb-color: var(--color-secondary-med); --thumb-border: white;">
               <div class="mt-1 text-sm">
@@ -122,9 +123,8 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
           <!-- Amenities Filter -->
           <div class="border-b border-[--color-base-light] pb-4 mb-6">
-            <h5 class="flex items-center justify-between mb-3">
-              <span class="flex items-center">
-                <span class="mr-2">✨</span>
+            <h5 class="flex items-center justify-between mb-3 text-[--color-primary-med]">
+              <span>
                 Amenities
               </span>
             </h5>
