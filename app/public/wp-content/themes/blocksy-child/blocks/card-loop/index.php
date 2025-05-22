@@ -116,26 +116,93 @@ function mi_register_card_loop_block() {
             if ($query->have_posts()) {
                 while ($query->have_posts()) {
                     $query->the_post();
+                    $post_id = get_the_ID();
                     
-                    // Get property data
+                    // Get property data from custom fields
+                    // Location
+                    $location = '';
+                    $location_terms = get_the_terms($post_id, 'property_location');
+                    if (!empty($location_terms) && !is_wp_error($location_terms)) {
+                        $location = $location_terms[0]->name;
+                    }
+                    
+                    // Property Type
+                    $property_type = '';
+                    $property_type_terms = get_the_terms($post_id, 'property_type');
+                    if (!empty($property_type_terms) && !is_wp_error($property_type_terms)) {
+                        $property_type = $property_type_terms[0]->name;
+                    }
+                    
+                    // Get property type icon
+                    $property_type_icon = '🏠'; // Default icon
+                    if (stripos($property_type, 'house') !== false) {
+                        $property_type_icon = '🏠';
+                    } elseif (stripos($property_type, 'condo') !== false) {
+                        $property_type_icon = '🏢';
+                    } elseif (stripos($property_type, 'villa') !== false) {
+                        $property_type_icon = '🏛️';
+                    } elseif (stripos($property_type, 'apartment') !== false) {
+                        $property_type_icon = '🏘️';
+                    }
+                    
+                    // Get amenities
+                    $amenities = [];
+                    $amenity_terms = get_the_terms($post_id, 'property_amenity');
+                    if (!empty($amenity_terms) && !is_wp_error($amenity_terms)) {
+                        foreach ($amenity_terms as $term) {
+                            $icon = '✨'; // Default icon
+                            
+                            // Assign icons based on amenity name
+                            if (stripos($term->name, 'pool') !== false) {
+                                $icon = '🏊';
+                            } elseif (stripos($term->name, 'wifi') !== false || stripos($term->name, 'internet') !== false) {
+                                $icon = '📶';
+                            } elseif (stripos($term->name, 'pet') !== false) {
+                                $icon = '🐕';
+                            } elseif (stripos($term->name, 'view') !== false || stripos($term->name, 'ocean') !== false) {
+                                $icon = '🌅';
+                            } elseif (stripos($term->name, 'kitchen') !== false) {
+                                $icon = '🍳';
+                            } elseif (stripos($term->name, 'air') !== false || stripos($term->name, 'ac') !== false) {
+                                $icon = '❄️';
+                            } elseif (stripos($term->name, 'parking') !== false) {
+                                $icon = '🅿️';
+                            }
+                            
+                            $amenities[] = [
+                                'name' => $term->name,
+                                'icon' => $icon
+                            ];
+                        }
+                    }
+                    
+                    // Get custom field values using Carbon Fields
+                    $bedrooms = carbon_get_post_meta($post_id, 'property_bedrooms') ?: 0;
+                    $bathrooms = carbon_get_post_meta($post_id, 'property_bathrooms') ?: 0;
+                    $guests = carbon_get_post_meta($post_id, 'property_max_guests') ?: 0;
+                    $price = carbon_get_post_meta($post_id, 'property_price') ?: '';
+                    
+                    // Format price if it exists
+                    if (!empty($price)) {
+                        $price = '$' . number_format($price) . '/night';
+                    }
+                    
+                    // Build the property data array
                     $property = [
-                        'id' => get_the_ID(),
+                        'id' => $post_id,
                         'title' => get_the_title(),
                         'permalink' => get_permalink(),
                         'description' => get_the_excerpt(),
-                        'image' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
-                        'location' => 'North Topsail Beach', // This would come from custom fields
+                        'image' => get_the_post_thumbnail_url($post_id, 'large'),
+                        'location' => $location,
                         'location_icon' => '📍',
-                        'property_type' => 'House', // This would come from taxonomy
-                        'property_type_icon' => '🏠',
-                        'bedrooms' => 3, // This would come from custom fields
-                        'bathrooms' => 2, // This would come from custom fields
-                        'guests' => 6, // This would come from custom fields
-                        'price' => '$200/night', // This would come from custom fields
-                        'amenities' => [
-                            ['name' => 'Pool', 'icon' => '🏊'],
-                            ['name' => 'WiFi', 'icon' => '📶'],
-                        ],
+                        'property_type' => $property_type,
+                        'property_type_icon' => $property_type_icon,
+                        'bedrooms' => $bedrooms,
+                        'bathrooms' => $bathrooms,
+                        'guests' => $guests,
+                        'price' => $price,
+                        'amenities' => $amenities,
                     ];
                     
                     $properties[] = $property;
@@ -143,25 +210,130 @@ function mi_register_card_loop_block() {
                 wp_reset_postdata();
             }
             
-            // Get filter data
+            // Get filter data from actual taxonomies
             $filters = [
-                'property_types' => [
-                    ['name' => 'House', 'count' => 12, 'icon' => '🏠'],
-                    ['name' => 'Condo', 'count' => 8, 'icon' => '🏢'],
-                    ['name' => 'Villa', 'count' => 6, 'icon' => '🏛️'],
-                ],
-                'locations' => [
-                    ['name' => 'North Topsail Beach', 'count' => 15, 'icon' => '🏖️'],
-                    ['name' => 'Surf City', 'count' => 8, 'icon' => '🌊'],
-                    ['name' => 'Topsail Beach', 'count' => 3, 'icon' => '🏝️'],
-                ],
-                'amenities' => [
+                'property_types' => [],
+                'locations' => [],
+                'amenities' => [],
+            ];
+            
+            // Get property types
+            $property_type_terms = get_terms([
+                'taxonomy' => 'property_type',
+                'hide_empty' => true,
+            ]);
+            
+            if (!empty($property_type_terms) && !is_wp_error($property_type_terms)) {
+                foreach ($property_type_terms as $term) {
+                    $icon = '🏠'; // Default icon
+                    
+                    // Assign icons based on term name
+                    if (stripos($term->name, 'house') !== false) {
+                        $icon = '🏠';
+                    } elseif (stripos($term->name, 'condo') !== false) {
+                        $icon = '🏢';
+                    } elseif (stripos($term->name, 'villa') !== false) {
+                        $icon = '🏛️';
+                    } elseif (stripos($term->name, 'apartment') !== false) {
+                        $icon = '🏘️';
+                    }
+                    
+                    $filters['property_types'][] = [
+                        'name' => $term->name,
+                        'count' => $term->count,
+                        'icon' => $icon,
+                    ];
+                }
+            }
+            
+            // Get locations
+            $location_terms = get_terms([
+                'taxonomy' => 'property_location',
+                'hide_empty' => true,
+            ]);
+            
+            if (!empty($location_terms) && !is_wp_error($location_terms)) {
+                foreach ($location_terms as $term) {
+                    $icon = '📍'; // Default icon
+                    
+                    // Assign beach-related icons if relevant
+                    if (stripos($term->name, 'beach') !== false) {
+                        $icon = '🏖️';
+                    } elseif (stripos($term->name, 'city') !== false) {
+                        $icon = '🌆';
+                    } elseif (stripos($term->name, 'mountain') !== false) {
+                        $icon = '⛰️';
+                    } elseif (stripos($term->name, 'lake') !== false) {
+                        $icon = '🏞️';
+                    }
+                    
+                    $filters['locations'][] = [
+                        'name' => $term->name,
+                        'count' => $term->count,
+                        'icon' => $icon,
+                    ];
+                }
+            }
+            
+            // Get amenities
+            $amenity_terms = get_terms([
+                'taxonomy' => 'property_amenity',
+                'hide_empty' => true,
+            ]);
+            
+            if (!empty($amenity_terms) && !is_wp_error($amenity_terms)) {
+                foreach ($amenity_terms as $term) {
+                    $icon = '✨'; // Default icon
+                    
+                    // Assign icons based on amenity name
+                    if (stripos($term->name, 'pool') !== false) {
+                        $icon = '🏊';
+                    } elseif (stripos($term->name, 'wifi') !== false || stripos($term->name, 'internet') !== false) {
+                        $icon = '📶';
+                    } elseif (stripos($term->name, 'pet') !== false) {
+                        $icon = '🐕';
+                    } elseif (stripos($term->name, 'view') !== false || stripos($term->name, 'ocean') !== false) {
+                        $icon = '🌅';
+                    } elseif (stripos($term->name, 'kitchen') !== false) {
+                        $icon = '🍳';
+                    } elseif (stripos($term->name, 'air') !== false || stripos($term->name, 'ac') !== false) {
+                        $icon = '❄️';
+                    } elseif (stripos($term->name, 'parking') !== false) {
+                        $icon = '🅿️';
+                    }
+                    
+                    $filters['amenities'][] = [
+                        'name' => $term->name,
+                        'icon' => $icon,
+                    ];
+                }
+            }
+            
+            // If any filter categories are empty, add some defaults
+            if (empty($filters['property_types'])) {
+                $filters['property_types'] = [
+                    ['name' => 'House', 'count' => 0, 'icon' => '🏠'],
+                    ['name' => 'Condo', 'count' => 0, 'icon' => '🏢'],
+                    ['name' => 'Villa', 'count' => 0, 'icon' => '🏛️'],
+                ];
+            }
+            
+            if (empty($filters['locations'])) {
+                $filters['locations'] = [
+                    ['name' => 'North Topsail Beach', 'count' => 0, 'icon' => '🏖️'],
+                    ['name' => 'Surf City', 'count' => 0, 'icon' => '🌊'],
+                    ['name' => 'Topsail Beach', 'count' => 0, 'icon' => '🏝️'],
+                ];
+            }
+            
+            if (empty($filters['amenities'])) {
+                $filters['amenities'] = [
                     ['name' => 'Pool', 'icon' => '🏊'],
                     ['name' => 'Ocean View', 'icon' => '🌅'],
                     ['name' => 'Pet Friendly', 'icon' => '🐕'],
                     ['name' => 'WiFi', 'icon' => '📶'],
-                ],
-            ];
+                ];
+            }
             
             // Set up template variables
             $template_vars = [
