@@ -37,20 +37,96 @@ require_once get_stylesheet_directory() . '/inc/mi-cpt-registration.php';
 // Include Carbon Fields property fields
 require_once get_stylesheet_directory() . '/inc/mi-property-fields.php';
 
-// Include taxonomy importer
-require_once get_stylesheet_directory() . '/inc/mi-taxonomy-importer.php';
-
-// Include property importer
-require_once get_stylesheet_directory() . '/inc/mi-property-importer.php';
-
-// Include cleanup script
-require_once get_stylesheet_directory() . '/inc/mi-cleanup.php';
-
-// Include site migration script
-require_once get_stylesheet_directory() . '/inc/mi-site-migration.php';
+// All importers and migration tools have been removed after successful data migration
 
 /**
  * Add your custom functions below this line
  */
 
-// Block registration will be added here
+/**
+ * Register custom block category
+ */
+function mi_register_block_category($categories) {
+    return array_merge(
+        $categories,
+        [
+            [
+                'slug'  => 'miblocks',
+                'title' => __('miBlocks', 'blocksy-child'),
+                'icon'  => 'layout',
+            ],
+        ]
+    );
+}
+add_filter('block_categories_all', 'mi_register_block_category', 10, 1);
+
+/**
+ * Load custom blocks
+ */
+function mi_load_custom_blocks() {
+    // Get all block directories
+    $blocks_dir = get_stylesheet_directory() . '/blocks';
+    
+    // Check if directory exists
+    if (!is_dir($blocks_dir)) {
+        return;
+    }
+    
+    // Get all subdirectories
+    $block_folders = array_filter(glob($blocks_dir . '/*'), 'is_dir');
+    
+    // Load each block's index.php file
+    foreach ($block_folders as $block_folder) {
+        $index_file = $block_folder . '/index.php';
+        
+        if (file_exists($index_file)) {
+            require_once $index_file;
+        }
+    }
+}
+add_action('after_setup_theme', 'mi_load_custom_blocks');
+
+/**
+ * Enqueue block assets
+ */
+function mi_enqueue_block_assets() {
+    // Get all block directories
+    $blocks_dir = get_stylesheet_directory() . '/blocks';
+    
+    // Check if directory exists
+    if (!is_dir($blocks_dir)) {
+        return;
+    }
+    
+    // Get all subdirectories
+    $block_folders = array_filter(glob($blocks_dir . '/*'), 'is_dir');
+    
+    // Enqueue each block's assets
+    foreach ($block_folders as $block_folder) {
+        $block_name = basename($block_folder);
+        $style_file = $block_folder . '/style.css';
+        $script_file = $block_folder . '/script.js';
+        
+        // Enqueue style if it exists
+        if (file_exists($style_file)) {
+            wp_enqueue_style(
+                'mi-block-' . $block_name,
+                get_stylesheet_directory_uri() . '/blocks/' . $block_name . '/style.css',
+                array(),
+                filemtime($style_file)
+            );
+        }
+        
+        // Enqueue script if it exists
+        if (file_exists($script_file)) {
+            wp_enqueue_script(
+                'mi-block-' . $block_name,
+                get_stylesheet_directory_uri() . '/blocks/' . $block_name . '/script.js',
+                array('jquery'),
+                filemtime($script_file),
+                true
+            );
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'mi_enqueue_block_assets');

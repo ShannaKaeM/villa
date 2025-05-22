@@ -1,0 +1,132 @@
+{
+  "properties": [
+    {
+      "id": 1,
+      "title": "Luxury Oceanfront Beach House",
+      "excerpt": "Wake up to the sound of waves in this newly renovated 4BR/3BA home right on North Topsail Beach.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_20PM.jpeg",
+      "permalink": "#property-1",
+      "price": "$450/night",
+      "status": "For Rent",
+      "featured": true,
+      "location": "North Topsail Beach",
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "max_guests": 10,
+      "amenities": ["Pool", "Ocean View", "Pet Friendly"],
+      "property_type": "House",
+      "address": "123 Ocean Blvd, North Topsail Beach, NC"
+    },
+    {
+      "id": 2,
+      "title": "Coastal Condo with Pier View",
+      "excerpt": "Modern 2BR condo steps from the fishing pier and local shops.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_21PM.jpeg",
+      "permalink": "#property-2",
+      "price": "$250/night",
+      "status": "For Rent",
+      "featured": false,
+      "location": "North Topsail Beach",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "max_guests": 4,
+      "amenities": ["Ocean View", "WiFi"],
+      "property_type": "Condo",
+      "address": "234 Pier Ave, North Topsail Beach, NC"
+    },
+    {
+      "id": 3,
+      "title": "Pet-Friendly Cottage",
+      "excerpt": "Charming 3BR cottage with fenced yard, perfect for families and pets.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_24PM (1).jpeg",
+      "permalink": "#property-3",
+      "price": "$200/night",
+      "status": "For Rent",
+      "featured": false,
+      "location": "North Topsail Beach",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "max_guests": 6,
+      "amenities": ["Pet Friendly", "WiFi", "Fenced Yard"],
+      "property_type": "House",
+      "address": "345 Beach Rd, North Topsail Beach, NC"
+    },
+    {
+      "id": 4,
+      "title": "Beachfront Villa with Pool",
+      "excerpt": "Stunning 5BR villa with private pool and direct beach access.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_22PM.jpeg",
+      "permalink": "#property-4",
+      "price": "$550/night",
+      "status": "For Rent",
+      "featured": true,
+      "location": "Surf City",
+      "bedrooms": 5,
+      "bathrooms": 4,
+      "max_guests": 12,
+      "amenities": ["Pool", "Ocean View", "Pet Friendly", "WiFi", "Hot Tub"],
+      "property_type": "Villa",
+      "address": "456 Shoreline Dr, Surf City, NC"
+    },
+    {
+      "id": 5,
+      "title": "Cozy Beach Bungalow",
+      "excerpt": "Charming 1BR bungalow just steps from the beach.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_23PM.jpeg",
+      "permalink": "#property-5",
+      "price": "$150/night",
+      "status": "For Rent",
+      "featured": false,
+      "location": "Topsail Beach",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "max_guests": 2,
+      "amenities": ["WiFi", "Ocean View"],
+      "property_type": "House",
+      "address": "567 Beach St, Topsail Beach, NC"
+    },
+    {
+      "id": 6,
+      "title": "Luxury Condo with Pool Access",
+      "excerpt": "Modern 3BR condo with access to community pool and fitness center.",
+      "thumbnail": "/wp-content/themes/blocksy-child/docs/IMAGES/Generated Image May 14, 2025 - 12_25PM.jpeg",
+      "permalink": "#property-6",
+      "price": "$300/night",
+      "status": "For Rent",
+      "featured": false,
+      "location": "Surf City",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "max_guests": 6,
+      "amenities": ["Pool", "WiFi", "Fitness Center"],
+      "property_type": "Condo",
+      "address": "678 Harbor View, Surf City, NC"
+    }
+  ],
+  "filters": {
+    "property_types": [
+      {"name": "House", "count": 12},
+      {"name": "Condo", "count": 8},
+      {"name": "Villa", "count": 6}
+    ],
+    "locations": [
+      {"name": "North Topsail Beach", "count": 15},
+      {"name": "Surf City", "count": 8},
+      {"name": "Topsail Beach", "count": 3}
+    ],
+    "amenities": [
+      {"name": "Pool", "count": 10},
+      {"name": "Ocean View", "count": 18},
+      {"name": "Pet Friendly", "count": 12},
+      {"name": "WiFi", "count": 22},
+      {"name": "Hot Tub", "count": 5},
+      {"name": "Fitness Center", "count": 3},
+      {"name": "Fenced Yard", "count": 4}
+    ],
+    "price_range": {
+      "min": 100,
+      "max": 600,
+      "default": 100
+    }
+  }
+}
