@@ -161,5 +161,45 @@ function mi_enqueue_block_editor_assets() {
             );
         }
     }
+    
+    // Add inline CSS to improve the Carbon Fields sidebar appearance
+    $custom_css = "
+        .cf-field__label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .cf-field__help {
+            font-style: italic;
+            opacity: 0.8;
+        }
+        .cf-field select,
+        .cf-field input[type=text],
+        .cf-field input[type=number] {
+            width: 100%;
+        }
+        .cf-checkbox__input {
+            accent-color: var(--wp-admin-theme-color);
+        }
+        .cf-separator {
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+    ";
+    
+    wp_add_inline_style('wp-edit-blocks', $custom_css);
 }
 add_action('enqueue_block_editor_assets', 'mi_enqueue_block_editor_assets');
+
+/**
+ * Add custom admin body class for Carbon Fields styling
+ */
+function mi_admin_body_class($classes) {
+    if (function_exists('get_current_screen')) {
+        $screen = get_current_screen();
+        if ($screen && $screen->is_block_editor()) {
+            $classes .= ' mi-block-editor';
+        }
+    }
+    return $classes;
+}
+add_filter('admin_body_class', 'mi_admin_body_class');
