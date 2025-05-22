@@ -262,7 +262,7 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
                   <?php endforeach; endif; ?>
                 </div>
                 <div class="mt-auto">
-                  <a href="<?php echo esc_url($property['permalink']); ?>" class="w-full inline-flex items-center justify-center py-2 px-4 bg-[--color-secondary-med] text-white text-sm font-medium rounded-md transition-colors hover:bg-[--color-secondary-dark]">View Details</a>
+                  <a href="<?php echo esc_url($property['permalink']); ?>" class="w-full ct-button">View Details</a>
                 </div>
               </div>
             </div>
