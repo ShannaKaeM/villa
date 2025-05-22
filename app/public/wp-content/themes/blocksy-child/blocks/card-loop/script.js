@@ -178,13 +178,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Show or hide the card
       card.style.display = showCard ? 'block' : 'none';
     });
-    
-    // Update results count
-    const visibleCards = document.querySelectorAll('.property-card[style="display: block"]');
-    const resultsCount = document.querySelector('.results-count');
-    if (resultsCount) {
-      resultsCount.textContent = visibleCards.length;
-    }
   }
   
   // Reset all filters to default values

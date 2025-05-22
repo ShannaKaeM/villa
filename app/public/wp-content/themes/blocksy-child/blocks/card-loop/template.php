@@ -16,10 +16,8 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
 
 <div <?php echo $wrapper_attributes; ?>>
   <div class="container mx-auto px-4 py-8">
-    <!-- Results Header -->
-    <div class="mb-6">
-      <h2 class="text-2xl font-bold text-[--color-base-dark]"><span class="results-count"><?php echo esc_html($count); ?></span> results for properties</h2>
-    </div>
+    <!-- View Switcher Controls -->
+    <div class="flex justify-end mb-6">
 
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
