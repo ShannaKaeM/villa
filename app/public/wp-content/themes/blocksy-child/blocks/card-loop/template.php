@@ -203,7 +203,7 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
               <div class="relative">
                 <div class="aspect-[6/4] overflow-hidden">
                   <?php if (!empty($property['image'])) : ?>
-                    <img src="<?php echo esc_url($property['image']); ?>" alt="<?php echo esc_attr($property['title']); ?>" class="w-full h-full object-cover">
+                    <img src="<?php echo esc_url($property['image']); ?>" alt="<?php echo esc_attr($property['title']); ?>" class="w-full h-full object-cover object-center">
                   <?php else : ?>
                     <div class="w-full h-full bg-[--color-neutral-light] flex items-center justify-center">
                       <span class="text-4xl">🏠</span>
@@ -220,13 +220,14 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
                   </span>
                 </div>
               </div>
-              <div class="p-4">
-                <h3 class="text-lg font-semibold mb-1"><?php echo esc_html($property['title']); ?></h3>
-                <div class="flex items-center text-sm text-[--color-neutral-dark] mb-2">
-                  <span class="mr-1"><?php echo esc_html($property['location_icon']); ?></span>
-                  <?php echo esc_html($property['location']); ?>
+              <div class="p-4 flex flex-col h-[calc(100%-240px)]">
+                <div class="mb-auto">
+                  <h3 class="text-lg font-semibold mb-1 h-[56px] line-clamp-2"><?php echo esc_html($property['title']); ?></h3>
+                  <div class="flex items-center text-sm text-[--color-neutral-dark] mb-4">
+                    <span class="mr-1"><?php echo esc_html($property['location_icon']); ?></span>
+                    <?php echo esc_html($property['location']); ?>
+                  </div>
                 </div>
-                <p class="text-sm text-[--color-neutral-med] mb-4 line-clamp-2"><?php echo esc_html($property['description']); ?></p>
                 <div class="flex flex-wrap gap-2 mb-3">
                   <span class="inline-flex items-center text-xs bg-[--color-neutral-light] px-2 py-1 rounded-md">
                     <span class="mr-1">🛏️</span>
@@ -257,14 +258,14 @@ $wrapper_attributes = $wrapper_attributes ?? 'class="mi-card-loop"';
                         else $amenity_icon = '✨';
                       }
                     ?>
-                    <span class="inline-flex items-center text-xs text-[--color-primary-dark] bg-[--color-primary-light]/10 px-2 py-1 rounded-md">
+                    <span class="inline-flex items-center text-xs text-[--color-primary-dark] bg-[--color-primary-light]/10 px-2 py-1 rounded-md shadow-sm">
                       <span class="mr-1"><?php echo esc_html($amenity_icon); ?></span>
                       <?php echo esc_html($amenity_name); ?>
                     </span>
                   <?php endforeach; endif; ?>
                 </div>
-                <div>
-                  <a href="<?php echo esc_url($property['permalink']); ?>" class="inline-flex items-center justify-center py-2 px-4 bg-[--color-secondary-med] text-white text-sm font-medium rounded-md transition-colors hover:bg-[--color-secondary-dark]">View Details</a>
+                <div class="mt-auto">
+                  <a href="<?php echo esc_url($property['permalink']); ?>" class="w-full inline-flex items-center justify-center py-2 px-4 bg-[--color-secondary-med] text-white text-sm font-medium rounded-md transition-colors hover:bg-[--color-secondary-dark]">View Details</a>
                 </div>
               </div>
             </div>
