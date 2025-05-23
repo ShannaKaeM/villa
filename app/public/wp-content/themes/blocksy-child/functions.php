@@ -25,6 +25,22 @@ function blocksy_child_enqueue_styles() {
         array('blocksy-parent-style'),
         wp_get_theme()->get('Version')
     );
+    
+    // 3. Load ShadCN custom CSS file
+    wp_enqueue_style(
+        'shadcn-custom',
+        get_stylesheet_directory_uri() . '/assets/css/shadcn-custom.css',
+        array('blocksy-child-style'),
+        filemtime(get_stylesheet_directory() . '/assets/css/shadcn-custom.css')
+    );
+    
+    // 4. Load main CSS file with global components
+    wp_enqueue_style(
+        'mi-main-css',
+        get_stylesheet_directory_uri() . '/assets/css/main.css',
+        array('blocksy-child-style'),
+        filemtime(get_stylesheet_directory() . '/assets/css/main.css')
+    );
 }
 add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_styles');
 
@@ -64,27 +80,39 @@ add_filter('block_categories_all', 'mi_register_block_category', 10, 1);
  * Load custom blocks
  */
 function mi_load_custom_blocks() {
+    global $mi_loaded_blocks;
+    $mi_loaded_blocks = [];
+    
     // Get all block directories
     $blocks_dir = get_stylesheet_directory() . '/blocks';
     
     // Check if directory exists
     if (!is_dir($blocks_dir)) {
+        error_log('miBlocks: Blocks directory does not exist: ' . $blocks_dir);
         return;
     }
     
     // Get all subdirectories
     $block_folders = array_filter(glob($blocks_dir . '/*'), 'is_dir');
     
+    // Debug: Log found folders
+    error_log('miBlocks: Found block folders: ' . print_r(array_map('basename', $block_folders), true));
+    
     // Load each block's index.php file
     foreach ($block_folders as $block_folder) {
         $index_file = $block_folder . '/index.php';
         
         if (file_exists($index_file)) {
+            error_log('miBlocks: Loading block: ' . basename($block_folder));
+            $mi_loaded_blocks[] = basename($block_folder);
             require_once $index_file;
+        } else {
+            error_log('miBlocks: No index.php found in: ' . basename($block_folder));
         }
     }
 }
-add_action('after_setup_theme', 'mi_load_custom_blocks');
+// Load blocks when Carbon Fields is ready to register fields
+add_action('carbon_fields_register_fields', 'mi_load_custom_blocks', 5); // Priority 5 to load before block registration
 
 /**
  * Enqueue block assets for frontend
@@ -130,6 +158,28 @@ function mi_enqueue_block_assets() {
     }
 }
 add_action('wp_enqueue_scripts', 'mi_enqueue_block_assets');
+
+/**
+ * Register native WordPress blocks
+ * 
+ * Looks for block.json files and registers them as native blocks
+ */
+function mi_register_native_blocks() {
+    $blocks_dir = get_stylesheet_directory() . '/blocks';
+    
+    // Check if directory exists
+    if (!is_dir($blocks_dir)) {
+        return;
+    }
+    
+    // Find all block.json files
+    $block_json_files = glob($blocks_dir . '/*/block.json');
+    
+    foreach ($block_json_files as $block_json) {
+        register_block_type(dirname($block_json));
+    }
+}
+add_action('init', 'mi_register_native_blocks');
 
 /**
  * Force Carbon Fields blocks to use sidebar controls
@@ -251,3 +301,229 @@ function mi_admin_body_class($classes) {
     return $classes;
 }
 add_filter('admin_body_class', 'mi_admin_body_class');
+
+/**
+ * Debug: Show loaded blocks in admin
+ */
+function mi_debug_loaded_blocks() {
+    global $mi_loaded_blocks;
+    if (!empty($mi_loaded_blocks) && current_user_can('manage_options')) {
+        echo '<div class="notice notice-info"><p>Loaded miBlocks: ' . implode(', ', $mi_loaded_blocks) . '</p></div>';
+    }
+}
+add_action('admin_notices', 'mi_debug_loaded_blocks');
+
+/**
+ * Enqueue frontend scripts for blocks
+ */
+function mi_enqueue_frontend_scripts() {
+    // Enqueue scripts for card-loop-native block if it's used on the page
+    if (has_block('miblocks/card-loop')) {
+        $view_script = get_stylesheet_directory() . '/blocks/card-loop-native/build/view.js';
+        
+        if (file_exists($view_script)) {
+            wp_enqueue_script(
+                'miblocks-ajax',
+                get_stylesheet_directory_uri() . '/blocks/card-loop-native/build/view.js',
+                array('wp-element'),
+                filemtime($view_script),
+                true
+            );
+            
+            // Localize script with AJAX data
+            wp_localize_script('miblocks-ajax', 'miblocks_ajax', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('miblocks_ajax_nonce')
+            ));
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'mi_enqueue_frontend_scripts');
+
+/**
+ * AJAX handler for filtering properties
+ */
+function mi_ajax_filter_properties() {
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'miblocks_ajax_nonce')) {
+        wp_die('Security check failed');
+    }
+    
+    // Get filter parameters
+    $filters = isset($_POST['filter']) ? $_POST['filter'] : array();
+    $range_filters = isset($_POST['range']) ? $_POST['range'] : array();
+    $post_type = isset($_POST['post_type']) ? sanitize_text_field($_POST['post_type']) : 'property';
+    $posts_per_page = isset($_POST['posts_per_page']) ? intval($_POST['posts_per_page']) : 12;
+    $card_style = isset($_POST['card_style']) ? sanitize_text_field($_POST['card_style']) : 'default';
+    
+    // Build query arguments
+    $args = array(
+        'post_type' => $post_type,
+        'posts_per_page' => $posts_per_page,
+        'post_status' => 'publish'
+    );
+    
+    // Add taxonomy queries if filters are set
+    if (!empty($filters)) {
+        $tax_query = array('relation' => 'AND');
+        
+        foreach ($filters as $taxonomy => $terms) {
+            if (!empty($terms)) {
+                $tax_query[] = array(
+                    'taxonomy' => sanitize_text_field($taxonomy),
+                    'field' => 'term_id',
+                    'terms' => array_map('intval', $terms)
+                );
+            }
+        }
+        
+        if (count($tax_query) > 1) {
+            $args['tax_query'] = $tax_query;
+        }
+    }
+    
+    // Add meta queries for range filters (bedrooms, bathrooms)
+    if (!empty($range_filters)) {
+        $meta_query = array('relation' => 'AND');
+        
+        if (isset($range_filters['bedrooms']) && $range_filters['bedrooms'] > 0) {
+            $meta_query[] = array(
+                'key' => 'property_bedrooms',
+                'value' => intval($range_filters['bedrooms']),
+                'compare' => '>=',
+                'type' => 'NUMERIC'
+            );
+        }
+        
+        if (isset($range_filters['bathrooms']) && $range_filters['bathrooms'] > 0) {
+            $meta_query[] = array(
+                'key' => 'property_bathrooms',
+                'value' => intval($range_filters['bathrooms']),
+                'compare' => '>=',
+                'type' => 'NUMERIC'
+            );
+        }
+        
+        if (count($meta_query) > 1) {
+            $args['meta_query'] = $meta_query;
+        }
+    }
+    
+    // Run query
+    $query = new WP_Query($args);
+    
+    // Generate HTML
+    ob_start();
+    
+    if ($query->have_posts()) {
+        while ($query->have_posts()) : $query->the_post(); ?>
+            <article class="card card--<?php echo esc_attr($card_style); ?>">
+                <?php if (has_post_thumbnail()) : ?>
+                    <div class="card__image">
+                        <?php 
+                        // Get property price if it's a property
+                        if ($post_type === 'property') : 
+                            $price = get_post_meta(get_the_ID(), 'property_price', true);
+                            if ($price) : ?>
+                                <span class="card__price">$<?php echo number_format($price); ?>/night</span>
+                            <?php endif;
+                            
+                            // Get property type for badge
+                            $property_type = get_the_terms(get_the_ID(), 'property-type');
+                            if ($property_type && !is_wp_error($property_type)) : ?>
+                                <span class="card__badge"><?php echo esc_html($property_type[0]->name); ?></span>
+                            <?php endif;
+                        endif; ?>
+                        
+                        <a href="<?php the_permalink(); ?>">
+                            <?php the_post_thumbnail('medium_large', ['class' => 'card__img']); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="card__content">
+                    <h3 class="card__title">
+                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                    </h3>
+                    
+                    <?php if (has_excerpt()) : ?>
+                        <p class="card__description"><?php echo get_the_excerpt(); ?></p>
+                    <?php endif; ?>
+                    
+                    <?php 
+                    // Display property details if it's a property
+                    if ($post_type === 'property') : 
+                        $beds = get_post_meta(get_the_ID(), 'property_bedrooms', true);
+                        $baths = get_post_meta(get_the_ID(), 'property_bathrooms', true);
+                        $guests = get_post_meta(get_the_ID(), 'property_guests', true);
+                        
+                        if ($beds || $baths || $guests) : ?>
+                            <div class="card__details">
+                                <?php if ($beds) : ?>
+                                    <span class="card__detail">
+                                        <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2V7M3 7l9-4 9 4M3 7h18M12 3v18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <?php echo $beds; ?> Beds
+                                    </span>
+                                <?php endif; ?>
+                                
+                                <?php if ($baths) : ?>
+                                    <span class="card__detail">
+                                        <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M5 12V7a1 1 0 011-1h12a1 1 0 011 1v5M3 12h18M7 12v7a2 2 0 002 2h6a2 2 0 002-2v-7M12 12v7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <?php echo $baths; ?> Baths
+                                    </span>
+                                <?php endif; ?>
+                                
+                                <?php if ($guests) : ?>
+                                    <span class="card__detail">
+                                        <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <?php echo $guests; ?> Guests
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif;
+                    endif; ?>
+                    
+                    <?php 
+                    // Display location for properties
+                    if ($post_type === 'property') : 
+                        $location = get_the_terms(get_the_ID(), 'location');
+                        if ($location && !is_wp_error($location)) : ?>
+                            <div class="card__meta">
+                                <span class="card__location"><?php echo esc_html($location[0]->name); ?></span>
+                            </div>
+                        <?php endif;
+                    endif; ?>
+                    
+                    <div class="card__actions">
+                        <a href="<?php the_permalink(); ?>" class="btn btn--primary">
+                            <?php _e('View Details', 'miblocks'); ?>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        <?php endwhile;
+        wp_reset_postdata();
+    } else {
+        echo '<div class="empty-state"><h3>No properties found</h3><p>Try adjusting your filters.</p></div>';
+    }
+    
+    $html = ob_get_clean();
+    
+    // Return JSON response
+    wp_send_json_success(array(
+        'html' => $html,
+        'found_posts' => $query->found_posts
+    ));
+}
+add_action('wp_ajax_filter_properties', 'mi_ajax_filter_properties');
+add_action('wp_ajax_nopriv_filter_properties', 'mi_ajax_filter_properties');
+
+// Track loaded blocks
+global $mi_loaded_blocks;
+$mi_loaded_blocks = [];

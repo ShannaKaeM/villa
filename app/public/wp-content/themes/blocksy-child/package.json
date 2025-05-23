@@ -1,0 +1,13 @@
+{
+  "name": "blocksy-child-blocks",
+  "version": "1.0.0",
+  "description": "Build scripts for Blocksy child theme blocks",
+  "scripts": {
+    "build": "wp-scripts build blocks/card-loop-native/src/index.js blocks/card-loop-native/src/view.js --output-path=blocks/card-loop-native/build",
+    "start": "wp-scripts start blocks/card-loop-native/src/index.js blocks/card-loop-native/src/view.js --output-path=blocks/card-loop-native/build",
+    "packages-update": "wp-scripts packages-update"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^26.0.0"
+  }
+}
