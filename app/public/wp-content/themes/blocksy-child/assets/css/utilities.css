@@ -1,0 +1,287 @@
+/**
+ * Global Utility Classes
+ * Single-purpose utility classes for common patterns
+ * Use sparingly - prefer semantic component classes
+ */
+
+/* ==========================================================================
+   Display Utilities
+   ========================================================================== */
+
+.hidden { display: none !important; }
+.block { display: block !important; }
+.inline-block { display: inline-block !important; }
+.inline { display: inline !important; }
+.flex { display: flex !important; }
+.inline-flex { display: inline-flex !important; }
+.grid { display: grid !important; }
+
+/* ==========================================================================
+   Flexbox Utilities
+   ========================================================================== */
+
+.flex-row { flex-direction: row !important; }
+.flex-col { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+
+.items-start { align-items: flex-start !important; }
+.items-center { align-items: center !important; }
+.items-end { align-items: flex-end !important; }
+.items-stretch { align-items: stretch !important; }
+
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+.flex-1 { flex: 1 1 0% !important; }
+.flex-auto { flex: 1 1 auto !important; }
+.flex-none { flex: none !important; }
+
+/* ==========================================================================
+   Grid Utilities
+   ========================================================================== */
+
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+.grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+.grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)) !important; }
+
+.gap-0 { gap: 0 !important; }
+.gap-1 { gap: var(--spacing-1, 0.25rem) !important; }
+.gap-2 { gap: var(--spacing-2, 0.5rem) !important; }
+.gap-3 { gap: var(--spacing-3, 0.75rem) !important; }
+.gap-4 { gap: var(--spacing-4, 1rem) !important; }
+.gap-5 { gap: var(--spacing-5, 1.25rem) !important; }
+.gap-6 { gap: var(--spacing-6, 1.5rem) !important; }
+.gap-8 { gap: var(--spacing-8, 2rem) !important; }
+
+/* ==========================================================================
+   Spacing Utilities
+   ========================================================================== */
+
+/* Margin */
+.m-0 { margin: 0 !important; }
+.m-auto { margin: auto !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+.my-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.ml-0 { margin-left: 0 !important; }
+.mr-0 { margin-right: 0 !important; }
+
+/* Common margin values */
+.mt-1 { margin-top: var(--spacing-1, 0.25rem) !important; }
+.mt-2 { margin-top: var(--spacing-2, 0.5rem) !important; }
+.mt-3 { margin-top: var(--spacing-3, 0.75rem) !important; }
+.mt-4 { margin-top: var(--spacing-4, 1rem) !important; }
+.mt-6 { margin-top: var(--spacing-6, 1.5rem) !important; }
+.mt-8 { margin-top: var(--spacing-8, 2rem) !important; }
+
+.mb-1 { margin-bottom: var(--spacing-1, 0.25rem) !important; }
+.mb-2 { margin-bottom: var(--spacing-2, 0.5rem) !important; }
+.mb-3 { margin-bottom: var(--spacing-3, 0.75rem) !important; }
+.mb-4 { margin-bottom: var(--spacing-4, 1rem) !important; }
+.mb-6 { margin-bottom: var(--spacing-6, 1.5rem) !important; }
+.mb-8 { margin-bottom: var(--spacing-8, 2rem) !important; }
+
+/* Padding */
+.p-0 { padding: 0 !important; }
+.p-1 { padding: var(--spacing-1, 0.25rem) !important; }
+.p-2 { padding: var(--spacing-2, 0.5rem) !important; }
+.p-3 { padding: var(--spacing-3, 0.75rem) !important; }
+.p-4 { padding: var(--spacing-4, 1rem) !important; }
+.p-6 { padding: var(--spacing-6, 1.5rem) !important; }
+.p-8 { padding: var(--spacing-8, 2rem) !important; }
+
+/* ==========================================================================
+   Text Utilities
+   ========================================================================== */
+
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+.text-xs { font-size: var(--font-size-xs, 0.75rem) !important; }
+.text-sm { font-size: var(--font-size-sm, 0.875rem) !important; }
+.text-base { font-size: var(--font-size-base, 1rem) !important; }
+.text-lg { font-size: var(--font-size-lg, 1.125rem) !important; }
+.text-xl { font-size: var(--font-size-xl, 1.25rem) !important; }
+.text-2xl { font-size: var(--font-size-2xl, 1.5rem) !important; }
+
+.font-normal { font-weight: 400 !important; }
+.font-medium { font-weight: 500 !important; }
+.font-semibold { font-weight: 600 !important; }
+.font-bold { font-weight: 700 !important; }
+
+.uppercase { text-transform: uppercase !important; }
+.lowercase { text-transform: lowercase !important; }
+.capitalize { text-transform: capitalize !important; }
+
+/* ==========================================================================
+   Color Utilities
+   ========================================================================== */
+
+.text-primary { color: var(--color-primary) !important; }
+.text-secondary { color: var(--color-secondary) !important; }
+.text-muted { color: var(--color-neutral-med) !important; }
+
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-secondary { background-color: var(--color-secondary) !important; }
+.bg-white { background-color: var(--color-base-white) !important; }
+.bg-light { background-color: var(--color-neutral-lightest) !important; }
+
+/* ==========================================================================
+   Border Utilities
+   ========================================================================== */
+
+.border { border: 1px solid var(--color-neutral-light) !important; }
+.border-0 { border: 0 !important; }
+.border-t { border-top: 1px solid var(--color-neutral-light) !important; }
+.border-b { border-bottom: 1px solid var(--color-neutral-light) !important; }
+.border-l { border-left: 1px solid var(--color-neutral-light) !important; }
+.border-r { border-right: 1px solid var(--color-neutral-light) !important; }
+
+.rounded { border-radius: var(--radius-md) !important; }
+.rounded-sm { border-radius: var(--radius-sm) !important; }
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.rounded-full { border-radius: var(--radius-full) !important; }
+.rounded-none { border-radius: 0 !important; }
+
+/* ==========================================================================
+   Shadow Utilities
+   ========================================================================== */
+
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* ==========================================================================
+   Overflow Utilities
+   ========================================================================== */
+
+.overflow-auto { overflow: auto !important; }
+.overflow-hidden { overflow: hidden !important; }
+.overflow-visible { overflow: visible !important; }
+.overflow-scroll { overflow: scroll !important; }
+
+/* ==========================================================================
+   Position Utilities
+   ========================================================================== */
+
+.static { position: static !important; }
+.relative { position: relative !important; }
+.absolute { position: absolute !important; }
+.fixed { position: fixed !important; }
+.sticky { position: sticky !important; }
+
+.top-0 { top: 0 !important; }
+.right-0 { right: 0 !important; }
+.bottom-0 { bottom: 0 !important; }
+.left-0 { left: 0 !important; }
+
+/* ==========================================================================
+   Width & Height Utilities
+   ========================================================================== */
+
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+.h-full { height: 100% !important; }
+.h-auto { height: auto !important; }
+
+/* ==========================================================================
+   Accessibility Utilities
+   ========================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ==========================================================================
+   Animation Utilities
+   ========================================================================== */
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-in-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+/* ==========================================================================
+   Responsive Utilities
+   ========================================================================== */
+
+@media (min-width: 640px) {
+  .sm\:hidden { display: none !important; }
+  .sm\:block { display: block !important; }
+  .sm\:inline-block { display: inline-block !important; }
+  .sm\:flex { display: flex !important; }
+  .sm\:grid { display: grid !important; }
+}
+
+@media (min-width: 768px) {
+  .md\:hidden { display: none !important; }
+  .md\:block { display: block !important; }
+  .md\:inline-block { display: inline-block !important; }
+  .md\:flex { display: flex !important; }
+  .md\:grid { display: grid !important; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:hidden { display: none !important; }
+  .lg\:block { display: block !important; }
+  .lg\:inline-block { display: inline-block !important; }
+  .lg\:flex { display: flex !important; }
+  .lg\:grid { display: grid !important; }
+}

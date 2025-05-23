@@ -1,0 +1,306 @@
+/**
+ * Filter Components
+ * Reusable filter patterns for sidebars and search interfaces
+ */
+
+/* ==========================================================================
+   Filter Container
+   ========================================================================== */
+
+.filter-sidebar {
+  background-color: var(--filter-bg, var(--color-base-white));
+  padding: var(--filter-padding, 1.5rem);
+  border-radius: var(--filter-radius, var(--radius-md));
+  box-shadow: var(--filter-shadow, var(--shadow-sm));
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--filter-header-spacing, 1.5rem);
+  padding-bottom: var(--filter-header-spacing, 1.5rem);
+  border-bottom: 1px solid var(--filter-border-color, var(--color-neutral-light));
+}
+
+.filter-title {
+  font-size: var(--filter-title-size, 1.25rem);
+  font-weight: var(--filter-title-weight, 600);
+  color: var(--filter-title-color, var(--color-base-dark));
+  margin: 0;
+}
+
+.filter-advanced {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.filter-advanced:hover {
+  color: var(--color-primary-dark);
+}
+
+/* ==========================================================================
+   Filter Sections
+   ========================================================================== */
+
+.filter-section {
+  padding-bottom: var(--filter-section-spacing, 1.5rem);
+  margin-bottom: var(--filter-section-spacing, 1.5rem);
+  border-bottom: 1px solid var(--filter-border-color, var(--color-neutral-light));
+}
+
+.filter-section:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.filter-section__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--filter-section-title-spacing, 0.75rem);
+  font-size: var(--filter-section-title-size, 1rem);
+  font-weight: var(--filter-section-title-weight, 500);
+  color: var(--filter-section-title-color, var(--color-primary-med));
+}
+
+.filter-section__count {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-med);
+  font-weight: normal;
+}
+
+/* ==========================================================================
+   Filter Controls
+   ========================================================================== */
+
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--filter-list-gap, 0.5rem);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: var(--filter-item-gap, 0.5rem);
+}
+
+.filter-checkbox {
+  accent-color: var(--filter-accent-color, var(--color-secondary-med));
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+  font-size: var(--filter-label-size, 0.875rem);
+  color: var(--filter-label-color, var(--color-text-base));
+}
+
+.filter-label:hover {
+  color: var(--filter-label-hover-color, var(--color-primary));
+}
+
+.filter-icon {
+  margin-right: var(--filter-icon-spacing, 0.25rem);
+  font-size: var(--filter-icon-size, 1rem);
+}
+
+.filter-count {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-med);
+}
+
+/* ==========================================================================
+   Range Filters
+   ========================================================================== */
+
+.filter-range {
+  margin-top: var(--filter-range-spacing, 0.5rem);
+}
+
+.filter-range__slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--filter-slider-track, var(--color-neutral-light));
+  outline: none;
+  margin: var(--filter-slider-margin, 0.5rem 0);
+}
+
+.filter-range__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--filter-slider-thumb, var(--color-secondary-med));
+  cursor: pointer;
+  border: 2px solid var(--filter-slider-thumb-border, white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.filter-range__slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--filter-slider-thumb, var(--color-secondary-med));
+  cursor: pointer;
+  border: 2px solid var(--filter-slider-thumb-border, white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.filter-range__display {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.filter-range__value {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-base);
+}
+
+/* ==========================================================================
+   Filter Actions
+   ========================================================================== */
+
+.filter-actions {
+  margin-top: var(--filter-actions-spacing, 1.5rem);
+  display: flex;
+  gap: var(--filter-actions-gap, 1rem);
+}
+
+.filter-reset {
+  flex: 1;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  background-color: var(--filter-reset-bg, var(--color-neutral-light));
+  color: var(--filter-reset-color, var(--color-neutral-dark));
+  border: none;
+  border-radius: var(--btn-radius);
+  font-size: var(--btn-font-size-sm);
+  font-weight: var(--btn-font-weight);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.filter-reset:hover {
+  background-color: var(--filter-reset-hover-bg, var(--color-neutral-med));
+  color: var(--filter-reset-hover-color, white);
+}
+
+.filter-apply {
+  flex: 1;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  background-color: var(--filter-apply-bg, var(--color-primary));
+  color: var(--filter-apply-color, white);
+  border: none;
+  border-radius: var(--btn-radius);
+  font-size: var(--btn-font-size-sm);
+  font-weight: var(--btn-font-weight);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.filter-apply:hover {
+  background-color: var(--filter-apply-hover-bg, var(--color-primary-dark));
+}
+
+/* ==========================================================================
+   Filter Results Bar
+   ========================================================================== */
+
+.filter-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--filter-results-padding, 1rem);
+  background-color: var(--filter-results-bg, var(--color-neutral-lightest));
+  border-radius: var(--radius-md);
+  margin-bottom: var(--filter-results-spacing, 1.5rem);
+}
+
+.filter-results__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.filter-results__count strong {
+  color: var(--color-text-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-results__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.filter-results__sort-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.filter-results__sort-select {
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-light);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  background-color: white;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Active Filters Display
+   ========================================================================== */
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.active-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: var(--color-primary-lightest);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+}
+
+.active-filter__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--spacing-1);
+}
+
+.active-filter__remove:hover {
+  color: var(--color-primary-dark);
+}
