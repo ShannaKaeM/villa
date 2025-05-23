@@ -303,3 +303,207 @@
   --aspect-ratio-3-2: 66.67%;
   --aspect-ratio-21-9: 42.86%;
 }
+
+/* ==========================================================================
+   Blocksy Theme Overrides
+   Override Blocksy's default CSS variables to use our design system
+   ========================================================================== */
+
+/* Override Blocksy Color Variables */
+:root {
+  /* Blocksy Palette Colors - Map to our design system */
+  --theme-palette-color-1: oklch(var(--primary));
+  --theme-palette-color-2: oklch(var(--secondary));
+  --theme-palette-color-3: oklch(var(--accent));
+  --theme-palette-color-4: oklch(var(--foreground));
+  --theme-palette-color-5: oklch(var(--muted));
+  --theme-palette-color-6: oklch(var(--muted-foreground));
+  --theme-palette-color-7: oklch(var(--card));
+  --theme-palette-color-8: oklch(var(--background));
+  
+  /* Blocksy Base Colors */
+  --paletteColor1: oklch(var(--primary));
+  --paletteColor2: oklch(var(--secondary));
+  --paletteColor3: oklch(var(--accent));
+  --paletteColor4: oklch(var(--foreground));
+  --paletteColor5: oklch(var(--muted));
+  --paletteColor6: oklch(var(--muted-foreground));
+  --paletteColor7: oklch(var(--card));
+  --paletteColor8: oklch(var(--background));
+  
+  /* Blocksy Text Colors */
+  --color: oklch(var(--foreground));
+  --textColor: oklch(var(--foreground));
+  --headingColor: oklch(var(--foreground));
+  --linkColor: oklch(var(--primary));
+  --linkHoverColor: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h));
+  
+  /* Blocksy Background Colors */
+  --backgroundColor: oklch(var(--background));
+  --siteBackground: oklch(var(--background));
+  --contentBackground: oklch(var(--card));
+  
+  /* Blocksy Border Colors */
+  --borderColor: oklch(var(--border));
+  --border-color: oklch(var(--border));
+  
+  /* Blocksy Button Colors */
+  --buttonTextColor: oklch(var(--primary-foreground));
+  --buttonTextHoverColor: oklch(var(--primary-foreground));
+  --buttonColor: oklch(var(--primary));
+  --buttonHoverColor: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h));
+  
+  /* Blocksy Form Colors */
+  --formTextColor: oklch(var(--foreground));
+  --formBorderColor: oklch(var(--border));
+  --formBorderFocusColor: oklch(var(--ring));
+  --formBackgroundColor: oklch(var(--background));
+  --formBackgroundFocusColor: oklch(var(--background));
+  
+  /* Blocksy Selection Colors */
+  --selectionTextColor: oklch(var(--foreground));
+  --selectionBackgroundColor: oklch(calc(var(--primary-l) + var(--lighten-20)) var(--primary-c) var(--primary-h));
+}
+
+/* Override Blocksy Typography Variables */
+:root {
+  /* Base Font Sizes */
+  --fontSize: var(--font-size-base);
+  --fontSizeSmall: var(--font-size-sm);
+  --fontSizeLarge: var(--font-size-lg);
+  
+  /* Heading Font Sizes */
+  --h1-fontSize: var(--font-size-5xl);
+  --h2-fontSize: var(--font-size-4xl);
+  --h3-fontSize: var(--font-size-3xl);
+  --h4-fontSize: var(--font-size-2xl);
+  --h5-fontSize: var(--font-size-xl);
+  --h6-fontSize: var(--font-size-lg);
+  
+  /* Font Weights */
+  --fontWeight: var(--font-weight-normal);
+  --headingsFontWeight: var(--font-weight-semibold);
+  
+  /* Line Heights */
+  --lineHeight: var(--line-height-normal);
+  --headingsLineHeight: var(--line-height-tight);
+  
+  /* Font Families */
+  --fontFamily: var(--font-family-base);
+  --headingsFontFamily: var(--font-family-heading);
+}
+
+/* Force Blocksy Elements to Use Our Colors */
+body,
+.site-main,
+.content-area {
+  color: oklch(var(--foreground)) !important;
+  background-color: oklch(var(--background)) !important;
+}
+
+/* Override Blocksy Heading Styles */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.entry-title,
+.page-title,
+.site-title {
+  color: oklch(var(--foreground)) !important;
+  font-family: var(--font-family-heading) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: var(--line-height-tight) !important;
+}
+
+h1, .h1 { font-size: var(--font-size-5xl) !important; }
+h2, .h2 { font-size: var(--font-size-4xl) !important; }
+h3, .h3 { font-size: var(--font-size-3xl) !important; }
+h4, .h4 { font-size: var(--font-size-2xl) !important; }
+h5, .h5 { font-size: var(--font-size-xl) !important; }
+h6, .h6 { font-size: var(--font-size-lg) !important; }
+
+/* Override Blocksy Link Styles */
+a:not(.m-btn):not(.m-button) {
+  color: oklch(var(--primary)) !important;
+}
+
+a:not(.m-btn):not(.m-button):hover {
+  color: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h)) !important;
+}
+
+/* Override Blocksy Button Styles */
+.ct-button,
+.wp-block-button__link,
+button[type="submit"],
+input[type="submit"] {
+  background-color: oklch(var(--primary)) !important;
+  color: oklch(var(--primary-foreground)) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--spacing-3) var(--spacing-6) !important;
+  font-weight: var(--font-weight-medium) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.ct-button:hover,
+.wp-block-button__link:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+  background-color: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h)) !important;
+}
+
+/* Override Blocksy Form Styles */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
+  background-color: oklch(var(--background)) !important;
+  border: var(--border-width) solid oklch(var(--border)) !important;
+  color: oklch(var(--foreground)) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--spacing-3) !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  border-color: oklch(var(--ring)) !important;
+  outline: 2px solid transparent !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px oklch(var(--ring)) !important;
+}
+
+/* ==========================================================================
+   Import Other CSS Files
+   ========================================================================== */
+
+/* Import existing theme variables and customizations */
+@import './shadcn-custom.css';
+
+/* Base styles and resets */
+@import './base.css';
+
+/* Layout patterns */
+@import './layout.css';
+
+/* Reusable components */
+@import './components.css';
+
+/* Filter components */
+@import './filters.css';
+
+/* UI States */
+@import './states.css';
+
+/* Utility classes (use sparingly) */
+@import './utilities.css';
