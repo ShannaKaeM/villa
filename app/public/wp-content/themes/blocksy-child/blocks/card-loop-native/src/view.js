@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeFilters(block) {
-    const filterCheckboxes = block.querySelectorAll('.filter-checkbox__input');
-    const rangeInputs = block.querySelectorAll('.filter-range__input');
+    const filterCheckboxes = block.querySelectorAll('.m-filter-checkbox__input');
+    const rangeInputs = block.querySelectorAll('.m-filter-range__input');
     const cardsContainer = block.querySelector('.cards-container');
     
     console.log('Filter checkboxes:', filterCheckboxes.length);
@@ -29,9 +29,9 @@ function initializeFilters(block) {
     }
     
     // Store original content for potential reset
-    const originalCards = cardsContainer.innerHTML;
+    const originalContent = cardsContainer.innerHTML;
     
-    // Handle checkbox changes
+    // Add change listeners to checkboxes
     filterCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             console.log('Filter changed:', checkbox.dataset.taxonomy, checkbox.dataset.term);
@@ -39,11 +39,10 @@ function initializeFilters(block) {
         });
     });
     
-    // Handle range slider changes
+    // Add change listeners to range inputs
     rangeInputs.forEach(input => {
         input.addEventListener('input', (e) => {
-            // Update the value display
-            const valueDisplay = input.parentElement.querySelector('.filter-range__value span');
+            const valueDisplay = input.closest('.m-filter-range').querySelector('.m-filter-range__value span');
             if (valueDisplay) {
                 valueDisplay.textContent = e.target.value;
             }
@@ -57,57 +56,58 @@ function initializeFilters(block) {
 }
 
 function applyFilters(block) {
-    const activeFilters = {};
-    const rangeFilters = {};
+    const filters = {};
+    const ranges = {};
     
-    // Collect active checkbox filters
-    block.querySelectorAll('.filter-checkbox__input:checked').forEach(checkbox => {
+    // Collect active filters
+    block.querySelectorAll('.m-filter-checkbox__input:checked').forEach(checkbox => {
         const taxonomy = checkbox.dataset.taxonomy;
         const term = checkbox.dataset.term;
         
-        if (!activeFilters[taxonomy]) {
-            activeFilters[taxonomy] = [];
+        if (!filters[taxonomy]) {
+            filters[taxonomy] = [];
         }
-        activeFilters[taxonomy].push(term);
+        filters[taxonomy].push(term);
     });
     
     // Collect range filters
-    block.querySelectorAll('.filter-range__input').forEach(input => {
-        const rangeType = input.dataset.range;
+    block.querySelectorAll('.m-filter-range__input').forEach(input => {
+        const range = input.dataset.range;
         const value = parseInt(input.value);
         
         if (value > 0) {
-            rangeFilters[rangeType] = value;
+            ranges[range] = value;
         }
     });
     
-    console.log('Active filters:', activeFilters);
-    console.log('Range filters:', rangeFilters);
+    console.log('Active filters:', filters);
+    console.log('Range filters:', ranges);
     
-    // Make AJAX request
-    const params = new URLSearchParams({
+    // Prepare AJAX request
+    const formData = new URLSearchParams({
         action: 'filter_properties',
         nonce: miblocks_ajax.nonce
     });
     
-    // Add checkbox filters
-    Object.keys(activeFilters).forEach(taxonomy => {
-        activeFilters[taxonomy].forEach(term => {
-            params.append(`filter[${taxonomy}][]`, term);
+    // Add filters to form data
+    Object.keys(filters).forEach(taxonomy => {
+        filters[taxonomy].forEach(term => {
+            formData.append(`filter[${taxonomy}][]`, term);
         });
     });
     
-    // Add range filters
-    Object.keys(rangeFilters).forEach(rangeType => {
-        params.append(`range[${rangeType}]`, rangeFilters[rangeType]);
+    // Add ranges to form data
+    Object.keys(ranges).forEach(range => {
+        formData.append(`range[${range}]`, ranges[range]);
     });
     
     // Add block attributes
-    params.append('post_type', block.dataset.postType || 'property');
-    params.append('posts_per_page', block.dataset.postsPerPage || '12');
-    params.append('card_style', block.dataset.cardStyle || 'default');
+    formData.append('post_type', block.dataset.postType || 'property');
+    formData.append('posts_per_page', block.dataset.postsPerPage || '12');
+    formData.append('card_style', block.dataset.cardStyle || 'default');
+    formData.append('columns', block.dataset.columns || '3');
     
-    console.log('AJAX params:', params.toString());
+    console.log('AJAX params:', formData.toString());
     
     // Show loading state
     const cardsContainer = block.querySelector('.cards-container');
@@ -115,10 +115,10 @@ function applyFilters(block) {
         cardsContainer.style.opacity = '0.5';
     }
     
-    // Make the request
+    // Send AJAX request
     fetch(miblocks_ajax.ajax_url, {
         method: 'POST',
-        body: params
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
@@ -128,7 +128,7 @@ function applyFilters(block) {
             cardsContainer.innerHTML = data.data.html;
             cardsContainer.style.opacity = '1';
             
-            // Update results count
+            // Update count if present
             const countElement = block.querySelector('.view-controls__count strong');
             if (countElement) {
                 countElement.textContent = data.data.found_posts;

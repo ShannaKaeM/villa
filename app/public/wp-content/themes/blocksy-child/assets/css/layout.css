@@ -11,10 +11,20 @@
 .content-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--grid-gap, 1.5rem);
+  gap: var(--spacing-8);
 }
 
 @media (min-width: 768px) {
+  .content-grid--sidebar-left {
+    grid-template-columns: 280px 1fr;
+  }
+  
+  .content-grid--sidebar-right {
+    grid-template-columns: 1fr 280px;
+  }
+}
+
+@media (min-width: 1024px) {
   .content-grid--sidebar-left {
     grid-template-columns: 300px 1fr;
   }
@@ -24,25 +34,15 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .content-grid--sidebar-left {
-    grid-template-columns: 320px 1fr;
-  }
-  
-  .content-grid--sidebar-right {
-    grid-template-columns: 1fr 320px;
-  }
-}
-
 /* Card Grid */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width, 300px), 1fr));
-  gap: var(--card-grid-gap, 1.5rem);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-6);
 }
 
 .card-grid--2 {
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width-lg, 400px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 
 @media (min-width: 768px) {

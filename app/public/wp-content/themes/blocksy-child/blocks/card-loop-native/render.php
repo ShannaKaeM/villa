@@ -58,7 +58,8 @@ $wrapper_attrs = get_block_wrapper_attributes([
     'class' => implode(' ', $wrapper_classes),
     'data-post-type' => $post_type,
     'data-posts-per-page' => $posts_per_page,
-    'data-card-style' => $card_style
+    'data-card-style' => $card_style,
+    'data-columns' => $columns
 ]);
 
 // Start output
@@ -81,7 +82,7 @@ ob_start();
             <div class="content-grid <?php echo $show_filter && $filter_position === 'left' ? 'content-grid--sidebar-left' : ''; ?>">
                 <?php if ($show_filter && $filter_position === 'left') : ?>
                     <!-- Filter Sidebar (Left) -->
-                    <aside class="sidebar filter-sidebar">
+                    <aside class="sidebar m-filter-sidebar">
                         <div class="filter-header">
                             <h2 class="filter-header__title"><?php _e('Filter', 'miblocks'); ?></h2>
                         </div>
@@ -107,37 +108,46 @@ ob_start();
                     <div class="cards-container">
                         <div class="view-grid view-grid--fixed-<?php echo $columns; ?>">
                             <?php while ($query->have_posts()) : $query->the_post(); ?>
-                                <article class="card card--<?php echo $card_style; ?>">
+                                <article class="m-card m-card--<?php echo $card_style; ?>">
                                     <?php if (has_post_thumbnail()) : ?>
-                                        <div class="card__image">
+                                        <div class="m-card__image">
                                             <?php 
                                             // Get property price if it's a property
                                             if ($post_type === 'property') : 
                                                 $price = get_post_meta(get_the_ID(), 'property_price', true);
                                                 if ($price) : ?>
-                                                    <span class="card__price">$<?php echo number_format($price); ?>/night</span>
+                                                    <div class="m-card__price">
+                                                        <?php echo esc_html($price); ?>
+                                                    </div>
                                                 <?php endif;
                                                 
-                                                // Get property type for badge
-                                                $property_type = get_the_terms(get_the_ID(), 'property-type');
+                                                // Get property type
+                                                $property_type = get_the_terms(get_the_ID(), 'property_type');
                                                 if ($property_type && !is_wp_error($property_type)) : ?>
-                                                    <span class="card__badge"><?php echo esc_html($property_type[0]->name); ?></span>
+                                                    <div class="m-card__badge">
+                                                        <?php echo esc_html($property_type[0]->name); ?>
+                                                    </div>
                                                 <?php endif;
                                             endif; ?>
                                             
                                             <a href="<?php the_permalink(); ?>">
-                                                <?php the_post_thumbnail('medium_large', ['class' => 'card__img']); ?>
+                                                <?php the_post_thumbnail('medium_large', ['class' => 'm-card__img']); ?>
                                             </a>
                                         </div>
                                     <?php endif; ?>
                                     
-                                    <div class="card__content">
-                                        <h3 class="card__title">
+                                    <div class="m-card__content">
+                                        <h3 class="m-card__title">
                                             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                         </h3>
                                         
-                                        <?php if (has_excerpt()) : ?>
-                                            <p class="card__description"><?php echo get_the_excerpt(); ?></p>
+                                        <?php 
+                                        // Display post content or excerpt
+                                        $content = get_the_content();
+                                        if ($content) : ?>
+                                            <p class="m-card__description"><?php echo wp_trim_words(strip_tags($content), 20); ?></p>
+                                        <?php elseif (has_excerpt()) : ?>
+                                            <p class="m-card__description"><?php echo get_the_excerpt(); ?></p>
                                         <?php endif; ?>
                                         
                                         <?php 
@@ -148,49 +158,50 @@ ob_start();
                                             $guests = get_post_meta(get_the_ID(), 'property_guests', true);
                                             
                                             if ($beds || $baths || $guests) : ?>
-                                                <div class="card__details">
+                                                <div class="m-card__details">
                                                     <?php if ($beds) : ?>
-                                                        <span class="card__detail">
-                                                            <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                        <span class="m-card__detail">
+                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                                 <path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2V7M3 7l9-4 9 4M3 7h18M12 3v18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                             </svg>
-                                                            <?php echo $beds; ?> Beds
+                                                            <?php echo esc_html($beds); ?> Beds
                                                         </span>
                                                     <?php endif; ?>
                                                     
                                                     <?php if ($baths) : ?>
-                                                        <span class="card__detail">
-                                                            <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                        <span class="m-card__detail">
+                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                                 <path d="M5 12V7a1 1 0 011-1h12a1 1 0 011 1v5M3 12h18M7 12v7a2 2 0 002 2h6a2 2 0 002-2v-7M12 12v7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                             </svg>
-                                                            <?php echo $baths; ?> Baths
+                                                            <?php echo esc_html($baths); ?> Baths
                                                         </span>
                                                     <?php endif; ?>
                                                     
                                                     <?php if ($guests) : ?>
-                                                        <span class="card__detail">
-                                                            <svg class="card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <span class="m-card__detail">
+                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-width="2"/>
                                                             </svg>
-                                                            <?php echo $guests; ?> Guests
+                                                            <?php echo esc_html($guests); ?> Guests
                                                         </span>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif;
-                                        endif; ?>
-                                        
-                                        <?php 
-                                        // Display location for properties
-                                        if ($post_type === 'property') : 
+                                            
+                                            // Display location
                                             $location = get_the_terms(get_the_ID(), 'location');
                                             if ($location && !is_wp_error($location)) : ?>
-                                                <div class="card__meta">
-                                                    <span class="card__location"><?php echo esc_html($location[0]->name); ?></span>
+                                                <div class="m-card__location">
+                                                    <svg class="m-card__location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <circle cx="12" cy="10" r="3" stroke-width="2"/>
+                                                    </svg>
+                                                    <?php echo esc_html($location[0]->name); ?>
                                                 </div>
                                             <?php endif;
                                         endif; ?>
                                         
-                                        <div class="card__actions">
+                                        <div class="m-card__actions">
                                             <a href="<?php the_permalink(); ?>" class="btn btn--primary">
                                                 <?php _e('View Details', 'miblocks'); ?>
                                             </a>

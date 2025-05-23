@@ -33,21 +33,36 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--btn-padding-y, 0.5rem) var(--btn-padding-x, 1rem);
-  font-size: var(--btn-font-size, 1rem);
-  font-weight: var(--btn-font-weight, 500);
-  line-height: var(--btn-line-height, 1.5);
-  border-radius: var(--btn-radius, var(--radius-md));
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: var(--spacing-3) var(--spacing-5);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
   text-decoration: none;
   white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--color-primary);
+  color: white;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 8px);
+  transition: all 0.2s ease;
 }
 
-.btn:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
 }
 
 /* Button Variants */
@@ -86,13 +101,13 @@
 
 /* Button Sizes */
 .btn--sm {
-  padding: var(--btn-padding-y-sm, 0.25rem) var(--btn-padding-x-sm, 0.75rem);
-  font-size: var(--btn-font-size-sm, 0.875rem);
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
 }
 
 .btn--lg {
-  padding: var(--btn-padding-y-lg, 0.75rem) var(--btn-padding-x-lg, 1.5rem);
-  font-size: var(--btn-font-size-lg, 1.125rem);
+  padding: var(--spacing-4) var(--spacing-6);
+  font-size: var(--font-size-lg);
 }
 
 /* Button States */
@@ -391,179 +406,189 @@
 }
 
 /* ==========================================================================
-   Card Components
+   Cards
    ========================================================================== */
 
-.card {
-  position: relative;
-  background: var(--color-bg-primary);
-  border-radius: 12px;
+.m-card {
+  background: var(--color-base-lightest);
+  border-radius: var(--radius-lg, 12px);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border-light, #f0f0f0);
 }
 
-.card:hover {
+.m-card:hover {
+  transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
 }
 
-/* Card Image */
-.card__image {
+/* Card Image Container */
+.m-card__image {
   position: relative;
-  aspect-ratio: 16/10;
+  aspect-ratio: 4/3;
   overflow: hidden;
+  background: var(--color-neutral-light);
 }
 
-.card__img {
+.m-card__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.card:hover .card__img {
+.m-card:hover .m-card__img {
   transform: scale(1.05);
 }
 
-/* Price Badge */
-.card__price {
+/* Price Badge - Top Left */
+.m-card__price {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: var(--spacing-3);
+  left: var(--spacing-3);
   background: var(--color-primary);
   color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-md, 8px);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Property Type Badge */
-.card__badge {
+/* Property Type Badge - Top Right */
+.m-card__badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.9);
+  top: var(--spacing-3);
+  right: var(--spacing-3);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   color: var(--color-text-primary);
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.75rem;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full, 999px);
+  font-size: var(--font-size-xs);
   font-weight: 500;
   z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Card Content */
-.card__content {
-  padding: 20px;
+.m-card__content {
+  padding: var(--spacing-5);
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-1);
 }
 
-.card__title {
-  font-size: 1.25rem;
+.m-card__title {
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  margin: 0 0 8px 0;
+  margin: 0;
   line-height: 1.3;
 }
 
-.card__title a {
-  color: var(--color-text-primary);
+.m-card__title a {
+  color: var(--color-text-primary-med);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.card__title a:hover {
+.m-card__title a:hover {
   color: var(--color-primary);
 }
 
-.card__description {
+.m-card__description {
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   line-height: 1.5;
-  margin: 0 0 16px 0;
-  flex: 1;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Property Details */
-.card__details {
+/* Property Details - Beds/Baths/Guests */
+.m-card__details {
   display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--color-border);
+  gap: var(--spacing-4);
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
-.card__detail {
+.m-card__detail {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--spacing-1);
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
-.card__detail-icon {
+.m-card__detail-icon {
   width: 16px;
   height: 16px;
-  opacity: 0.6;
-}
-
-/* Card Meta */
-.card__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.card__location {
+  flex-shrink: 0;
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+/* Location */
+.m-card__location {
   display: flex;
   align-items: center;
-  gap: 4px;
-}
-
-.card__location::before {
-  content: "📍";
-  font-size: 0.75rem;
-}
-
-/* Card Actions */
-.card__actions {
+  gap: var(--spacing-1);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
   margin-top: auto;
 }
 
-.card__actions .btn {
+.m-card__location-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* Card Footer - Host Info */
+.m-card__footer {
+  padding: var(--spacing-3) var(--spacing-5);
+  border-top: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-secondary, #fafafa);
+}
+
+.m-card__host {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.m-card__host-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-neutral-light);
+  object-fit: cover;
+}
+
+/* Card Actions */
+.m-card__actions {
+  margin-top: auto;
+}
+
+.m-card__actions .btn {
   width: 100%;
   justify-content: center;
-}
-
-/* Card Variants */
-.card--minimal {
-  box-shadow: none;
-  border: 1px solid var(--color-border);
-}
-
-.card--minimal:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.card--horizontal {
-  flex-direction: row;
-}
-
-.card--horizontal .card__image {
-  width: 40%;
-  aspect-ratio: 4/3;
-}
-
-.card--horizontal .card__content {
-  width: 60%;
 }
