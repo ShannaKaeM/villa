@@ -4,7 +4,7 @@
  */
 
 /* Import existing theme variables and customizations */
-@import './shadcn-custom.css';
+@import './shadcn.css';
 
 /* Base styles and resets */
 @import './base.css';
@@ -394,6 +394,14 @@
 }
 
 /* Force Blocksy Elements to Use Our Colors */
+.ct-main-container,
+[data-theme="blocksy"],
+body.blocksy-theme {
+  /* Apply theme colors within Blocksy containers */
+  color: oklch(var(--foreground)) !important;
+  background-color: oklch(var(--background)) !important;
+}
+
 body,
 .site-main,
 .content-area {
@@ -483,27 +491,3 @@ select:focus {
   box-shadow: 0 0 0 2px oklch(var(--ring)) !important;
 }
 
-/* ==========================================================================
-   Import Other CSS Files
-   ========================================================================== */
-
-/* Import existing theme variables and customizations */
-@import './shadcn-custom.css';
-
-/* Base styles and resets */
-@import './base.css';
-
-/* Layout patterns */
-@import './layout.css';
-
-/* Reusable components */
-@import './components.css';
-
-/* Filter components */
-@import './filters.css';
-
-/* UI States */
-@import './states.css';
-
-/* Utility classes (use sparingly) */
-@import './utilities.css';

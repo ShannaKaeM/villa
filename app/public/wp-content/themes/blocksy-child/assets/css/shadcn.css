@@ -1,0 +1,106 @@
+/*
+ * Villa Community Theme - CSS Variables
+ * Minimal setup for color system without Tailwind
+ */
+
+:root {
+  /* Core colors using OKLCH format */
+  --background: 100% 0 0;           /* White */
+  --foreground: 20% 0 0;            /* Near black */
+  
+  /* Primary color with individual channels */
+  --primary-l: 58.03%;
+  --primary-c: 0.051;
+  --primary-h: 200.36;
+  --primary: var(--primary-l) var(--primary-c) var(--primary-h);
+  --primary-foreground: 100% 0 0;   /* White */
+  
+  /* Secondary color with individual channels */
+  --secondary-l: 53.97%;
+  --secondary-c: 0.08;
+  --secondary-h: 11.99;
+  --secondary: var(--secondary-l) var(--secondary-c) var(--secondary-h);
+  --secondary-foreground: 100% 0 0; /* White */
+  
+  --muted: 65.98% 0.011 90.15;      /* Neutral Med (#a29d94) */
+  --muted-foreground: 35.16% 0.008 88.25; /* Neutral Dark (#4f4d46) */
+  
+  --card: 100% 0 0;                 /* White */
+  --card-foreground: 20% 0 0;       /* Near black */
+  
+  --popover: 100% 0 0;              /* White */
+  --popover-foreground: 20% 0 0;    /* Near black */
+  
+  --accent: 95% 0.05 45;            /* Light orange */
+  --accent-foreground: 55% 0.15 45; /* Darker orange */
+  
+  /* Destructive color with individual channels */
+  --destructive-l: 65%;
+  --destructive-c: 0.2;
+  --destructive-h: 25;
+  --destructive: var(--destructive-l) var(--destructive-c) var(--destructive-h);
+  --destructive-foreground: 100% 0 0; /* White */
+  
+  --border: 92% 0.01 0;             /* Light gray */
+  --input: 92% 0.01 0;              /* Light gray */
+  --ring: 70% 0.2 45;               /* (same as primary) */
+  
+  /* Success color with individual channels */
+  --success-l: 65%;
+  --success-c: 0.2;
+  --success-h: 145;
+  --success: var(--success-l) var(--success-c) var(--success-h);
+  --success-foreground: 100% 0 0;   /* White */
+  
+  /* Warning color with individual channels */
+  --warning-l: 75%;
+  --warning-c: 0.2;
+  --warning-h: 85;
+  --warning: var(--warning-l) var(--warning-c) var(--warning-h);
+  --warning-foreground: 20% 0 0;    /* Near black */
+  
+  --radius: 0.5rem;
+}
+
+/* Dark mode (optional - remove if not needed) */
+.dark {
+  --background: 15% 0 0;            /* Near black */
+  --foreground: 98% 0 0;            /* Near white */
+  
+  /* Primary color with individual channels */
+  --primary-l: 70%;
+  --primary-c: 0.2;
+  --primary-h: 45;
+  --primary: var(--primary-l) var(--primary-c) var(--primary-h);
+  --primary-foreground: 15% 0 0;    /* Near black */
+  
+  /* Secondary color with individual channels */
+  --secondary-l: 30%;
+  --secondary-c: 0.05;
+  --secondary-h: 250;
+  --secondary: var(--secondary-l) var(--secondary-c) var(--secondary-h);
+  --secondary-foreground: 98% 0 0;  /* Near white */
+  
+  --muted: 25% 0.01 250;            /* Dark muted */
+  --muted-foreground: 65% 0.01 0;   /* Light gray */
+  
+  --card: 15% 0 0;                  /* Near black */
+  --card-foreground: 98% 0 0;       /* Near white */
+  
+  --popover: 15% 0 0;               /* Near black */
+  --popover-foreground: 98% 0 0;    /* Near white */
+  
+  --accent: 30% 0.05 250;           /* Dark blue accent */
+  --accent-foreground: 98% 0 0;     /* Near white */
+  
+  /* Destructive color with individual channels */
+  --destructive-l: 45%;
+  --destructive-c: 0.15;
+  --destructive-h: 25;
+  --destructive: var(--destructive-l) var(--destructive-c) var(--destructive-h);
+  --destructive-foreground: 98% 0 0; /* Near white */
+  
+  --border: 25% 0.01 250;           /* Dark border */
+  --input: 25% 0.01 250;            /* Dark input */
+  --ring: 70% 0.2 45;               /* Orange (same as primary) */
+}
