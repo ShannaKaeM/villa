@@ -13,11 +13,12 @@ import ServerSideRender from '@wordpress/server-side-render';
 export default function Edit({ attributes, setAttributes }) {
     const blockProps = useBlockProps();
     
-    // For now, let's just focus on properties
+    // Updated post type options to include Articles CPT and User Profiles
     const postTypeOptions = [
         { label: 'Properties', value: 'property' },
-        { label: 'Articles', value: 'post' },
+        { label: 'Articles', value: 'article' },
         { label: 'Businesses', value: 'business' },
+        { label: 'User Profiles', value: 'profile' },
     ];
 
     return (

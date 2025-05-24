@@ -46,7 +46,11 @@ $query = new WP_Query($query_args);
 $is_editor = defined('REST_REQUEST') && REST_REQUEST;
 
 // Add wrapper classes
-$wrapper_classes = ['mi-card-loop', 'wp-block-miblocks-card-loop', 'columns-' . $columns, 'card-style-' . $card_style];
+$wrapper_classes = ['mi-card-loop'];
+if ($show_filter) {
+    $wrapper_classes[] = 'has-filter';
+    $wrapper_classes[] = 'filter-position-' . $filter_position;
+}
 
 // Check if className is set in the block attributes
 if (isset($attributes['className'])) {
@@ -67,178 +71,82 @@ ob_start();
 ?>
 
 <div <?php echo $wrapper_attrs; ?>>
-    <?php if ($query->have_posts()) : ?>
-        <!-- View Controls -->
-        <div class="view-controls">
-            <div class="container container--xl">
+    <?php if ($show_filter && $filter_position === 'left') : ?>
+        <aside class="mi-card-loop__sidebar">
+            <?php include __DIR__ . '/partials/filters.php'; ?>
+        </aside>
+    <?php endif; ?>
+    
+    <div class="mi-card-loop__main">
+        <?php if ($show_filter && $filter_position === 'top') : ?>
+            <div class="mi-card-loop__filters-top">
+                <?php include __DIR__ . '/partials/filters-horizontal.php'; ?>
+            </div>
+        <?php endif; ?>
+        
+        <div class="mi-card-loop__header">
+            <div class="view-controls">
                 <div class="view-controls__count">
-                    Showing <strong><?php echo $query->found_posts; ?></strong> results
+                    <?php printf(
+                        _n('Found <strong>%s</strong> result', 'Found <strong>%s</strong> results', $query->found_posts, 'miblocks'),
+                        $query->found_posts
+                    ); ?>
+                </div>
+                <div class="view-controls__sort">
+                    <select class="m-select m-select--sm">
+                        <option value="date"><?php _e('Newest First', 'miblocks'); ?></option>
+                        <option value="price_asc"><?php _e('Price: Low to High', 'miblocks'); ?></option>
+                        <option value="price_desc"><?php _e('Price: High to Low', 'miblocks'); ?></option>
+                        <option value="title"><?php _e('Name: A-Z', 'miblocks'); ?></option>
+                    </select>
                 </div>
             </div>
         </div>
         
-        <!-- Main Layout -->
-        <div class="container container--xl">
-            <div class="content-grid <?php echo $show_filter && $filter_position === 'left' ? 'content-grid--sidebar-left' : ''; ?>">
-                <?php if ($show_filter && $filter_position === 'left') : ?>
-                    <!-- Filter Sidebar (Left) -->
-                    <aside class="sidebar m-filter-sidebar">
-                        <div class="filter-header">
-                            <h2 class="filter-header__title"><?php _e('Filter', 'miblocks'); ?></h2>
-                        </div>
-                        <?php include __DIR__ . '/partials/filters.php'; ?>
-                    </aside>
-                <?php endif; ?>
-                
-                <!-- Main Content Area -->
-                <div class="content-grid__main">
-                    <?php if ($show_filter && $filter_position === 'top') : ?>
-                        <!-- Filter Bar (Top) -->
-                        <div class="filter-bar filter-bar--horizontal">
-                            <div class="filter-header">
-                                <h2 class="filter-header__title"><?php _e('Filter', 'miblocks'); ?></h2>
-                            </div>
-                            <div class="filter-bar__content">
-                                <?php include __DIR__ . '/partials/filters.php'; ?>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <!-- Cards Grid -->
-                    <div class="cards-container">
-                        <div class="view-grid view-grid--fixed-<?php echo $columns; ?>">
-                            <?php while ($query->have_posts()) : $query->the_post(); ?>
-                                <article class="m-card m-card--<?php echo $card_style; ?>">
-                                    <?php if (has_post_thumbnail()) : ?>
-                                        <div class="m-card__image">
-                                            <?php 
-                                            // Get property price if it's a property
-                                            if ($post_type === 'property') : 
-                                                $price = get_post_meta(get_the_ID(), 'property_price', true);
-                                                if ($price) : ?>
-                                                    <div class="m-card__price">
-                                                        <?php echo esc_html($price); ?>
-                                                    </div>
-                                                <?php endif;
-                                                
-                                                // Get property type
-                                                $property_type = get_the_terms(get_the_ID(), 'property_type');
-                                                if ($property_type && !is_wp_error($property_type)) : ?>
-                                                    <div class="m-card__badge">
-                                                        <?php echo esc_html($property_type[0]->name); ?>
-                                                    </div>
-                                                <?php endif;
-                                            endif; ?>
-                                            
-                                            <a href="<?php the_permalink(); ?>">
-                                                <?php the_post_thumbnail('medium_large', ['class' => 'm-card__img']); ?>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
-                                    
-                                    <div class="m-card__content">
-                                        <h3 class="m-card__title">
-                                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                                        </h3>
-                                        
-                                        <?php 
-                                        // Display post content or excerpt
-                                        $content = get_the_content();
-                                        if ($content) : ?>
-                                            <p class="m-card__description"><?php echo wp_trim_words(strip_tags($content), 20); ?></p>
-                                        <?php elseif (has_excerpt()) : ?>
-                                            <p class="m-card__description"><?php echo get_the_excerpt(); ?></p>
-                                        <?php endif; ?>
-                                        
-                                        <?php 
-                                        // Display property details if it's a property
-                                        if ($post_type === 'property') : 
-                                            $beds = get_post_meta(get_the_ID(), 'property_bedrooms', true);
-                                            $baths = get_post_meta(get_the_ID(), 'property_bathrooms', true);
-                                            $guests = get_post_meta(get_the_ID(), 'property_guests', true);
-                                            
-                                            if ($beds || $baths || $guests) : ?>
-                                                <div class="m-card__details">
-                                                    <?php if ($beds) : ?>
-                                                        <span class="m-card__detail">
-                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                                <path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2V7M3 7l9-4 9 4M3 7h18M12 3v18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                            <?php echo esc_html($beds); ?> Beds
-                                                        </span>
-                                                    <?php endif; ?>
-                                                    
-                                                    <?php if ($baths) : ?>
-                                                        <span class="m-card__detail">
-                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                                <path d="M5 12V7a1 1 0 011-1h12a1 1 0 011 1v5M3 12h18M7 12v7a2 2 0 002 2h6a2 2 0 002-2v-7M12 12v7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                            </svg>
-                                                            <?php echo esc_html($baths); ?> Baths
-                                                        </span>
-                                                    <?php endif; ?>
-                                                    
-                                                    <?php if ($guests) : ?>
-                                                        <span class="m-card__detail">
-                                                            <svg class="m-card__detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-width="2"/>
-                                                            </svg>
-                                                            <?php echo esc_html($guests); ?> Guests
-                                                        </span>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php endif;
-                                            
-                                            // Display location
-                                            $location = get_the_terms(get_the_ID(), 'location');
-                                            if ($location && !is_wp_error($location)) : ?>
-                                                <div class="m-card__location">
-                                                    <svg class="m-card__location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        <circle cx="12" cy="10" r="3" stroke-width="2"/>
-                                                    </svg>
-                                                    <?php echo esc_html($location[0]->name); ?>
-                                                </div>
-                                            <?php endif;
-                                        endif; ?>
-                                        
-                                        <div class="m-card__actions">
-                                            <a href="<?php the_permalink(); ?>" class="btn btn--primary">
-                                                <?php _e('View Details', 'miblocks'); ?>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </article>
-                            <?php endwhile; ?>
-                        </div>
-                    </div>
-                    
-                    <?php if ($show_pagination && $query->max_num_pages > 1) : ?>
-                        <!-- Pagination -->
-                        <div class="pagination">
-                            <?php
-                            echo paginate_links([
-                                'total' => $query->max_num_pages,
-                                'current' => $paged,
-                                'prev_text' => __('← Previous', 'miblocks'),
-                                'next_text' => __('Next →', 'miblocks'),
-                            ]);
-                            ?>
-                        </div>
-                    <?php endif; ?>
+        <div class="cards-container">
+            <?php if ($query->have_posts()) : ?>
+                <div class="view-grid view-grid--fixed-<?php echo esc_attr($columns); ?>">
+                    <?php while ($query->have_posts()) : $query->the_post(); ?>
+                        <?php 
+                        // Include the appropriate card template based on post type
+                        $card_template = __DIR__ . '/partials/card-' . $post_type . '.php';
+                        if (file_exists($card_template)) {
+                            include $card_template;
+                        } else {
+                            // Default card template
+                            include __DIR__ . '/partials/card-default.php';
+                        }
+                        ?>
+                    <?php endwhile; ?>
                 </div>
-            </div>
+            <?php else : ?>
+                <div class="empty-state">
+                    <div class="empty-state__icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <h3 class="empty-state__title"><?php _e('No results found', 'miblocks'); ?></h3>
+                    <p class="empty-state__description"><?php _e('Try adjusting your filters or search criteria.', 'miblocks'); ?></p>
+                </div>
+            <?php endif; ?>
         </div>
-    <?php else : ?>
-        <!-- Empty State -->
-        <div class="container container--xl">
-            <div class="empty-state">
-                <h3 class="empty-state__title"><?php _e('No items found', 'miblocks'); ?></h3>
-                <p class="empty-state__description"><?php _e('Try adjusting your filters or search criteria.', 'miblocks'); ?></p>
+        
+        <?php if ($show_pagination && $query->max_num_pages > 1) : ?>
+            <div class="mi-card-loop__pagination">
+                <?php
+                echo paginate_links(array(
+                    'total' => $query->max_num_pages,
+                    'current' => $paged,
+                    'prev_text' => '←',
+                    'next_text' => '→',
+                    'type' => 'list'
+                ));
+                ?>
             </div>
-        </div>
-    <?php endif; ?>
-    
-    <?php wp_reset_postdata(); ?>
+        <?php endif; ?>
+    </div>
 </div>
 
 <?php

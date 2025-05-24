@@ -237,4 +237,231 @@
       font-size: 1rem;
     }
   }
+  
+  // Icon sizing fix
+  .m-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    line-height: 1;
+    
+    &--xs {
+      font-size: 0.875rem;
+      width: 1rem;
+      height: 1rem;
+    }
+    
+    &--sm {
+      font-size: 1rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    
+    &--md {
+      font-size: 1.25rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    
+    &--lg {
+      font-size: 1.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+  
+  // Card icon fixes
+  .m-card {
+    &__detail-icon,
+    &__location-icon {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      stroke-width: 2;
+    }
+    
+    &__price,
+    &__type,
+    &__category {
+      font-size: 0.875rem;
+    }
+  }
+  
+  // Filter icon fixes
+  .m-filter-checkbox__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 1rem;
+    flex-shrink: 0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  // Empty state icon fix
+  .empty-state__icon {
+    svg {
+      width: 64px;
+      height: 64px;
+      stroke: currentColor;
+      opacity: 0.3;
+    }
+  }
+}
+
+// Card Loop Block Layout
+.mi-card-loop {
+  &.has-filter {
+    &.filter-position-left {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+  
+  &__sidebar {
+    @media (max-width: 1024px) {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  &__main {
+    min-width: 0; // Prevent grid blowout
+  }
+}
+
+// Filter Sidebar Styles
+.m-filter-sidebar {
+  background: var(--wp--preset--color--white);
+  border-radius: var(--wp--custom--border-radius--md);
+  padding: 1.5rem;
+  box-shadow: var(--wp--custom--box-shadow--sm);
+  
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--wp--preset--color--contrast);
+  }
+}
+
+.m-filter-section {
+  margin-bottom: 2rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  &__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    color: var(--wp--preset--color--contrast-2);
+  }
+}
+
+.m-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.m-filter-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--wp--custom--border-radius--sm);
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: var(--wp--preset--color--base-2);
+  }
+  
+  &__input {
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  
+  &__icon {
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    flex-shrink: 0;
+    
+    img {
+      width: 1.25rem;
+      height: 1.25rem;
+      object-fit: contain;
+    }
+  }
+  
+  &__label {
+    flex: 1;
+    font-size: 0.875rem;
+  }
+  
+  &__count {
+    font-size: 0.75rem;
+    color: var(--wp--preset--color--contrast-3);
+    margin-left: 0.5rem;
+  }
+}
+
+.m-filter-range {
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  &__value {
+    font-weight: 600;
+    color: var(--wp--preset--color--primary);
+  }
+  
+  &__input {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--wp--preset--color--base-2);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    &::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--wp--preset--color--primary);
+      cursor: pointer;
+    }
+    
+    &::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--wp--preset--color--primary);
+      cursor: pointer;
+      border: none;
+    }
+  }
 }
