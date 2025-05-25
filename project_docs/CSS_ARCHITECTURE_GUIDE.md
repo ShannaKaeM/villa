@@ -359,7 +359,7 @@ The theme uses BEM (Block Element Modifier) naming for CSS classes:
 2. Add `block.json` configuration
 3. Create `render.php` for server-side rendering
 4. Add JavaScript in `src/`
-5. Create `styles/block.css` with plain CSS (can use theme variables)
+5. Create `styles/block.css` with plain CSS (must use theme variables)
 6. Optionally create `styles/editor.css` for editor-specific overrides
 7. Run `npm run build` to compile JavaScript
 
@@ -373,7 +373,7 @@ The theme uses BEM (Block Element Modifier) naming for CSS classes:
     padding: var(--spacing-md);
 }
 
-/* Avoid - hardcoded values */
+/* Dont use hardcoded values */
 .my-element {
     color: #0066CC;
     padding: 16px;
