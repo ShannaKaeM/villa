@@ -60,7 +60,7 @@
                     'menu_id'        => 'primary-menu',
                     'container'      => 'div',
                     'container_class' => 'menu-container',
-                    'fallback_cb'    => false,
+                    'fallback_cb'    => 'mi_condotel_fallback_menu',
                 ));
                 ?>
             </nav>

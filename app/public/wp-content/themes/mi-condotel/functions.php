@@ -51,6 +51,47 @@ function mi_condotel_setup() {
 }
 add_action('after_setup_theme', 'mi_condotel_setup');
 
+/**
+ * Fallback menu function - displays pages if no menu is set
+ */
+function mi_condotel_fallback_menu() {
+    $pages = get_pages(array(
+        'sort_order' => 'ASC',
+        'sort_column' => 'menu_order,post_title',
+        'parent' => 0,
+        'exclude' => get_option('page_on_front')
+    ));
+    
+    if ($pages) {
+        echo '<div class="menu-container">';
+        echo '<ul id="primary-menu" class="menu">';
+        
+        // Add Home link
+        echo '<li class="menu-item"><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
+        
+        // Add top-level pages
+        foreach ($pages as $page) {
+            echo '<li class="menu-item">';
+            echo '<a href="' . esc_url(get_permalink($page->ID)) . '">' . esc_html($page->post_title) . '</a>';
+            echo '</li>';
+        }
+        
+        // Add Properties, Businesses, and Articles if they exist
+        if (post_type_exists('property')) {
+            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('property')) . '">Properties</a></li>';
+        }
+        if (post_type_exists('business')) {
+            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('business')) . '">Businesses</a></li>';
+        }
+        if (post_type_exists('article')) {
+            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('article')) . '">Articles</a></li>';
+        }
+        
+        echo '</ul>';
+        echo '</div>';
+    }
+}
+
 // Include additional functionality
 require_once get_template_directory() . '/inc/mi-cleanup.php';
 require_once get_template_directory() . '/inc/mi-cpt-registration.php';
