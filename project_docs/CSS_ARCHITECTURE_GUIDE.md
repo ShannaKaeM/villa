@@ -92,22 +92,26 @@ mi-condotel/
 ## Design System & Variables
 
 ### Color System
-The theme uses a simplified 4-color system with CSS color-mix() modifiers:
+The theme uses a simplified 5-color system with CSS color-mix() modifiers:
 
 ```css
 /* Main Theme Colors (Single Source of Truth) */
 --color-primary: #4d6a6d;      /* Teal/Green */
 --color-secondary: #9c5961;    /* Rose/Pink */
---color-neutral: #a69f95;      /* Warm Gray/Beige */
+--color-tertiary:rgb(9, 120, 142);     /* Teal/Green */
+--color-neutral: #a69f95;      /* Sand */
 --color-base: #808080;         /* True Gray */
+--color-white: #ffffff;         /* White */
+--color-black: #000000;         /* Black */
 
-/* Color Variations (5 levels each) */
+/* Color Variations (7 levels each but not for black and white) */
 /* Each color has these variations created with CSS color-mix(): */
 /* -lightest: color-mix(in srgb, [color] 20%, white) */
 /* -light: color-mix(in srgb, [color] 60%, white) */
 /* -med: [color] (unchanged) */
 /* -dark: color-mix(in srgb, [color] 80%, black) */
 /* -darkest: color-mix(in srgb, [color] 60%, black) */
+
 
 /* Base Scale (7 levels including extremes) */
 --color-base-extreme-light: color-mix(in srgb, var(--color-base) 0%, white 100%);
@@ -119,21 +123,22 @@ The theme uses a simplified 4-color system with CSS color-mix() modifiers:
 --color-base-extreme-dark: color-mix(in srgb, var(--color-base) 0%, black 100%);
 
 /* Site Background */
---color-site-bg: #f5f2ed;
+--color-site-bg: var(--color-white);
 ```
 
 ### Typography System
 ```css
 /* Font Families */
---font-primary: 'Poppins', sans-serif;
---font-secondary: 'Merriweather', serif;
+--font-primary: 'Montserrat', sans-serif;
+--font-secondary: 'Poppins', sans-serif;
 
 /* Font Weights */
+--font-weight-extra-light: 100;
 --font-weight-light: 300;
 --font-weight-normal: 400;
---font-weight-medium: 500;
 --font-weight-semibold: 600;
 --font-weight-bold: 700;
+--font-weight-extra-bold: 800;
 
 /* Font Sizes */
 --font-size-xs: 0.75rem;
@@ -142,9 +147,9 @@ The theme uses a simplified 4-color system with CSS color-mix() modifiers:
 --font-size-lg: 1.125rem;
 --font-size-xl: 1.25rem;
 --font-size-2xl: 1.5rem;
---font-size-3xl: 1.875rem;
---font-size-4xl: 2.25rem;
---font-size-5xl: 3rem;
+--font-size-3xl: 2.5rem;
+--font-size-4xl: 3.5rem;
+--font-size-5xl: 4.5rem;
 ```
 
 ### Spacing System
@@ -160,6 +165,7 @@ The theme uses a simplified 4-color system with CSS color-mix() modifiers:
 
 /* Layout & Container Widths */
 --site-content-width: 1200px;
+--container-width-xs: 480px;
 --container-width-sm: 640px;
 --container-width-md: 768px;
 --container-width-lg: 1024px;

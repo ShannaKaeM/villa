@@ -213,6 +213,7 @@ select {
   
   /* Layout & Container Widths */
   --site-content-width: 1200px;
+  --container-width-xs: 480px;
   --container-width-sm: 640px;
   --container-width-md: 768px;
   --container-width-lg: 1024px;
@@ -279,6 +280,10 @@ a:hover {
   margin-right: auto;
   padding-left: var(--spacing-4);
   padding-right: var(--spacing-4);
+}
+
+@media (min-width: 480px) {
+  .container { max-width: var(--container-width-xs); }
 }
 
 @media (min-width: 640px) {
