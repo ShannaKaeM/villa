@@ -8,48 +8,47 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-// Enqueue stylesheets in the correct order
+// Enqueue main styles
 function blocksy_child_enqueue_styles() {
-    // 1. First load parent theme stylesheet
-    wp_enqueue_style(
-        'blocksy-parent-style',
+    // Get the parent theme version for cache busting
+    $parent_theme = wp_get_theme('blocksy');
+    $parent_version = $parent_theme->get('Version');
+    
+    // Enqueue parent theme styles
+    wp_enqueue_style('blocksy-parent-style', 
         get_template_directory_uri() . '/style.css',
         array(),
-        wp_get_theme('blocksy')->get('Version')
+        $parent_version
     );
     
-    // 2. Then load child theme stylesheet for any additional customizations
-    wp_enqueue_style(
-        'blocksy-child-style',
+    // Enqueue child theme styles (minimal, just theme declaration)
+    wp_enqueue_style('blocksy-child-style',
         get_stylesheet_uri(),
         array('blocksy-parent-style'),
         wp_get_theme()->get('Version')
     );
     
-    // 3. Load Google Fonts - Montserrat
-    wp_enqueue_style(
-        'google-fonts-montserrat',
-        'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap',
+    // Enqueue Google Fonts
+    wp_enqueue_style('google-fonts', 
+        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap',
         array(),
         null
     );
     
-    // 4. Load main CSS file with global components
-    wp_enqueue_style(
-        'mi-main-css',
+    // Enqueue main CSS (includes base.css with CSS variables)
+    wp_enqueue_style('villa-main-styles',
         get_stylesheet_directory_uri() . '/assets/css/main.css',
-        array('blocksy-child-style', 'google-fonts-montserrat'),
+        array('blocksy-child-style'),
         filemtime(get_stylesheet_directory() . '/assets/css/main.css')
     );
 }
 add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_styles');
 
-// Enqueue editor-specific styles
-function blocksy_child_enqueue_editor_styles() {
-    // Add editor overrides to force our theme colors
-    add_editor_style('assets/css/editor-overrides.css');
-}
-add_action('after_setup_theme', 'blocksy_child_enqueue_editor_styles');
+// Remove global editor overrides - blocks handle their own editor styles
+// function blocksy_child_enqueue_editor_styles() {
+//     add_editor_style('assets/css/editor-overrides.css');
+// }
+// add_action('after_setup_theme', 'blocksy_child_enqueue_editor_styles');
 
 // Carbon Fields setup - this MUST come first before any other includes
 require_once get_stylesheet_directory() . '/inc/carbon-fields-setup.php';
@@ -207,52 +206,44 @@ function mi_load_block_css_files() {
         return;
     }
     
-    // First, load the CSS variables file if it exists
-    $variables_file = $blocks_dir . '/styles/variables.css';
-    if (file_exists($variables_file)) {
-        $variables_url = get_stylesheet_directory_uri() . '/blocks/styles/variables.css';
-        wp_enqueue_style(
-            'miblocks-variables',
-            $variables_url,
-            array(),
-            filemtime($variables_file),
-            'all'
-        );
-    }
+    // Scan for block directories
+    $items = scandir($blocks_dir);
     
-    // Find all blocks with styles/block.css files
-    $block_dirs = glob($blocks_dir . '/*', GLOB_ONLYDIR);
-    
-    foreach ($block_dirs as $block_dir) {
-        $block_name = basename($block_dir);
-        $css_file = $block_dir . '/styles/block.css';
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..' || !is_dir($blocks_dir . '/' . $item)) {
+            continue;
+        }
+        
+        // Check if this directory has a styles/block.css file
+        $css_file = $blocks_dir . '/' . $item . '/styles/block.css';
         
         if (file_exists($css_file)) {
-            // Get the CSS file URL
+            $block_name = $item;
             $css_url = get_stylesheet_directory_uri() . '/blocks/' . $block_name . '/styles/block.css';
             
             // Enqueue the CSS file
             wp_enqueue_style(
                 'miblocks-' . $block_name . '-styles',
                 $css_url,
-                array('miblocks-variables'), // Depend on variables
+                array(), // No dependencies - true island architecture
                 filemtime($css_file) // Use file modification time for cache busting
             );
             
-            // Also enqueue in the editor
+            // Also enqueue block styles in the editor
             add_editor_style('blocks/' . $block_name . '/styles/block.css');
+            
+            // Check for editor-specific styles
+            $editor_css_file = $blocks_dir . '/' . $item . '/styles/editor.css';
+            if (file_exists($editor_css_file)) {
+                add_editor_style('blocks/' . $block_name . '/styles/editor.css');
+            }
         }
     }
 }
 add_action('wp_enqueue_scripts', 'mi_load_block_css_files');
 add_action('enqueue_block_editor_assets', 'mi_load_block_css_files');
 
-/**
- * Include GutenVibes CSS Editor Integration
- */
-if (file_exists(get_stylesheet_directory() . '/blocks/gutenvibes-integration.php')) {
-    require_once get_stylesheet_directory() . '/blocks/gutenvibes-integration.php';
-}
+// Remove the GutenVibes integration - no longer needed
 
 /**
  * Force Carbon Fields blocks to use sidebar controls

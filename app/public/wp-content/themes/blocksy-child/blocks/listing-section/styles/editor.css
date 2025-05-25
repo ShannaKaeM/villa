@@ -1,0 +1,53 @@
+/**
+ * Editor-specific styles for Listing Section block
+ * Overrides Blocksy's blue colors within this block
+ */
+
+/* Import theme variables */
+@import url('../../../assets/css/base.css');
+
+/* Block-specific editor overrides */
+.editor-styles-wrapper .wp-block-miblocks-listing-section {
+    /* Ensure block uses theme colors */
+    --linkInitialColor: var(--color-primary) !important;
+    --linkHoverColor: var(--color-primary-dark) !important;
+    
+    /* Reset background */
+    background-color: transparent !important;
+}
+
+/* Fix card colors in editor */
+.editor-styles-wrapper .wp-block-miblocks-listing-section .card {
+    background-color: var(--color-white) !important;
+    border-color: var(--color-base-light) !important;
+}
+
+/* Fix link colors within block */
+.editor-styles-wrapper .wp-block-miblocks-listing-section a {
+    color: var(--color-primary) !important;
+}
+
+.editor-styles-wrapper .wp-block-miblocks-listing-section a:hover {
+    color: var(--color-primary-dark) !important;
+}
+
+/* Fix heading colors within block */
+.editor-styles-wrapper .wp-block-miblocks-listing-section h1,
+.editor-styles-wrapper .wp-block-miblocks-listing-section h2,
+.editor-styles-wrapper .wp-block-miblocks-listing-section h3,
+.editor-styles-wrapper .wp-block-miblocks-listing-section h4 {
+    color: var(--color-base-extreme-dark) !important;
+    font-family: var(--font-secondary), serif !important;
+}
+
+/* Fix button colors within block */
+.editor-styles-wrapper .wp-block-miblocks-listing-section .wp-element-button,
+.editor-styles-wrapper .wp-block-miblocks-listing-section .button {
+    background-color: var(--color-primary) !important;
+    color: var(--color-white) !important;
+}
+
+.editor-styles-wrapper .wp-block-miblocks-listing-section .wp-element-button:hover,
+.editor-styles-wrapper .wp-block-miblocks-listing-section .button:hover {
+    background-color: var(--color-primary-dark) !important;
+}

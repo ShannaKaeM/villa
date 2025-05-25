@@ -7,17 +7,16 @@
  * @param WP_Block $block      The block instance.
  */
 
-// Extract attributes with defaults
-$attributes = $attributes ?? [];
-$post_type = $attributes['postType'] ?? 'property';
-$posts_per_page = $attributes['postsPerPage'] ?? 12;
-$columns = $attributes['columns'] ?? 3;
-$show_filter = $attributes['showFilter'] ?? true;
-$filter_position = $attributes['filterPosition'] ?? 'left';
-$card_style = $attributes['cardStyle'] ?? 'default';
-$show_pagination = $attributes['showPagination'] ?? false;
-$selected_categories = $attributes['selectedCategories'] ?? [];
-$selected_tags = $attributes['selectedTags'] ?? [];
+// Extract attributes with defaults - WordPress already provides defaults from block.json
+$post_type = isset($attributes['postType']) ? $attributes['postType'] : 'property';
+$posts_per_page = isset($attributes['postsPerPage']) ? $attributes['postsPerPage'] : 12;
+$columns = isset($attributes['columns']) ? $attributes['columns'] : 3;
+$show_filter = isset($attributes['showFilter']) ? $attributes['showFilter'] : true;
+$filter_position = isset($attributes['filterPosition']) ? $attributes['filterPosition'] : 'left';
+$card_style = isset($attributes['cardStyle']) ? $attributes['cardStyle'] : 'default';
+$show_pagination = isset($attributes['showPagination']) ? $attributes['showPagination'] : false;
+$selected_categories = isset($attributes['selectedCategories']) ? $attributes['selectedCategories'] : [];
+$selected_tags = isset($attributes['selectedTags']) ? $attributes['selectedTags'] : [];
 
 // Get current page for pagination
 $paged = get_query_var('paged') ? get_query_var('paged') : 1;

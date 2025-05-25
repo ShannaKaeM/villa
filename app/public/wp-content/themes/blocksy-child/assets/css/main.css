@@ -6,8 +6,39 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-/* Core reset and base styles with CSS variables */
-@import './base.css';
+/* Import our base CSS with all variables */
+@import url('base.css');
+
+/* ==========================================================================
+   Force Theme Palette Colors on Root
+   ========================================================================== */
+:root {
+  /* Override Blocksy's theme palette colors with our theme colors */
+  --theme-palette-color-1: var(--color-primary) !important;
+  --theme-palette-color-2: var(--color-secondary) !important;
+  --theme-palette-color-3: var(--color-emphasis) !important;
+  --theme-palette-color-4: var(--color-neutral) !important;
+  --theme-palette-color-5: var(--color-base) !important;
+  --theme-palette-color-6: var(--color-base-extreme-light) !important;
+  --theme-palette-color-7: var(--color-base-extreme-dark) !important;
+  --theme-palette-color-8: var(--color-site-bg) !important;
+}
+
+/* Force Blocksy to use our colors in all contexts */
+body,
+.ct-header,
+[data-header],
+.site-header,
+#header {
+  --theme-palette-color-1: var(--color-primary) !important;
+  --theme-palette-color-2: var(--color-secondary) !important;
+  --theme-palette-color-3: var(--color-emphasis) !important;
+  --theme-palette-color-4: var(--color-neutral) !important;
+  --theme-palette-color-5: var(--color-base) !important;
+  --theme-palette-color-6: var(--color-base-extreme-light) !important;
+  --theme-palette-color-7: var(--color-base-extreme-dark) !important;
+  --theme-palette-color-8: var(--color-site-bg) !important;
+}
 
 /* ==========================================================================
    Blocksy Theme Overrides
@@ -47,7 +78,7 @@ body.blocksy-theme,
 .site-main,
 .content-area {
   color: var(--color-base-darkest) !important;
-  background-color: var(--color-white) !important;
+  background-color: var(--color-site-bg) !important;
 }
 
 /* Override ALL Blocksy button styles - including sliders */
@@ -66,7 +97,7 @@ input[type="button"],
 [class*="slider"] button,
 [class*="carousel"] button {
   background-color: var(--color-primary) !important;
-  color: var(--color-white) !important;
+  color: var(--color-base-extreme-light) !important;
   border: none !important;
   border-radius: var(--radius-md) !important;
   padding: var(--spacing-3) var(--spacing-6) !important;
@@ -89,7 +120,7 @@ input[type="button"]:hover,
 [class*="slider"] button:hover,
 [class*="carousel"] button:hover {
   background-color: var(--color-primary-dark) !important;
-  color: var(--color-white) !important;
+  color: var(--color-base-extreme-light) !important;
 }
 
 /* Override slider navigation specifically */
@@ -145,7 +176,7 @@ input[type="tel"],
 input[type="date"],
 textarea,
 select {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-base-extreme-light) !important;
   border: 1px solid var(--color-base-light) !important;
   color: var(--color-base-darkest) !important;
   border-radius: var(--radius-md) !important;
@@ -170,14 +201,14 @@ select:focus {
 
 /* Override Blocksy Cards */
 .entry-card {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-base-extreme-light) !important;
   color: var(--color-base-darkest) !important;
   border: 1px solid var(--color-base-light) !important;
 }
 
 /* Override Blocksy Header */
 header[data-row] {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-base-extreme-light) !important;
   color: var(--color-base-darkest) !important;
 }
 
@@ -236,13 +267,12 @@ article::after,
 
 /* Fix body background */
 body {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-site-bg) !important;
 }
 
 /* Fix main content background */
-.site-main,
 #main {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-site-bg) !important;
 }
 
 /* Ensure proper text colors */
@@ -252,7 +282,7 @@ body,
 .entry-content li,
 .entry-content td,
 .entry-content th {
-  color: var(--color-black) !important;
+  color: var(--color-base-extreme-dark) !important;
 }
 
 /* Fix heading colors */
@@ -263,7 +293,7 @@ h1, h2, h3, h4, h5, h6,
 .entry-content h4,
 .entry-content h5,
 .entry-content h6 {
-  color: var(--color-black) !important;
+  color: var(--color-base-extreme-dark) !important;
   font-family: var(--font-secondary), serif !important;
 }
 
@@ -278,17 +308,82 @@ h1, h2, h3, h4, h5, h6,
 header[data-row="top"],
 header[data-row="middle"],
 header[data-row="bottom"],
-.site-header {
-  background-color: var(--color-white) !important;
+.site-header,
+.ct-header,
+[data-header] {
+  background-color: var(--color-primary) !important;
+}
+
+/* Override Blocksy's header panel background */
+.ct-panel.ct-header {
+  background-color: var(--color-primary) !important;
 }
 
 /* Fix navigation colors */
 .site-header a,
-.site-header .menu-item a {
-  color: var(--color-black) !important;
+.site-header .menu-item a,
+.ct-header a,
+.ct-header .menu-item a {
+  color: var(--color-base-extreme-light) !important;
 }
 
 .site-header a:hover,
-.site-header .menu-item a:hover {
-  color: var(--color-primary) !important;
+.site-header .menu-item a:hover,
+.ct-header a:hover,
+.ct-header .menu-item a:hover {
+  color: var(--color-primary-light) !important;
+}
+
+/* Fix logo text color */
+.site-title,
+.site-title a,
+.site-description {
+  color: var(--color-base-extreme-light) !important;
+}
+
+/* ==========================================================================
+   Footer Overrides
+   ========================================================================== */
+footer[data-row],
+.site-footer,
+.ct-footer,
+[data-footer],
+#footer {
+  background-color: var(--color-primary) !important;
+  color: var(--color-base-extreme-light) !important;
+}
+
+/* Footer text and links */
+.site-footer a,
+.ct-footer a,
+footer a {
+  color: var(--color-base-extreme-light) !important;
+}
+
+.site-footer a:hover,
+.ct-footer a:hover,
+footer a:hover {
+  color: var(--color-primary-light) !important;
+}
+
+/* Footer widget titles */
+.site-footer .widget-title,
+.ct-footer .widget-title,
+footer .widget-title {
+  color: var(--color-base-extreme-light) !important;
+}
+
+/* Footer copyright text */
+.ct-footer-copyright,
+.site-info,
+.footer-copyright {
+  color: var(--color-base-extreme-light) !important;
+  opacity: 0.8;
+}
+
+/* Override Blocksy main content area */
+.site-main,
+.content-area {
+  color: var(--color-base-darkest) !important;
+  background-color: var(--color-site-bg) !important;
 }

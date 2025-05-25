@@ -11,7 +11,11 @@
 $title = isset($attributes['title']) ? $attributes['title'] : 'Page Title';
 $subtitle = isset($attributes['subtitle']) ? $attributes['subtitle'] : '';
 $backgroundImage = isset($attributes['backgroundImage']) ? $attributes['backgroundImage'] : '';
-$overlayOpacity = isset($attributes['overlayOpacity']) ? $attributes['overlayOpacity'] : 0.5;
+$overlayOpacity = isset($attributes['overlayOpacity']) ? floatval($attributes['overlayOpacity']) : 0.5;
+// Ensure opacity is between 0 and 1
+if ($overlayOpacity > 1) {
+    $overlayOpacity = $overlayOpacity / 100; // Convert percentage to decimal if needed
+}
 $minHeight = isset($attributes['minHeight']) ? $attributes['minHeight'] : '400px';
 $borderRadius = isset($attributes['borderRadius']) ? $attributes['borderRadius'] : 'lg';
 $titleSpacing = isset($attributes['titleSpacing']) ? $attributes['titleSpacing'] : '4';
@@ -101,32 +105,46 @@ $spacingMap = array(
 
 // Map colors to CSS variables
 $colorMap = array(
-    'white' => 'var(--color-white)',
-    'black' => 'var(--color-black)',
+    'white' => 'var(--color-base-extreme-light)',
+    'black' => 'var(--color-base-extreme-dark)',
     'primary' => 'var(--color-primary)',
+    'primary-lightest' => 'var(--color-primary-lightest)',
     'primary-light' => 'var(--color-primary-light)',
+    'primary-med' => 'var(--color-primary-med)',
     'primary-dark' => 'var(--color-primary-dark)',
+    'primary-darkest' => 'var(--color-primary-darkest)',
     'secondary' => 'var(--color-secondary)',
+    'secondary-lightest' => 'var(--color-secondary-lightest)',
     'secondary-light' => 'var(--color-secondary-light)',
+    'secondary-med' => 'var(--color-secondary-med)',
     'secondary-dark' => 'var(--color-secondary-dark)',
+    'secondary-darkest' => 'var(--color-secondary-darkest)',
     'emphasis' => 'var(--color-emphasis)',
+    'emphasis-lightest' => 'var(--color-emphasis-lightest)',
     'emphasis-light' => 'var(--color-emphasis-light)',
+    'emphasis-med' => 'var(--color-emphasis-med)',
     'emphasis-dark' => 'var(--color-emphasis-dark)',
+    'emphasis-darkest' => 'var(--color-emphasis-darkest)',
+    'neutral' => 'var(--color-neutral)',
     'neutral-lightest' => 'var(--color-neutral-lightest)',
     'neutral-light' => 'var(--color-neutral-light)',
-    'neutral' => 'var(--color-neutral)',
+    'neutral-med' => 'var(--color-neutral-med)',
     'neutral-dark' => 'var(--color-neutral-dark)',
+    'neutral-darkest' => 'var(--color-neutral-darkest)',
+    'base' => 'var(--color-base)',
+    'base-extreme-light' => 'var(--color-base-extreme-light)',
     'base-lightest' => 'var(--color-base-lightest)',
     'base-light' => 'var(--color-base-light)',
-    'base' => 'var(--color-base)',
+    'base-med' => 'var(--color-base-med)',
     'base-dark' => 'var(--color-base-dark)',
-    'base-darkest' => 'var(--color-base-darkest)'
+    'base-darkest' => 'var(--color-base-darkest)',
+    'base-extreme-dark' => 'var(--color-base-extreme-dark)'
 );
 
 // Get mapped values
 $titleSizeValue = isset($sizeMap[$titleSize]) ? $sizeMap[$titleSize] : 'var(--font-size-4xl)';
 $titleWeightValue = isset($weightMap[$titleWeight]) ? $weightMap[$titleWeight] : 'var(--font-weight-bold)';
-$titleColorValue = isset($colorMap[$titleColor]) ? $colorMap[$titleColor] : 'var(--color-white)';
+$titleColorValue = isset($colorMap[$titleColor]) ? $colorMap[$titleColor] : 'var(--color-base-extreme-light)';
 $titleTransformValue = isset($transformMap[$titleTransform]) ? $transformMap[$titleTransform] : 'uppercase';
 $titleTrackingValue = isset($trackingMap[$titleTracking]) ? $trackingMap[$titleTracking] : 'var(--letter-spacing-tight)';
 $subtitleSizeValue = isset($sizeMap[$subtitleSize]) ? $sizeMap[$subtitleSize] : 'var(--font-size-xl)';
@@ -138,7 +156,6 @@ $titleSpacingValue = isset($spacingMap[$titleSpacing]) ? $spacingMap[$titleSpaci
 
 // Get wrapper attributes
 $wrapper_attributes = get_block_wrapper_attributes(array(
-    'class' => 'page-header-block',
     'style' => sprintf(
         'background-image: url(%s); min-height: %s; --block-radius: %s; background-position-y: %s;',
         esc_url($backgroundImage),
@@ -150,12 +167,12 @@ $wrapper_attributes = get_block_wrapper_attributes(array(
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="page-header-overlay" style="opacity: <?php echo esc_attr($overlayOpacity); ?>"></div>
-    <div class="page-header-content">
-        <div class="page-header-inner">
-            <h1 class="page-header-title" style="font-size: <?php echo esc_attr($titleSizeValue); ?> !important; font-weight: <?php echo esc_attr($titleWeightValue); ?> !important; color: <?php echo esc_attr($titleColorValue); ?> !important; text-transform: <?php echo esc_attr($titleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($titleTrackingValue); ?> !important; margin-bottom: <?php echo esc_attr($titleSpacingValue); ?> !important;"><?php echo esc_html($title); ?></h1>
+    <div class="page-header__overlay" style="opacity: <?php echo esc_attr($overlayOpacity); ?>"></div>
+    <div class="page-header__content">
+        <div class="page-header__inner">
+            <h1 class="page-header__title" style="font-size: <?php echo esc_attr($titleSizeValue); ?> !important; font-weight: <?php echo esc_attr($titleWeightValue); ?> !important; color: <?php echo esc_attr($titleColorValue); ?> !important; text-transform: <?php echo esc_attr($titleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($titleTrackingValue); ?> !important; margin-bottom: <?php echo esc_attr($titleSpacingValue); ?> !important;"><?php echo esc_html($title); ?></h1>
             <?php if (!empty($subtitle)) : ?>
-                <p class="page-header-subtitle" style="font-size: <?php echo esc_attr($subtitleSizeValue); ?> !important; font-weight: <?php echo esc_attr($subtitleWeightValue); ?> !important; color: <?php echo esc_attr($subtitleColorValue); ?> !important; text-transform: <?php echo esc_attr($subtitleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($subtitleTrackingValue); ?> !important;"><?php echo esc_html($subtitle); ?></p>
+                <p class="page-header__subtitle" style="font-size: <?php echo esc_attr($subtitleSizeValue); ?> !important; font-weight: <?php echo esc_attr($subtitleWeightValue); ?> !important; color: <?php echo esc_attr($subtitleColorValue); ?> !important; text-transform: <?php echo esc_attr($subtitleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($subtitleTrackingValue); ?> !important;"><?php echo esc_html($subtitle); ?></p>
             <?php endif; ?>
         </div>
     </div>

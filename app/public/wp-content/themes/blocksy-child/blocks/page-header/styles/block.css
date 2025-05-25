@@ -1,10 +1,10 @@
 /**
  * Page Header Block Styles
- * This file can be edited via GutenVibes CSS Editor
+ * Using BEM naming convention
  */
 
-/* Block Wrapper - 90% width with rounded corners */
-.wp-block-miblocks-page-header .page-header-block {
+/* Block - Main wrapper with proper rounded corners */
+.wp-block-miblocks-page-header {
     position: relative;
     display: flex;
     align-items: center;
@@ -17,37 +17,42 @@
     max-width: 1400px;
     margin: var(--spacing-8) auto;
     border-radius: var(--block-radius, var(--radius-lg));
+    min-height: 400px;
 }
 
-/* Overlay */
-.page-header-overlay {
+/* Element - Overlay with matching rounded corners */
+.page-header__overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-base-darkest);
+    background-color: var(--color-base-extreme-dark);
     z-index: 1;
-    border-radius: var(--block-radius, var(--radius-lg));
+    border-radius: inherit; /* Inherit from parent */
     pointer-events: none;
 }
 
-/* Content Container */
-.page-header-content {
+/* Element - Content Container centered vertically and horizontally */
+.page-header__content {
     position: relative;
     z-index: 2;
     width: 100%;
     padding: var(--spacing-16) var(--spacing-4);
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: inherit;
 }
 
-.page-header-inner {
+.page-header__inner {
     max-width: 800px;
     margin: 0 auto;
 }
 
-/* Title Styles - Default styles that inline styles will override */
-.page-header-title {
+/* Element - Title Styles */
+.page-header__title {
     line-height: var(--line-height-tight);
     margin: 0 0 var(--spacing-4) 0;
     letter-spacing: var(--letter-spacing-tight);
@@ -55,24 +60,24 @@
 }
 
 /* Only apply default styles if no inline styles are present */
-.page-header-title:not([style*="font-size"]) {
+.page-header__title:not([style*="font-size"]) {
     font-size: var(--font-size-4xl);
 }
 
-.page-header-title:not([style*="font-weight"]) {
+.page-header__title:not([style*="font-weight"]) {
     font-weight: var(--font-weight-bold);
 }
 
-.page-header-title:not([style*="color"]) {
-    color: var(--color-white);
+.page-header__title:not([style*="color"]) {
+    color: var(--color-base-extreme-light);
 }
 
-.page-header-title:not([style*="text-transform"]) {
+.page-header__title:not([style*="text-transform"]) {
     text-transform: var(--text-transform-uppercase);
 }
 
-/* Subtitle Styles - Default styles that inline styles will override */
-.page-header-subtitle {
+/* Element - Subtitle Styles */
+.page-header__subtitle {
     line-height: var(--line-height-relaxed);
     margin: 0;
     max-width: 600px;
@@ -82,52 +87,57 @@
 }
 
 /* Only apply default styles if no inline styles are present */
-.page-header-subtitle:not([style*="font-size"]) {
+.page-header__subtitle:not([style*="font-size"]) {
     font-size: var(--font-size-xl);
 }
 
-.page-header-subtitle:not([style*="font-weight"]) {
+.page-header__subtitle:not([style*="font-weight"]) {
     font-weight: var(--font-weight-normal);
 }
 
-.page-header-subtitle:not([style*="color"]) {
-    color: var(--color-base-light);
+.page-header__subtitle:not([style*="color"]) {
+    color: var(--color-base-lightest);
 }
 
-.page-header-subtitle:not([style*="text-transform"]) {
+.page-header__subtitle:not([style*="text-transform"]) {
     text-transform: var(--text-transform-none);
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    .wp-block-miblocks-page-header .page-header-block {
+    .wp-block-miblocks-page-header {
         width: 95%;
-        margin: var(--spacing-4) auto;
+        min-height: 300px;
     }
-    
-    .page-header-title:not([style*="font-size"]) {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .page-header-subtitle:not([style*="font-size"]) {
-        font-size: var(--font-size-lg);
-    }
-    
-    .page-header-content {
+
+    .page-header__content {
         padding: var(--spacing-12) var(--spacing-3);
     }
+
+    /* Responsive title size */
+    .page-header__title:not([style*="font-size"]) {
+        font-size: var(--font-size-3xl);
+    }
+
+    /* Responsive subtitle size */
+    .page-header__subtitle:not([style*="font-size"]) {
+        font-size: var(--font-size-lg);
+    }
 }
 
-/* Editor specific styles */
-.editor-styles-wrapper .wp-block-miblocks-page-header .page-header-block {
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
-}
+/* Print Styles */
+@media print {
+    .wp-block-miblocks-page-header {
+        background-image: none !important;
+        border: 1px solid var(--color-neutral-300);
+    }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .wp-block-miblocks-page-header .page-header-block {
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    .page-header__overlay {
+        display: none;
+    }
+
+    .page-header__title,
+    .page-header__subtitle {
+        color: var(--color-neutral-900) !important;
     }
 }

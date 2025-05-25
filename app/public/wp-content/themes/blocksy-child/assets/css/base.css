@@ -77,7 +77,20 @@ select {
 
 :root {
 
-  /* Remove any default Blocksy blue colors */
+  
+
+
+  /* Main Theme Colors (Single Source of Truth) */
+  --color-primary: #5a7f80; /* Teal*/
+  --color-secondary: #a85d57; /* Terracotta */
+  --color-emphasis: #3c9da1; /* Turquoise */
+  --color-neutral: #9b8974; /* Sand */
+  --color-base: #9c9c9c; /* Mid Gray - for grayscale variations */
+  --color-white: #FFFFFF; /* Pure White - standalone color */
+  --color-black: #000000; /* Pure Black - standalone color */
+  --color-site-bg: #ffffff; /* Pure White - standalone color */
+
+  /* Override Blocksy theme palette colors */
   --paletteColor1: var(--color-primary);
   --paletteColor2: var(--color-secondary);
   --paletteColor3: var(--color-emphasis);
@@ -85,26 +98,24 @@ select {
   --paletteColor5: var(--color-base);
   --paletteColor6: var(--color-white);
   --paletteColor7: var(--color-black);
+  --paletteColor8: var(--color-site-bg);
 
+  --theme-palette-color-1: var(--color-primary);
+  --theme-palette-color-2: var(--color-secondary);
+  --theme-palette-color-3: var(--color-emphasis);
+  --theme-palette-color-4: var(--color-neutral);
+  --theme-palette-color-5: var(--color-base);
+  --theme-palette-color-6: var(--color-white);
+  --theme-palette-color-7: var(--color-black);
+  --theme-palette-color-8: var(--color-site-bg);
 
-  /* Main Theme Colors (Single Source of Truth) */
-  --color-primary: #5a7f80; /* Goldenrod */
-  --color-secondary: #a85d57; /* Saddle Brown */
-  --color-emphasis: #3c9da1; /* Tomato */
-  --color-neutral: #9b8974; /* Light Sand */
-  --color-base: #f5f2ed; /* Beige - FIXED: was incorrectly set to gray */
-  --color-white: #FFFFFF; /* Pure White - standalone color */
-  --color-black: #000000; /* Pure Black - standalone color */
-
-  
-  
   /* Primary Variations */
   --color-primary-lightest: color-mix(in srgb, var(--color-primary) 20%, white);
   --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
   --color-primary-med: var(--color-primary);
   --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
   --color-primary-darkest: color-mix(in srgb, var(--color-primary) 60%, black);
-  
+
   /* Secondary Variations */
   --color-secondary-lightest: color-mix(in srgb, var(--color-secondary) 20%, white);
   --color-secondary-light: color-mix(in srgb, var(--color-secondary) 60%, white);
@@ -127,11 +138,13 @@ select {
   --color-neutral-darkest: color-mix(in srgb, var(--color-neutral) 60%, black);
   
   /* Base Variations (5 levels - white and black are separate) */
-  --color-base-lightest: color-mix(in srgb, var(--color-base) 20%, white);
+  --color-base-extreme-light: color-mix(in srgb, var(--color-base) 0%, white);
+  --color-base-lightest: color-mix(in srgb, var(--color-base) 30%, white);
   --color-base-light: color-mix(in srgb, var(--color-base) 60%, white);
   --color-base-med: var(--color-base);
-  --color-base-dark: color-mix(in srgb, var(--color-base) 80%, black);
-  --color-base-darkest: color-mix(in srgb, var(--color-base) 60%, black);
+  --color-base-dark: color-mix(in srgb, var(--color-base) 60%, black);
+  --color-base-darkest: color-mix(in srgb, var(--color-base) 30%, black);
+  --color-base-extreme-dark: color-mix(in srgb, var(--color-base) 0%, black);
   
   /* Blocksy Component Colors - Override ALL defaults */
   --theme-text-color: var(--color-base-dark);
@@ -141,8 +154,8 @@ select {
   --theme-border-color: var(--color-neutral-light);
   --theme-button-background-initial-color: var(--color-primary-med);
   --theme-button-background-hover-color: var(--color-primary-dark);
-  --theme-button-text-initial-color: var(--color-white);
-  --theme-button-text-hover-color: var(--color-white);
+  --theme-button-text-initial-color: var(--color-base-extreme-light);
+  --theme-button-text-hover-color: var(--color-base-extreme-light);
   
   
   /* Spacing Scale */
