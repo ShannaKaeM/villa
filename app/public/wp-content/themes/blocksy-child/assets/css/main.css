@@ -196,3 +196,99 @@ footer[data-row] {
 .ct-main-container h6 {
   font-family: 'Montserrat', sans-serif !important;
 }
+
+/* ==========================================================================
+   Remove Gray Overlays and Fix Backgrounds
+   ========================================================================== */
+
+/* Remove any overlays from main content areas */
+#main,
+.site-main,
+.ct-container-full,
+.ct-container,
+article.post,
+article.page,
+.entry-content,
+.wp-block-group,
+.wp-block-cover,
+.wp-block-miblocks-listing-section,
+.wp-block-miblocks-page-header {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Remove pseudo-element overlays */
+#main::before,
+#main::after,
+.site-main::before,
+.site-main::after,
+.ct-container::before,
+.ct-container::after,
+article::before,
+article::after,
+.entry-content::before,
+.entry-content::after {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+}
+
+/* Fix body background */
+body {
+  background-color: var(--color-white) !important;
+}
+
+/* Fix main content background */
+.site-main,
+#main {
+  background-color: var(--color-white) !important;
+}
+
+/* Ensure proper text colors */
+body,
+.entry-content,
+.entry-content p,
+.entry-content li,
+.entry-content td,
+.entry-content th {
+  color: var(--color-black) !important;
+}
+
+/* Fix heading colors */
+h1, h2, h3, h4, h5, h6,
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6 {
+  color: var(--color-black) !important;
+  font-family: var(--font-secondary), serif !important;
+}
+
+/* Remove any filters or opacity */
+.site-main *,
+#main * {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Fix Blocksy header background */
+header[data-row="top"],
+header[data-row="middle"],
+header[data-row="bottom"],
+.site-header {
+  background-color: var(--color-white) !important;
+}
+
+/* Fix navigation colors */
+.site-header a,
+.site-header .menu-item a {
+  color: var(--color-black) !important;
+}
+
+.site-header a:hover,
+.site-header .menu-item a:hover {
+  color: var(--color-primary) !important;
+}

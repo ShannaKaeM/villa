@@ -1,89 +1,116 @@
 /**
- * WordPress Block Editor Overrides
- * Forces our theme colors in the Gutenberg editor
+ * Editor Overrides for Villa Community Theme
+ * Forces theme colors in the Gutenberg editor
  */
 
-/* Import our base variables */
-@import './base.css';
+/* Import base CSS variables */
+@import url('base.css');
 
 /* Override Blocksy's editor colors */
-.editor-styles-wrapper,
-.wp-block,
+.editor-styles-wrapper {
+    --theme-palette-color-1: var(--color-primary) !important;
+    --theme-palette-color-2: var(--color-secondary) !important;
+    --theme-palette-color-3: var(--color-emphasis) !important;
+    --theme-palette-color-4: var(--color-neutral) !important;
+    --theme-palette-color-5: var(--color-base) !important;
+    --theme-palette-color-6: var(--color-white) !important;
+    --theme-palette-color-7: var(--color-black) !important;
+    --theme-palette-color-8: var(--color-primary-dark) !important;
+    
+    /* Override default WordPress/Blocksy blue */
+    --wp-admin-theme-color: var(--color-primary) !important;
+    --wp-admin-theme-color-darker-20: var(--color-primary-darkest) !important;
+    
+    /* Override Blocksy's default blue palette */
+    --paletteColor1: var(--color-primary) !important;
+    --paletteColor2: var(--color-secondary) !important;
+    --paletteColor3: var(--color-emphasis) !important;
+    --paletteColor4: var(--color-neutral) !important;
+    --paletteColor5: var(--color-base) !important;
+    
+    /* Background and text color overrides */
+    background-color: var(--color-white) !important;
+    color: var(--color-black) !important;
+}
+
+/* Fix editor background */
 .block-editor-writing-flow,
-.edit-post-visual-editor,
-.editor-styles-wrapper .editor-styles-wrapper,
-body.block-editor-page {
-  --theme-palette-color-1: var(--color-primary) !important;
-  --theme-palette-color-2: var(--color-secondary) !important;
-  --theme-palette-color-3: var(--color-emphasis) !important;
-  --theme-palette-color-4: var(--color-neutral) !important;
-  --theme-palette-color-5: var(--color-base) !important;
-  --theme-palette-color-6: var(--color-white) !important;
-  --theme-palette-color-7: var(--color-black) !important;
-  
-  /* Override default WordPress/Blocksy blue */
-  --wp-admin-theme-color: var(--color-primary) !important;
-  --wp-admin-theme-color-darker-10: var(--color-primary-dark) !important;
-  --wp-admin-theme-color-darker-20: var(--color-primary-darkest) !important;
-}
-
-/* Force button colors in editor */
-.editor-styles-wrapper .wp-block-button__link,
-.editor-styles-wrapper button,
-.editor-styles-wrapper .button,
-.editor-styles-wrapper .btn,
-.editor-styles-wrapper input[type="submit"],
-.editor-styles-wrapper input[type="button"] {
-  background-color: var(--color-primary) !important;
-  color: var(--color-white) !important;
-}
-
-.editor-styles-wrapper .wp-block-button__link:hover,
-.editor-styles-wrapper button:hover,
-.editor-styles-wrapper .button:hover,
-.editor-styles-wrapper .btn:hover {
-  background-color: var(--color-primary-dark) !important;
-  color: var(--color-white) !important;
-}
-
-/* Override link colors in editor */
-.editor-styles-wrapper a {
-  color: var(--color-primary) !important;
-}
-
-.editor-styles-wrapper a:hover {
-  color: var(--color-primary-dark) !important;
-}
-
-/* Override text colors */
-.editor-styles-wrapper,
-.editor-styles-wrapper p,
+.wp-block-post-content,
 .editor-styles-wrapper .wp-block {
-  color: var(--color-base-darkest) !important;
+    background-color: transparent !important;
 }
 
-/* Override heading colors */
+/* Override Blocksy's blue overlays */
+.editor-styles-wrapper .ct-div-block,
+.editor-styles-wrapper [class*="ct-"] {
+    --linkInitialColor: var(--color-primary) !important;
+    --linkHoverColor: var(--color-primary-dark) !important;
+}
+
+/* Fix text colors in blocks */
+.editor-styles-wrapper .wp-block {
+    color: inherit !important;
+}
+
+/* Fix heading colors */
 .editor-styles-wrapper h1,
 .editor-styles-wrapper h2,
 .editor-styles-wrapper h3,
 .editor-styles-wrapper h4,
 .editor-styles-wrapper h5,
 .editor-styles-wrapper h6 {
-  color: var(--color-base-darkest) !important;
+    color: var(--color-black) !important;
+    font-family: var(--font-secondary), serif !important;
+}
+
+/* Fix link colors */
+.editor-styles-wrapper a {
+    color: var(--color-primary) !important;
+}
+
+.editor-styles-wrapper a:hover {
+    color: var(--color-primary-dark) !important;
+}
+
+/* Remove any Blocksy blue backgrounds */
+.editor-styles-wrapper [style*="background-color: rgb(61, 155, 233)"],
+.editor-styles-wrapper [style*="background-color: #3d9be9"] {
+    background-color: var(--color-primary) !important;
+}
+
+/* Fix Villa blocks specifically */
+.editor-styles-wrapper .wp-block-miblocks-listing-section {
+    background-color: transparent !important;
+}
+
+.editor-styles-wrapper .wp-block-miblocks-page-header {
+    background-color: var(--color-base) !important;
+    color: var(--color-black) !important;
+}
+
+/* Ensure proper font families */
+.editor-styles-wrapper {
+    font-family: var(--font-primary), sans-serif !important;
+}
+
+/* Force button colors in editor */
+.editor-styles-wrapper .wp-block-button__link,
+.editor-styles-wrapper .wp-element-button {
+    background-color: var(--color-primary) !important;
+    color: var(--color-white) !important;
+}
+
+.editor-styles-wrapper .wp-block-button__link:hover,
+.editor-styles-wrapper .wp-element-button:hover {
+    background-color: var(--color-primary-dark) !important;
+    color: var(--color-white) !important;
 }
 
 /* Remove any overlays or filters in editor */
 .editor-styles-wrapper::before,
 .editor-styles-wrapper::after,
-.block-editor-writing-flow::before,
-.block-editor-writing-flow::after {
-  display: none !important;
-}
-
-/* Ensure no opacity issues in editor */
-.editor-styles-wrapper,
-.block-editor-writing-flow,
-.wp-block {
-  opacity: 1 !important;
-  filter: none !important;
+.wp-block::before,
+.wp-block::after {
+    display: none !important;
+    opacity: 0 !important;
 }

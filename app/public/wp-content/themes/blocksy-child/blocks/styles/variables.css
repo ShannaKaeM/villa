@@ -15,7 +15,7 @@
   --color-secondary: #a85d57; /* Saddle Brown */
   --color-emphasis: #3c9da1; /* Tomato */
   --color-neutral: #9b8974; /* Light Sand */
-  --color-base: #9c9c9c; /* Mid Gray */
+  --color-base: #f5f2ed; /* Beige - FIXED: was incorrectly set to gray */
   --color-white: #FFFFFF; /* Pure White - standalone color */
   --color-black: #000000; /* Pure Black - standalone color */
   
