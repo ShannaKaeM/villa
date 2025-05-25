@@ -1,5 +1,6 @@
 # Ignore project docs directory (for collaborative work)
 /project_docs/
+!project_docs/*.md
 
 # WordPress core files that shouldn't be tracked
 /app/public/wp-config.php
