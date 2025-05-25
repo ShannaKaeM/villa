@@ -39,13 +39,14 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-height: 60px;
 }
 
 .header-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     max-width: var(--container-max-width, 1200px);
     margin: 0 auto;
 }
@@ -56,13 +57,32 @@
 
 .site-title {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
+    line-height: 1.2;
 }
 
 .site-title a {
-    color: var(--color-primary-med);
+    color: var(--color-base-dark);
     text-decoration: none;
+}
+
+.site-description {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: var(--color-base-medium);
+}
+
+/* Custom Logo */
+.custom-logo-link {
+    display: inline-block;
+    line-height: 0;
+}
+
+.custom-logo {
+    max-height: 50px;
+    width: auto;
+    height: auto;
 }
 
 /* Navigation */

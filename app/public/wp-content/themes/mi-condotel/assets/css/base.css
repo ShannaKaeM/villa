@@ -90,24 +90,6 @@ select {
   --color-black: #000000; /* Pure Black - standalone color */
   --color-site-bg: #ffffff; /* Pure White - standalone color */
 
-  /* Override Blocksy theme palette colors */
-  --paletteColor1: var(--color-primary);
-  --paletteColor2: var(--color-secondary);
-  --paletteColor3: var(--color-emphasis);
-  --paletteColor4: var(--color-neutral);
-  --paletteColor5: var(--color-base);
-  --paletteColor6: var(--color-white);
-  --paletteColor7: var(--color-black);
-  --paletteColor8: var(--color-site-bg);
-
-  --theme-palette-color-1: var(--color-primary);
-  --theme-palette-color-2: var(--color-secondary);
-  --theme-palette-color-3: var(--color-emphasis);
-  --theme-palette-color-4: var(--color-neutral);
-  --theme-palette-color-5: var(--color-base);
-  --theme-palette-color-6: var(--color-white);
-  --theme-palette-color-7: var(--color-black);
-  --theme-palette-color-8: var(--color-site-bg);
 
   /* Primary Variations */
   --color-primary-lightest: color-mix(in srgb, var(--color-primary) 20%, white);
