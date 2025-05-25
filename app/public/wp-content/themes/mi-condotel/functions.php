@@ -76,17 +76,6 @@ function mi_condotel_fallback_menu() {
             echo '</li>';
         }
         
-        // Add Properties, Businesses, and Articles if they exist
-        if (post_type_exists('property')) {
-            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('property')) . '">Properties</a></li>';
-        }
-        if (post_type_exists('business')) {
-            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('business')) . '">Businesses</a></li>';
-        }
-        if (post_type_exists('article')) {
-            echo '<li class="menu-item"><a href="' . esc_url(get_post_type_archive_link('article')) . '">Articles</a></li>';
-        }
-        
         echo '</ul>';
         echo '</div>';
     }
