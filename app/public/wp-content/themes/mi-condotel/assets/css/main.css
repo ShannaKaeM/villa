@@ -157,8 +157,7 @@
    ========================================================================== */
 
 .entry-title {
-    color: var(--color-primary-med);
-    margin-bottom: 1rem;
+    display: none;
 }
 
 .entry-content {

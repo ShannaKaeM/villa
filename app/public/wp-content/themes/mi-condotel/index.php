@@ -12,7 +12,8 @@ get_header();
     <div class="container">
         <?php
         if (have_posts()) :
-            
+            /*
+            Blog page title removed
             if (is_home() && !is_front_page()) :
                 ?>
                 <header class="page-header">
@@ -20,6 +21,7 @@ get_header();
                 </header>
                 <?php
             endif;
+            */
             
             // Start the Loop
             while (have_posts()) :
@@ -27,6 +29,7 @@ get_header();
                 ?>
                 
                 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+                    <?php /* Titles removed - using Hero blocks or custom content instead
                     <header class="entry-header">
                         <?php
                         if (is_singular()) :
@@ -36,6 +39,7 @@ get_header();
                         endif;
                         ?>
                     </header>
+                    */ ?>
                     
                     <?php if (has_post_thumbnail()) : ?>
                         <div class="post-thumbnail">

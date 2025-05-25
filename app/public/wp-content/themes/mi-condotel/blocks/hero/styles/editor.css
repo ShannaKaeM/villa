@@ -1,0 +1,19 @@
+/**
+ * Hero Block Editor Styles
+ */
+
+/* Ensure block takes full width in editor */
+.wp-block-miblocks-hero {
+    max-width: none !important;
+}
+
+/* Override editor alignment constraints */
+.wp-block[data-type="miblocks/hero"] {
+    max-width: none !important;
+}
+
+/* Ensure proper preview in editor */
+.editor-styles-wrapper .hero-block {
+    margin-left: 0;
+    margin-right: 0;
+}
