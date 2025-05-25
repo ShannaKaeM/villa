@@ -51,6 +51,16 @@ function mi_condotel_setup() {
 }
 add_action('after_setup_theme', 'mi_condotel_setup');
 
+// Include additional functionality
+require_once get_template_directory() . '/inc/mi-cleanup.php';
+require_once get_template_directory() . '/inc/mi-cpt-registration.php';
+require_once get_template_directory() . '/inc/carbon-fields-setup.php';
+require_once get_template_directory() . '/inc/mi-property-fields.php';
+require_once get_template_directory() . '/inc/mi-property-importer.php';
+require_once get_template_directory() . '/inc/mi-taxonomy-importer.php';
+require_once get_template_directory() . '/inc/mi-site-migration.php';
+require_once get_template_directory() . '/inc/mi-export-helper.php';
+
 // Enqueue styles and scripts
 function mi_condotel_scripts() {
     // Google Fonts
@@ -107,86 +117,13 @@ function mi_condotel_register_blocks() {
 }
 add_action('init', 'mi_condotel_register_blocks');
 
-// Custom Post Types
-function mi_condotel_register_post_types() {
-    // Property Post Type
-    register_post_type('property', array(
-        'labels' => array(
-            'name'               => __('Properties', 'mi-condotel'),
-            'singular_name'      => __('Property', 'mi-condotel'),
-            'add_new'            => __('Add New Property', 'mi-condotel'),
-            'add_new_item'       => __('Add New Property', 'mi-condotel'),
-            'edit_item'          => __('Edit Property', 'mi-condotel'),
-            'new_item'           => __('New Property', 'mi-condotel'),
-            'view_item'          => __('View Property', 'mi-condotel'),
-            'search_items'       => __('Search Properties', 'mi-condotel'),
-            'not_found'          => __('No properties found', 'mi-condotel'),
-            'not_found_in_trash' => __('No properties found in Trash', 'mi-condotel'),
-        ),
-        'public'             => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array('slug' => 'properties'),
-        'capability_type'    => 'post',
-        'has_archive'        => true,
-        'hierarchical'       => false,
-        'menu_position'      => 5,
-        'menu_icon'          => 'dashicons-building',
-        'supports'           => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
-        'show_in_rest'       => true,
-    ));
-    
-    // Property Type Taxonomy
-    register_taxonomy('property_type', 'property', array(
-        'labels' => array(
-            'name'              => __('Property Types', 'mi-condotel'),
-            'singular_name'     => __('Property Type', 'mi-condotel'),
-            'search_items'      => __('Search Property Types', 'mi-condotel'),
-            'all_items'         => __('All Property Types', 'mi-condotel'),
-            'edit_item'         => __('Edit Property Type', 'mi-condotel'),
-            'update_item'       => __('Update Property Type', 'mi-condotel'),
-            'add_new_item'      => __('Add New Property Type', 'mi-condotel'),
-            'new_item_name'     => __('New Property Type Name', 'mi-condotel'),
-            'menu_name'         => __('Property Types', 'mi-condotel'),
-        ),
-        'hierarchical'      => true,
-        'public'            => true,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => array('slug' => 'property-type'),
-        'show_in_rest'      => true,
-    ));
-    
-    // Property Features Taxonomy
-    register_taxonomy('property_features', 'property', array(
-        'labels' => array(
-            'name'              => __('Property Features', 'mi-condotel'),
-            'singular_name'     => __('Property Feature', 'mi-condotel'),
-            'search_items'      => __('Search Property Features', 'mi-condotel'),
-            'all_items'         => __('All Property Features', 'mi-condotel'),
-            'edit_item'         => __('Edit Property Feature', 'mi-condotel'),
-            'update_item'       => __('Update Property Feature', 'mi-condotel'),
-            'add_new_item'      => __('Add New Property Feature', 'mi-condotel'),
-            'new_item_name'     => __('New Property Feature Name', 'mi-condotel'),
-            'menu_name'         => __('Property Features', 'mi-condotel'),
-        ),
-        'hierarchical'      => false,
-        'public'            => true,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => array('slug' => 'property-features'),
-        'show_in_rest'      => true,
-    ));
-}
-add_action('init', 'mi_condotel_register_post_types');
-
 // Theme activation - flush rewrite rules
 function mi_condotel_rewrite_flush() {
-    mi_condotel_register_post_types();
+    // Call the CPT registration functions from mi-cpt-registration.php
+    mi_register_property_post_type();
+    mi_register_business_post_type();
+    mi_register_article_post_type();
+    mi_register_user_profile_post_type();
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'mi_condotel_rewrite_flush');
