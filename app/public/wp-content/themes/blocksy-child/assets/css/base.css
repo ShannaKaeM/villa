@@ -76,6 +76,17 @@ select {
    ========================================================================== */
 
 :root {
+
+  /* Remove any default Blocksy blue colors */
+  --paletteColor1: var(--color-primary);
+  --paletteColor2: var(--color-secondary);
+  --paletteColor3: var(--color-emphasis);
+  --paletteColor4: var(--color-neutral);
+  --paletteColor5: var(--color-base);
+  --paletteColor6: var(--color-white);
+  --paletteColor7: var(--color-black);
+
+
   /* Main Theme Colors (Single Source of Truth) */
   --color-primary: #5a7f80; /* Goldenrod */
   --color-secondary: #a85d57; /* Saddle Brown */
@@ -84,6 +95,8 @@ select {
   --color-base: #9c9c9c; /* Mid Gray */
   --color-white: #FFFFFF; /* Pure White - standalone color */
   --color-black: #000000; /* Pure Black - standalone color */
+
+  
   
   /* Primary Variations */
   --color-primary-lightest: color-mix(in srgb, var(--color-primary) 20%, white);
@@ -120,34 +133,17 @@ select {
   --color-base-dark: color-mix(in srgb, var(--color-base) 80%, black);
   --color-base-darkest: color-mix(in srgb, var(--color-base) 60%, black);
   
-  /* Blocksy Global Overrides - Map to our 7 main colors */
-  --theme-palette-color-1: var(--color-primary);
-  --theme-palette-color-2: var(--color-secondary);
-  --theme-palette-color-3: var(--color-emphasis);
-  --theme-palette-color-4: var(--color-neutral);
-  --theme-palette-color-5: var(--color-base);
-  --theme-palette-color-6: var(--color-white);
-  --theme-palette-color-7: var(--color-black);
-  
   /* Blocksy Component Colors - Override ALL defaults */
   --theme-text-color: var(--color-base-dark);
-  --theme-link-initial-color: var(--color-primary);
+  --theme-link-initial-color: var(--color-primary-med);
   --theme-link-hover-color: var(--color-primary-dark);
-  --theme-heading-color: var(--color-base-darkest);
+  --theme-heading-color: var(--color-primary-med);
   --theme-border-color: var(--color-neutral-light);
-  --theme-button-background-initial-color: var(--color-primary);
+  --theme-button-background-initial-color: var(--color-primary-med);
   --theme-button-background-hover-color: var(--color-primary-dark);
   --theme-button-text-initial-color: var(--color-white);
   --theme-button-text-hover-color: var(--color-white);
   
-  /* Remove any default Blocksy blue colors */
-  --paletteColor1: var(--color-primary);
-  --paletteColor2: var(--color-secondary);
-  --paletteColor3: var(--color-emphasis);
-  --paletteColor4: var(--color-neutral);
-  --paletteColor5: var(--color-base);
-  --paletteColor6: var(--color-white);
-  --paletteColor7: var(--color-black);
   
   /* Spacing Scale */
   --spacing-0: 0;
@@ -321,12 +317,12 @@ a:hover {
 
 /* Focus styles */
 :focus {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-primary-med);
   outline-offset: 2px;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-primary-med);
   outline-offset: 2px;
 }
 
