@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa Community - Form System Demo</title>
+    <link rel="stylesheet" href="assets/css/villa-semantic-system.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--color-neutral-50);
+            padding: var(--space-8);
+        }
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .demo-section {
+            background: var(--color-base-50);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        h1 {
+            font-size: var(--text-3xl);
+            color: var(--color-base-900);
+            margin-bottom: var(--space-8);
+        }
+        h2 {
+            font-size: var(--text-xl);
+            color: var(--color-base-900);
+            margin-bottom: var(--space-6);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>Villa Community Form System Demo</h1>
+
+        <!-- Filter Sidebar Example -->
+        <div class="content-with-sidebar">
+            <aside class="filter-sidebar">
+                <section class="filter-section">
+                    <h3 class="filter-section-title">Property Type</h3>
+                    <div class="filter-checkbox-group">
+                        <input type="checkbox" id="apt" class="form-checkbox form-element">
+                        <label for="apt" class="filter-label">Apartment</label>
+                        <span class="filter-count">(24)</span>
+                    </div>
+                    <div class="filter-checkbox-group">
+                        <input type="checkbox" id="house" class="form-checkbox form-element">
+                        <label for="house" class="filter-label">House</label>
+                        <span class="filter-count">(18)</span>
+                    </div>
+                    <div class="filter-checkbox-group">
+                        <input type="checkbox" id="condo" class="form-checkbox form-element">
+                        <label for="condo" class="filter-label">Condo</label>
+                        <span class="filter-count">(12)</span>
+                    </div>
+                </section>
+
+                <section class="filter-section">
+                    <h3 class="filter-section-title">Price Range</h3>
+                    <div class="filter-range-group">
+                        <div class="filter-range-labels">
+                            <span>$500</span>
+                            <span>$5,000</span>
+                        </div>
+                        <input type="range" class="form-slider form-element" min="500" max="5000" value="2500">
+                    </div>
+                </section>
+
+                <section class="filter-section">
+                    <h3 class="filter-section-title">Bedrooms</h3>
+                    <div class="form-group">
+                        <select class="form-select form-element">
+                            <option>Any</option>
+                            <option>1+</option>
+                            <option>2+</option>
+                            <option>3+</option>
+                            <option>4+</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="filter-section">
+                    <h3 class="filter-section-title">Search</h3>
+                    <div class="form-group">
+                        <input type="search" class="form-input form-element" placeholder="Search by location...">
+                    </div>
+                </section>
+            </aside>
+
+            <main>
+                <div class="demo-section">
+                    <h2>All Form Elements Share Common Styles</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Text Input</label>
+                        <input type="text" class="form-input form-element" placeholder="Enter text...">
+                        <span class="form-helper">All inputs share the same base styles</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Dropdown</label>
+                        <select class="form-select form-element">
+                            <option>Option 1</option>
+                            <option>Option 2</option>
+                            <option>Option 3</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Textarea</label>
+                        <textarea class="form-textarea form-element" placeholder="Enter description..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Checkboxes</label>
+                        <div class="filter-checkbox-group">
+                            <input type="checkbox" id="opt1" class="form-checkbox form-element">
+                            <label for="opt1" class="filter-label">Option 1</label>
+                        </div>
+                        <div class="filter-checkbox-group">
+                            <input type="checkbox" id="opt2" class="form-checkbox form-element">
+                            <label for="opt2" class="filter-label">Option 2</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Radio Buttons</label>
+                        <div class="filter-checkbox-group">
+                            <input type="radio" id="rad1" name="radio" class="form-radio form-element">
+                            <label for="rad1" class="filter-label">Choice 1</label>
+                        </div>
+                        <div class="filter-checkbox-group">
+                            <input type="radio" id="rad2" name="radio" class="form-radio form-element">
+                            <label for="rad2" class="filter-label">Choice 2</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Range Slider</label>
+                        <input type="range" class="form-slider form-element" min="0" max="100" value="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Disabled Input</label>
+                        <input type="text" class="form-input form-element" placeholder="Disabled..." disabled>
+                    </div>
+                </div>
+
+                <div class="demo-section">
+                    <h2>Benefits of Unified Form System</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Shared Properties</h3>
+                            <ul class="card-description">
+                                <li>All form elements inherit from <code>.form-element</code></li>
+                                <li>Consistent borders, colors, and transitions</li>
+                                <li>Unified focus and hover states</li>
+                                <li>Change one variable, update all elements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

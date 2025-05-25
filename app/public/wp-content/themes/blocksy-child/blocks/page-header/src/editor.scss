@@ -1,0 +1,65 @@
+/**
+ * Editor styles for Page Header block
+ */
+
+.wp-block-miblocks-page-header {
+    .page-header-block {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        min-height: 400px;
+        width: 90%;
+        max-width: 1400px;
+        margin: 2rem auto;
+        border-radius: 1rem;
+    }
+
+    .page-header-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #000;
+        z-index: 1;
+        pointer-events: none;
+        border-radius: 1rem;
+    }
+
+    .page-header-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding: 4rem 1rem;
+        text-align: center;
+    }
+
+    .page-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-header-title {
+        color: #fff;
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0 0 1rem 0;
+        letter-spacing: -0.02em;
+    }
+
+    .page-header-subtitle {
+        color: #e5e5e5;
+        font-size: 1.125rem;
+        line-height: 1.75;
+        margin: 0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

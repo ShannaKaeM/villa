@@ -13,7 +13,7 @@ if (!isset($attributes) && isset($post_type_param)) {
 ?>
 
 <div class="m-filter-sidebar">
-    <h3 class="m-filter-sidebar__title">
+    <h3 class="m-filter-sidebar__title title-sidebar">
         <?php 
         if ($post_type === 'business') {
             _e('Filter Businesses', 'miblocks');

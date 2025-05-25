@@ -26,15 +26,7 @@ function blocksy_child_enqueue_styles() {
         wp_get_theme()->get('Version')
     );
     
-    // 3. Load ShadCN custom CSS file
-    wp_enqueue_style(
-        'shadcn-custom',
-        get_stylesheet_directory_uri() . '/assets/css/shadcn.css',
-        array('blocksy-child-style'),
-        filemtime(get_stylesheet_directory() . '/assets/css/shadcn.css')
-    );
-    
-    // 4. Load main CSS file with global components
+    // 3. Load main CSS file with global components
     wp_enqueue_style(
         'mi-main-css',
         get_stylesheet_directory_uri() . '/assets/css/main.css',
@@ -169,14 +161,22 @@ function mi_register_native_blocks() {
     
     // Check if directory exists
     if (!is_dir($blocks_dir)) {
+        error_log('mi_register_native_blocks: Blocks directory does not exist');
         return;
     }
     
     // Find all block.json files
     $block_json_files = glob($blocks_dir . '/*/block.json');
     
+    error_log('mi_register_native_blocks: Found block.json files: ' . print_r($block_json_files, true));
+    
     foreach ($block_json_files as $block_json) {
-        register_block_type(dirname($block_json));
+        $result = register_block_type(dirname($block_json));
+        if (is_wp_error($result)) {
+            error_log('mi_register_native_blocks: Error registering block ' . dirname($block_json) . ': ' . $result->get_error_message());
+        } else {
+            error_log('mi_register_native_blocks: Successfully registered block from ' . dirname($block_json));
+        }
     }
 }
 add_action('init', 'mi_register_native_blocks');

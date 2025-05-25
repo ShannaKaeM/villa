@@ -1,463 +1,76 @@
 /**
- * Main CSS Entry Point
- * This file imports all global styles in the correct order
+ * Villa Community - Main CSS Entry Point
+ * Pure semantic CSS approach
  */
 
-/* Import existing theme variables and customizations */
-@import './shadcn.css';
-
-/* Base styles and resets */
+/* Core reset and base styles with CSS variables */
 @import './base.css';
 
-/* Layout patterns */
-@import './layout.css';
-
-/* Reusable components */
-@import './components.css';
-
-/* Filter components */
-@import './filters.css';
-
-/* UI States */
-@import './states.css';
-
-/* Utility classes (use sparingly) */
-@import './utilities.css';
-
-/**
- * Custom Properties Extension
- * Add any additional custom properties that aren't in shadcn-custom.css
- */
-:root {
-  /* Spacing Scale */
-  --spacing-0: 0;
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-5: 1.25rem; 
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-10: 2.5rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-  --spacing-20: 5rem;
-  --spacing-24: 6rem;
-  
-  /* Font Sizes */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-  
-  /* Font Weights */
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  
-  /* Line Heights */
-  --line-height-100: 1;
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
-  --line-height-loose: 2;
-  
-  /* Letter Spacing */
-  --letter-spacing-tighter: -0.05em;
-  --letter-spacing-tight: -0.025em;
-  --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.025em;
-  --letter-spacing-wider: 0.05em;
-  --letter-spacing-widest: 0.1em;
-  
-  /* Opacity */
-  --opacity-0: 0;
-  --opacity-5: 0.05;
-  --opacity-10: 0.1;
-  --opacity-20: 0.2;
-  --opacity-25: 0.25;
-  --opacity-30: 0.3;
-  --opacity-40: 0.4;
-  --opacity-50: 0.5;
-  --opacity-60: 0.6;
-  --opacity-70: 0.7;
-  --opacity-75: 0.75;
-  --opacity-80: 0.8;
-  --opacity-90: 0.9;
-  --opacity-95: 0.95;
-  --opacity-100: 1;
-  
-  /* Lightness Modifiers for OKLCH */
-  /* Use with calc() to modify the lightness channel */
-  /* Example: oklch(calc(var(--primary-l) * var(--lightness-90)) var(--primary-c) var(--primary-h)) */
-  --lightness-5: 0.05;
-  --lightness-10: 0.1;
-  --lightness-20: 0.2;
-  --lightness-30: 0.3;
-  --lightness-40: 0.4;
-  --lightness-50: 0.5;
-  --lightness-60: 0.6;
-  --lightness-70: 0.7;
-  --lightness-80: 0.8;
-  --lightness-90: 0.9;
-  --lightness-95: 0.95;
-  --lightness-100: 1;
-  --lightness-105: 1.05;
-  --lightness-110: 1.1;
-  --lightness-120: 1.2;
-  --lightness-130: 1.3;
-  --lightness-140: 1.4;
-  --lightness-150: 1.5;
-  
-  /* Lightness Adjustment Values */
-  /* Use with calc() to add/subtract from lightness */
-  /* Example: oklch(calc(var(--primary-l) + var(--lighten-10)) var(--primary-c) var(--primary-h)) */
-  --darken-50: -0.5;
-  --darken-40: -0.4;
-  --darken-30: -0.3;
-  --darken-20: -0.2;
-  --darken-15: -0.15;
-  --darken-10: -0.1;
-  --darken-5: -0.05;
-  --lighten-5: 0.05;
-  --lighten-10: 0.1;
-  --lighten-15: 0.15;
-  --lighten-20: 0.2;
-  --lighten-30: 0.3;
-  --lighten-40: 0.4;
-  --lighten-50: 0.5;
-  
-  /* Transform Values */
-  --translate-y-px: -1px;
-  --translate-y-0: 0;
-  --translate-y-1: 0.25rem;
-  --translate-y-2: 0.5rem;
-  --translate-y-3: 0.75rem;
-  --translate-y-4: 1rem;
-  --translate-x-full: 100%;
-  --translate-x-half: 50%;
-  --scale-0: 0;
-  --scale-50: 0.5;
-  --scale-75: 0.75;
-  --scale-90: 0.9;
-  --scale-95: 0.95;
-  --scale-100: 1;
-  --scale-105: 1.05;
-  --scale-110: 1.1;
-  --scale-125: 1.25;
-  --scale-150: 1.5;
-  --rotate-0: 0deg;
-  --rotate-45: 45deg;
-  --rotate-90: 90deg;
-  --rotate-180: 180deg;
-  --rotate-360: 360deg;
-  
-  /* Border Radius */
-  --radius-sm: 0.125rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-full: 9999px;
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 0.1), 0 4px 6px -4px oklch(0% 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px oklch(0% 0 0 / 0.1), 0 8px 10px -6px oklch(0% 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px oklch(0% 0 0 / 0.25);
-  
-  /* None Values */
-  --transform-none: none;
-  --shadow-none: none;
-  
-  /* Z-index Scale */
-  --z-index-dropdown: 1000;
-  --z-index-sticky: 1020;
-  --z-index-fixed: 1030;
-  --z-index-modal-backdrop: 1040;
-  --z-index-modal: 1050;
-  --z-index-popover: 1060;
-  --z-index-tooltip: 1070;
-  
-  /* Animation Durations */
-  --animation-duration-fast: 0.2s;
-  --animation-duration-base: 1s;
-  --animation-duration-slow: 1.4s;
-  --animation-duration-slower: 2s;
-  
-  /* Animation Delays */
-  --animation-delay-base: -0.16s;
-  
-  /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-base: 200ms ease-in-out;
-  --transition-slow: 300ms ease-in-out;
-  
-  /* Layout Widths */
-  --sidebar-width-sm: 280px;
-  --sidebar-width-md: 300px;
-  --sidebar-width-lg: 320px;
-  
-  --container-width-sm: 640px;
-  --container-width-md: 768px;
-  --container-width-lg: 1024px;
-  --container-width-xl: 1280px;
-  --container-width-2xl: 1536px;
-  
-  --grid-breakpoint-sm: 640px;
-  --grid-breakpoint-md: 768px;
-  --grid-breakpoint-lg: 1024px;
-  --grid-breakpoint-xl: 1280px;
-  
-  --card-min-width: 300px;
-  --card-min-width-lg: 400px;
-  
-  --hero-height-md: 400px;
-  --hero-height-full: 100vh;
-  
-  --list-image-width: 250px;
-  --list-image-width-lg: 350px;
-  
-  /* Component Dimensions */
-  --border-width: 1px;
-  --border-width-2: 2px;
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 5px;
-  
-  --icon-size-xs: 1rem;      /* 16px */
-  --icon-size-sm: 1.25rem;   /* 20px */
-  --icon-size-md: 1.5rem;    /* 24px */
-  --icon-size-lg: 2rem;      /* 32px */
-  --icon-size-xl: 2.5rem;    /* 40px */
-  
-  --button-height-sm: 2rem;   /* 32px */
-  --button-height-md: 2.5rem; /* 40px */
-  --button-height-lg: 3rem;   /* 48px */
-  
-  --input-height-sm: 2rem;    /* 32px */
-  --input-height-md: 2.5rem;  /* 40px */
-  --input-height-lg: 3rem;    /* 48px */
-  
-  --avatar-size-xs: 1.5rem;   /* 24px */
-  --avatar-size-sm: 2rem;     /* 32px */
-  --avatar-size-md: 2.5rem;   /* 40px */
-  --avatar-size-lg: 3rem;     /* 48px */
-  --avatar-size-xl: 4rem;     /* 64px */
-  
-  --min-height-textarea: 100px;
-  --min-height-modal: 200px;
-  --max-width-modal: 500px;
-  --max-width-tooltip: 300px;
-  
-  --progress-height: 8px;
-  --switch-width: 3rem;
-  --switch-height: 1.75rem;
-  --switch-thumb-size: 1.25rem;
-  
-  --pagination-size: 2.5rem;
-  --spinner-size-sm: 1rem;
-  --spinner-size-md: 1.5rem;
-  --spinner-size-lg: 2.5rem;
-  
-  /* Animation Durations */
-  --duration-75: 75ms;
-  --duration-100: 100ms;
-  --duration-150: 150ms;
-  --duration-200: 200ms;
-  --duration-300: 300ms;
-  --duration-500: 500ms;
-  --duration-700: 700ms;
-  --duration-800: 800ms;
-  --duration-1000: 1000ms;
-  
-  /* Percentage Values */
-  --percent-90: 90%;
-  --percent-100: 100%;
-  --percent-125: 125%;
-  
-  /* Spacing Values */
-  --spacing-px: 1px;
-  --spacing-0-25: 0.25rem;
-  
-  /* Line Clamp */
-  --line-clamp-1: 1;
-  --line-clamp-2: 2;
-  --line-clamp-3: 3;
-  --line-clamp-4: 4;
-  --line-clamp-5: 5;
-  --line-clamp-6: 6;
-  
-  /* Aspect Ratios */
-  --aspect-ratio-16-9: 56.25%;
-  --aspect-ratio-4-3: 75%;
-  --aspect-ratio-1-1: 100%;
-  --aspect-ratio-3-2: 66.67%;
-  --aspect-ratio-21-9: 42.86%;
-}
+/* Block-specific styles */
+@import './blocks/page-header.css';
 
 /* ==========================================================================
    Blocksy Theme Overrides
-   Override Blocksy's default CSS variables to use our design system
+   Use our theme variables to override Blocksy's default styles
    ========================================================================== */
 
-/* Override Blocksy Color Variables */
-:root {
-  /* Blocksy Palette Colors - Map to our design system */
-  --theme-palette-color-1: oklch(var(--primary));
-  --theme-palette-color-2: oklch(var(--secondary));
-  --theme-palette-color-3: oklch(var(--accent));
-  --theme-palette-color-4: oklch(var(--foreground));
-  --theme-palette-color-5: oklch(var(--muted));
-  --theme-palette-color-6: oklch(var(--muted-foreground));
-  --theme-palette-color-7: oklch(var(--card));
-  --theme-palette-color-8: oklch(var(--background));
-  
-  /* Blocksy Base Colors */
-  --paletteColor1: oklch(var(--primary));
-  --paletteColor2: oklch(var(--secondary));
-  --paletteColor3: oklch(var(--accent));
-  --paletteColor4: oklch(var(--foreground));
-  --paletteColor5: oklch(var(--muted));
-  --paletteColor6: oklch(var(--muted-foreground));
-  --paletteColor7: oklch(var(--card));
-  --paletteColor8: oklch(var(--background));
-  
-  /* Blocksy Text Colors */
-  --color: oklch(var(--foreground));
-  --textColor: oklch(var(--foreground));
-  --headingColor: oklch(var(--foreground));
-  --linkColor: oklch(var(--primary));
-  --linkHoverColor: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h));
-  
-  /* Blocksy Background Colors */
-  --backgroundColor: oklch(var(--background));
-  --siteBackground: oklch(var(--background));
-  --contentBackground: oklch(var(--card));
-  
-  /* Blocksy Border Colors */
-  --borderColor: oklch(var(--border));
-  --border-color: oklch(var(--border));
-  
-  /* Blocksy Button Colors */
-  --buttonTextColor: oklch(var(--primary-foreground));
-  --buttonTextHoverColor: oklch(var(--primary-foreground));
-  --buttonColor: oklch(var(--primary));
-  --buttonHoverColor: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h));
-  
-  /* Blocksy Form Colors */
-  --formTextColor: oklch(var(--foreground));
-  --formBorderColor: oklch(var(--border));
-  --formBorderFocusColor: oklch(var(--ring));
-  --formBackgroundColor: oklch(var(--background));
-  --formBackgroundFocusColor: oklch(var(--background));
-  
-  /* Blocksy Selection Colors */
-  --selectionTextColor: oklch(var(--foreground));
-  --selectionBackgroundColor: oklch(calc(var(--primary-l) + var(--lighten-20)) var(--primary-c) var(--primary-h));
-}
-
-/* Override Blocksy Typography Variables */
-:root {
-  /* Base Font Sizes */
-  --fontSize: var(--font-size-base);
-  --fontSizeSmall: var(--font-size-sm);
-  --fontSizeLarge: var(--font-size-lg);
-  
-  /* Heading Font Sizes */
-  --h1-fontSize: var(--font-size-5xl);
-  --h2-fontSize: var(--font-size-4xl);
-  --h3-fontSize: var(--font-size-3xl);
-  --h4-fontSize: var(--font-size-2xl);
-  --h5-fontSize: var(--font-size-xl);
-  --h6-fontSize: var(--font-size-lg);
-  
-  /* Font Weights */
-  --fontWeight: var(--font-weight-normal);
-  --headingsFontWeight: var(--font-weight-semibold);
-  
-  /* Line Heights */
-  --lineHeight: var(--line-height-normal);
-  --headingsLineHeight: var(--line-height-tight);
-  
-  /* Font Families */
-  --fontFamily: var(--font-family-base);
-  --headingsFontFamily: var(--font-family-heading);
-}
-
-/* Force Blocksy Elements to Use Our Colors */
+/* Force Blocksy to use our color system */
+body,
 .ct-main-container,
 [data-theme="blocksy"],
-body.blocksy-theme {
-  /* Apply theme colors within Blocksy containers */
-  color: oklch(var(--foreground)) !important;
-  background-color: oklch(var(--background)) !important;
-}
-
-body,
+body.blocksy-theme,
 .site-main,
 .content-area {
-  color: oklch(var(--foreground)) !important;
-  background-color: oklch(var(--background)) !important;
+  color: var(--foreground) !important;
+  background-color: var(--background) !important;
 }
 
-/* Override Blocksy Heading Styles */
+/* Override Blocksy Typography */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6,
 .entry-title,
 .page-title,
 .site-title {
-  color: oklch(var(--foreground)) !important;
-  font-family: var(--font-family-heading) !important;
-  font-weight: var(--font-weight-semibold) !important;
-  line-height: var(--line-height-tight) !important;
+  color: var(--foreground) !important;
+  font-family: var(--font-family-sans) !important;
 }
 
-h1, .h1 { font-size: var(--font-size-5xl) !important; }
-h2, .h2 { font-size: var(--font-size-4xl) !important; }
-h3, .h3 { font-size: var(--font-size-3xl) !important; }
-h4, .h4 { font-size: var(--font-size-2xl) !important; }
-h5, .h5 { font-size: var(--font-size-xl) !important; }
-h6, .h6 { font-size: var(--font-size-lg) !important; }
-
-/* Override Blocksy Link Styles */
-a:not(.m-btn):not(.m-button) {
-  color: oklch(var(--primary)) !important;
+/* Override Blocksy Links */
+a:not(.wp-block-button__link):not(.button):not(.btn) {
+  color: var(--primary) !important;
 }
 
-a:not(.m-btn):not(.m-button):hover {
-  color: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h)) !important;
+a:not(.wp-block-button__link):not(.button):not(.btn):hover {
+  color: var(--color-primary-600) !important;
 }
 
-/* Override Blocksy Button Styles */
+/* Override Blocksy Buttons */
 .ct-button,
 .wp-block-button__link,
 button[type="submit"],
-input[type="submit"] {
-  background-color: oklch(var(--primary)) !important;
-  color: oklch(var(--primary-foreground)) !important;
+input[type="submit"],
+.button,
+.btn {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: none !important;
   border-radius: var(--radius-md) !important;
   padding: var(--spacing-3) var(--spacing-6) !important;
   font-weight: var(--font-weight-medium) !important;
-  transition: all var(--transition-fast) !important;
+  transition: all var(--transition-base) !important;
 }
 
 .ct-button:hover,
 .wp-block-button__link:hover,
 button[type="submit"]:hover,
-input[type="submit"]:hover {
-  background-color: oklch(calc(var(--primary-l) + var(--darken-10)) var(--primary-c) var(--primary-h)) !important;
+input[type="submit"]:hover,
+.button:hover,
+.btn:hover {
+  background-color: var(--color-primary-600) !important;
+  color: var(--primary-foreground) !important;
 }
 
-/* Override Blocksy Form Styles */
+/* Override Blocksy Form Elements */
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -468,11 +81,11 @@ input[type="tel"],
 input[type="date"],
 textarea,
 select {
-  background-color: oklch(var(--background)) !important;
-  border: var(--border-width) solid oklch(var(--border)) !important;
-  color: oklch(var(--foreground)) !important;
+  background-color: var(--input) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
   border-radius: var(--radius-md) !important;
-  padding: var(--spacing-3) !important;
+  padding: var(--spacing-2) var(--spacing-3) !important;
 }
 
 input[type="text"]:focus,
@@ -485,9 +98,30 @@ input[type="tel"]:focus,
 input[type="date"]:focus,
 textarea:focus,
 select:focus {
-  border-color: oklch(var(--ring)) !important;
+  border-color: var(--ring) !important;
   outline: 2px solid transparent !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px oklch(var(--ring)) !important;
+  box-shadow: 0 0 0 2px var(--ring) !important;
 }
 
+/* Override Blocksy Cards */
+.ct-card,
+.entry-card {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Override Blocksy Header */
+.site-header,
+header[data-row] {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Override Blocksy Footer */
+.site-footer,
+footer[data-row] {
+  background-color: var(--muted) !important;
+  color: var(--muted-foreground) !important;
+}

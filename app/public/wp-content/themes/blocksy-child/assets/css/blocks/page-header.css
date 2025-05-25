@@ -1,0 +1,92 @@
+/**
+ * Page Header Block Styles
+ * Hero-style page headers with background images - 90% width with rounded corners
+ */
+
+.page-header-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    width: 90%;
+    max-width: 1400px;
+    margin: var(--spacing-8) auto;
+    border-radius: var(--radius-lg);
+}
+
+.page-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-base-900);
+    z-index: 1;
+    border-radius: var(--radius-lg);
+}
+
+.page-header-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: var(--spacing-16) var(--spacing-4);
+    text-align: center;
+}
+
+.page-header-inner {
+    max-width: var(--container-width-lg);
+    margin: 0 auto;
+}
+
+.page-header-title {
+    color: var(--color-base-50);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin: 0 0 var(--spacing-4) 0;
+    letter-spacing: var(--letter-spacing-tight);
+    font-family: var(--font-family-sans);
+}
+
+.page-header-subtitle {
+    color: var(--color-base-200);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--font-family-sans);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .page-header-block {
+        width: 95%;
+        margin: var(--spacing-4) auto;
+    }
+    
+    .page-header-title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .page-header-subtitle {
+        font-size: var(--font-size-base);
+    }
+    
+    .page-header-content {
+        padding: var(--spacing-12) var(--spacing-4);
+    }
+}
+
+/* Editor specific styles */
+.editor-styles-wrapper .page-header-block {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
