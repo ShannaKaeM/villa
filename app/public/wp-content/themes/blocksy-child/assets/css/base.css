@@ -77,15 +77,14 @@ select {
 
 :root {
   /* Main Theme Colors (Single Source of Truth) */
-  --color-primary: #4d6a6d;    /* Teal/Green */
-  --color-secondary: #9c5961;  /* Rose/Pink */
-  --color-emphasis: #0c8795;  /* Bright Teal */
-  --color-neutral: #a69f95;   /* Warm Gray/Beige */
-  --color-base: #808080;       /* True Gray */
-  --color-white: #ffffff; /* White */
-  --color-black: #000000; /* Black */
+  --color-primary: #B8860B; /* Goldenrod */
+  --color-secondary: #8B4513; /* Saddle Brown */
+  --color-emphasis: #FF6347; /* Tomato */
+  --color-neutral: #D3D3D3; /* Light Gray */
+  --color-base: #696969; /* Dim Gray */
+  --color-white: #FFFFFF; /* Pure White - standalone color */
+  --color-black: #000000; /* Pure Black - standalone color */
   
-  /* Color Variations using CSS color-mix() */
   /* Primary Variations */
   --color-primary-lightest: color-mix(in srgb, var(--color-primary) 20%, white);
   --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
@@ -114,14 +113,14 @@ select {
   --color-neutral-dark: color-mix(in srgb, var(--color-neutral) 80%, black);
   --color-neutral-darkest: color-mix(in srgb, var(--color-neutral) 60%, black);
   
-  /* Base Variations (7 levels including white and black) */
+  /* Base Variations (5 levels - white and black are separate) */
   --color-base-lightest: color-mix(in srgb, var(--color-base) 20%, white);
   --color-base-light: color-mix(in srgb, var(--color-base) 60%, white);
   --color-base-med: var(--color-base);
   --color-base-dark: color-mix(in srgb, var(--color-base) 80%, black);
   --color-base-darkest: color-mix(in srgb, var(--color-base) 60%, black);
   
-  /* Blocksy Global Overrides - Map to our 4 main colors */
+  /* Blocksy Global Overrides - Map to our 7 main colors */
   --theme-palette-color-1: var(--color-primary);
   --theme-palette-color-2: var(--color-secondary);
   --theme-palette-color-3: var(--color-emphasis);
@@ -130,12 +129,25 @@ select {
   --theme-palette-color-6: var(--color-white);
   --theme-palette-color-7: var(--color-black);
   
-  
+  /* Blocksy Component Colors - Override ALL defaults */
   --theme-text-color: var(--color-base-dark);
-  --theme-link-initial-color: var(--color-primary-med);
-  --theme-link-hover-color: var(--color-emphasis-med);
+  --theme-link-initial-color: var(--color-primary);
+  --theme-link-hover-color: var(--color-primary-dark);
   --theme-heading-color: var(--color-base-darkest);
   --theme-border-color: var(--color-neutral-light);
+  --theme-button-background-initial-color: var(--color-primary);
+  --theme-button-background-hover-color: var(--color-primary-dark);
+  --theme-button-text-initial-color: var(--color-white);
+  --theme-button-text-hover-color: var(--color-white);
+  
+  /* Remove any default Blocksy blue colors */
+  --paletteColor1: var(--color-primary);
+  --paletteColor2: var(--color-secondary);
+  --paletteColor3: var(--color-emphasis);
+  --paletteColor4: var(--color-neutral);
+  --paletteColor5: var(--color-base);
+  --paletteColor6: var(--color-white);
+  --paletteColor7: var(--color-black);
   
   /* Spacing Scale */
   --spacing-0: 0;

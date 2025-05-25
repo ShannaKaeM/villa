@@ -14,6 +14,31 @@
    Use our theme variables to override Blocksy's default styles
    ========================================================================== */
 
+/* Remove any Blocksy overlays or filters */
+body::before,
+body::after,
+.site::before,
+.site::after,
+.ct-container::before,
+.ct-container::after {
+  display: none !important;
+}
+
+/* Remove any opacity or filters on main containers */
+body,
+.site,
+.ct-container,
+.ct-main-container,
+[data-theme="blocksy"],
+body.blocksy-theme,
+.site-main,
+.content-area {
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* Force Blocksy to use our color system */
 body,
 .ct-main-container,
@@ -23,6 +48,71 @@ body.blocksy-theme,
 .content-area {
   color: var(--color-base-darkest) !important;
   background-color: var(--color-white) !important;
+}
+
+/* Override ALL Blocksy button styles - including sliders */
+.wp-block-button__link,
+button,
+.button,
+.btn,
+input[type="submit"],
+input[type="button"],
+.ct-button,
+.flexy-container button,
+.flexy-nav button,
+.flexy-pagination button,
+.flexy-dots button,
+[class*="swiper"] button,
+[class*="slider"] button,
+[class*="carousel"] button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--spacing-3) var(--spacing-6) !important;
+  font-weight: var(--font-weight-medium) !important;
+  transition: background-color var(--transition-fast) !important;
+}
+
+.wp-block-button__link:hover,
+button:hover,
+.button:hover,
+.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.ct-button:hover,
+.flexy-container button:hover,
+.flexy-nav button:hover,
+.flexy-pagination button:hover,
+.flexy-dots button:hover,
+[class*="swiper"] button:hover,
+[class*="slider"] button:hover,
+[class*="carousel"] button:hover {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-white) !important;
+}
+
+/* Override slider navigation specifically */
+.flexy-nav svg,
+.swiper-button-prev,
+.swiper-button-next,
+.slider-nav,
+.carousel-nav {
+  color: var(--color-primary) !important;
+  fill: var(--color-primary) !important;
+}
+
+/* Override pagination dots */
+.flexy-dots li,
+.swiper-pagination-bullet,
+.slider-dots span {
+  background-color: var(--color-neutral-light) !important;
+}
+
+.flexy-dots li.active,
+.swiper-pagination-bullet-active,
+.slider-dots span.active {
+  background-color: var(--color-primary) !important;
 }
 
 /* Override Blocksy Typography */
@@ -42,30 +132,6 @@ a:not(.wp-block-button__link):not(.button):not(.btn) {
 
 a:not(.wp-block-button__link):not(.button):not(.btn):hover {
   color: var(--color-primary-dark) !important;
-}
-
-/* Override Blocksy Buttons */
-.wp-block-button__link,
-button[type="submit"],
-input[type="submit"],
-.button,
-.btn {
-  background-color: var(--color-primary) !important;
-  color: var(--color-white) !important;
-  border: none !important;
-  border-radius: var(--radius-md) !important;
-  padding: var(--spacing-3) var(--spacing-6) !important;
-  font-weight: var(--font-weight-medium) !important;
-  transition: background-color var(--transition-fast) !important;
-}
-
-.wp-block-button__link:hover,
-button[type="submit"]:hover,
-input[type="submit"]:hover,
-.button:hover,
-.btn:hover {
-  background-color: var(--color-primary-dark) !important;
-  color: var(--color-white) !important;
 }
 
 /* Override Blocksy Form Elements */
