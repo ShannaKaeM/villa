@@ -10,52 +10,32 @@
 @import url('base.css');
 
 /* ==========================================================================
-   Force Theme Palette Colors on Root
+   Blocksy Theme Overrides
+   Use our theme variables to override Blocksy's default styles
    ========================================================================== */
-:root {
-  /* Override Blocksy's theme palette colors with our theme colors */
-  --theme-palette-color-1: var(--color-primary) !important;
-  --theme-palette-color-2: var(--color-secondary) !important;
-  --theme-palette-color-3: var(--color-emphasis) !important;
-  --theme-palette-color-4: var(--color-neutral) !important;
-  --theme-palette-color-5: var(--color-base) !important;
-  --theme-palette-color-6: var(--color-base-extreme-light) !important;
-  --theme-palette-color-7: var(--color-base-extreme-dark) !important;
-  --theme-palette-color-8: var(--color-site-bg) !important;
-}
 
-/* Force Blocksy to use our colors in all contexts */
+/* 1. Global Color System
+   ========================================================================== */
+/* Force our color system on all Blocksy contexts */
+:root,
 body,
 .ct-header,
 [data-header],
 .site-header,
 #header {
-  --theme-palette-color-1: var(--color-primary) !important;
-  --theme-palette-color-2: var(--color-secondary) !important;
-  --theme-palette-color-3: var(--color-emphasis) !important;
-  --theme-palette-color-4: var(--color-neutral) !important;
-  --theme-palette-color-5: var(--color-base) !important;
-  --theme-palette-color-6: var(--color-base-extreme-light) !important;
-  --theme-palette-color-7: var(--color-base-extreme-dark) !important;
-  --theme-palette-color-8: var(--color-site-bg) !important;
+  --theme-palette-color-1: var(--color-primary);
+  --theme-palette-color-2: var(--color-secondary);
+  --theme-palette-color-3: var(--color-emphasis);
+  --theme-palette-color-4: var(--color-neutral);
+  --theme-palette-color-5: var(--color-base);
+  --theme-palette-color-6: var(--color-base-extreme-light);
+  --theme-palette-color-7: var(--color-base-extreme-dark);
+  --theme-palette-color-8: var(--color-site-bg);
 }
 
-/* ==========================================================================
-   Blocksy Theme Overrides
-   Use our theme variables to override Blocksy's default styles
+/* 2. Base Layout & Containers
    ========================================================================== */
-
-/* Remove any Blocksy overlays or filters */
-body::before,
-body::after,
-.site::before,
-.site::after,
-.ct-container::before,
-.ct-container::after {
-  display: none !important;
-}
-
-/* Remove any opacity or filters on main containers */
+/* Main body and content areas */
 body,
 .site,
 .ct-container,
@@ -64,24 +44,97 @@ body,
 body.blocksy-theme,
 .site-main,
 .content-area {
-  opacity: 1 !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  color: var(--color-base-darkest);
+  background-color: var(--color-site-bg);
+  opacity: 1;
+  filter: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-/* Force Blocksy to use our color system */
-body,
-.ct-main-container,
-[data-theme="blocksy"],
-body.blocksy-theme,
+/* Remove Blocksy overlays */
+body::before,
+body::after,
+.site::before,
+.site::after,
+.ct-container::before,
+.ct-container::after,
+#main::before,
+#main::after,
+.site-main::before,
+.site-main::after,
+article::before,
+article::after,
+.entry-content::before,
+.entry-content::after {
+  display: none;
+  opacity: 0;
+  background: none;
+}
+
+/* Content areas background */
+#main,
 .site-main,
-.content-area {
-  color: var(--color-base-darkest) !important;
-  background-color: var(--color-site-bg) !important;
+.ct-container-full,
+.ct-container,
+article.post,
+article.page,
+.entry-content,
+.wp-block-group,
+.wp-block-cover,
+.wp-block-miblocks-listing-section,
+.wp-block-miblocks-page-header {
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
 }
 
-/* Override ALL Blocksy button styles - including sliders */
+/* 3. Typography
+   ========================================================================== */
+/* Headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.entry-title,
+.page-title,
+.site-title,
+.ct-main-container h1,
+.ct-main-container h2,
+.ct-main-container h3,
+.ct-main-container h4,
+.ct-main-container h5,
+.ct-main-container h6,
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6 {
+  font-family: var(--font-secondary), 'Montserrat', sans-serif;
+  color: var(--color-base-extreme-dark);
+}
+
+/* Body text */
+body,
+.entry-content,
+.entry-content p,
+.entry-content li,
+.entry-content td,
+.entry-content th {
+  color: var(--color-base-extreme-dark);
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* 4. Components
+   ========================================================================== */
+/* Buttons - consolidated all button selectors */
 .wp-block-button__link,
 button,
 .button,
@@ -96,13 +149,13 @@ input[type="button"],
 [class*="swiper"] button,
 [class*="slider"] button,
 [class*="carousel"] button {
-  background-color: var(--color-primary) !important;
-  color: var(--color-base-extreme-light) !important;
-  border: none !important;
-  border-radius: var(--radius-md) !important;
-  padding: var(--spacing-3) var(--spacing-6) !important;
-  font-weight: var(--font-weight-medium) !important;
-  transition: background-color var(--transition-fast) !important;
+  background-color: var(--color-primary);
+  color: var(--color-base-extreme-light);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-6);
+  font-weight: var(--font-weight-medium);
+  transition: background-color var(--transition-fast);
 }
 
 .wp-block-button__link:hover,
@@ -119,53 +172,11 @@ input[type="button"]:hover,
 [class*="swiper"] button:hover,
 [class*="slider"] button:hover,
 [class*="carousel"] button:hover {
-  background-color: var(--color-primary-dark) !important;
-  color: var(--color-base-extreme-light) !important;
+  background-color: var(--color-primary-dark);
+  color: var(--color-base-extreme-light);
 }
 
-/* Override slider navigation specifically */
-.flexy-nav svg,
-.swiper-button-prev,
-.swiper-button-next,
-.slider-nav,
-.carousel-nav {
-  color: var(--color-primary) !important;
-  fill: var(--color-primary) !important;
-}
-
-/* Override pagination dots */
-.flexy-dots li,
-.swiper-pagination-bullet,
-.slider-dots span {
-  background-color: var(--color-neutral-light) !important;
-}
-
-.flexy-dots li.active,
-.swiper-pagination-bullet-active,
-.slider-dots span.active {
-  background-color: var(--color-primary) !important;
-}
-
-/* Override Blocksy Typography */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
-.entry-title,
-.page-title,
-.site-title {
-  color: var(--color-base-darkest) !important;
-  font-family: var(--font-family-sans) !important;
-}
-
-/* Override Blocksy Links */
-a:not(.wp-block-button__link):not(.button):not(.btn) {
-  color: var(--color-primary) !important;
-}
-
-a:not(.wp-block-button__link):not(.button):not(.btn):hover {
-  color: var(--color-primary-dark) !important;
-}
-
-/* Override Blocksy Form Elements */
+/* Forms */
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -176,11 +187,11 @@ input[type="tel"],
 input[type="date"],
 textarea,
 select {
-  background-color: var(--color-base-extreme-light) !important;
-  border: 1px solid var(--color-base-light) !important;
-  color: var(--color-base-darkest) !important;
-  border-radius: var(--radius-md) !important;
-  padding: var(--spacing-2) var(--spacing-3) !important;
+  border: 1px solid var(--color-base-light);
+  background-color: var(--color-base-extreme-light);
+  color: var(--color-base-darkest);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
 }
 
 input[type="text"]:focus,
@@ -193,197 +204,128 @@ input[type="tel"]:focus,
 input[type="date"]:focus,
 textarea:focus,
 select:focus {
-  border-color: var(--color-primary) !important;
-  outline: 2px solid transparent !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px var(--color-primary-light) !important;
+  border-color: var(--color-primary);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
-/* Override Blocksy Cards */
+/* Cards */
 .entry-card {
-  background-color: var(--color-base-extreme-light) !important;
-  color: var(--color-base-darkest) !important;
-  border: 1px solid var(--color-base-light) !important;
+  background-color: var(--color-base-extreme-light);
+  color: var(--color-base-darkest);
+  border: 1px solid var(--color-base-light);
 }
 
-/* Override Blocksy Header */
-header[data-row] {
-  background-color: var(--color-base-extreme-light) !important;
-  color: var(--color-base-darkest) !important;
-}
-
-/* Override Blocksy Footer */
-footer[data-row] {
-  background-color: var(--color-neutral-light) !important;
-  color: var(--color-base-darkest) !important;
-}
-
-/* Override any Blocksy typography that might be interfering */
-.ct-main-container h1,
-.ct-main-container h2,
-.ct-main-container h3,
-.ct-main-container h4,
-.ct-main-container h5,
-.ct-main-container h6 {
-  font-family: 'Montserrat', sans-serif !important;
-}
-
-/* ==========================================================================
-   Remove Gray Overlays and Fix Backgrounds
+/* 5. Slider & Navigation Components
    ========================================================================== */
-
-/* Remove any overlays from main content areas */
-#main,
-.site-main,
-.ct-container-full,
-.ct-container,
-article.post,
-article.page,
-.entry-content,
-.wp-block-group,
-.wp-block-cover,
-.wp-block-miblocks-listing-section,
-.wp-block-miblocks-page-header {
-  background-color: transparent !important;
-  position: relative;
-  z-index: 1;
+/* Slider navigation */
+.flexy-nav svg,
+.swiper-button-prev,
+.swiper-button-next,
+.slider-nav,
+.carousel-nav {
+  color: var(--color-primary);
+  fill: var(--color-primary);
 }
 
-/* Remove pseudo-element overlays */
-#main::before,
-#main::after,
-.site-main::before,
-.site-main::after,
-.ct-container::before,
-.ct-container::after,
-article::before,
-article::after,
-.entry-content::before,
-.entry-content::after {
-  display: none !important;
-  opacity: 0 !important;
-  background: none !important;
+/* Pagination dots */
+.flexy-dots li,
+.swiper-pagination-bullet,
+.slider-dots span {
+  background-color: var(--color-neutral-light);
 }
 
-/* Fix body background */
-body {
-  background-color: var(--color-site-bg) !important;
+.flexy-dots li.active,
+.swiper-pagination-bullet-active,
+.slider-dots span.active {
+  background-color: var(--color-primary);
 }
 
-/* Fix main content background */
-#main {
-  background-color: var(--color-site-bg) !important;
-}
-
-/* Ensure proper text colors */
-body,
-.entry-content,
-.entry-content p,
-.entry-content li,
-.entry-content td,
-.entry-content th {
-  color: var(--color-base-extreme-dark) !important;
-}
-
-/* Fix heading colors */
-h1, h2, h3, h4, h5, h6,
-.entry-content h1,
-.entry-content h2,
-.entry-content h3,
-.entry-content h4,
-.entry-content h5,
-.entry-content h6 {
-  color: var(--color-base-extreme-dark) !important;
-  font-family: var(--font-secondary), serif !important;
-}
-
-/* Remove any filters or opacity */
-.site-main *,
-#main * {
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-/* Fix Blocksy header background */
+/* 6. Header
+   ========================================================================== */
+header[data-row],
 header[data-row="top"],
 header[data-row="middle"],
 header[data-row="bottom"],
 .site-header,
 .ct-header,
-[data-header] {
-  background-color: var(--color-primary) !important;
-}
-
-/* Override Blocksy's header panel background */
+[data-header],
 .ct-panel.ct-header {
-  background-color: var(--color-primary) !important;
+  background-color: var(--color-primary);
+  color: var(--color-base-extreme-light);
 }
 
-/* Fix navigation colors */
+/* Header navigation */
 .site-header a,
 .site-header .menu-item a,
 .ct-header a,
 .ct-header .menu-item a {
-  color: var(--color-base-extreme-light) !important;
+  color: var(--color-base-extreme-light);
 }
 
 .site-header a:hover,
 .site-header .menu-item a:hover,
 .ct-header a:hover,
 .ct-header .menu-item a:hover {
-  color: var(--color-primary-light) !important;
+  color: var(--color-primary-light);
 }
 
-/* Fix logo text color */
+/* Site branding */
 .site-title,
 .site-title a,
 .site-description {
-  color: var(--color-base-extreme-light) !important;
+  color: var(--color-base-extreme-light);
 }
 
-/* ==========================================================================
-   Footer Overrides
+/* 7. Footer
    ========================================================================== */
 footer[data-row],
 .site-footer,
 .ct-footer,
 [data-footer],
 #footer {
-  background-color: var(--color-primary) !important;
-  color: var(--color-base-extreme-light) !important;
+  background-color: var(--color-primary);
+  color: var(--color-base-extreme-light);
 }
 
-/* Footer text and links */
+/* Footer links */
 .site-footer a,
 .ct-footer a,
 footer a {
-  color: var(--color-base-extreme-light) !important;
+  color: var(--color-base-extreme-light);
 }
 
 .site-footer a:hover,
 .ct-footer a:hover,
 footer a:hover {
-  color: var(--color-primary-light) !important;
+  color: var(--color-primary-light);
 }
 
-/* Footer widget titles */
+/* Footer widgets */
 .site-footer .widget-title,
 .ct-footer .widget-title,
 footer .widget-title {
-  color: var(--color-base-extreme-light) !important;
+  color: var(--color-base-extreme-light);
 }
 
-/* Footer copyright text */
+/* Footer copyright */
 .ct-footer-copyright,
 .site-info,
 .footer-copyright {
-  color: var(--color-base-extreme-light) !important;
+  color: var(--color-base-extreme-light);
   opacity: 0.8;
 }
 
-/* Override Blocksy main content area */
-.site-main,
-.content-area {
-  color: var(--color-base-darkest) !important;
-  background-color: var(--color-site-bg) !important;
+/* 8. Special Cases & Exceptions
+   ========================================================================== */
+/* Page header block text should always be white/light */
+.wp-block-miblocks-page-header .page-header__title,
+.wp-block-miblocks-page-header .page-header__subtitle {
+  color: white !important;
+}
+
+/* Page header overlay uses dynamic opacity from block settings */
+.wp-block-miblocks-page-header .page-header__overlay {
+  opacity: var(--page-header-overlay-opacity, 0.5);
 }

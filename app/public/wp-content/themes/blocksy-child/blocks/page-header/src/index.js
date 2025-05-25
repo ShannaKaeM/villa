@@ -23,9 +23,9 @@ registerBlockType(metadata.name, {
             title,
             subtitle,
             backgroundImage,
-            overlayOpacity,
             minHeight,
             borderRadius,
+            overlayOpacity,
             titleSize,
             titleWeight,
             titleColor,
@@ -88,15 +88,6 @@ registerBlockType(metadata.name, {
                             />
                         </MediaUploadCheck>
                         
-                        <RangeControl
-                            label={__('Overlay Opacity', 'miblocks')}
-                            value={overlayOpacity}
-                            onChange={(value) => setAttributes({ overlayOpacity: value })}
-                            min={0}
-                            max={1}
-                            step={0.1}
-                        />
-                        
                         <TextControl
                             label={__('Minimum Height', 'miblocks')}
                             value={minHeight}
@@ -133,6 +124,14 @@ registerBlockType(metadata.name, {
                                 { label: __('75%', 'miblocks'), value: '75%' },
                             ]}
                             onChange={(value) => setAttributes({ backgroundPositionY: value })}
+                        />
+                        <RangeControl
+                            label={__('Overlay Opacity', 'miblocks')}
+                            value={overlayOpacity}
+                            onChange={(value) => setAttributes({ overlayOpacity: value })}
+                            min={0}
+                            max={1}
+                            step={0.1}
                         />
                     </PanelBody>
                     
@@ -325,10 +324,7 @@ registerBlockType(metadata.name, {
                 </InspectorControls>
 
                 <div {...blockProps}>
-                    <div 
-                        className="page-header-overlay" 
-                        style={{ opacity: overlayOpacity }}
-                    ></div>
+                    <div className="page-header-overlay" style={{ opacity: overlayOpacity }}></div>
                     <div className="page-header-content">
                         <div className="page-header-inner">
                             <RichText

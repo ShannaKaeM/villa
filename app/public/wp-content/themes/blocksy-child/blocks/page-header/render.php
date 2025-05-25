@@ -11,13 +11,9 @@
 $title = isset($attributes['title']) ? $attributes['title'] : 'Page Title';
 $subtitle = isset($attributes['subtitle']) ? $attributes['subtitle'] : '';
 $backgroundImage = isset($attributes['backgroundImage']) ? $attributes['backgroundImage'] : '';
-$overlayOpacity = isset($attributes['overlayOpacity']) ? floatval($attributes['overlayOpacity']) : 0.5;
-// Ensure opacity is between 0 and 1
-if ($overlayOpacity > 1) {
-    $overlayOpacity = $overlayOpacity / 100; // Convert percentage to decimal if needed
-}
 $minHeight = isset($attributes['minHeight']) ? $attributes['minHeight'] : '400px';
 $borderRadius = isset($attributes['borderRadius']) ? $attributes['borderRadius'] : 'lg';
+$overlayOpacity = isset($attributes['overlayOpacity']) ? $attributes['overlayOpacity'] : 0.5;
 $titleSpacing = isset($attributes['titleSpacing']) ? $attributes['titleSpacing'] : '4';
 $backgroundPositionY = isset($attributes['backgroundPositionY']) ? $attributes['backgroundPositionY'] : 'center';
 
@@ -154,25 +150,40 @@ $subtitleTransformValue = isset($transformMap[$subtitleTransform]) ? $transformM
 $subtitleTrackingValue = isset($trackingMap[$subtitleTracking]) ? $trackingMap[$subtitleTracking] : 'var(--letter-spacing-normal)';
 $titleSpacingValue = isset($spacingMap[$titleSpacing]) ? $spacingMap[$titleSpacing] : 'var(--spacing-4)';
 
+// Build CSS custom properties string
+$customProperties = sprintf(
+    '--page-header-bg-image: url(%s); --page-header-min-height: %s; --page-header-radius: %s; --page-header-overlay-opacity: %s; --page-header-bg-position-y: %s; --page-header-title-size: %s; --page-header-title-weight: %s; --page-header-title-color: %s; --page-header-title-transform: %s; --page-header-title-tracking: %s; --page-header-title-spacing: %s; --page-header-subtitle-size: %s; --page-header-subtitle-weight: %s; --page-header-subtitle-color: %s; --page-header-subtitle-transform: %s; --page-header-subtitle-tracking: %s;',
+    esc_url($backgroundImage),
+    esc_attr($minHeight),
+    esc_attr($radiusValue),
+    esc_attr($overlayOpacity),
+    esc_attr($backgroundPositionY),
+    esc_attr($titleSizeValue),
+    esc_attr($titleWeightValue),
+    esc_attr($titleColorValue),
+    esc_attr($titleTransformValue),
+    esc_attr($titleTrackingValue),
+    esc_attr($titleSpacingValue),
+    esc_attr($subtitleSizeValue),
+    esc_attr($subtitleWeightValue),
+    esc_attr($subtitleColorValue),
+    esc_attr($subtitleTransformValue),
+    esc_attr($subtitleTrackingValue)
+);
+
 // Get wrapper attributes
 $wrapper_attributes = get_block_wrapper_attributes(array(
-    'style' => sprintf(
-        'background-image: url(%s); min-height: %s; --block-radius: %s; background-position-y: %s;',
-        esc_url($backgroundImage),
-        esc_attr($minHeight),
-        esc_attr($radiusValue),
-        esc_attr($backgroundPositionY)
-    )
+    'style' => $customProperties
 ));
 ?>
 
 <div <?php echo $wrapper_attributes; ?>>
-    <div class="page-header__overlay" style="opacity: <?php echo esc_attr($overlayOpacity); ?>"></div>
+    <div class="page-header__overlay"></div>
     <div class="page-header__content">
         <div class="page-header__inner">
-            <h1 class="page-header__title" style="font-size: <?php echo esc_attr($titleSizeValue); ?> !important; font-weight: <?php echo esc_attr($titleWeightValue); ?> !important; color: <?php echo esc_attr($titleColorValue); ?> !important; text-transform: <?php echo esc_attr($titleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($titleTrackingValue); ?> !important; margin-bottom: <?php echo esc_attr($titleSpacingValue); ?> !important;"><?php echo esc_html($title); ?></h1>
+            <h1 class="page-header__title"><?php echo esc_html($title); ?></h1>
             <?php if (!empty($subtitle)) : ?>
-                <p class="page-header__subtitle" style="font-size: <?php echo esc_attr($subtitleSizeValue); ?> !important; font-weight: <?php echo esc_attr($subtitleWeightValue); ?> !important; color: <?php echo esc_attr($subtitleColorValue); ?> !important; text-transform: <?php echo esc_attr($subtitleTransformValue); ?> !important; letter-spacing: <?php echo esc_attr($subtitleTrackingValue); ?> !important;"><?php echo esc_html($subtitle); ?></p>
+                <p class="page-header__subtitle"><?php echo esc_html($subtitle); ?></p>
             <?php endif; ?>
         </div>
     </div>
