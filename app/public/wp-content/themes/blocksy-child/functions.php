@@ -44,6 +44,13 @@ function blocksy_child_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_styles');
 
+// Enqueue editor-specific styles
+function blocksy_child_enqueue_editor_styles() {
+    // Add editor overrides to force our theme colors
+    add_editor_style('assets/css/editor-overrides.css');
+}
+add_action('after_setup_theme', 'blocksy_child_enqueue_editor_styles');
+
 // Carbon Fields setup - this MUST come first before any other includes
 require_once get_stylesheet_directory() . '/inc/carbon-fields-setup.php';
 

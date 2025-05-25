@@ -10,12 +10,12 @@
      7 Main Colors with 5 variations each (white & black are standalone)
      ========================================================================== */
   
-  /* Main Colors */
-  --color-primary: #B8860B; /* Goldenrod */
-  --color-secondary: #8B4513; /* Saddle Brown */
-  --color-emphasis: #FF6347; /* Tomato */
-  --color-neutral: #D3D3D3; /* Light Gray */
-  --color-base: #696969; /* Dim Gray */
+  /* Main Theme Colors (Single Source of Truth) */
+  --color-primary: #5a7f80; /* Goldenrod */
+  --color-secondary: #a85d57; /* Saddle Brown */
+  --color-emphasis: #3c9da1; /* Tomato */
+  --color-neutral: #9b8974; /* Light Sand */
+  --color-base: #9c9c9c; /* Mid Gray */
   --color-white: #FFFFFF; /* Pure White - standalone color */
   --color-black: #000000; /* Pure Black - standalone color */
   
