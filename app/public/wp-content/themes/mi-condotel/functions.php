@@ -5,6 +5,11 @@
  * @package mi-condotel
  */
 
+// Load Composer autoloader if it exists
+if (file_exists(get_template_directory() . '/vendor/autoload.php')) {
+    require_once get_template_directory() . '/vendor/autoload.php';
+}
+
 // Theme Setup
 function mi_condotel_setup() {
     // Add theme support

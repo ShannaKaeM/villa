@@ -4,7 +4,7 @@
     "name": "miblocks/listing-section",
     "version": "1.0.0",
     "title": "Listing Section",
-    "category": "miblocks",
+    "category": "miBlocks",
     "icon": "grid-view",
     "description": "Display listings in a customizable card layout with filtering options.",
     "supports": {

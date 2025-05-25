@@ -1,0 +1,96 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "miblocks/cta-section",
+    "version": "1.0.0",
+    "title": "CTA Section",
+    "category": "miBlocks",
+    "icon": "megaphone",
+    "description": "A call-to-action section with background and typography controls",
+    "supports": {
+        "html": false,
+        "align": ["wide", "full"]
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Ready to Get Started?"
+        },
+        "titleColor": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "titleSize": {
+            "type": "string",
+            "default": "2.5rem"
+        },
+        "titleWeight": {
+            "type": "string",
+            "default": "var(--wp--custom--font-weight--bold)"
+        },
+        "titleTracking": {
+            "type": "string",
+            "default": "var(--wp--custom--letter-spacing--normal)"
+        },
+        "description": {
+            "type": "string",
+            "default": "Join thousands of satisfied customers today."
+        },
+        "descriptionColor": {
+            "type": "string",
+            "default": "#666666"
+        },
+        "descriptionSize": {
+            "type": "string",
+            "default": "1.125rem"
+        },
+        "descriptionWeight": {
+            "type": "string",
+            "default": "var(--wp--custom--font-weight--normal)"
+        },
+        "descriptionTracking": {
+            "type": "string",
+            "default": "var(--wp--custom--letter-spacing--normal)"
+        },
+        "backgroundColor": {
+            "type": "string",
+            "default": "#f5f5f5"
+        },
+        "backgroundImage": {
+            "type": "string",
+            "default": ""
+        },
+        "backgroundImageId": {
+            "type": "number",
+            "default": 0
+        },
+        "overlayColor": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "overlayOpacity": {
+            "type": "number",
+            "default": 30
+        },
+        "padding": {
+            "type": "object",
+            "default": {
+                "top": "4rem",
+                "right": "2rem",
+                "bottom": "4rem",
+                "left": "2rem"
+            }
+        },
+        "buttonText": {
+            "type": "string",
+            "default": "Get Started"
+        },
+        "buttonUrl": {
+            "type": "string",
+            "default": "#"
+        }
+    },
+    "editorScript": "file:./build/index.js",
+    "editorStyle": "file:./styles/editor.css",
+    "style": "file:./styles/block.css"
+}

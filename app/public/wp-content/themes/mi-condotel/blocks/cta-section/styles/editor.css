@@ -1,0 +1,8 @@
+/* CTA Section Editor Styles */
+.cta-section {
+    margin: 0;
+}
+
+.cta-section__button {
+    pointer-events: none; /* Prevent clicking in editor */
+}

@@ -1,0 +1,101 @@
+/* CTA Section Block Styles */
+.cta-section {
+    position: relative;
+    width: 100%;
+    margin: 2rem auto;
+}
+
+.cta-section__container {
+    position: relative;
+    background-color: var(--cta-bg-color, #f5f5f5);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: var(--cta-padding-top) var(--cta-padding-right) var(--cta-padding-bottom) var(--cta-padding-left);
+    text-align: center;
+    border-radius: var(--wp--custom--border-radius--lg);
+    overflow: hidden;
+}
+
+.cta-section__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--cta-overlay-color);
+    opacity: var(--cta-overlay-opacity);
+    pointer-events: none;
+}
+
+.cta-section__content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cta-section__title {
+    color: var(--cta-title-color);
+    font-size: var(--cta-title-size);
+    font-weight: var(--cta-title-weight);
+    letter-spacing: var(--cta-title-tracking);
+    line-height: 1.2;
+    margin: 0 0 1rem;
+}
+
+.cta-section__description {
+    color: var(--cta-description-color);
+    font-size: var(--cta-description-size);
+    font-weight: var(--cta-description-weight);
+    letter-spacing: var(--cta-description-tracking);
+    line-height: 1.6;
+    margin: 0 0 2rem;
+}
+
+.cta-section__button-wrapper {
+    margin-top: 2rem;
+}
+
+.cta-section__button {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    background-color: var(--wp--preset--color--primary, #000);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--wp--custom--border-radius--base);
+    font-weight: var(--wp--custom--font-weight--medium);
+    transition: all 0.3s ease;
+}
+
+.cta-section__button:hover {
+    background-color: var(--wp--preset--color--primary-dark, #333);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Alignment variations */
+.alignwide .cta-section__container {
+    max-width: var(--wp--custom--layout--wide-size);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alignfull .cta-section__container {
+    border-radius: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .cta-section__container {
+        padding: 3rem 1.5rem;
+    }
+    
+    .cta-section__title {
+        font-size: calc(var(--cta-title-size) * 0.85);
+    }
+    
+    .cta-section__description {
+        font-size: calc(var(--cta-description-size) * 0.9);
+    }
+}

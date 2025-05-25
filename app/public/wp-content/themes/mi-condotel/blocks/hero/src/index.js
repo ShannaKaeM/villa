@@ -1,423 +1,158 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { 
     InspectorControls, 
-    MediaUpload, 
-    MediaUploadCheck,
+    RichText,
     useBlockProps,
-    RichText
+    useSetting
 } from '@wordpress/block-editor';
 import { 
     PanelBody, 
-    SelectControl, 
-    TextControl, 
-    RangeControl,
-    Button
+    SelectControl
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { TypographyControls, SpacingControls, BackgroundControls } from '../../components';
 
-// Import block metadata
-import metadata from '../block.json';
+registerBlockType('mi-condotel/hero', {
+    edit: ({ attributes, setAttributes }) => {
+        const {
+            backgroundImage,
+            backgroundImageId,
+            overlayColor,
+            overlayOpacity,
+            title,
+            titleColor,
+            titleSize,
+            titleWeight,
+            titleTracking,
+            subtitle,
+            subtitleColor,
+            subtitleSize,
+            subtitleWeight,
+            subtitleTracking,
+            minHeight,
+            padding,
+            borderRadius,
+            width
+        } = attributes;
+        
+        // Get custom values from theme.json
+        const borderRadiusOptions = [
+            { label: 'None', value: '0' },
+            { label: 'Extra Small', value: 'var(--wp--custom--border-radius--xs)' },
+            { label: 'Small', value: 'var(--wp--custom--border-radius--sm)' },
+            { label: 'Base', value: 'var(--wp--custom--border-radius--base)' },
+            { label: 'Large', value: 'var(--wp--custom--border-radius--lg)' },
+            { label: 'Extra Large', value: 'var(--wp--custom--border-radius--xl)' },
+            { label: '2XL', value: 'var(--wp--custom--border-radius--2xl)' },
+            { label: '3XL', value: 'var(--wp--custom--border-radius--3xl)' },
+            { label: '4XL', value: 'var(--wp--custom--border-radius--4xl)' },
+            { label: 'Full', value: 'var(--wp--custom--border-radius--full)' }
+        ];
 
-// Edit component
-const Edit = ({ attributes, setAttributes }) => {
-    const {
-        title,
-        subtitle,
-        backgroundImage,
-        minHeight,
-        widthOption,
-        borderRadius,
-        overlayColor,
-        overlayVariation,
-        overlayOpacity,
-        titleSize,
-        titleWeight,
-        titleColor,
-        titleColorVariation,
-        titleTracking,
-        titleTransform,
-        subtitleSize,
-        subtitleWeight,
-        subtitleColor,
-        subtitleColorVariation,
-        subtitleTracking,
-        subtitleTransform,
-        titleSpacing
-    } = attributes;
+        const blockProps = useBlockProps({
+            className: `hero-block hero-block--${width}`,
+            style: {
+                '--hero-min-height': minHeight + 'px',
+                '--hero-overlay-color': overlayColor,
+                '--hero-overlay-opacity': overlayOpacity / 100,
+                '--hero-title-color': titleColor,
+                '--hero-title-size': titleSize,
+                '--hero-title-weight': titleWeight,
+                '--hero-title-tracking': titleTracking,
+                '--hero-subtitle-color': subtitleColor,
+                '--hero-subtitle-size': subtitleSize,
+                '--hero-subtitle-weight': subtitleWeight,
+                '--hero-subtitle-tracking': subtitleTracking,
+                '--hero-padding-top': padding?.top || '3rem',
+                '--hero-padding-right': padding?.right || '1rem',
+                '--hero-padding-bottom': padding?.bottom || '3rem',
+                '--hero-padding-left': padding?.left || '1rem',
+                '--hero-border-radius': width === 'full-width' ? '0' : borderRadius
+            }
+        });
 
-    // Helper function to get color CSS variable
-    const getColorVar = (color, variation = 'med') => {
-        if (color === 'white' || color === 'black') {
-            return `var(--color-${color})`;
-        }
-        return variation === 'med' 
-            ? `var(--color-${color}-med)` 
-            : `var(--color-${color}-${variation})`;
-    };
-
-    // Build classes
-    const wrapperClasses = ['hero-block'];
-    if (widthOption === 'content') {
-        wrapperClasses.push('hero-block--content-width');
-    } else if (widthOption === 'full') {
-        wrapperClasses.push('hero-block--full-width');
-    }
-
-    const containerClasses = ['hero-block__container'];
-    // Only add border radius if not full width
-    if (borderRadius !== 'none' && widthOption !== 'full') {
-        containerClasses.push(`hero-block__container--radius-${borderRadius}`);
-    }
-
-    // Build styles
-    const containerStyle = {
-        minHeight: minHeight,
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
-    };
-
-    const overlayStyle = {
-        backgroundColor: `color-mix(in srgb, ${getColorVar(overlayColor, overlayVariation)} ${overlayOpacity * 100}%, transparent)`,
-    };
-
-    const titleStyle = {
-        fontSize: `var(--font-size-${titleSize})`,
-        fontWeight: `var(--font-weight-${titleWeight})`,
-        color: getColorVar(titleColor, titleColorVariation),
-        letterSpacing: `var(--letter-spacing-${titleTracking})`,
-        textTransform: `var(--text-transform-${titleTransform})`,
-        marginBottom: `var(--spacing-${titleSpacing})`,
-    };
-
-    const subtitleStyle = {
-        fontSize: `var(--font-size-${subtitleSize})`,
-        fontWeight: `var(--font-weight-${subtitleWeight})`,
-        color: getColorVar(subtitleColor, subtitleColorVariation),
-        letterSpacing: `var(--letter-spacing-${subtitleTracking})`,
-        textTransform: `var(--text-transform-${subtitleTransform})`,
-    };
-
-    const blockProps = useBlockProps({
-        className: wrapperClasses.join(' '),
-    });
-
-    return (
-        <>
-            <InspectorControls>
-                <PanelBody title={__('Layout Settings', 'mi-condotel')}>
-                    <SelectControl
-                        label={__('Width Option', 'mi-condotel')}
-                        value={widthOption}
-                        options={[
-                            { label: 'Wide (1400px max)', value: '90' },
-                            { label: 'Content Width (1200px max)', value: 'content' },
-                            { label: 'Full Width', value: 'full' },
-                        ]}
-                        onChange={(value) => setAttributes({ widthOption: value })}
-                    />
-                    <TextControl
-                        label={__('Minimum Height', 'mi-condotel')}
-                        value={minHeight}
-                        onChange={(value) => setAttributes({ minHeight: value })}
-                        help={__('e.g., 400px, 50vh', 'mi-condotel')}
-                    />
-                    <SelectControl
-                        label={__('Border Radius', 'mi-condotel')}
-                        value={borderRadius}
-                        options={[
-                            { label: 'None', value: 'none' },
-                            { label: 'Extra Small', value: 'xs' },
-                            { label: 'Small', value: 'sm' },
-                            { label: 'Medium', value: 'md' },
-                            { label: 'Large', value: 'lg' },
-                            { label: 'Extra Large', value: 'xl' },
-                            { label: '2X Large', value: '2xl' },
-                            { label: '3X Large', value: '3xl' },
-                            { label: '4X Large', value: '4xl' },
-                            { label: 'Full', value: 'full' },
-                        ]}
-                        onChange={(value) => setAttributes({ borderRadius: value })}
-                        disabled={widthOption === 'full'}
-                        help={widthOption === 'full' ? __('Border radius is disabled for full width heroes', 'mi-condotel') : ''}
-                    />
-                </PanelBody>
-
-                <PanelBody title={__('Background Settings', 'mi-condotel')}>
-                    <MediaUploadCheck>
-                        <MediaUpload
-                            onSelect={(media) => setAttributes({ backgroundImage: media.url })}
-                            allowedTypes={['image']}
-                            value={backgroundImage}
-                            render={({ open }) => (
-                                <div>
-                                    <Button onClick={open} variant="secondary">
-                                        {backgroundImage ? __('Change Image', 'mi-condotel') : __('Select Image', 'mi-condotel')}
-                                    </Button>
-                                    {backgroundImage && (
-                                        <Button
-                                            onClick={() => setAttributes({ backgroundImage: '' })}
-                                            variant="link"
-                                            isDestructive
-                                            style={{ marginLeft: '10px' }}
-                                        >
-                                            {__('Remove', 'mi-condotel')}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
-                        />
-                    </MediaUploadCheck>
-                </PanelBody>
-
-                <PanelBody title={__('Overlay Settings', 'mi-condotel')}>
-                    <SelectControl
-                        label={__('Overlay Color', 'mi-condotel')}
-                        value={overlayColor}
-                        options={[
-                            { label: 'Primary', value: 'primary' },
-                            { label: 'Secondary', value: 'secondary' },
-                            { label: 'Tertiary', value: 'tertiary' },
-                            { label: 'Neutral', value: 'neutral' },
-                            { label: 'Base', value: 'base' },
-                            { label: 'White', value: 'white' },
-                            { label: 'Black', value: 'black' },
-                        ]}
-                        onChange={(value) => setAttributes({ overlayColor: value })}
-                    />
-                    {overlayColor !== 'white' && overlayColor !== 'black' && (
+        return (
+            <>
+                <InspectorControls>
+                    <PanelBody title="Layout" initialOpen={true}>
                         <SelectControl
-                            label={__('Color Variation', 'mi-condotel')}
-                            value={overlayVariation}
+                            label="Width"
+                            value={width}
                             options={[
-                                { label: 'Lightest', value: 'lightest' },
-                                { label: 'Light', value: 'light' },
-                                { label: 'Medium', value: 'med' },
-                                { label: 'Dark', value: 'dark' },
-                                { label: 'Darkest', value: 'darkest' },
+                                { label: 'Wide (1400px max)', value: 'wide' },
+                                { label: 'Content Width (1200px max)', value: 'content-width' },
+                                { label: 'Full Width', value: 'full-width' }
                             ]}
-                            onChange={(value) => setAttributes({ overlayVariation: value })}
+                            onChange={(value) => setAttributes({ width: value })}
                         />
-                    )}
-                    <RangeControl
-                        label={__('Overlay Opacity', 'mi-condotel')}
-                        value={overlayOpacity}
-                        onChange={(value) => setAttributes({ overlayOpacity: value })}
-                        min={0}
-                        max={1}
-                        step={0.1}
-                    />
-                </PanelBody>
+                        {width !== 'full-width' && (
+                            <SelectControl
+                                label="Border Radius"
+                                value={borderRadius}
+                                options={borderRadiusOptions}
+                                onChange={(value) => setAttributes({ borderRadius: value })}
+                            />
+                        )}
+                    </PanelBody>
 
-                <PanelBody title={__('Title Settings', 'mi-condotel')}>
-                    <SelectControl
-                        label={__('Title Size', 'mi-condotel')}
-                        value={titleSize}
-                        options={[
-                            { label: 'Extra Small', value: 'xs' },
-                            { label: 'Small', value: 'sm' },
-                            { label: 'Base', value: 'base' },
-                            { label: 'Large', value: 'lg' },
-                            { label: 'Extra Large', value: 'xl' },
-                            { label: '2X Large', value: '2xl' },
-                            { label: '3X Large', value: '3xl' },
-                            { label: '4X Large', value: '4xl' },
-                            { label: '5X Large', value: '5xl' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleSize: value })}
+                    <SpacingControls
+                        attributes={attributes}
+                        setAttributes={setAttributes}
+                        showPadding={true}
+                        showMinHeight={true}
+                        minHeightMin={200}
+                        minHeightMax={800}
                     />
-                    <SelectControl
-                        label={__('Title Weight', 'mi-condotel')}
-                        value={titleWeight}
-                        options={[
-                            { label: 'Extra Light', value: 'extra-light' },
-                            { label: 'Light', value: 'light' },
-                            { label: 'Normal', value: 'normal' },
-                            { label: 'Semibold', value: 'semibold' },
-                            { label: 'Bold', value: 'bold' },
-                            { label: 'Extra Bold', value: 'extra-bold' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleWeight: value })}
-                    />
-                    <SelectControl
-                        label={__('Title Color', 'mi-condotel')}
-                        value={titleColor}
-                        options={[
-                            { label: 'Primary', value: 'primary' },
-                            { label: 'Secondary', value: 'secondary' },
-                            { label: 'Tertiary', value: 'tertiary' },
-                            { label: 'Neutral', value: 'neutral' },
-                            { label: 'Base', value: 'base' },
-                            { label: 'White', value: 'white' },
-                            { label: 'Black', value: 'black' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleColor: value })}
-                    />
-                    {titleColor !== 'white' && titleColor !== 'black' && (
-                        <SelectControl
-                            label={__('Title Color Variation', 'mi-condotel')}
-                            value={titleColorVariation}
-                            options={[
-                                { label: 'Lightest', value: 'lightest' },
-                                { label: 'Light', value: 'light' },
-                                { label: 'Medium', value: 'med' },
-                                { label: 'Dark', value: 'dark' },
-                                { label: 'Darkest', value: 'darkest' },
-                            ]}
-                            onChange={(value) => setAttributes({ titleColorVariation: value })}
-                        />
-                    )}
-                    <SelectControl
-                        label={__('Title Letter Spacing', 'mi-condotel')}
-                        value={titleTracking}
-                        options={[
-                            { label: 'Tighter', value: 'tighter' },
-                            { label: 'Tight', value: 'tight' },
-                            { label: 'Normal', value: 'normal' },
-                            { label: 'Wide', value: 'wide' },
-                            { label: 'Wider', value: 'wider' },
-                            { label: 'Widest', value: 'widest' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleTracking: value })}
-                    />
-                    <SelectControl
-                        label={__('Title Transform', 'mi-condotel')}
-                        value={titleTransform}
-                        options={[
-                            { label: 'None', value: 'none' },
-                            { label: 'Uppercase', value: 'uppercase' },
-                            { label: 'Lowercase', value: 'lowercase' },
-                            { label: 'Capitalize', value: 'capitalize' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleTransform: value })}
-                    />
-                    <SelectControl
-                        label={__('Title Bottom Spacing', 'mi-condotel')}
-                        value={titleSpacing}
-                        options={[
-                            { label: 'Extra Small', value: 'xs' },
-                            { label: 'Small', value: 'sm' },
-                            { label: 'Medium', value: 'md' },
-                            { label: 'Large', value: 'lg' },
-                            { label: 'Extra Large', value: 'xl' },
-                            { label: '2X Large', value: '2xl' },
-                        ]}
-                        onChange={(value) => setAttributes({ titleSpacing: value })}
-                    />
-                </PanelBody>
 
-                <PanelBody title={__('Subtitle Settings', 'mi-condotel')}>
-                    <SelectControl
-                        label={__('Subtitle Size', 'mi-condotel')}
-                        value={subtitleSize}
-                        options={[
-                            { label: 'Extra Small', value: 'xs' },
-                            { label: 'Small', value: 'sm' },
-                            { label: 'Base', value: 'base' },
-                            { label: 'Large', value: 'lg' },
-                            { label: 'Extra Large', value: 'xl' },
-                            { label: '2X Large', value: '2xl' },
-                            { label: '3X Large', value: '3xl' },
-                        ]}
-                        onChange={(value) => setAttributes({ subtitleSize: value })}
+                    <BackgroundControls
+                        attributes={attributes}
+                        setAttributes={setAttributes}
+                        showImage={true}
+                        showOverlay={true}
                     />
-                    <SelectControl
-                        label={__('Subtitle Weight', 'mi-condotel')}
-                        value={subtitleWeight}
-                        options={[
-                            { label: 'Extra Light', value: 'extra-light' },
-                            { label: 'Light', value: 'light' },
-                            { label: 'Normal', value: 'normal' },
-                            { label: 'Semibold', value: 'semibold' },
-                            { label: 'Bold', value: 'bold' },
-                            { label: 'Extra Bold', value: 'extra-bold' },
-                        ]}
-                        onChange={(value) => setAttributes({ subtitleWeight: value })}
-                    />
-                    <SelectControl
-                        label={__('Subtitle Color', 'mi-condotel')}
-                        value={subtitleColor}
-                        options={[
-                            { label: 'Primary', value: 'primary' },
-                            { label: 'Secondary', value: 'secondary' },
-                            { label: 'Tertiary', value: 'tertiary' },
-                            { label: 'Neutral', value: 'neutral' },
-                            { label: 'Base', value: 'base' },
-                            { label: 'White', value: 'white' },
-                            { label: 'Black', value: 'black' },
-                        ]}
-                        onChange={(value) => setAttributes({ subtitleColor: value })}
-                    />
-                    {subtitleColor !== 'white' && subtitleColor !== 'black' && (
-                        <SelectControl
-                            label={__('Subtitle Color Variation', 'mi-condotel')}
-                            value={subtitleColorVariation}
-                            options={[
-                                { label: 'Lightest', value: 'lightest' },
-                                { label: 'Light', value: 'light' },
-                                { label: 'Medium', value: 'med' },
-                                { label: 'Dark', value: 'dark' },
-                                { label: 'Darkest', value: 'darkest' },
-                            ]}
-                            onChange={(value) => setAttributes({ subtitleColorVariation: value })}
-                        />
-                    )}
-                    <SelectControl
-                        label={__('Subtitle Letter Spacing', 'mi-condotel')}
-                        value={subtitleTracking}
-                        options={[
-                            { label: 'Tighter', value: 'tighter' },
-                            { label: 'Tight', value: 'tight' },
-                            { label: 'Normal', value: 'normal' },
-                            { label: 'Wide', value: 'wide' },
-                            { label: 'Wider', value: 'wider' },
-                            { label: 'Widest', value: 'widest' },
-                        ]}
-                        onChange={(value) => setAttributes({ subtitleTracking: value })}
-                    />
-                    <SelectControl
-                        label={__('Subtitle Transform', 'mi-condotel')}
-                        value={subtitleTransform}
-                        options={[
-                            { label: 'None', value: 'none' },
-                            { label: 'Uppercase', value: 'uppercase' },
-                            { label: 'Lowercase', value: 'lowercase' },
-                            { label: 'Capitalize', value: 'capitalize' },
-                        ]}
-                        onChange={(value) => setAttributes({ subtitleTransform: value })}
-                    />
-                </PanelBody>
-            </InspectorControls>
 
-            <div {...blockProps}>
-                <div className={containerClasses.join(' ')} style={containerStyle}>
-                    <div className="hero-block__overlay" style={overlayStyle}></div>
-                    <div className="hero-block__content">
-                        <div className="hero-block__text-wrapper">
+                    <TypographyControls
+                        title="Title Typography"
+                        attributes={attributes}
+                        setAttributes={setAttributes}
+                        prefix="title"
+                    />
+
+                    <TypographyControls
+                        title="Subtitle Typography"
+                        attributes={attributes}
+                        setAttributes={setAttributes}
+                        prefix="subtitle"
+                    />
+                </InspectorControls>
+
+                <div {...blockProps}>
+                    <div 
+                        className="hero-block__container"
+                        style={{
+                            backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined
+                        }}
+                    >
+                        <div className="hero-block__overlay"></div>
+                        <div className="hero-block__content">
                             <RichText
                                 tagName="h1"
                                 className="hero-block__title"
                                 value={title}
                                 onChange={(value) => setAttributes({ title: value })}
-                                placeholder={__('Enter title...', 'mi-condotel')}
-                                style={titleStyle}
+                                placeholder="Enter title..."
                             />
                             <RichText
                                 tagName="p"
                                 className="hero-block__subtitle"
                                 value={subtitle}
                                 onChange={(value) => setAttributes({ subtitle: value })}
-                                placeholder={__('Enter subtitle...', 'mi-condotel')}
-                                style={subtitleStyle}
+                                placeholder="Enter subtitle..."
                             />
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    );
-};
-
-// Register the block
-registerBlockType(metadata.name, {
-    edit: Edit,
-    save: () => null, // Dynamic block
+            </>
+        );
+    },
+    save: () => null
 });

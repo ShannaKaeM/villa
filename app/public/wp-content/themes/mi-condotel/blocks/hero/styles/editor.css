@@ -17,3 +17,85 @@
     margin-left: 0;
     margin-right: 0;
 }
+
+/* Hero Block Editor Styles */
+.hero-block {
+    width: 100%;
+}
+
+/* Container */
+.hero-block__container {
+    position: relative;
+    min-height: var(--hero-min-height, 400px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    border-radius: var(--hero-border-radius, var(--wp--custom--border-radius--lg));
+}
+
+/* Width variations in editor */
+.hero-block--wide .hero-block__container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero-block--content-width .hero-block__container {
+    max-width: var(--wp--custom--site-content-width, 1200px);
+    margin: 0 auto;
+}
+
+.hero-block--full-width .hero-block__container {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0 !important;
+}
+
+/* Overlay */
+.hero-block__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--hero-overlay-color, #000000);
+    opacity: var(--hero-overlay-opacity, 0.5);
+}
+
+/* Content */
+.hero-block__content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: var(--hero-padding-top, 3rem) var(--hero-padding-right, 1rem) var(--hero-padding-bottom, 3rem) var(--hero-padding-left, 1rem);
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Typography */
+.hero-block__title {
+    color: var(--hero-title-color, #ffffff);
+    font-size: var(--hero-title-size, 2.25rem);
+    font-weight: var(--hero-title-weight, var(--wp--custom--font-weight--bold));
+    letter-spacing: var(--hero-title-tracking, var(--wp--custom--letter-spacing--normal));
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.hero-block__subtitle {
+    color: var(--hero-subtitle-color, #ffffff);
+    font-size: var(--hero-subtitle-size, 1.25rem);
+    font-weight: var(--hero-subtitle-weight, var(--wp--custom--font-weight--normal));
+    letter-spacing: var(--hero-subtitle-tracking, var(--wp--custom--letter-spacing--normal));
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* RichText placeholders */
+.hero-block__title[data-is-placeholder-visible="true"],
+.hero-block__subtitle[data-is-placeholder-visible="true"] {
+    opacity: 0.7;
+}

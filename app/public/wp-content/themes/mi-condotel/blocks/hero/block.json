@@ -4,9 +4,9 @@
     "name": "miblocks/hero",
     "version": "1.0.0",
     "title": "Hero",
-    "category": "miblocks",
+    "category": "miBlocks",
     "icon": "cover-image",
-    "description": "A customizable hero section with background image and text overlay",
+    "description": "A hero section with customizable background, text, and layout options.",
     "supports": {
         "html": false,
         "align": ["wide", "full"]
@@ -17,110 +17,82 @@
     "style": "file:./styles/block.css",
     "render": "file:./render.php",
     "attributes": {
+        "backgroundImage": {
+            "type": "string",
+            "default": ""
+        },
+        "backgroundImageId": {
+            "type": "number",
+            "default": 0
+        },
+        "overlayColor": {
+            "type": "string",
+            "default": "#000000"
+        },
+        "overlayOpacity": {
+            "type": "number",
+            "default": 50
+        },
         "title": {
             "type": "string",
             "default": ""
+        },
+        "titleColor": {
+            "type": "string",
+            "default": "#ffffff"
+        },
+        "titleSize": {
+            "type": "string",
+            "default": "2.25rem"
+        },
+        "titleWeight": {
+            "type": "string",
+            "default": "var(--wp--custom--font-weight--bold)"
+        },
+        "titleTracking": {
+            "type": "string",
+            "default": "var(--wp--custom--letter-spacing--normal)"
         },
         "subtitle": {
             "type": "string",
             "default": ""
         },
-        "backgroundImage": {
+        "subtitleColor": {
             "type": "string",
-            "default": ""
-        },
-        "minHeight": {
-            "type": "string",
-            "default": "500px"
-        },
-        "widthOption": {
-            "type": "string",
-            "default": "90",
-            "enum": ["90", "content"]
-        },
-        "borderRadius": {
-            "type": "string",
-            "default": "2xl",
-            "enum": ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "full"]
-        },
-        "overlayColor": {
-            "type": "string",
-            "default": "primary",
-            "enum": ["primary", "secondary", "tertiary", "neutral", "base", "white", "black"]
-        },
-        "overlayVariation": {
-            "type": "string",
-            "default": "med",
-            "enum": ["lightest", "light", "med", "dark", "darkest"]
-        },
-        "overlayOpacity": {
-            "type": "number",
-            "default": 0.5
-        },
-        "titleSize": {
-            "type": "string",
-            "default": "3xl",
-            "enum": ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl"]
-        },
-        "titleWeight": {
-            "type": "string",
-            "default": "bold",
-            "enum": ["extra-light", "light", "normal", "semibold", "bold", "extra-bold"]
-        },
-        "titleColor": {
-            "type": "string",
-            "default": "white",
-            "enum": ["primary", "secondary", "tertiary", "neutral", "base", "white", "black"]
-        },
-        "titleColorVariation": {
-            "type": "string",
-            "default": "med",
-            "enum": ["lightest", "light", "med", "dark", "darkest"]
-        },
-        "titleTracking": {
-            "type": "string",
-            "default": "normal",
-            "enum": ["tighter", "tight", "normal", "wide", "wider", "widest"]
-        },
-        "titleTransform": {
-            "type": "string",
-            "default": "none",
-            "enum": ["none", "uppercase", "lowercase", "capitalize"]
-        },
-        "titleSpacing": {
-            "type": "string",
-            "default": "md",
-            "enum": ["xs", "sm", "md", "lg", "xl", "2xl"]
+            "default": "#ffffff"
         },
         "subtitleSize": {
             "type": "string",
-            "default": "lg",
-            "enum": ["xs", "sm", "base", "lg", "xl", "2xl", "3xl"]
+            "default": "1.25rem"
         },
         "subtitleWeight": {
             "type": "string",
-            "default": "normal",
-            "enum": ["extra-light", "light", "normal", "semibold", "bold", "extra-bold"]
-        },
-        "subtitleColor": {
-            "type": "string",
-            "default": "white",
-            "enum": ["primary", "secondary", "tertiary", "neutral", "base", "white", "black"]
-        },
-        "subtitleColorVariation": {
-            "type": "string",
-            "default": "med",
-            "enum": ["lightest", "light", "med", "dark", "darkest"]
+            "default": "var(--wp--custom--font-weight--normal)"
         },
         "subtitleTracking": {
             "type": "string",
-            "default": "normal",
-            "enum": ["tighter", "tight", "normal", "wide", "wider", "widest"]
+            "default": "var(--wp--custom--letter-spacing--normal)"
         },
-        "subtitleTransform": {
+        "minHeight": {
+            "type": "number",
+            "default": 400
+        },
+        "padding": {
+            "type": "object",
+            "default": {
+                "top": "3rem",
+                "right": "1rem",
+                "bottom": "3rem",
+                "left": "1rem"
+            }
+        },
+        "borderRadius": {
             "type": "string",
-            "default": "none",
-            "enum": ["none", "uppercase", "lowercase", "capitalize"]
+            "default": "var(--wp--custom--border-radius--lg)"
+        },
+        "width": {
+            "type": "string",
+            "default": "wide"
         }
     }
 }
