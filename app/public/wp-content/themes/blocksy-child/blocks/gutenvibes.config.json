@@ -1,0 +1,71 @@
+{
+  "name": "Villa Community Blocks",
+  "version": "1.0.0",
+  "description": "Custom blocks for Villa Community theme with GutenVibes CSS Editor support",
+  "blocks": [
+    {
+      "name": "miblocks/page-header",
+      "title": "Page Header",
+      "category": "design",
+      "cssFile": "styles/block.css",
+      "selectors": {
+        "root": ".wp-block-miblocks-page-header",
+        "overlay": ".wp-block-miblocks-page-header::before",
+        "content": ".page-header-content",
+        "title": ".page-header-title",
+        "subtitle": ".page-header-subtitle"
+      },
+      "controls": [
+        "backgroundColor",
+        "textColor",
+        "overlayOpacity",
+        "height",
+        "titleSpacing",
+        "backgroundPositionY"
+      ]
+    },
+    {
+      "name": "miblocks/listing-section",
+      "title": "Listing Section",
+      "category": "layout",
+      "cssFile": "styles/block.css",
+      "selectors": {
+        "root": ".wp-block-miblocks-listing-section",
+        "container": ".listing-section",
+        "sidebar": ".listing-section__sidebar",
+        "main": ".listing-section__main",
+        "header": ".listing-section__header",
+        "cardsContainer": ".cards-container",
+        "card": ".card",
+        "cardImage": ".card__image",
+        "cardContent": ".card__content",
+        "cardTitle": ".card__title",
+        "cardExcerpt": ".card__excerpt",
+        "pagination": ".listing-section__pagination",
+        "filterBar": ".filter-bar",
+        "filterDropdown": ".filter-dropdown",
+        "filterCheckbox": ".filter-checkbox",
+        "filterSidebar": ".filter-sidebar",
+        "badge": ".badge"
+      },
+      "controls": [
+        "columns",
+        "gap",
+        "cardStyle",
+        "showFilter",
+        "filterPosition"
+      ]
+    }
+  ],
+  "globalStyles": {
+    "variables": "styles/variables.css",
+    "base": "../../assets/css/base.css"
+  },
+  "editor": {
+    "allowComplexSelectors": true,
+    "allowPseudoElements": true,
+    "allowMediaQueries": true,
+    "allowCustomProperties": true,
+    "encapsulation": "shadow-dom"
+  }
+}

@@ -1,0 +1,87 @@
+/**
+ * Editor styles for Listing Section block
+ */
+
+.wp-block-miblocks-listing-section {
+    // Import frontend styles
+    @import './style.scss';
+    
+    // Ensure proper containment in editor
+    overflow: hidden;
+    box-sizing: border-box;
+    
+    // Constrain filter elements in editor
+    .filter-bar,
+    .filter-sidebar {
+        max-width: 100%;
+        overflow-x: auto;
+        box-sizing: border-box;
+    }
+    
+    .filter-dropdown__menu {
+        max-width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .listing-section-editor-preview {
+        padding: 20px;
+        border: 1px dashed #ddd;
+        background: #f9f9f9;
+        margin-bottom: 20px;
+        
+        h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+            
+            strong {
+                color: #333;
+            }
+        }
+    }
+    
+    // Preview message styles
+    .editor-preview-message {
+        padding: 20px;
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        border-radius: 4px;
+        
+        p {
+            margin: 0 0 10px;
+            
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+        
+        small {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+    }
+    
+    // Loading state
+    .components-placeholder {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0f0f0;
+        border: 1px dashed #ccc;
+        
+        p {
+            margin: 0;
+            color: #666;
+            font-style: italic;
+        }
+    }
+}
