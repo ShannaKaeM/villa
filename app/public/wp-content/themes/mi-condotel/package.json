@@ -1,0 +1,13 @@
+{
+  "name": "blocksy-child-blocks",
+  "version": "1.0.0",
+  "description": "Build scripts for Blocksy child theme blocks",
+  "scripts": {
+    "build": "wp-scripts build blocks/page-header/src/index.js --output-path=blocks/page-header/build && wp-scripts build blocks/listing-section/src/index.js blocks/listing-section/src/view.js --output-path=blocks/listing-section/build",
+    "start": "wp-scripts start blocks/listing-section/src/index.js blocks/listing-section/src/view.js --output-path=blocks/listing-section/build",
+    "packages-update": "wp-scripts packages-update"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^26.0.0"
+  }
+}

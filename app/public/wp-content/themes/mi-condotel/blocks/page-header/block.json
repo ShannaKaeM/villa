@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "miblocks/page-header",
+  "version": "1.0.0",
+  "title": "Page Header",
+  "category": "miblocks",
+  "icon": "cover-image",
+  "description": "A full-width page header with background image, title and subtitle",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Page Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Add a description or subtitle for this page"
+    },
+    "backgroundImage": {
+      "type": "string",
+      "default": "http://villa-community20.local/wp-content/uploads/2025/05/Kitchen1.png"
+    },
+    "minHeight": {
+      "type": "string",
+      "default": "400px"
+    },
+    "borderRadius": {
+      "type": "string",
+      "default": "lg"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": 0.5
+    },
+    "titleSize": {
+      "type": "string",
+      "default": "4xl"
+    },
+    "titleWeight": {
+      "type": "string",
+      "default": "bold"
+    },
+    "titleColor": {
+      "type": "string",
+      "default": "white"
+    },
+    "subtitleSize": {
+      "type": "string",
+      "default": "xl"
+    },
+    "subtitleWeight": {
+      "type": "string",
+      "default": "normal"
+    },
+    "subtitleColor": {
+      "type": "string",
+      "default": "base-light"
+    },
+    "titleTransform": {
+      "type": "string",
+      "default": "uppercase"
+    },
+    "subtitleTransform": {
+      "type": "string",
+      "default": "none"
+    },
+    "titleTracking": {
+      "type": "string",
+      "default": "tight"
+    },
+    "subtitleTracking": {
+      "type": "string",
+      "default": "normal"
+    },
+    "titleSpacing": {
+      "type": "string",
+      "default": "4"
+    },
+    "backgroundPositionY": {
+      "type": "string",
+      "default": "center"
+    }
+  },
+  "editorScript": "file:./build/index.js",
+  "editorStyle": "file:./build/index.css",
+  "render": "file:./render.php"
+}

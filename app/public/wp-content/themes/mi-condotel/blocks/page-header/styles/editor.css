@@ -1,0 +1,49 @@
+/**
+ * Editor-specific styles for Page Header block
+ * Overrides Blocksy's blue colors within this block
+ */
+
+/* Import theme variables */
+@import url('../../../assets/css/base.css');
+
+/* Block-specific editor overrides */
+.editor-styles-wrapper .wp-block-miblocks-page-header {
+    /* Ensure block uses theme colors */
+    --linkInitialColor: var(--color-white) !important;
+    --linkHoverColor: var(--color-base-extreme-light) !important;
+    
+    /* Set appropriate background for hero sections */
+    background-color: var(--color-base) !important;
+    color: var(--color-base-extreme-light) !important;
+}
+
+/* Fix text colors within block */
+.editor-styles-wrapper .wp-block-miblocks-page-header h1,
+.editor-styles-wrapper .wp-block-miblocks-page-header h2,
+.editor-styles-wrapper .wp-block-miblocks-page-header h3,
+.editor-styles-wrapper .wp-block-miblocks-page-header p {
+    color: var(--color-white) !important;
+}
+
+/* Fix link colors within block */
+.editor-styles-wrapper .wp-block-miblocks-page-header a {
+    color: var(--color-white) !important;
+    text-decoration: underline;
+}
+
+.editor-styles-wrapper .wp-block-miblocks-page-header a:hover {
+    color: var(--color-base-extreme-light) !important;
+}
+
+/* Fix button colors within block */
+.editor-styles-wrapper .wp-block-miblocks-page-header .wp-element-button,
+.editor-styles-wrapper .wp-block-miblocks-page-header .button {
+    background-color: var(--color-white) !important;
+    color: var(--color-primary) !important;
+}
+
+.editor-styles-wrapper .wp-block-miblocks-page-header .wp-element-button:hover,
+.editor-styles-wrapper .wp-block-miblocks-page-header .button:hover {
+    background-color: var(--color-base-extreme-light) !important;
+    color: var(--color-primary-dark) !important;
+}

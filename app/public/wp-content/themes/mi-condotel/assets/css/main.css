@@ -1,0 +1,248 @@
+/**
+ * Villa Community - Main CSS Entry Point
+ * Pure semantic CSS approach
+ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+/* Import our base CSS with all variables */
+@import url('base.css');
+
+/**
+ * mi-Condotel Main Stylesheet
+ * 
+ * This file imports the base design system and adds theme-specific styles
+ */
+
+/* ==========================================================================
+   Layout & Structure
+   ========================================================================== */
+
+.site-main {
+    min-height: 100vh;
+}
+
+.container {
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+
+.site-header {
+    background-color: var(--color-base-extreme-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+}
+
+.site-branding {
+    flex-shrink: 0;
+}
+
+.site-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.site-title a {
+    color: var(--color-primary-med);
+    text-decoration: none;
+}
+
+/* Navigation */
+.main-navigation {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.menu-container {
+    display: flex;
+}
+
+#primary-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2rem;
+}
+
+#primary-menu a {
+    color: var(--color-base-dark);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+#primary-menu a:hover {
+    color: var(--color-primary-med);
+}
+
+/* ==========================================================================
+   Footer Styles
+   ========================================================================== */
+
+.site-footer {
+    background-color: var(--color-base-dark);
+    color: var(--color-base-extreme-light);
+    padding: 3rem 0 1rem;
+    margin-top: 4rem;
+}
+
+.footer-inner {
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.footer-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.site-info {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Content Styles
+   ========================================================================== */
+
+.entry-title {
+    color: var(--color-primary-med);
+    margin-bottom: 1rem;
+}
+
+.entry-content {
+    line-height: 1.6;
+}
+
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6 {
+    color: var(--color-primary-med);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Block Styles
+   ========================================================================== */
+
+/* Page Header Block */
+.wp-block-miblocks-page-header .page-header__title,
+.wp-block-miblocks-page-header .page-header__subtitle {
+    color: white !important;
+}
+
+.wp-block-miblocks-page-header .page-header__overlay {
+    opacity: var(--page-header-overlay-opacity, 0.5);
+    background-color: black;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+    
+    .menu-container {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--color-base-extreme-light);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .menu-container.toggled {
+        display: block;
+    }
+    
+    #primary-menu {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .footer-widgets {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.screen-reader-text {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+}
+
+.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alignleft {
+    float: left;
+    margin-right: 1.5rem;
+}
+
+.alignright {
+    float: right;
+    margin-left: 1.5rem;
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .site-header,
+    .site-footer,
+    .menu-toggle {
+        display: none;
+    }
+}

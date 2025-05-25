@@ -1,0 +1,371 @@
+/**
+ * Base Styles
+ * Foundation styles that apply globally
+ * These are the building blocks that all components can use
+ */
+
+/* ==========================================================================
+   Reset & Normalize
+   ========================================================================== */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1, h2, h3, h4, h5, h6,
+p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Make images easier to work with */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Remove focus outline for mouse users, keep for keyboard users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ==========================================================================
+   CSS Variables - Design System
+   ========================================================================== */
+
+:root {
+
+  
+
+
+  /* Main Theme Colors (Single Source of Truth) */
+  --color-primary: #5a7f80; /* Teal*/
+  --color-secondary: #a85d57; /* Terracotta */
+  --color-emphasis: #3c9da1; /* Turquoise */
+  --color-neutral: #9b8974; /* Sand */
+  --color-base: #9c9c9c; /* Mid Gray - for grayscale variations */
+  --color-white: #FFFFFF; /* Pure White - standalone color */
+  --color-black: #000000; /* Pure Black - standalone color */
+  --color-site-bg: #ffffff; /* Pure White - standalone color */
+
+  /* Override Blocksy theme palette colors */
+  --paletteColor1: var(--color-primary);
+  --paletteColor2: var(--color-secondary);
+  --paletteColor3: var(--color-emphasis);
+  --paletteColor4: var(--color-neutral);
+  --paletteColor5: var(--color-base);
+  --paletteColor6: var(--color-white);
+  --paletteColor7: var(--color-black);
+  --paletteColor8: var(--color-site-bg);
+
+  --theme-palette-color-1: var(--color-primary);
+  --theme-palette-color-2: var(--color-secondary);
+  --theme-palette-color-3: var(--color-emphasis);
+  --theme-palette-color-4: var(--color-neutral);
+  --theme-palette-color-5: var(--color-base);
+  --theme-palette-color-6: var(--color-white);
+  --theme-palette-color-7: var(--color-black);
+  --theme-palette-color-8: var(--color-site-bg);
+
+  /* Primary Variations */
+  --color-primary-lightest: color-mix(in srgb, var(--color-primary) 20%, white);
+  --color-primary-light: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-primary-med: var(--color-primary);
+  --color-primary-dark: color-mix(in srgb, var(--color-primary) 80%, black);
+  --color-primary-darkest: color-mix(in srgb, var(--color-primary) 60%, black);
+
+  /* Secondary Variations */
+  --color-secondary-lightest: color-mix(in srgb, var(--color-secondary) 20%, white);
+  --color-secondary-light: color-mix(in srgb, var(--color-secondary) 60%, white);
+  --color-secondary-med: var(--color-secondary);
+  --color-secondary-dark: color-mix(in srgb, var(--color-secondary) 80%, black);
+  --color-secondary-darkest: color-mix(in srgb, var(--color-secondary) 60%, black);
+  
+  /* Emphasis Variations */
+  --color-emphasis-lightest: color-mix(in srgb, var(--color-emphasis) 20%, white);
+  --color-emphasis-light: color-mix(in srgb, var(--color-emphasis) 60%, white);
+  --color-emphasis-med: var(--color-emphasis);
+  --color-emphasis-dark: color-mix(in srgb, var(--color-emphasis) 80%, black);
+  --color-emphasis-darkest: color-mix(in srgb, var(--color-emphasis) 60%, black);
+  
+  /* Neutral Variations */
+  --color-neutral-lightest: color-mix(in srgb, var(--color-neutral) 20%, white);
+  --color-neutral-light: color-mix(in srgb, var(--color-neutral) 60%, white);
+  --color-neutral-med: var(--color-neutral);
+  --color-neutral-dark: color-mix(in srgb, var(--color-neutral) 80%, black);
+  --color-neutral-darkest: color-mix(in srgb, var(--color-neutral) 60%, black);
+  
+  /* Base Variations (5 levels - white and black are separate) */
+  --color-base-extreme-light: color-mix(in srgb, var(--color-base) 0%, white);
+  --color-base-lightest: color-mix(in srgb, var(--color-base) 30%, white);
+  --color-base-light: color-mix(in srgb, var(--color-base) 60%, white);
+  --color-base-med: var(--color-base);
+  --color-base-dark: color-mix(in srgb, var(--color-base) 60%, black);
+  --color-base-darkest: color-mix(in srgb, var(--color-base) 30%, black);
+  --color-base-extreme-dark: color-mix(in srgb, var(--color-base) 0%, black);
+  
+  /* Blocksy Component Colors - Override ALL defaults */
+  --theme-text-color: var(--color-base-dark);
+  --theme-link-initial-color: var(--color-primary-med);
+  --theme-link-hover-color: var(--color-primary-dark);
+  --theme-heading-color: var(--color-primary-med);
+  --theme-border-color: var(--color-neutral-light);
+  --theme-button-background-initial-color: var(--color-primary-med);
+  --theme-button-background-hover-color: var(--color-primary-dark);
+  --theme-button-text-initial-color: var(--color-base-extreme-light);
+  --theme-button-text-hover-color: var(--color-base-extreme-light);
+  
+  
+  /* Spacing Scale */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  
+  /* Typography */
+  --font-family-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-family-mono: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.50rem;
+  --font-size-2xl: 2.5rem;
+  --font-size-3xl: 3.5rem;
+  --font-size-4xl: 4.5rem;
+  --font-size-5xl: 5.5rem;
+  
+  /* Font Weights */
+  --font-weight-light: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Text Transform */
+  --text-transform-none: none;
+  --text-transform-uppercase: uppercase;
+  --text-transform-lowercase: lowercase;
+  --text-transform-capitalize: capitalize;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+  
+  /* Border Radius */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2.5rem;
+  --radius-3xl: 3.5rem;
+  --radius-4xl: 4.5rem;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+  
+  /* Z-index Scale */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal: 1050;
+  --z-index-tooltip: 1070;
+  
+  /* Layout */
+  --container-width-sm: 640px;
+  --container-width-md: 768px;
+  --container-width-lg: 1024px;
+  --container-width-xl: 1280px;
+  --container-width-2xl: 1536px;
+}
+
+/* ==========================================================================
+   Typography Base
+   ========================================================================== */
+
+body {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--theme-text-color);
+  background-color: var(--color-white);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--theme-heading-color);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
+
+/* Links */
+a {
+  color: var(--theme-link-initial-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--theme-link-hover-color);
+  text-decoration: underline;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+}
+
+@media (min-width: 640px) {
+  .container { max-width: var(--container-width-sm); }
+}
+
+@media (min-width: 768px) {
+  .container { max-width: var(--container-width-md); }
+}
+
+@media (min-width: 1024px) {
+  .container { max-width: var(--container-width-lg); }
+}
+
+@media (min-width: 1280px) {
+  .container { max-width: var(--container-width-xl); }
+}
+
+/* Focus styles */
+:focus {
+  outline: 2px solid var(--color-primary-med);
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary-med);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-darkest);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-base-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-med);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-base-dark);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-base-med) var(--color-base-light);
+}
