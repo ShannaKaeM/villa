@@ -77,9 +77,6 @@ select {
 
 :root {
 
-  
-
-
   /* Main Theme Colors (Single Source of Truth) */
   --color-primary: #5a7f80; /* Teal*/
   --color-secondary: #a85d57; /* Terracotta */
@@ -128,32 +125,22 @@ select {
   --color-base-darkest: color-mix(in srgb, var(--color-base) 30%, black);
   --color-base-extreme-dark: color-mix(in srgb, var(--color-base) 0%, black);
   
-  /* Blocksy Component Colors - Override ALL defaults */
-  --theme-text-color: var(--color-base-dark);
-  --theme-link-initial-color: var(--color-primary-med);
-  --theme-link-hover-color: var(--color-primary-dark);
-  --theme-heading-color: var(--color-primary-med);
-  --theme-border-color: var(--color-neutral-light);
-  --theme-button-background-initial-color: var(--color-primary-med);
-  --theme-button-background-hover-color: var(--color-primary-dark);
-  --theme-button-text-initial-color: var(--color-base-extreme-light);
-  --theme-button-text-hover-color: var(--color-base-extreme-light);
-  
+  /* Component Colors */
+  /* Removed redundant theme variables - use color variables directly */
   
   /* Spacing Scale */
-  --spacing-0: 0;
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-5: 1.25rem;
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-10: 2.5rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-  --spacing-20: 5rem;
-  --spacing-24: 6rem;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-base: 1rem;
+  --spacing-lg: 1.25rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+  --spacing-3xl: 2.5rem;
+  --spacing-4xl: 3rem;
+  --spacing-5xl: 4rem;
+  --spacing-6xl: 5rem;
+  --spacing-7xl: 6rem;
   
   /* Typography */
   --font-family-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -241,7 +228,7 @@ body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  color: var(--theme-text-color);
+  color: var(--color-base-dark);
   background-color: var(--color-white);
 }
 
@@ -250,7 +237,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-tight);
-  color: var(--theme-heading-color);
+  color: var(--color-primary-med);
 }
 
 h1 { font-size: var(--font-size-4xl); }
@@ -262,13 +249,13 @@ h6 { font-size: var(--font-size-base); }
 
 /* Links */
 a {
-  color: var(--theme-link-initial-color);
+  color: var(--color-primary-med);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--theme-link-hover-color);
+  color: var(--color-primary-dark);
   text-decoration: underline;
 }
 

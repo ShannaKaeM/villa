@@ -184,7 +184,7 @@
 /* Page Header Block */
 .wp-block-miblocks-page-header .page-header__title,
 .wp-block-miblocks-page-header .page-header__subtitle {
-    color: white !important;
+    color: white;
 }
 
 .wp-block-miblocks-page-header .page-header__overlay {
