@@ -3,11 +3,11 @@
  * Pure semantic CSS approach
  */
 
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
 /* Core reset and base styles with CSS variables */
 @import './base.css';
-
-/* Block-specific styles */
-@import './blocks/page-header.css';
 
 /* ==========================================================================
    Blocksy Theme Overrides
@@ -21,8 +21,8 @@ body,
 body.blocksy-theme,
 .site-main,
 .content-area {
-  color: var(--foreground) !important;
-  background-color: var(--background) !important;
+  color: var(--color-base-darkest) !important;
+  background-color: var(--color-white) !important;
 }
 
 /* Override Blocksy Typography */
@@ -31,43 +31,41 @@ h1, h2, h3, h4, h5, h6,
 .entry-title,
 .page-title,
 .site-title {
-  color: var(--foreground) !important;
+  color: var(--color-base-darkest) !important;
   font-family: var(--font-family-sans) !important;
 }
 
 /* Override Blocksy Links */
 a:not(.wp-block-button__link):not(.button):not(.btn) {
-  color: var(--primary) !important;
+  color: var(--color-primary) !important;
 }
 
 a:not(.wp-block-button__link):not(.button):not(.btn):hover {
-  color: var(--color-primary-600) !important;
+  color: var(--color-primary-dark) !important;
 }
 
 /* Override Blocksy Buttons */
-.ct-button,
 .wp-block-button__link,
 button[type="submit"],
 input[type="submit"],
 .button,
 .btn {
-  background-color: var(--primary) !important;
-  color: var(--primary-foreground) !important;
+  background-color: var(--color-primary) !important;
+  color: var(--color-white) !important;
   border: none !important;
   border-radius: var(--radius-md) !important;
   padding: var(--spacing-3) var(--spacing-6) !important;
   font-weight: var(--font-weight-medium) !important;
-  transition: all var(--transition-base) !important;
+  transition: background-color var(--transition-fast) !important;
 }
 
-.ct-button:hover,
 .wp-block-button__link:hover,
 button[type="submit"]:hover,
 input[type="submit"]:hover,
 .button:hover,
 .btn:hover {
-  background-color: var(--color-primary-600) !important;
-  color: var(--primary-foreground) !important;
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-white) !important;
 }
 
 /* Override Blocksy Form Elements */
@@ -81,9 +79,9 @@ input[type="tel"],
 input[type="date"],
 textarea,
 select {
-  background-color: var(--input) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
+  background-color: var(--color-white) !important;
+  border: 1px solid var(--color-base-light) !important;
+  color: var(--color-base-darkest) !important;
   border-radius: var(--radius-md) !important;
   padding: var(--spacing-2) var(--spacing-3) !important;
 }
@@ -98,30 +96,37 @@ input[type="tel"]:focus,
 input[type="date"]:focus,
 textarea:focus,
 select:focus {
-  border-color: var(--ring) !important;
+  border-color: var(--color-primary) !important;
   outline: 2px solid transparent !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px var(--ring) !important;
+  box-shadow: 0 0 0 2px var(--color-primary-light) !important;
 }
 
 /* Override Blocksy Cards */
-.ct-card,
 .entry-card {
-  background-color: var(--card) !important;
-  color: var(--card-foreground) !important;
-  border: 1px solid var(--border) !important;
+  background-color: var(--color-white) !important;
+  color: var(--color-base-darkest) !important;
+  border: 1px solid var(--color-base-light) !important;
 }
 
 /* Override Blocksy Header */
-.site-header,
 header[data-row] {
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
+  background-color: var(--color-white) !important;
+  color: var(--color-base-darkest) !important;
 }
 
 /* Override Blocksy Footer */
-.site-footer,
 footer[data-row] {
-  background-color: var(--muted) !important;
-  color: var(--muted-foreground) !important;
+  background-color: var(--color-neutral-light) !important;
+  color: var(--color-base-darkest) !important;
+}
+
+/* Override any Blocksy typography that might be interfering */
+.ct-main-container h1,
+.ct-main-container h2,
+.ct-main-container h3,
+.ct-main-container h4,
+.ct-main-container h5,
+.ct-main-container h6 {
+  font-family: 'Montserrat', sans-serif !important;
 }

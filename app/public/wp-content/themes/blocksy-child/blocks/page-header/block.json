@@ -30,6 +30,58 @@
     "minHeight": {
       "type": "string",
       "default": "400px"
+    },
+    "borderRadius": {
+      "type": "string",
+      "default": "lg"
+    },
+    "titleSize": {
+      "type": "string",
+      "default": "4xl"
+    },
+    "titleWeight": {
+      "type": "string",
+      "default": "bold"
+    },
+    "titleColor": {
+      "type": "string",
+      "default": "white"
+    },
+    "subtitleSize": {
+      "type": "string",
+      "default": "xl"
+    },
+    "subtitleWeight": {
+      "type": "string",
+      "default": "normal"
+    },
+    "subtitleColor": {
+      "type": "string",
+      "default": "base-light"
+    },
+    "titleTransform": {
+      "type": "string",
+      "default": "uppercase"
+    },
+    "subtitleTransform": {
+      "type": "string",
+      "default": "none"
+    },
+    "titleTracking": {
+      "type": "string",
+      "default": "tight"
+    },
+    "subtitleTracking": {
+      "type": "string",
+      "default": "normal"
+    },
+    "titleSpacing": {
+      "type": "string",
+      "default": "4"
+    },
+    "backgroundPositionY": {
+      "type": "string",
+      "default": "center"
     }
   },
   "editorScript": "file:./build/index.js",

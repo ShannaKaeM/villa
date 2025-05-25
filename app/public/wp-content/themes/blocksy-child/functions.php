@@ -26,11 +26,19 @@ function blocksy_child_enqueue_styles() {
         wp_get_theme()->get('Version')
     );
     
-    // 3. Load main CSS file with global components
+    // 3. Load Google Fonts - Montserrat
+    wp_enqueue_style(
+        'google-fonts-montserrat',
+        'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap',
+        array(),
+        null
+    );
+    
+    // 4. Load main CSS file with global components
     wp_enqueue_style(
         'mi-main-css',
         get_stylesheet_directory_uri() . '/assets/css/main.css',
-        array('blocksy-child-style'),
+        array('blocksy-child-style', 'google-fonts-montserrat'),
         filemtime(get_stylesheet_directory() . '/assets/css/main.css')
     );
 }
@@ -180,6 +188,64 @@ function mi_register_native_blocks() {
     }
 }
 add_action('init', 'mi_register_native_blocks');
+
+/**
+ * Load block-specific CSS files
+ * This allows for visual editing via GutenVibes CSS Editor
+ */
+function mi_load_block_css_files() {
+    $blocks_dir = get_stylesheet_directory() . '/blocks';
+    
+    if (!is_dir($blocks_dir)) {
+        return;
+    }
+    
+    // First, load the CSS variables file if it exists
+    $variables_file = $blocks_dir . '/styles/variables.css';
+    if (file_exists($variables_file)) {
+        $variables_url = get_stylesheet_directory_uri() . '/blocks/styles/variables.css';
+        wp_enqueue_style(
+            'miblocks-variables',
+            $variables_url,
+            array(),
+            filemtime($variables_file),
+            'all'
+        );
+    }
+    
+    // Find all blocks with styles/block.css files
+    $block_dirs = glob($blocks_dir . '/*', GLOB_ONLYDIR);
+    
+    foreach ($block_dirs as $block_dir) {
+        $block_name = basename($block_dir);
+        $css_file = $block_dir . '/styles/block.css';
+        
+        if (file_exists($css_file)) {
+            // Get the CSS file URL
+            $css_url = get_stylesheet_directory_uri() . '/blocks/' . $block_name . '/styles/block.css';
+            
+            // Enqueue the CSS file
+            wp_enqueue_style(
+                'miblocks-' . $block_name . '-styles',
+                $css_url,
+                array('miblocks-variables'), // Depend on variables
+                filemtime($css_file) // Use file modification time for cache busting
+            );
+            
+            // Also enqueue in the editor
+            add_editor_style('blocks/' . $block_name . '/styles/block.css');
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'mi_load_block_css_files');
+add_action('enqueue_block_editor_assets', 'mi_load_block_css_files');
+
+/**
+ * Include GutenVibes CSS Editor Integration
+ */
+if (file_exists(get_stylesheet_directory() . '/blocks/gutenvibes-integration.php')) {
+    require_once get_stylesheet_directory() . '/blocks/gutenvibes-integration.php';
+}
 
 /**
  * Force Carbon Fields blocks to use sidebar controls
