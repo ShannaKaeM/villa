@@ -211,7 +211,8 @@ select {
   --z-index-modal: 1050;
   --z-index-tooltip: 1070;
   
-  /* Layout */
+  /* Layout & Container Widths */
+  --site-content-width: 1200px;
   --container-width-sm: 640px;
   --container-width-md: 768px;
   --container-width-lg: 1024px;
