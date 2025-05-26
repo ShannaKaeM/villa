@@ -8,6 +8,9 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// Include color sync functionality
+require_once get_stylesheet_directory() . '/inc/blocksy-color-sync.php';
+
 // Enqueue main styles
 function blocksy_child_enqueue_styles() {
     // Get the parent theme version for cache busting
@@ -35,11 +38,11 @@ function blocksy_child_enqueue_styles() {
         null
     );
     
-    // Enqueue main CSS (includes base.css with CSS variables)
-    wp_enqueue_style('villa-main-styles',
-        get_stylesheet_directory_uri() . '/assets/css/main.css',
+    // Enqueue theme integration CSS (works with theme.json)
+    wp_enqueue_style('villa-theme-integration',
+        get_stylesheet_directory_uri() . '/assets/css/theme-integration.css',
         array('blocksy-child-style'),
-        filemtime(get_stylesheet_directory() . '/assets/css/main.css')
+        filemtime(get_stylesheet_directory() . '/assets/css/theme-integration.css')
     );
 }
 add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_styles');
