@@ -53,7 +53,16 @@ add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_styles');
 // Carbon Fields setup - this MUST come first before any other includes
 require_once get_stylesheet_directory() . '/inc/carbon-fields-setup.php';
 
-// Include CPT and taxonomy registration
+// Boot Carbon Fields
+add_action('after_setup_theme', 'blocksy_child_carbon_fields_boot');
+function blocksy_child_carbon_fields_boot() {
+    \Carbon_Fields\Carbon_Fields::boot();
+}
+
+// Include theme JSON helpers
+require_once get_stylesheet_directory() . '/inc/theme-json-helpers.php';
+
+// Register Carbon Fields blocks
 require_once get_stylesheet_directory() . '/inc/mi-cpt-registration.php';
 
 // Include Carbon Fields property fields
@@ -536,3 +545,66 @@ add_action('wp_ajax_nopriv_filter_properties', 'mi_ajax_filter_properties');
 // Track loaded blocks
 global $mi_loaded_blocks;
 $mi_loaded_blocks = [];
+
+/**
+ * Dynamic Complete Theme.json REST API
+ * Returns ALL theme.json data that the block editor uses
+ */
+add_action('rest_api_init', function() {
+    register_rest_route('wp/v2', '/theme-json', array(
+        'methods' => 'GET',
+        'callback' => 'get_dynamic_theme_json_data',
+        'permission_callback' => '__return_true',
+    ));
+});
+
+function get_dynamic_theme_json_data() {
+    // Check if WP_Theme_JSON_Resolver exists (WordPress 5.8+)
+    if (!class_exists('WP_Theme_JSON_Resolver')) {
+        return rest_ensure_response(array(
+            'error' => 'WP_Theme_JSON_Resolver not available',
+            'message' => 'This feature requires WordPress 5.8 or higher'
+        ));
+    }
+    
+    // Get the complete WP_Theme_JSON object that the editor uses
+    $theme_json_resolver = WP_Theme_JSON_Resolver::get_merged_data();
+    
+    // Get the raw data from the resolver (this is what the editor actually uses)
+    $complete_data = $theme_json_resolver->get_data();
+    
+    // Also get the global settings and styles for comparison/backup
+    $global_settings = wp_get_global_settings();
+    $global_styles = wp_get_global_styles();
+    
+    // Get all custom CSS properties that are generated
+    $custom_properties = $theme_json_resolver->get_custom_css();
+    
+    // Get stylesheet that would be generated
+    $stylesheet = $theme_json_resolver->get_stylesheet();
+    
+    // Return everything the block editor has access to
+    return rest_ensure_response(array(
+        // The complete merged theme.json data (theme + user + core defaults)
+        'merged_data' => $complete_data,
+        
+        // Individual components for easier access
+        'settings' => $complete_data['settings'] ?? array(),
+        'styles' => $complete_data['styles'] ?? array(),
+        'customTemplates' => $complete_data['customTemplates'] ?? array(),
+        'templateParts' => $complete_data['templateParts'] ?? array(),
+        'patterns' => $complete_data['patterns'] ?? array(),
+        
+        // Processed/computed values that the editor actually uses
+        'global_settings' => $global_settings,
+        'global_styles' => $global_styles,
+        
+        // Generated CSS and properties
+        'custom_properties' => $custom_properties,
+        'stylesheet' => $stylesheet,
+        
+        // Additional useful data
+        'version' => $complete_data['version'] ?? 2,
+        'source' => 'wp_theme_json_resolver_merged', // So you know this is the complete data
+    ));
+}
