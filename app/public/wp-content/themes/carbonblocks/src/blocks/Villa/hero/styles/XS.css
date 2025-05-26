@@ -1,0 +1,26 @@
+/* Hero Block - Mobile Styles */
+.carbon-block--hero {
+    min-height: 350px !important;
+}
+
+.carbon-block--hero__container {
+    padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--20);
+}
+
+.carbon-block--hero__title {
+    margin-bottom: var(--wp--preset--spacing--20);
+}
+
+.carbon-block--hero__title--6xl,
+.carbon-block--hero__title--5xl,
+.carbon-block--hero__title--4xl {
+    font-size: var(--wp--preset--font-size--2-xl);
+}
+
+.carbon-block--hero__title--3xl {
+    font-size: var(--wp--preset--font-size--xl);
+}
+
+.carbon-block--hero__subtitle {
+    font-size: var(--wp--preset--font-size--sm);
+}
