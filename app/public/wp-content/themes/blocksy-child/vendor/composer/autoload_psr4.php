@@ -6,6 +6,10 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'MiAgency\\' => array($baseDir . '/inc'),
+    'Twig\\' => array($vendorDir . '/twig/twig/src'),
+    'Timber\\' => array($vendorDir . '/timber/timber/src'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'Danielsnell\\CarbonBlocks\\' => array($baseDir . '/src'),
     'Carbon_Fields\\' => array($vendorDir . '/htmlburger/carbon-fields/core'),
 );

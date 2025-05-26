@@ -1,18 +1,17 @@
 {
-    "name": "mi-agency/blocksy-child",
-    "description": "Blocksy Child Theme with Carbon Fields integration",
-    "type": "wordpress-theme",
+    "name": "danielsnell/carbon-blocks",
     "require": {
+        "timber/timber": "^2.3",
         "htmlburger/carbon-fields": "^3.6"
     },
     "autoload": {
         "psr-4": {
-            "MiAgency\\": "inc/"
+            "Danielsnell\\CarbonBlocks\\": "src/"
         }
     },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true
+    "authors": [
+        {
+            "name": "broke.dev"
         }
-    }
+    ]
 }
