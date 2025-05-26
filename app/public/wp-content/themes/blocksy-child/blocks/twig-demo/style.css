@@ -1,0 +1,28 @@
+.twig-demo-block {
+    margin: 20px 0;
+}
+
+.twig-demo-block .card {
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.twig-demo-block .card--elevated {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.twig-demo-block .card--outlined {
+    box-shadow: none;
+    border: 2px solid #e5e5e5;
+}
+
+.twig-demo-block h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.twig-demo-block p {
+    margin: 0;
+}
