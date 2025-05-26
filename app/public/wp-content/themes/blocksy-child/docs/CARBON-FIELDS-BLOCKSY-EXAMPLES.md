@@ -238,6 +238,88 @@ Block::make('Hero Section')
     });
 ```
 
+### Hero Section Block (Enhanced)
+
+A fully-featured hero section with advanced customization options including width, height, overlay, and typography controls.
+
+### Features:
+- **Three width options**: Wide (1450px), Content (1200px), Full Width
+- **Five height presets** plus custom height option
+- **Background image with overlay** controls
+- **Advanced typography** settings for title and subtitle
+- **Letter spacing** (tracking) controls
+- **Border radius** options for contained layouts
+- **Breadcrumb navigation** support
+
+### Code Example:
+
+```php
+Block::make('Hero Section')
+    ->add_fields([
+        // Content Fields
+        Field::make('text', 'title', 'Title')
+            ->set_default_value('Sofas'),
+        
+        // Layout Options
+        Field::make('select', 'width_option', 'Width Option')
+            ->set_options([
+                'wide' => 'Wide (1450px max)',
+                'content' => 'Content Width (1200px)',
+                'full' => 'Full Width'
+            ])
+            ->set_default_value('wide'),
+        
+        // Height Options
+        Field::make('select', 'height_option', 'Height Option')
+            ->set_options([
+                'small' => 'Small (250px)',
+                'medium' => 'Medium (350px)',
+                'large' => 'Large (450px)',
+                'xlarge' => 'Extra Large (550px)',
+                'custom' => 'Custom Height'
+            ])
+            ->set_default_value('medium'),
+        
+        // Overlay Options
+        Field::make('checkbox', 'enable_overlay', 'Enable Overlay')
+            ->set_default_value(true),
+        
+        Field::make('text', 'overlay_opacity', 'Overlay Opacity (0-100)')
+            ->set_attribute('type', 'number')
+            ->set_default_value('40'),
+        
+        // Typography Controls
+        Field::make('select', 'title_weight', 'Title Weight')
+            ->set_options([
+                '300' => 'Light',
+                '400' => 'Regular',
+                '500' => 'Medium',
+                '600' => 'Semi Bold',
+                '700' => 'Bold',
+                '800' => 'Extra Bold',
+                '900' => 'Black'
+            ])
+            ->set_default_value('400'),
+        
+        Field::make('select', 'title_tracking', 'Title Letter Spacing')
+            ->set_options([
+                'tight' => 'Tight (-0.05em)',
+                'normal' => 'Normal (0)',
+                'wide' => 'Wide (0.05em)',
+                'wider' => 'Wider (0.1em)',
+                'widest' => 'Widest (0.2em)'
+            ])
+            ->set_default_value('wide')
+    ]);
+```
+
+### Key Improvements:
+1. **Responsive width management** with proper padding
+2. **Flexible height system** with presets and custom option
+3. **Advanced overlay controls** with opacity settings
+4. **Professional typography** with weight and tracking options
+5. **Conditional logic** for context-aware field display
+
 ## CSS Template Patterns
 
 ### Conditional Styling
@@ -385,7 +467,9 @@ function get_typography_fields($prefix = '') {
                 '400' => 'Regular',
                 '500' => 'Medium',
                 '600' => 'Semi Bold',
-                '700' => 'Bold'
+                '700' => 'Bold',
+                '800' => 'Extra Bold',
+                '900' => 'Black'
             ]),
     ];
 }
@@ -413,4 +497,3 @@ Block::make('Styled Section')
     ->set_render_callback(function ($fields, $attributes, $inner_blocks) {
         // Render logic here
     });
-```
