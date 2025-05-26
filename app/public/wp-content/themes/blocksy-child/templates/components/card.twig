@@ -1,0 +1,77 @@
+{#
+    Card Component
+    
+    Parameters:
+    - title: Card title (required)
+    - content: Card content (required)
+    - image_id: WordPress attachment ID (optional)
+    - image_url: Direct image URL (optional)
+    - link: Card link URL (optional)
+    - variant: 'default', 'elevated', 'outlined' (default: 'default')
+    - class: Additional CSS classes (optional)
+#}
+
+{% set variant = variant|default('default') %}
+
+<div class="card card--{{ variant }} {{ class|default('') }}"
+     style="
+        background-color: {{ semantic_color('bg-primary') }};
+        border-radius: var(--wp--preset--border-radius--lg);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        {% if variant == 'elevated' %}
+            box-shadow: 0 4px 6px {{ semantic_color('shadow') }};
+        {% elseif variant == 'outlined' %}
+            border: 1px solid {{ semantic_color('border') }};
+        {% endif %}
+     ">
+    
+    {% if image_id or image_url %}
+        <div class="card__image" style="aspect-ratio: 16/9; overflow: hidden;">
+            {% if link %}<a href="{{ link|esc_url }}">{% endif %}
+            
+            {% if image_id %}
+                {{ wp_get_attachment_image(image_id, 'large', false, {
+                    'style': 'width: 100%; height: 100%; object-fit: cover;'
+                }) }}
+            {% elseif image_url %}
+                <img src="{{ image_url|esc_url }}" 
+                     alt="{{ title|esc_attr }}"
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            {% endif %}
+            
+            {% if link %}</a>{% endif %}
+        </div>
+    {% endif %}
+    
+    <div class="card__body" style="padding: {{ theme_spacing('30') }};">
+        {% if title %}
+            <h3 class="card__title" style="
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('20') }};
+                font-size: var(--wp--preset--font-size--large);
+            ">
+                {% if link %}
+                    <a href="{{ link|esc_url }}" style="color: inherit; text-decoration: none;">
+                        {{ title|esc_html }}
+                    </a>
+                {% else %}
+                    {{ title|esc_html }}
+                {% endif %}
+            </h3>
+        {% endif %}
+        
+        {% if content %}
+            <div class="card__content" style="
+                color: {{ semantic_color('text-secondary') }};
+                line-height: 1.6;
+            ">
+                {{ content|wp_kses_post }}
+            </div>
+        {% endif %}
+        
+        {% block card_footer %}
+            {# Override this block for custom footer content #}
+        {% endblock %}
+    </div>
+</div>

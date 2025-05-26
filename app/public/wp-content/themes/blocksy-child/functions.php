@@ -11,6 +11,40 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 // Include color sync functionality
 require_once get_stylesheet_directory() . '/inc/blocksy-color-sync.php';
 
+// Include Twig integration
+require_once get_stylesheet_directory() . '/vendor/autoload.php';
+require_once get_stylesheet_directory() . '/inc/TwigIntegration.php';
+
+// Initialize Twig
+add_action('after_setup_theme', function() {
+    \MiAgency\twig();
+});
+
+// Add Twig shortcode for demonstration
+add_shortcode('twig_button', function($atts) {
+    $atts = shortcode_atts([
+        'text' => 'Click Me',
+        'url' => '#',
+        'variant' => 'primary',
+        'size' => 'medium'
+    ], $atts);
+    
+    return \MiAgency\twig()->render('components/button.twig', $atts);
+});
+
+// Add Twig card shortcode
+add_shortcode('twig_card', function($atts, $content = '') {
+    $atts = shortcode_atts([
+        'title' => '',
+        'variant' => 'default',
+        'link' => ''
+    ], $atts);
+    
+    $atts['content'] = $content;
+    
+    return \MiAgency\twig()->render('components/card.twig', $atts);
+});
+
 // Enqueue main styles
 function blocksy_child_enqueue_styles() {
     // Get the parent theme version for cache busting

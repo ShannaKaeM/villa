@@ -1,0 +1,212 @@
+{# Twig Demo Page Template #}
+
+<article class="twig-demo-page" style="padding: {{ theme_spacing('50') }} 0;">
+    <div class="container" style="max-width: var(--wp--custom--layout--content-size); margin: 0 auto; padding: 0 {{ theme_spacing('30') }};">
+        
+        {# Page Header #}
+        <header style="text-align: center; margin-bottom: {{ theme_spacing('50') }};">
+            <h1 style="
+                font-size: var(--wp--preset--font-size--xx-large);
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('20') }};
+            ">
+                {{ page_title|esc_html }}
+            </h1>
+            
+            <p style="
+                font-size: var(--wp--preset--font-size--large);
+                color: {{ semantic_color('text-secondary') }};
+                max-width: 600px;
+                margin: 0 auto;
+            ">
+                Experience the power of Twig templating integrated with our WordPress theme
+            </p>
+        </header>
+        
+        {# Demo Sections #}
+        <section style="margin-bottom: {{ theme_spacing('50') }};">
+            <h2 style="
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('30') }};
+                text-align: center;
+            ">
+                Key Features
+            </h2>
+            
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: {{ theme_spacing('30') }};
+            ">
+                {% for section in demo_sections %}
+                    {{ component('card', {
+                        title: section.title,
+                        content: section.description,
+                        variant: loop.index % 2 == 0 ? 'elevated' : 'outlined'
+                    }) }}
+                {% endfor %}
+            </div>
+        </section>
+        
+        {# Button Examples #}
+        <section style="
+            background: {{ semantic_color('bg-secondary') }};
+            padding: {{ theme_spacing('40') }};
+            border-radius: var(--wp--preset--border-radius--xl);
+            margin-bottom: {{ theme_spacing('50') }};
+        ">
+            <h3 style="
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('30') }};
+                text-align: center;
+            ">
+                Button Components
+            </h3>
+            
+            <div style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: {{ theme_spacing('20') }};
+                justify-content: center;
+            ">
+                {{ component('button', {
+                    text: 'Primary Action',
+                    variant: 'primary',
+                    size: 'large',
+                    url: '#primary'
+                }) }}
+                
+                {{ component('button', {
+                    text: 'Secondary Action',
+                    variant: 'secondary',
+                    size: 'medium',
+                    url: '#secondary'
+                }) }}
+                
+                {{ component('button', {
+                    text: 'Neutral Action',
+                    variant: 'neutral',
+                    size: 'medium',
+                    url: '#neutral'
+                }) }}
+            </div>
+        </section>
+        
+        {# Code Example #}
+        <section style="margin-bottom: {{ theme_spacing('50') }};">
+            <h3 style="
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('20') }};
+            ">
+                How It Works
+            </h3>
+            
+            <div style="
+                background: {{ semantic_color('base-darkest') }};
+                color: {{ semantic_color('text-inverse') }};
+                padding: {{ theme_spacing('30') }};
+                border-radius: var(--wp--preset--border-radius--md);
+                overflow-x: auto;
+            ">
+                <h4 style="color: #a8ff60; margin-bottom: {{ theme_spacing('20') }};">
+                    Example: Rendering a Button Component
+                </h4>
+                <pre style="margin: 0; font-family: monospace; font-size: 14px;"><code style="color: #f0f0f0;">{{ "{{ component('button', {
+    text: 'Click Me',
+    variant: 'primary',
+    size: 'medium',
+    url: home_url('/contact')
+}) }}" }}</code></pre>
+            </div>
+        </section>
+        
+        {# Shortcode Examples #}
+        <section style="margin-bottom: {{ theme_spacing('50') }};">
+            <h3 style="
+                color: {{ semantic_color('text-primary') }};
+                margin-bottom: {{ theme_spacing('20') }};
+            ">
+                Shortcode Support
+            </h3>
+            
+            <p style="
+                color: {{ semantic_color('text-secondary') }};
+                margin-bottom: {{ theme_spacing('30') }};
+            ">
+                You can also use Twig components via shortcodes in any content area:
+            </p>
+            
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: {{ theme_spacing('30') }};
+            ">
+                <div style="
+                    background: {{ semantic_color('bg-primary') }};
+                    padding: {{ theme_spacing('30') }};
+                    border-radius: var(--wp--preset--border-radius--md);
+                    border: 1px solid {{ semantic_color('border') }};
+                ">
+                    <h4 style="color: {{ semantic_color('text-primary') }}; margin-bottom: {{ theme_spacing('10') }};">
+                        Button Shortcode
+                    </h4>
+                    <code style="
+                        display: block;
+                        background: {{ semantic_color('base-light') }};
+                        padding: {{ theme_spacing('10') }};
+                        border-radius: var(--wp--preset--border-radius--sm);
+                        font-size: 12px;
+                        margin-bottom: {{ theme_spacing('20') }};
+                    ">
+                        [twig_button text="Get Started" variant="primary" size="large"]
+                    </code>
+                    {{ component('button', {
+                        text: 'Get Started',
+                        variant: 'primary',
+                        size: 'large'
+                    }) }}
+                </div>
+                
+                <div style="
+                    background: {{ semantic_color('bg-primary') }};
+                    padding: {{ theme_spacing('30') }};
+                    border-radius: var(--wp--preset--border-radius--md);
+                    border: 1px solid {{ semantic_color('border') }};
+                ">
+                    <h4 style="color: {{ semantic_color('text-primary') }}; margin-bottom: {{ theme_spacing('10') }};">
+                        Card Shortcode
+                    </h4>
+                    <code style="
+                        display: block;
+                        background: {{ semantic_color('base-light') }};
+                        padding: {{ theme_spacing('10') }};
+                        border-radius: var(--wp--preset--border-radius--sm);
+                        font-size: 12px;
+                        margin-bottom: {{ theme_spacing('20') }};
+                    ">
+                        [twig_card title="Feature" variant="elevated"]Content here[/twig_card]
+                    </code>
+                    <div style="transform: scale(0.9); transform-origin: top left;">
+                        {{ component('card', {
+                            title: 'Feature',
+                            content: 'Content here',
+                            variant: 'elevated'
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        {# Original Page Content (if any) #}
+        {% if page_content %}
+            <section class="page-content" style="
+                margin-top: {{ theme_spacing('50') }};
+                padding-top: {{ theme_spacing('50') }};
+                border-top: 1px solid {{ semantic_color('border') }};
+            ">
+                {{ page_content|wp_kses_post }}
+            </section>
+        {% endif %}
+        
+    </div>
+</article>

@@ -3,7 +3,8 @@
     "description": "Blocksy Child Theme with Carbon Fields integration",
     "type": "wordpress-theme",
     "require": {
-        "htmlburger/carbon-fields": "^3.6"
+        "htmlburger/carbon-fields": "^3.6",
+        "twig/twig": "^3.0"
     },
     "autoload": {
         "psr-4": {

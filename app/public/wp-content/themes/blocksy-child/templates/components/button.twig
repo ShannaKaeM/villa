@@ -1,0 +1,39 @@
+{#
+    Button Component
+    
+    Parameters:
+    - text: Button text (required)
+    - url: Button URL (default: '#')
+    - variant: 'primary', 'secondary', 'neutral' (default: 'primary')
+    - size: 'small', 'medium', 'large' (default: 'medium')
+    - icon: Icon name (optional)
+    - class: Additional CSS classes (optional)
+#}
+
+{% set variant = variant|default('primary') %}
+{% set size = size|default('medium') %}
+{% set url = url|default('#') %}
+
+<a href="{{ url|esc_url }}" 
+   class="button button--{{ variant }} button--{{ size }} {{ class|default('') }}"
+   style="
+        background-color: {{ semantic_color(variant) }};
+        color: {{ semantic_color('text-inverse') }};
+        padding: {{ size == 'small' ? theme_spacing('10') : size == 'large' ? theme_spacing('30') : theme_spacing('20') }};
+        border-radius: var(--wp--preset--border-radius--md);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--wp--preset--spacing--10);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+   "
+   onmouseover="this.style.backgroundColor='{{ semantic_color(variant ~ '-dark') }}'"
+   onmouseout="this.style.backgroundColor='{{ semantic_color(variant) }}'">
+    
+    {% if icon %}
+        <span class="button__icon">{{ icon }}</span>
+    {% endif %}
+    
+    <span class="button__text">{{ text|esc_html }}</span>
+</a>
