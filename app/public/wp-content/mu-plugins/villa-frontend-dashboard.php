@@ -552,11 +552,9 @@ function villa_render_dashboard($user, $user_roles) {
                                 
                                 <?php if (villa_user_can_access_committees($user_roles)): ?>
                                     <li>
-                                        <a href="?tab=committees" class="<?php echo $current_tab === 'committees' ? 'active' : ''; ?>">
-                                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                            </svg>
-                                            Committees
+                                        <a href="?tab=groups" class="<?php echo $current_tab === 'groups' ? 'active' : ''; ?>">
+                                            <i class="fas fa-users"></i>
+                                            <span>Groups</span>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -650,6 +648,15 @@ function villa_render_dashboard($user, $user_roles) {
                         case 'profile':
                             villa_render_dashboard_profile($user);
                             break;
+                            
+                        case 'groups':
+                        case 'committees':
+                            if (villa_user_can_access_committees($user_roles)) {
+                                villa_render_dashboard_committees($user);
+                            } else {
+                                echo '<div class="dashboard-no-access">You do not have permission to access groups.</div>';
+                            }
+                            break;
                         
                         default:
                             echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Navigate using the sidebar.</div>';
@@ -692,7 +699,19 @@ function villa_user_can_access_business($user_roles) {
 }
 
 function villa_user_can_access_committees($user_roles) {
-    $allowed_roles = array('bod', 'committee_member', 'staff');
+    $allowed_roles = array(
+        'bod', 
+        'villa_board_president', 
+        'villa_board_vice_president', 
+        'villa_board_treasurer', 
+        'villa_board_secretary',
+        'committee_member', 
+        'villa_property_management',
+        'villa_maintenance',
+        'villa_office_manager',
+        'villa_concierge',
+        'villa_director_operations'
+    );
     return !empty(array_intersect($user_roles, $allowed_roles));
 }
 

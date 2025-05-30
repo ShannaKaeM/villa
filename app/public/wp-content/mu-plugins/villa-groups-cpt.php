@@ -113,17 +113,10 @@ add_action('init', 'villa_register_group_type_taxonomy');
  * Create default group types
  */
 function villa_create_default_group_types() {
-    if (!term_exists('committee', 'group_type')) {
-        wp_insert_term('Committee', 'group_type', array(
-            'slug' => 'committee',
-            'description' => 'Community committees and working groups'
-        ));
-    }
-
-    if (!term_exists('board-of-directors', 'group_type')) {
-        wp_insert_term('Board of Directors', 'group_type', array(
-            'slug' => 'board-of-directors',
-            'description' => 'Board of Directors members'
+    if (!term_exists('volunteers', 'group_type')) {
+        wp_insert_term('Volunteers', 'group_type', array(
+            'slug' => 'volunteers',
+            'description' => 'Volunteer committees including Executive, Technology, Legal, Built Environment, Budget, and Operations'
         ));
     }
 
@@ -133,22 +126,438 @@ function villa_create_default_group_types() {
             'description' => 'Community staff and employees'
         ));
     }
+}
+add_action('init', 'villa_create_default_group_types');
 
-    if (!term_exists('department', 'group_type')) {
-        wp_insert_term('Department', 'group_type', array(
-            'slug' => 'department',
-            'description' => 'Organizational departments'
+/**
+ * Create staff user roles
+ */
+function villa_create_staff_roles() {
+    // Property Management role
+    if (!get_role('villa_property_management')) {
+        add_role('villa_property_management', 'Property Management', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
         ));
     }
 
-    if (!term_exists('volunteer', 'group_type')) {
-        wp_insert_term('Volunteer Group', 'group_type', array(
-            'slug' => 'volunteer',
-            'description' => 'Volunteer groups and teams'
+    // Maintenance role
+    if (!get_role('villa_maintenance')) {
+        add_role('villa_maintenance', 'Maintenance', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_published_posts' => true,
+        ));
+    }
+
+    // Office Manager role
+    if (!get_role('villa_office_manager')) {
+        add_role('villa_office_manager', 'Office Manager', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+        ));
+    }
+
+    // Concierge role
+    if (!get_role('villa_concierge')) {
+        add_role('villa_concierge', 'Concierge', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_published_posts' => true,
+        ));
+    }
+
+    // Director of Villa Operations role
+    if (!get_role('villa_director_operations')) {
+        add_role('villa_director_operations', 'Director of Villa Operations', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
+            'edit_users' => true,
+        ));
+    }
+
+    // Board hierarchy roles
+    if (!get_role('villa_board_president')) {
+        add_role('villa_board_president', 'Board President', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
+            'edit_users' => true,
+            'manage_options' => true,
+        ));
+    }
+
+    if (!get_role('villa_board_vice_president')) {
+        add_role('villa_board_vice_president', 'Board Vice President', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
+            'edit_users' => true,
+        ));
+    }
+
+    if (!get_role('villa_board_treasurer')) {
+        add_role('villa_board_treasurer', 'Board Treasurer', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
+        ));
+    }
+
+    if (!get_role('villa_board_secretary')) {
+        add_role('villa_board_secretary', 'Board Secretary', array(
+            'read' => true,
+            'edit_posts' => true,
+            'edit_others_posts' => true,
+            'edit_published_posts' => true,
+            'publish_posts' => true,
+            'manage_categories' => true,
+            'edit_villa_groups' => true,
+            'edit_others_villa_groups' => true,
         ));
     }
 }
-add_action('init', 'villa_create_default_group_types');
+add_action('init', 'villa_create_staff_roles');
+
+/**
+ * Create default volunteer committees
+ */
+function villa_create_default_committees() {
+    // Only run this once
+    if (get_option('villa_default_committees_created')) {
+        return;
+    }
+
+    // Get the volunteers term
+    $volunteers_term = get_term_by('slug', 'volunteers', 'group_type');
+    if (!$volunteers_term) {
+        return; // Wait for group types to be created first
+    }
+
+    $committees = array(
+        array(
+            'title' => 'Executive Committee',
+            'slug' => 'exec',
+            'description' => 'Executive leadership and strategic oversight of Villa Capriani community operations and governance.',
+            'mission' => 'Providing executive leadership and strategic direction for the Villa Capriani community.',
+            'focus_areas' => array(
+                'Strategic planning and community vision',
+                'Policy development and governance oversight',
+                'Inter-committee coordination and communication',
+                'Community-wide decision making and leadership'
+            )
+        ),
+        array(
+            'title' => 'Technology & Marketing Committee',
+            'slug' => 'tech',
+            'description' => 'Advancing Villa Capriani through digital innovation and strategic marketing initiatives.',
+            'mission' => 'Advancing Villa Capriani through digital innovation and strategic marketing.',
+            'focus_areas' => array(
+                'Website and digital platform management',
+                'Community marketing and social media',
+                'Technology infrastructure improvements',
+                'Owner communication systems'
+            )
+        ),
+        array(
+            'title' => 'Legal & Governance Committee',
+            'slug' => 'legal',
+            'description' => 'Ensuring compliance, fairness, and legal protection for the Villa Capriani community.',
+            'mission' => 'Ensuring compliance, fairness, and legal protection for our community.',
+            'focus_areas' => array(
+                'HOA rule development and enforcement',
+                'Legal matter coordination',
+                'Policy updates and compliance',
+                'Dispute resolution processes'
+            )
+        ),
+        array(
+            'title' => 'Built Environment Committee',
+            'slug' => 'built',
+            'description' => 'Preserving and enhancing the beauty and functionality of our Spanish Colonial paradise.',
+            'mission' => 'Preserving and enhancing the beauty of our Spanish Colonial paradise.',
+            'focus_areas' => array(
+                'Landscaping design and maintenance',
+                'Architectural review and approval',
+                'Community appearance standards',
+                'Environmental sustainability'
+            )
+        ),
+        array(
+            'title' => 'Budget & Revenue Committee',
+            'slug' => 'budget',
+            'description' => 'Maximizing value and ensuring financial health for all Villa Capriani owners.',
+            'mission' => 'Maximizing value and financial health for all owners.',
+            'focus_areas' => array(
+                'Annual budget development',
+                'Revenue optimization strategies',
+                'Financial reporting and transparency',
+                'Cost management and efficiency'
+            )
+        ),
+        array(
+            'title' => 'Operations Review Committee',
+            'slug' => 'ops',
+            'description' => 'Ensuring excellence in all community operations and services at Villa Capriani.',
+            'mission' => 'Ensuring excellence in all community operations and services.',
+            'focus_areas' => array(
+                'Process improvement and efficiency',
+                'Staff performance and development',
+                'Quality assurance and standards',
+                'Owner satisfaction monitoring'
+            )
+        )
+    );
+
+    foreach ($committees as $committee) {
+        // Check if committee already exists
+        $existing = get_page_by_path($committee['slug'], OBJECT, 'villa_group');
+        if ($existing) {
+            continue;
+        }
+
+        // Create the committee post
+        $post_id = wp_insert_post(array(
+            'post_title' => $committee['title'],
+            'post_name' => $committee['slug'],
+            'post_content' => $committee['description'],
+            'post_status' => 'publish',
+            'post_type' => 'villa_group'
+        ));
+
+        if ($post_id && !is_wp_error($post_id)) {
+            // Assign to volunteers group type
+            wp_set_post_terms($post_id, array($volunteers_term->term_id), 'group_type');
+            
+            // Add committee details
+            update_post_meta($post_id, 'group_abbreviation', strtoupper($committee['slug']));
+            update_post_meta($post_id, 'group_mission', $committee['mission']);
+            update_post_meta($post_id, 'group_focus_areas', $committee['focus_areas']);
+            update_post_meta($post_id, 'group_type_display', 'Committee');
+            update_post_meta($post_id, 'group_meeting_frequency', 'Monthly');
+            update_post_meta($post_id, 'group_status', 'Active');
+        }
+    }
+
+    // Mark as completed
+    update_option('villa_default_committees_created', true);
+}
+add_action('init', 'villa_create_default_committees', 20); // Run after group types are created
+
+/**
+ * Clean up old group type terms and create Staff group
+ */
+function villa_cleanup_and_create_staff_group() {
+    // Only run this once
+    if (get_option('villa_staff_group_created')) {
+        return;
+    }
+
+    // Remove old/duplicate group type terms
+    $old_terms = array('committee', 'board-of-directors', 'department', 'volunteer');
+    foreach ($old_terms as $term_slug) {
+        $term = get_term_by('slug', $term_slug, 'group_type');
+        if ($term) {
+            wp_delete_term($term->term_id, 'group_type');
+        }
+    }
+
+    // Get the staff term
+    $staff_term = get_term_by('slug', 'staff', 'group_type');
+    if (!$staff_term) {
+        return; // Wait for group types to be created first
+    }
+
+    // Create Staff group to hold all staff roles
+    $existing_staff_group = get_page_by_path('staff-group', OBJECT, 'villa_group');
+    if (!$existing_staff_group) {
+        $staff_group_id = wp_insert_post(array(
+            'post_title' => 'Staff',
+            'post_name' => 'staff-group',
+            'post_content' => 'Villa Capriani staff members including Property Management, Maintenance, Office Manager, Concierge, and Director of Villa Operations.',
+            'post_status' => 'publish',
+            'post_type' => 'villa_group'
+        ));
+
+        if ($staff_group_id && !is_wp_error($staff_group_id)) {
+            // Assign to staff group type
+            wp_set_post_terms($staff_group_id, array($staff_term->term_id), 'group_type');
+            
+            // Add staff group details
+            update_post_meta($staff_group_id, 'group_abbreviation', 'STAFF');
+            update_post_meta($staff_group_id, 'group_mission', 'Providing excellent service and operations for Villa Capriani community.');
+            update_post_meta($staff_group_id, 'group_focus_areas', array(
+                'Property management and maintenance',
+                'Owner services and support',
+                'Community operations',
+                'Administrative functions'
+            ));
+            update_post_meta($staff_group_id, 'group_type_display', 'Staff');
+            update_post_meta($staff_group_id, 'group_status', 'Active');
+        }
+    }
+
+    // Mark as completed
+    update_option('villa_staff_group_created', true);
+}
+add_action('init', 'villa_cleanup_and_create_staff_group', 25); // Run after committees are created
+
+/**
+ * Assign admin user to test committees for fortune telling purposes
+ */
+function villa_assign_admin_test_committees() {
+    // Only run this once
+    if (get_option('villa_admin_test_committees_assigned')) {
+        return;
+    }
+
+    // Get admin user (assuming user ID 1, but let's be safe)
+    $admin_users = get_users(array('role' => 'administrator', 'number' => 1));
+    if (empty($admin_users)) {
+        return;
+    }
+    
+    $admin_user = $admin_users[0];
+    $admin_id = $admin_user->ID;
+
+    // Get TECH and EXEC committees
+    $tech_committee = get_page_by_path('tech', OBJECT, 'villa_group');
+    $exec_committee = get_page_by_path('exec', OBJECT, 'villa_group');
+
+    if ($tech_committee) {
+        // Add admin to TECH committee as member
+        $tech_members = get_post_meta($tech_committee->ID, 'group_members_list', true) ?: array();
+        $tech_members[] = array(
+            'user_id' => $admin_id,
+            'role' => 'Tech Member',
+            'joined_date' => current_time('mysql'),
+            'status' => 'active'
+        );
+        update_post_meta($tech_committee->ID, 'group_members_list', $tech_members);
+    }
+
+    if ($exec_committee) {
+        // Add admin to EXEC committee as member
+        $exec_members = get_post_meta($exec_committee->ID, 'group_members_list', true) ?: array();
+        $exec_members[] = array(
+            'user_id' => $admin_id,
+            'role' => 'Exec Member',
+            'joined_date' => current_time('mysql'),
+            'status' => 'active'
+        );
+        update_post_meta($exec_committee->ID, 'group_members_list', $exec_members);
+    }
+
+    // Mark as completed
+    update_option('villa_admin_test_committees_assigned', true);
+}
+add_action('init', 'villa_assign_admin_test_committees', 25); // Run after committees are created
+
+/**
+ * Assign admin to committees for testing
+ */
+function villa_assign_admin_to_committees() {
+    $admin_users = get_users(array('role' => 'administrator'));
+    if (empty($admin_users)) {
+        return;
+    }
+    
+    $admin_user = $admin_users[0];
+    
+    // Get all volunteer committees
+    $committees = get_posts(array(
+        'post_type' => 'villa_group',
+        'posts_per_page' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'group_type',
+                'field' => 'slug',
+                'terms' => 'volunteers'
+            )
+        )
+    ));
+    
+    foreach ($committees as $committee) {
+        $abbreviation = get_post_meta($committee->ID, 'group_abbreviation', true);
+        
+        // Assign admin to TECH and EXEC committees as member
+        if (in_array($abbreviation, array('TECH', 'EXEC'))) {
+            $existing_members = get_post_meta($committee->ID, 'group_members_list', true);
+            if (!is_array($existing_members)) {
+                $existing_members = array();
+            }
+            
+            // Check if admin is already a member
+            $already_member = false;
+            foreach ($existing_members as $member) {
+                if (isset($member['user_id']) && $member['user_id'] == $admin_user->ID) {
+                    $already_member = true;
+                    break;
+                }
+            }
+            
+            if (!$already_member) {
+                $role = ($abbreviation === 'TECH') ? 'Tech Member' : 'Exec Member';
+                $existing_members[] = array(
+                    'user_id' => $admin_user->ID,
+                    'role' => $role,
+                    'date_joined' => current_time('Y-m-d')
+                );
+                
+                update_post_meta($committee->ID, 'group_members_list', $existing_members);
+            }
+        }
+    }
+}
+add_action('init', 'villa_assign_admin_to_committees', 25); // Run after committees are created
+
+/**
+ * Assign admin staff roles for testing
+ */
+function villa_assign_admin_staff_roles() {
+    $admin_users = get_users(array('role' => 'administrator'));
+    if (empty($admin_users)) {
+        return;
+    }
+    
+    $admin_user = $admin_users[0];
+    
+    // Give admin some staff roles for testing
+    $admin_user->add_role('villa_property_management');
+    $admin_user->add_role('villa_board_president');
+}
+add_action('init', 'villa_assign_admin_staff_roles', 26);
 
 /**
  * Add CMB2 fields for Groups
@@ -237,11 +646,11 @@ function villa_register_group_fields() {
     ));
 
     $group_members->add_field(array(
-        'name' => __('Group Leader/Chair', 'migv'),
-        'id'   => 'group_leader',
+        'name' => __('Group Coordinator', 'migv'),
+        'id'   => 'group_coordinator',
         'type' => 'select',
         'options_cb' => 'villa_get_users_for_select',
-        'desc' => __('Select the group leader or chairperson', 'migv'),
+        'desc' => __('Select the group coordinator', 'migv'),
     ));
 
     $group_members->add_field(array(
@@ -267,8 +676,19 @@ function villa_register_group_fields() {
     $group_members->add_group_field('group_members_list', array(
         'name' => __('Role in Group', 'migv'),
         'id'   => 'role',
-        'type' => 'text',
-        'desc' => __('e.g., Secretary, Treasurer, Member', 'migv'),
+        'type' => 'select',
+        'options' => array(
+            'Member' => __('Member', 'migv'),
+            'Coordinator' => __('Coordinator', 'migv'),
+            'Tech Member' => __('Tech Member', 'migv'),
+            'Legal Member' => __('Legal Member', 'migv'),
+            'Built Member' => __('Built Member', 'migv'),
+            'Budget Member' => __('Budget Member', 'migv'),
+            'Ops Member' => __('Ops Member', 'migv'),
+            'Exec Member' => __('Exec Member', 'migv'),
+        ),
+        'default' => 'Member',
+        'desc' => __('Role within the group', 'migv'),
     ));
 
     $group_members->add_group_field('group_members_list', array(
@@ -531,7 +951,7 @@ function villa_get_user_groups($user_id) {
         'meta_query' => array(
             'relation' => 'OR',
             array(
-                'key' => 'group_leader',
+                'key' => 'group_coordinator',
                 'value' => $user_id,
                 'compare' => '='
             ),
@@ -547,9 +967,9 @@ function villa_get_user_groups($user_id) {
 }
 
 function villa_get_user_role_in_group($user_id, $group_id) {
-    $leader = get_post_meta($group_id, 'group_leader', true);
-    if ($leader == $user_id) {
-        return 'Leader';
+    $coordinator = get_post_meta($group_id, 'group_coordinator', true);
+    if ($coordinator == $user_id) {
+        return 'Coordinator';
     }
     
     $members = get_post_meta($group_id, 'group_members_list', true);
@@ -569,10 +989,10 @@ function villa_is_user_in_group($user_id, $group_id) {
 }
 
 function villa_get_group_member_count($group_id) {
-    $leader = get_post_meta($group_id, 'group_leader', true);
+    $coordinator = get_post_meta($group_id, 'group_coordinator', true);
     $members = get_post_meta($group_id, 'group_members_list', true);
     
-    $count = $leader ? 1 : 0;
+    $count = $coordinator ? 1 : 0;
     if (is_array($members)) {
         $count += count($members);
     }
@@ -612,7 +1032,7 @@ function villa_handle_group_membership_request() {
     
     // Get group details
     $group = get_post($group_id);
-    $group_leader_id = get_post_meta($group_id, 'group_leader', true);
+    $group_coordinator_id = get_post_meta($group_id, 'group_coordinator', true);
     $contact_email = get_post_meta($group_id, 'group_contact_email', true);
     
     // Create a notification/request (you could store this as post meta or create a separate system)
@@ -628,22 +1048,22 @@ function villa_handle_group_membership_request() {
     $existing_requests[] = $request_data;
     update_post_meta($group_id, 'membership_requests', $existing_requests);
     
-    // Send notification email to group leader
-    if ($group_leader_id) {
-        $leader = get_user_by('ID', $group_leader_id);
+    // Send notification email to group coordinator
+    if ($group_coordinator_id) {
+        $coordinator = get_user_by('ID', $group_coordinator_id);
         $requester = get_user_by('ID', $user_id);
         
-        if ($leader && $requester) {
+        if ($coordinator && $requester) {
             $subject = sprintf('New membership request for %s', $group->post_title);
             $message = sprintf(
                 "Hello %s,\n\n%s (%s) has requested to join the group '%s'.\n\nYou can review and approve this request in the WordPress admin area.\n\nBest regards,\nVilla Community",
-                $leader->display_name,
+                $coordinator->display_name,
                 $requester->display_name,
                 $requester->user_email,
                 $group->post_title
             );
             
-            wp_mail($leader->user_email, $subject, $message);
+            wp_mail($coordinator->user_email, $subject, $message);
         }
     }
     

@@ -134,30 +134,6 @@ function villa_register_dashboard_post_types() {
         'show_in_rest' => true
     ));
     
-    // Committee Post Type
-    register_post_type('committee', array(
-        'labels' => array(
-            'name' => 'Committees',
-            'singular_name' => 'Committee',
-            'add_new' => 'Add New Committee',
-            'add_new_item' => 'Add New Committee',
-            'edit_item' => 'Edit Committee',
-            'new_item' => 'New Committee',
-            'view_item' => 'View Committee',
-            'search_items' => 'Search Committees',
-            'not_found' => 'No committees found',
-            'not_found_in_trash' => 'No committees found in trash'
-        ),
-        'public' => false,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'menu_icon' => 'dashicons-groups',
-        'supports' => array('title', 'editor', 'custom-fields'),
-        'capability_type' => 'post',
-        'map_meta_cap' => true,
-        'show_in_rest' => true
-    ));
-    
     // Billing Statement Post Type
     register_post_type('billing_statement', array(
         'labels' => array(

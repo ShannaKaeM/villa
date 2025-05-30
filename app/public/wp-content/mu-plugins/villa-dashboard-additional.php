@@ -259,64 +259,412 @@ function villa_render_dashboard_business($user) {
 }
 
 /**
- * Render committees dashboard tab
+ * Render groups dashboard tab (committees and staff groups)
  */
 function villa_render_dashboard_committees($user) {
     $user_roles = villa_get_user_villa_roles($user->ID);
-    $user_committees = villa_get_user_committees($user->ID);
+    $user_groups = villa_get_user_groups($user->ID);
+    
+    // Separate committees and staff groups
+    $committees = array();
+    $staff_groups = array();
+    
+    foreach ($user_groups as $group) {
+        $group_types = wp_get_post_terms($group->ID, 'group_type');
+        foreach ($group_types as $type) {
+            if ($type->slug === 'volunteers') {
+                $committees[] = $group;
+            } elseif ($type->slug === 'staff') {
+                $staff_groups[] = $group;
+            }
+        }
+    }
     
     ?>
-    <div class="committees-dashboard">
-        <div class="committees-header">
-            <h2>My Committees</h2>
+    <div class="groups-dashboard">
+        <div class="groups-header">
+            <h2>My Groups</h2>
+            <p>Committees and staff groups you're part of</p>
         </div>
         
-        <?php if (empty($user_committees)): ?>
-            <div class="no-committees">
-                <p>You are not currently assigned to any committees.</p>
+        <?php if (empty($user_groups)): ?>
+            <div class="no-groups">
+                <p>You are not currently assigned to any groups or committees.</p>
+                <p>Contact administration if you believe this is an error.</p>
             </div>
         <?php else: ?>
-            <div class="committees-list">
-                <?php foreach ($user_committees as $committee): ?>
-                    <?php
-                    $committee_type = get_post_meta($committee->ID, 'committee_type', true);
-                    $meeting_schedule = get_post_meta($committee->ID, 'committee_meeting_schedule', true);
-                    $next_meeting = get_post_meta($committee->ID, 'committee_next_meeting', true);
-                    $member_count = villa_get_committee_member_count($committee->ID);
-                    ?>
-                    
-                    <div class="committee-card">
-                        <div class="committee-header">
-                            <h3><?php echo esc_html($committee->post_title); ?></h3>
-                            <span class="committee-type"><?php echo esc_html(ucwords(str_replace('_', ' ', $committee_type))); ?></span>
-                        </div>
-                        
-                        <div class="committee-info">
-                            <p><?php echo wp_trim_words($committee->post_content, 30); ?></p>
+            
+            <?php if (!empty($committees)): ?>
+                <div class="group-section">
+                    <h3>Volunteer Committees</h3>
+                    <div class="groups-list">
+                        <?php foreach ($committees as $committee): ?>
+                            <?php
+                            $group_abbreviation = get_post_meta($committee->ID, 'group_abbreviation', true);
+                            $group_mission = get_post_meta($committee->ID, 'group_mission', true);
+                            $meeting_schedule = get_post_meta($committee->ID, 'group_meeting_schedule', true);
+                            $meeting_location = get_post_meta($committee->ID, 'group_meeting_location', true);
+                            $group_status = get_post_meta($committee->ID, 'group_status', true);
+                            $focus_areas = get_post_meta($committee->ID, 'group_focus_areas', true);
+                            $member_count = villa_get_committee_member_count($committee->ID);
+                            $user_role = villa_get_user_role_in_group($user->ID, $committee->ID);
+                            ?>
                             
-                            <div class="committee-details">
-                                <?php if ($member_count): ?>
-                                    <p><strong>Members:</strong> <?php echo $member_count; ?></p>
-                                <?php endif; ?>
+                            <div class="group-card committee-card">
+                                <div class="group-header committee-header">
+                                    <h4><?php echo esc_html($committee->post_title); ?></h4>
+                                    <div class="group-badges committee-badges">
+                                        <?php if ($group_abbreviation): ?>
+                                            <span class="group-abbreviation committee-abbreviation"><?php echo esc_html($group_abbreviation); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($user_role): ?>
+                                            <span class="user-role"><?php echo esc_html($user_role); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($group_status): ?>
+                                            <span class="group-status committee-status status-<?php echo esc_attr(strtolower($group_status)); ?>"><?php echo esc_html(ucfirst($group_status)); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                                 
-                                <?php if ($meeting_schedule): ?>
-                                    <p><strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?></p>
-                                <?php endif; ?>
+                                <div class="group-info committee-info">
+                                    <?php if ($group_mission): ?>
+                                        <p class="group-mission committee-mission"><strong>Mission:</strong> <?php echo esc_html($group_mission); ?></p>
+                                    <?php else: ?>
+                                        <p><?php echo wp_trim_words($committee->post_content, 30); ?></p>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($focus_areas && is_array($focus_areas)): ?>
+                                        <div class="focus-areas">
+                                            <strong>Focus Areas:</strong>
+                                            <ul>
+                                                <?php foreach ($focus_areas as $area): ?>
+                                                    <li><?php echo esc_html($area); ?></li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <div class="group-details committee-details">
+                                        <?php if ($member_count): ?>
+                                            <p><strong>Members:</strong> <?php echo $member_count; ?></p>
+                                        <?php endif; ?>
+                                        
+                                        <?php if ($meeting_schedule): ?>
+                                            <p><strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?></p>
+                                        <?php endif; ?>
+                                        
+                                        <?php if ($meeting_location): ?>
+                                            <p><strong>Location:</strong> <?php echo esc_html($meeting_location); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                                 
-                                <?php if ($next_meeting): ?>
-                                    <p><strong>Next Meeting:</strong> <?php echo date('F j, Y', strtotime($next_meeting)); ?></p>
-                                <?php endif; ?>
+                                <div class="group-actions committee-actions">
+                                    <a href="?tab=groups&group_id=<?php echo $committee->ID; ?>" class="button">View Details</a>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="committee-actions">
-                            <a href="?tab=committees&committee_id=<?php echo $committee->ID; ?>" class="button">View Details</a>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($staff_groups)): ?>
+                <div class="group-section">
+                    <h3>Staff Groups</h3>
+                    <div class="groups-list">
+                        <?php foreach ($staff_groups as $staff_group): ?>
+                            <?php
+                            $group_abbreviation = get_post_meta($staff_group->ID, 'group_abbreviation', true);
+                            $group_mission = get_post_meta($staff_group->ID, 'group_mission', true);
+                            $member_count = villa_get_committee_member_count($staff_group->ID);
+                            $user_role = villa_get_user_role_in_group($user->ID, $staff_group->ID);
+                            ?>
+                            
+                            <div class="group-card staff-card">
+                                <div class="group-header staff-header">
+                                    <h4><?php echo esc_html($staff_group->post_title); ?></h4>
+                                    <div class="group-badges">
+                                        <?php if ($group_abbreviation): ?>
+                                            <span class="group-abbreviation"><?php echo esc_html($group_abbreviation); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($user_role): ?>
+                                            <span class="user-role"><?php echo esc_html($user_role); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="group-info">
+                                    <?php if ($group_mission): ?>
+                                        <p class="group-mission"><strong>Purpose:</strong> <?php echo esc_html($group_mission); ?></p>
+                                    <?php else: ?>
+                                        <p><?php echo wp_trim_words($staff_group->post_content, 30); ?></p>
+                                    <?php endif; ?>
+                                    
+                                    <div class="group-details">
+                                        <?php if ($member_count): ?>
+                                            <p><strong>Staff Members:</strong> <?php echo $member_count; ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="group-actions">
+                                    <a href="?tab=groups&group_id=<?php echo $staff_group->ID; ?>" class="button">View Details</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+            
         <?php endif; ?>
     </div>
+    <style>
+    .groups-dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .groups-header {
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e1e5e9;
+    }
+    
+    .groups-header h2 {
+        color: #2c3e50;
+        margin: 0 0 5px 0;
+        font-size: 28px;
+        font-weight: 600;
+    }
+    
+    .groups-header p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 16px;
+    }
+    
+    .no-groups {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 2px dashed #dee2e6;
+    }
+    
+    .no-groups p {
+        color: #6c757d;
+        font-size: 16px;
+        margin: 10px 0;
+    }
+    
+    .group-section {
+        margin-bottom: 40px;
+    }
+    
+    .group-section h3 {
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+        font-size: 22px;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .groups-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 25px;
+    }
+    
+    .group-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        border: 1px solid #e1e5e9;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .group-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Committee Cards */
+    .committee-card .group-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    /* Staff Cards */
+    .staff-card .group-header {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+    }
+    
+    .group-header {
+        padding: 20px 20px 15px;
+    }
+    
+    .group-header h4 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .group-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .group-abbreviation {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .user-role {
+        background: rgba(255, 255, 255, 0.9);
+        color: #2c3e50;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .group-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+    }
+    
+    .status-planning {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+    }
+    
+    .status-inactive {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+    
+    .group-info {
+        padding: 20px;
+    }
+    
+    .group-mission {
+        margin: 0 0 15px 0;
+        color: #2c3e50;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    .focus-areas {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-left: 4px solid #667eea;
+    }
+    
+    .staff-card .focus-areas {
+        border-left-color: #11998e;
+    }
+    
+    .focus-areas strong {
+        color: #2c3e50;
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    .focus-areas ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    .focus-areas li {
+        color: #495057;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    .group-details {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .group-details p {
+        margin: 8px 0;
+        color: #6c757d;
+        font-size: 14px;
+    }
+    
+    .group-details strong {
+        color: #495057;
+    }
+    
+    .group-actions {
+        padding: 15px 20px;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .group-actions .button {
+        background: #667eea;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.3s ease;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+    }
+    
+    .staff-card .group-actions .button {
+        background: #11998e;
+    }
+    
+    .group-actions .button:hover {
+        background: #5a67d8;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .staff-card .group-actions .button:hover {
+        background: #0e8074;
+    }
+    
+    @media (max-width: 768px) {
+        .groups-list {
+            grid-template-columns: 1fr;
+        }
+        
+        .group-card {
+            margin: 0 10px;
+        }
+        
+        .group-section h3 {
+            font-size: 20px;
+        }
+        
+        .groups-header h2 {
+            font-size: 24px;
+        }
+    }
+    </style>
     <?php
 }
 
@@ -586,22 +934,26 @@ function villa_get_user_business_listings($user_id) {
 }
 
 function villa_get_user_committees($user_id) {
-    return get_posts(array(
-        'post_type' => 'committee',
-        'meta_query' => array(
-            array(
-                'key' => 'committee_members',
-                'value' => $user_id,
-                'compare' => 'LIKE'
-            )
-        ),
-        'posts_per_page' => -1
-    ));
+    // Get groups where user is coordinator or member
+    $user_groups = villa_get_user_groups($user_id);
+    
+    // Filter to only get volunteer committees (not staff groups)
+    $committees = array();
+    foreach ($user_groups as $group) {
+        $group_types = wp_get_post_terms($group->ID, 'group_type');
+        foreach ($group_types as $type) {
+            if ($type->slug === 'volunteers') {
+                $committees[] = $group;
+                break;
+            }
+        }
+    }
+    
+    return $committees;
 }
 
 function villa_get_committee_member_count($committee_id) {
-    $members = get_post_meta($committee_id, 'committee_members', true);
-    return is_array($members) ? count($members) : 0;
+    return villa_get_group_member_count($committee_id);
 }
 
 function villa_get_user_billing_statements($user_id) {
