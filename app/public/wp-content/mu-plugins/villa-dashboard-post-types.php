@@ -296,8 +296,29 @@ function villa_property_meta_box_callback($post) {
     $listing_price = get_post_meta($post->ID, 'property_listing_price', true);
     $owners = get_post_meta($post->ID, 'property_owners', true);
     
+    // Get all users with owner-related roles
+    $owner_users = get_users(array(
+        'role__in' => array('owner', 'bod', 'administrator'),
+        'orderby' => 'display_name',
+        'order' => 'ASC'
+    ));
+    
     ?>
     <table class="form-table">
+        <tr>
+            <th><label for="property_owners">Property Owners</label></th>
+            <td>
+                <select id="property_owners" name="property_owners[]" multiple="multiple" style="width: 100%; min-height: 120px;">
+                    <?php foreach ($owner_users as $user) : ?>
+                        <option value="<?php echo esc_attr($user->ID); ?>" 
+                                <?php echo (is_array($owners) && in_array($user->ID, $owners)) ? 'selected' : ''; ?>>
+                            <?php echo esc_html($user->display_name . ' (' . $user->user_email . ')'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="description">Hold Ctrl/Cmd to select multiple owners. Leave empty for unassigned properties.</p>
+            </td>
+        </tr>
         <tr>
             <th><label for="property_address">Address</label></th>
             <td><input type="text" id="property_address" name="property_address" value="<?php echo esc_attr($address); ?>" class="regular-text" /></td>
@@ -463,6 +484,15 @@ function villa_save_dashboard_meta_boxes($post_id) {
                 update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
             }
         }
+        
+        // Handle property_owners separately as it's an array
+        if (isset($_POST['property_owners']) && is_array($_POST['property_owners'])) {
+            $owners = array_map('intval', $_POST['property_owners']);
+            update_post_meta($post_id, 'property_owners', $owners);
+        } else {
+            // If no owners selected, clear the field
+            update_post_meta($post_id, 'property_owners', array());
+        }
     }
     
     if (isset($_POST['villa_ticket_meta_box_nonce'])) {
@@ -593,4 +623,60 @@ function villa_business_meta_box_callback($post) {
         </tr>
     </table>
     <?php
+}
+
+/**
+ * Add admin columns for properties
+ */
+add_filter('manage_villa_property_posts_columns', 'villa_property_admin_columns');
+add_action('manage_villa_property_posts_custom_column', 'villa_property_admin_column_content', 10, 2);
+
+/**
+ * Add custom columns to property admin list
+ */
+function villa_property_admin_columns($columns) {
+    $new_columns = array();
+    $new_columns['cb'] = $columns['cb'];
+    $new_columns['title'] = $columns['title'];
+    $new_columns['property_owners'] = 'Owners';
+    $new_columns['property_address'] = 'Address';
+    $new_columns['property_type'] = 'Type';
+    $new_columns['property_listing_status'] = 'Status';
+    $new_columns['date'] = $columns['date'];
+    return $new_columns;
+}
+
+/**
+ * Display content for custom property admin columns
+ */
+function villa_property_admin_column_content($column, $post_id) {
+    switch ($column) {
+        case 'property_owners':
+            $owners = get_post_meta($post_id, 'property_owners', true);
+            if (!empty($owners) && is_array($owners)) {
+                $owner_names = array();
+                foreach ($owners as $owner_id) {
+                    $user = get_user_by('ID', $owner_id);
+                    if ($user) {
+                        $owner_names[] = $user->display_name;
+                    }
+                }
+                echo esc_html(implode(', ', $owner_names));
+            } else {
+                echo '<em>Unassigned</em>';
+            }
+            break;
+        case 'property_address':
+            $address = get_post_meta($post_id, 'property_address', true);
+            echo esc_html($address ?: '-');
+            break;
+        case 'property_type':
+            $type = get_post_meta($post_id, 'property_type', true);
+            echo esc_html(ucfirst($type ?: '-'));
+            break;
+        case 'property_listing_status':
+            $status = get_post_meta($post_id, 'property_listing_status', true);
+            echo esc_html(ucwords(str_replace('_', ' ', $status ?: 'not listed')));
+            break;
+    }
 }
