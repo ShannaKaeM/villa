@@ -70,8 +70,18 @@ function villa_dashboard_shortcode($atts) {
         return '<div class="villa-dashboard-no-access">Your account does not have access to the dashboard. Please contact an administrator.</div>';
     }
     
+    // Ensure CSS is loaded
+    wp_enqueue_style('villa-dashboard-styles');
+    
     ob_start();
+    
+    // Add a simple test to make sure we're rendering
+    echo '<!-- Villa Dashboard Starting -->';
+    
     villa_render_dashboard($user, $user_roles);
+    
+    echo '<!-- Villa Dashboard Ending -->';
+    
     return ob_get_clean();
 }
 add_shortcode('villa_dashboard', 'villa_dashboard_shortcode');
@@ -80,130 +90,121 @@ add_shortcode('villa_dashboard', 'villa_dashboard_shortcode');
  * Render the main dashboard interface
  */
 function villa_render_dashboard($user, $user_roles) {
-    $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'properties';
+    $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'profile';
+    
+    // Get meta box settings
+    $page_id = get_the_ID();
+    $dashboard_title = get_post_meta($page_id, 'dashboard_title', true) ?: 'Villa Community Dashboard';
+    $show_welcome = get_post_meta($page_id, 'show_welcome_message', true);
+    $welcome_message = get_post_meta($page_id, 'welcome_message', true);
     
     ?>
-    <div class="villa-dashboard">
-        <!-- Dashboard Navigation -->
-        <div class="dashboard-nav">
-            <div class="dashboard-tabs">
-                <?php if (villa_user_can_access_properties($user_roles)): ?>
-                    <a href="?tab=properties" class="dashboard-tab <?php echo $current_tab === 'properties' ? 'active' : ''; ?>" data-tab="properties">
-                        Properties
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_tickets($user_roles)): ?>
-                    <a href="?tab=tickets" class="dashboard-tab <?php echo $current_tab === 'tickets' ? 'active' : ''; ?>" data-tab="tickets">
-                        Support Tickets
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_announcements($user_roles)): ?>
-                    <a href="?tab=announcements" class="dashboard-tab <?php echo $current_tab === 'announcements' ? 'active' : ''; ?>" data-tab="announcements">
-                        Announcements
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_owner_portal($user_roles)): ?>
-                    <a href="?tab=owner-portal" class="dashboard-tab <?php echo $current_tab === 'owner-portal' ? 'active' : ''; ?>" data-tab="owner-portal">
-                        Owner Portal
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_business($user_roles)): ?>
-                    <a href="?tab=business" class="dashboard-tab <?php echo $current_tab === 'business' ? 'active' : ''; ?>" data-tab="business">
-                        Business Listings
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_committees($user_roles)): ?>
-                    <a href="?tab=groups" class="dashboard-tab <?php echo $current_tab === 'groups' ? 'active' : ''; ?>" data-tab="groups">
-                        Groups & Committees
-                    </a>
-                <?php endif; ?>
-                
-                <?php if (villa_user_can_access_billing($user_roles)): ?>
-                    <a href="?tab=billing" class="dashboard-tab <?php echo $current_tab === 'billing' ? 'active' : ''; ?>" data-tab="billing">
-                        Billing
-                    </a>
-                <?php endif; ?>
-                
-                <a href="?tab=profile" class="dashboard-tab <?php echo $current_tab === 'profile' ? 'active' : ''; ?>" data-tab="profile">
-                    Profile
-                </a>
+    <div class="villa-dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="villa-sidebar">
+            <!-- Logo/Brand -->
+            <div class="villa-sidebar-header">
+                <div class="villa-logo">
+                    <img src="<?php echo wp_get_upload_dir()['baseurl']; ?>/2025/05/villa-community-logo-150x150.png" alt="Villa Community Logo" />
+                    <span>Villa Community</span>
+                </div>
             </div>
+            
+            <!-- Main Navigation -->
+            <nav class="villa-sidebar-nav">
+                <div class="villa-nav-section">
+                    <ul class="villa-nav-list">
+                        <!-- Temporarily disabled for testing -->
+                        <?php if (false && villa_user_can_access_properties($user_roles)): ?>
+                            <li>
+                                <a href="?tab=properties" class="villa-nav-item <?php echo $current_tab === 'properties' ? 'active' : ''; ?>" data-tab="properties">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>Properties</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        
+                        <!-- All other sections temporarily disabled -->
+                        <?php if (false): ?>
+                        <!-- Support Tickets, Announcements, etc. temporarily disabled -->
+                        <?php endif; ?>
+                    </ul>
+                </div>
+                
+                <!-- User Section - Only active section for testing -->
+                <div class="villa-nav-section villa-nav-user">
+                    <ul class="villa-nav-list">
+                        <li>
+                            <a href="?tab=profile" class="villa-nav-item <?php echo $current_tab === 'profile' ? 'active' : ''; ?>" data-tab="profile">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo wp_logout_url(home_url()); ?>" class="villa-nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
         
-        <!-- Dashboard Content -->
-        <div class="dashboard-content">
-            <?php
-            switch ($current_tab) {
-                case 'properties':
-                    if (villa_user_can_access_properties($user_roles)) {
-                        villa_render_dashboard_properties($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to properties.</div>';
-                    }
-                    break;
+        <!-- Main Content Area -->
+        <div class="villa-main-content">
+            <!-- Top Header -->
+            <div class="villa-content-header">
+                <div class="villa-header-left">
+                    <h1 class="villa-page-title">
+                        <?php 
+                        switch ($current_tab) {
+                            case 'profile': echo 'Profile'; break;
+                            default: echo 'Dashboard';
+                        }
+                        ?>
+                    </h1>
+                </div>
+                <div class="villa-header-right">
+                    <div class="villa-user-info">
+                        <span class="villa-user-name"><?php echo esc_html($user->display_name); ?></span>
+                        <div class="villa-user-avatar">
+                            <?php echo get_avatar($user->ID, 32); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="villa-page-content">
+                <?php if ($show_welcome && $welcome_message && $current_tab === 'profile'): ?>
+                    <div class="villa-welcome-message">
+                        <?php echo wp_kses_post($welcome_message); ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php
+                // Simplified switch - only Profile for testing
+                switch ($current_tab) {
+                    case 'profile':
+                        villa_render_dashboard_profile($user);
+                        break;
                     
-                case 'tickets':
-                    if (villa_user_can_access_tickets($user_roles)) {
-                        villa_render_dashboard_tickets($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to support tickets.</div>';
-                    }
-                    break;
-                    
-                case 'announcements':
-                    if (villa_user_can_access_announcements($user_roles)) {
-                        villa_render_dashboard_announcements($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to announcements.</div>';
-                    }
-                    break;
-                    
-                case 'owner-portal':
-                    if (villa_user_can_access_owner_portal($user_roles)) {
-                        villa_render_dashboard_owner_portal($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to the owner portal.</div>';
-                    }
-                    break;
-                    
-                case 'business':
-                    if (villa_user_can_access_business($user_roles)) {
-                        villa_render_dashboard_business($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to business listings.</div>';
-                    }
-                    break;
-                    
-                case 'committees':
-                case 'groups':
-                    if (villa_user_can_access_committees($user_roles)) {
-                        villa_render_dashboard_groups($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to groups.</div>';
-                    }
-                    break;
-                    
-                case 'billing':
-                    if (villa_user_can_access_billing($user_roles)) {
-                        villa_render_dashboard_billing($user);
-                    } else {
-                        echo '<div class="access-denied">You do not have access to billing.</div>';
-                    }
-                    break;
-                    
-                case 'profile':
-                    villa_render_dashboard_profile($user);
-                    break;
-                    
-                default:
-                    echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard!</div>';
-            }
-            ?>
+                    default:
+                        echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Click Profile to get started.</div>';
+                }
+                ?>
+            </div>
         </div>
     </div>
     <?php
@@ -386,7 +387,21 @@ function villa_ajax_load_tab_content() {
         case 'announcements':
             villa_render_dashboard_announcements($user);
             break;
-        // Add other tabs as needed
+        case 'owner-portal':
+            villa_render_dashboard_owner_portal($user);
+            break;
+        case 'business':
+            villa_render_dashboard_business($user);
+            break;
+        case 'groups':
+            villa_render_dashboard_groups($user);
+            break;
+        case 'billing':
+            villa_render_dashboard_billing($user);
+            break;
+        case 'profile':
+            villa_render_dashboard_profile($user);
+            break;
     }
     
     $content = ob_get_clean();
