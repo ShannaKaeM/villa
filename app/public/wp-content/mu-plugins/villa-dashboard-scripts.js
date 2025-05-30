@@ -21,6 +21,7 @@
             this.initFilters();
             this.initForms();
             this.initFileUploads();
+            this.initProjectsFilters();
         },
 
         // Bind all event handlers
@@ -103,6 +104,11 @@
             $('.ticket-attachment-upload').each(function() {
                 VillaDashboard.initFileUpload($(this));
             });
+        },
+
+        // Initialize projects filter functionality
+        initProjectsFilters: function() {
+            $(document).on('click', '.filter-tab', this.handleProjectFilter);
         },
 
         // Handle tab switching
@@ -530,6 +536,61 @@
             
             if (!isValid) {
                 e.preventDefault();
+            }
+        },
+
+        // Handle project filter clicks
+        handleProjectFilter: function(e) {
+            e.preventDefault();
+            
+            var $tab = $(this);
+            var filter = $tab.data('filter');
+            
+            // Update active tab
+            $('.filter-tab').removeClass('active');
+            $tab.addClass('active');
+            
+            // Filter project cards
+            VillaDashboard.filterProjects(filter);
+        },
+
+        // Filter projects based on selected criteria
+        filterProjects: function(filter) {
+            var $cards = $('.project-card');
+            
+            if (filter === 'all') {
+                $cards.removeClass('hidden').show();
+            } else if (filter === 'my') {
+                $cards.each(function() {
+                    var $card = $(this);
+                    if ($card.data('my') === true || $card.data('my') === 'true') {
+                        $card.removeClass('hidden').show();
+                    } else {
+                        $card.addClass('hidden').hide();
+                    }
+                });
+            } else {
+                $cards.each(function() {
+                    var $card = $(this);
+                    var cardType = $card.data('type');
+                    
+                    if (cardType === filter) {
+                        $card.removeClass('hidden').show();
+                    } else {
+                        $card.addClass('hidden').hide();
+                    }
+                });
+            }
+            
+            // Show/hide no results message
+            var visibleCards = $('.project-card:visible').length;
+            if (visibleCards === 0) {
+                if ($('.no-filtered-projects').length === 0) {
+                    $('.projects-grid').append('<div class="no-filtered-projects no-projects"><h3>No Projects Found</h3><p>No projects match the selected filter.</p></div>');
+                }
+                $('.no-filtered-projects').show();
+            } else {
+                $('.no-filtered-projects').hide();
             }
         }
     };

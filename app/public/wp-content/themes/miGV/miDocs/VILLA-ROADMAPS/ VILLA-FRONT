@@ -1,0 +1,394 @@
+# Villa Capriani Frontend Content Details
+## Complete Public Site Content & User Experience
+
+*This document details the actual content, copy, and user experience for the public-facing Villa Capriani website. For backend architecture, see villa-platform-architecture.md*
+
+---
+
+## 🏠 **HOMEPAGE** - Villa Capriani Welcome
+
+### **Hero Section**
+**Main Headline:** "Welcome to Villa Capriani - Where Spanish Elegance Meets Coastal Living"
+**Subheadline:** "Discover luxury oceanfront condominiums on beautiful Topsail Island, North Carolina"
+**Call-to-Action Buttons:**
+- "Browse Available Properties" (Primary)
+- "Learn About Our Community" (Secondary)
+- "Owner Portal Login" (Utility)
+
+### **Featured Properties Carousel** *(3-4 Units)*
+**Section Title:** "Featured Properties Available Now"
+- Property cards with hero image, unit number, price, bed/bath
+- "View Details" and "Contact Owner" buttons
+- Filter by: For Sale, For Rent, All
+
+### **Villa Capriani 2.0 Vision Highlights**
+**Section Title:** "Building Our Future Together"
+**Content Blocks:**
+- "Enhanced Amenities" - Pool renovations, dining upgrades
+- "Community Collaboration" - Owner-driven improvements
+- "Architectural Preservation" - Maintaining Spanish heritage
+- "Investment Growth" - Increasing property values
+**CTA:** "View Complete Roadmap"
+
+### **Committee Spotlight**
+**Section Title:** "Meet Our Community Leaders"
+- Rotating spotlight on each committee
+- Member count and current projects
+- "Get Involved" call-to-action
+
+### **Recent Community Updates** *(Latest 3 Announcements)*
+- Date, title, excerpt
+- "Read More" links to full articles
+- "View All Updates" link
+
+---
+
+## 🏛️ **ABOUT VILLA CAPRIANI**
+
+### **Villa History & Heritage**
+**Content:**
+- Founded in [Year] as a premier oceanfront destination
+- Spanish Colonial Revival architecture details
+- Original vision and development story
+- Transformation over the decades
+- Community milestones and achievements
+
+### **Spanish Architecture Details**
+**Featured Elements:**
+- Red tile roofs and stucco exteriors
+- Wrought iron balconies and details
+- Courtyard and fountain features
+- Arched doorways and windows
+- Preservation efforts and guidelines
+
+### **Amenities Overview**
+**Current Amenities:**
+- Oceanfront pools and hot tubs
+- Private beach access
+- On-site dining facilities
+- Fitness center and spa services
+- Tennis and recreation areas
+- Parking and security
+
+**Planned Enhancements (Villa 2.0):**
+- Pool renovation and expansion
+- Dining facility upgrades
+- Enhanced landscaping
+- Technology improvements
+- Additional recreational facilities
+
+### **Location & Topsail Island**
+**Villa Capriani Location Benefits:**
+- Direct oceanfront positioning
+- Private beach access
+- Walking distance to island attractions
+- Easy access to mainland amenities
+- Protected coastal environment
+
+---
+
+## 🚀 **VILLA CAPRIANI 2.0 VISION**
+
+### **Enhancement Roadmap**
+**Vision Statement:** "Preserving our heritage while embracing the future"
+
+**Project Categories:**
+- **Amenity Enhancements** - Pool, dining, recreation upgrades
+- **Infrastructure** - Technology, utilities, accessibility
+- **Landscaping** - Native plants, sustainability, beauty
+- **Community Spaces** - Meeting areas, collaboration zones
+- **Preservation** - Architectural integrity, historical elements
+
+### **Architectural Plans**
+- Detailed renderings of proposed improvements
+- Before/after comparisons
+- Architectural heritage preservation plans
+- Sustainability and environmental considerations
+
+### **Timeline & Milestones**
+**Phase 1 (Year 1):** Foundation improvements and planning
+**Phase 2 (Year 2):** Major amenity renovations
+**Phase 3 (Year 3):** Community space enhancements
+**Phase 4 (Year 4):** Final touches and grand reopening
+
+### **Investment Details**
+- Project funding sources and structure
+- Owner contribution information
+- Expected ROI and property value impact
+- Financing options and payment plans
+
+---
+
+## 👥 **COMMITTEES PAGE**
+
+### **Committee Overview**
+**Governance Model Explanation:**
+"Villa Capriani operates through collaborative committees of dedicated owners who volunteer their expertise to enhance our community."
+
+### **Individual Committee Cards**
+
+#### **💻 Technology & Marketing Committee**
+**Mission:** "Advancing Villa Capriani through digital innovation and strategic marketing"
+**Current Focus:**
+- Website and digital platform management
+- Community marketing and social media
+- Technology infrastructure improvements
+- Owner communication systems
+**Member Count:** [Dynamic from backend]
+**Current Projects:** [Pulled from Fluent Boards]
+
+#### **⚖️ Legal & Governance Committee**
+**Mission:** "Ensuring compliance, fairness, and legal protection for our community"
+**Current Focus:**
+- HOA rule development and enforcement
+- Legal matter coordination
+- Policy updates and compliance
+- Dispute resolution processes
+**Member Count:** [Dynamic]
+**Current Projects:** [Dynamic]
+
+#### **🌿 Grounds & Appearance Committee**
+**Mission:** "Preserving and enhancing the beauty of our Spanish Colonial paradise"
+**Current Focus:**
+- Landscaping design and maintenance
+- Architectural review and approval
+- Community appearance standards
+- Environmental sustainability
+**Member Count:** [Dynamic]
+**Current Projects:** [Dynamic]
+
+#### **💰 Budget & Revenue Committee**
+**Mission:** "Maximizing value and financial health for all owners"
+**Current Focus:**
+- Annual budget development
+- Revenue optimization strategies
+- Financial reporting and transparency
+- Cost management and efficiency
+**Member Count:** [Dynamic]
+**Current Projects:** [Dynamic]
+
+#### **📋 Operations Review Committee**
+**Mission:** "Ensuring excellence in all community operations and services"
+**Current Focus:**
+- Process improvement and efficiency
+- Staff performance and development
+- Quality assurance and standards
+- Owner satisfaction monitoring
+**Member Count:** [Dynamic]
+**Current Projects:** [Dynamic]
+
+### **Get Involved Section**
+**Call-to-Action:** "Ready to Make a Difference?"
+- Benefits of committee participation
+- Time commitment expectations
+- Application process
+- Contact information for each committee
+
+---
+
+## 🏠 **PROPERTY LISTINGS**
+
+### **Search & Filter Interface**
+**Filter Options:**
+- Availability: For Sale, For Rent, All
+- Price Range: Slider with min/max
+- Bedrooms: 1, 2, 3, 4+
+- Bathrooms: 1, 1.5, 2, 2.5+
+- Floor Level: Ground, 2nd, 3rd, Penthouse
+- View Type: Ocean, Pool, Garden, Partial Ocean
+- Special Features: Balcony, Fireplace, Updated, etc.
+
+### **Property Grid Display**
+**Card Information:**
+- Hero image with photo count indicator
+- Unit number and building side (A/B)
+- Price and availability status
+- Bed/bath count and square footage
+- Key features (ocean view, updated, etc.)
+- "View Details" and "Contact Owner" buttons
+
+### **Detailed Property Pages**
+**Property Information:**
+- Photo gallery with virtual tour option
+- Detailed specifications and features
+- Floor plan and layout
+- Amenity access and proximity
+- HOA fees and assessment information
+- Property history and recent updates
+
+**Owner Contact Section:**
+- Contact form for inquiries
+- Owner response time expectations
+- Viewing appointment scheduling
+- Professional agent information (if applicable)
+
+---
+
+## 🌊 **LOCAL ATTRACTIONS**
+
+### **Topsail Island Guide**
+**Island Overview:**
+- 26-mile barrier island paradise
+- Rich history and natural beauty
+- Family-friendly atmosphere
+- Year-round activities and events
+
+### **Restaurant Recommendations**
+**Categories:**
+- **Fine Dining** - Upscale oceanfront restaurants
+- **Casual Dining** - Family-friendly local favorites
+- **Quick Bites** - Beach snacks and takeout
+- **Bars & Nightlife** - Evening entertainment options
+
+**Each Restaurant Entry:**
+- Name, cuisine type, price range
+- Distance from Villa Capriani
+- Specialties and must-try dishes
+- Contact information and hours
+
+### **Activities & Events**
+**Year-Round Activities:**
+- Beach activities (swimming, surfing, fishing)
+- Water sports and boat rentals
+- Golf courses and tennis
+- Shopping and galleries
+- Nature walks and bird watching
+
+**Seasonal Events:**
+- Summer festivals and concerts
+- Holiday celebrations
+- Fishing tournaments
+- Art shows and markets
+
+### **Beach Access Information**
+- Villa Capriani private beach access
+- Public beach access points
+- Beach rules and regulations
+- Seasonal lifeguard information
+- Beach equipment rental options
+
+---
+
+## 💎 **OWNER BENEFITS**
+
+### **Ownership Advantages**
+**Lifestyle Benefits:**
+- Oceanfront luxury living
+- Resort-style amenities
+- Exclusive community access
+- Professional property management
+- Maintenance-free living
+
+**Financial Benefits:**
+- Strong rental income potential
+- Appreciation in coastal real estate
+- Tax advantages of ownership
+- Professional management services
+- Shared amenity costs
+
+### **Investment Potential**
+**Market Analysis:**
+- Topsail Island real estate trends
+- Villa Capriani historical performance
+- Rental income projections
+- Appreciation forecasts
+- Market comparison data
+
+### **Community Perks**
+**Exclusive Access:**
+- Owner-only events and gatherings
+- Priority booking for amenities
+- Voting rights on community decisions
+- Committee participation opportunities
+- Insider updates and communications
+
+### **Buying/Selling Resources**
+**For Buyers:**
+- Financing options and lenders
+- Inspection and due diligence guides
+- HOA document library
+- Move-in procedures and timeline
+- Owner orientation program
+
+**For Sellers:**
+- Market analysis and pricing guidance
+- Marketing and listing services
+- Showing coordination
+- Transaction management
+- Transfer procedures
+
+---
+
+## 📱 **OWNER PORTAL PREVIEW** *(Login Required)*
+
+### **Portal Access**
+**Login Page Features:**
+- Secure authentication
+- Password reset functionality
+- New owner registration
+- Guest access for potential buyers
+- Mobile-responsive design
+
+### **Dashboard Preview** *(For Marketing)*
+**Showcase Features:**
+- Personalized property management
+- Community collaboration tools
+- Support ticket system
+- Committee participation
+- Financial reporting access
+- Document library
+
+**Call-to-Action:** "Experience the full Villa Capriani owner experience"
+
+---
+
+## 📞 **CONTACT & SUPPORT**
+
+### **General Inquiries**
+- Property management office
+- Sales and leasing contacts
+- Committee leadership
+- Emergency contacts
+
+### **Visitor Information**
+- Directions and parking
+- Check-in procedures for guests
+- Amenity access for visitors
+- Local transportation options
+
+### **Professional Services**
+- Real estate agents
+- Property management team
+- Maintenance and repair services
+- Legal and financial advisors
+
+---
+
+## 🔗 **BACKEND INTEGRATION NOTES**
+
+*This section maps frontend content to backend systems for development reference*
+
+### **Dynamic Content Sources:**
+- **Properties CPT:** All property listings and details
+- **Groups CPT:** Committee information and member counts
+- **Announcements CPT:** Community updates and news
+- **User Meta:** Owner contact and profile information
+- **Custom Fields:** Property details, amenity data, project timelines
+
+### **Interactive Features:**
+- **Contact Forms:** Lead capture and owner inquiries
+- **Search/Filter:** Property database queries
+- **Member Counts:** Real-time committee membership
+- **Project Status:** Fluent Boards integration
+- **Login Portal:** Secure authentication system
+
+### **SEO & Performance:**
+- **Meta Descriptions:** Unique for each page/property
+- **Image Optimization:** Compressed galleries and hero images
+- **Mobile Responsive:** All layouts optimized for mobile
+- **Page Speed:** Optimized loading for property galleries
+- **Local SEO:** Topsail Island and coastal NC keywords
+
+---
+
+*This document serves as the complete content guide for the Villa Capriani public website, ensuring consistent messaging and comprehensive user experience across all frontend pages.*

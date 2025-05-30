@@ -16,6 +16,9 @@ require_once plugin_dir_path(__FILE__) . 'villa-dashboard-announcements.php';
 require_once plugin_dir_path(__FILE__) . 'villa-dashboard-additional.php';
 require_once plugin_dir_path(__FILE__) . 'villa-dashboard-post-types.php';
 require_once plugin_dir_path(__FILE__) . 'villa-groups-cpt.php';
+require_once plugin_dir_path(__FILE__) . 'villa-projects-cpt.php';
+require_once plugin_dir_path(__FILE__) . 'villa-projects-fields.php';
+require_once plugin_dir_path(__FILE__) . 'villa-projects-sample-data.php';
 
 /**
  * Enqueue dashboard styles and scripts
@@ -499,6 +502,17 @@ function villa_render_dashboard($user, $user_roles) {
                                 </li>
                             <?php endif; ?>
                             
+                            <?php if (villa_user_can_access_projects($user_roles)): ?>
+                                <li>
+                                    <a href="?tab=projects" class="<?php echo $current_tab === 'projects' ? 'active' : ''; ?>">
+                                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        Projects
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            
                             <?php if (villa_user_can_access_tickets($user_roles)): ?>
                                 <li>
                                     <a href="?tab=tickets" class="<?php echo $current_tab === 'tickets' ? 'active' : ''; ?>">
@@ -645,6 +659,14 @@ function villa_render_dashboard($user, $user_roles) {
                             }
                             break;
                             
+                        case 'projects':
+                            if (villa_user_can_access_projects($user_roles)) {
+                                villa_render_dashboard_projects($user);
+                            } else {
+                                echo '<div class="dashboard-no-access">You do not have permission to access projects.</div>';
+                            }
+                            break;
+                            
                         case 'profile':
                             villa_render_dashboard_profile($user);
                             break;
@@ -674,6 +696,12 @@ function villa_render_dashboard($user, $user_roles) {
  */
 function villa_user_can_access_properties($user_roles) {
     $allowed_roles = array('owner', 'bod', 'staff', 'property_manager');
+    
+    return !empty(array_intersect($user_roles, $allowed_roles));
+}
+
+function villa_user_can_access_projects($user_roles) {
+    $allowed_roles = array('owner', 'bod', 'staff', 'project_manager');
     
     return !empty(array_intersect($user_roles, $allowed_roles));
 }
@@ -871,6 +899,9 @@ function villa_ajax_load_tab_content() {
         case 'properties':
             villa_render_dashboard_properties($user);
             break;
+        case 'projects':
+            villa_render_dashboard_projects($user);
+            break;
         case 'tickets':
             villa_render_dashboard_tickets($user);
             break;
@@ -1019,4 +1050,166 @@ function villa_role_assignment_admin_page() {
     echo '</div>';
     
     echo '</div>';
+}
+
+/**
+ * Render the Projects dashboard tab
+ */
+function villa_render_dashboard_projects($user) {
+    $user_roles = villa_get_user_villa_roles($user->ID);
+    
+    // Get user's groups to determine project access
+    $user_groups = villa_get_user_groups($user->ID);
+    $assigned_groups = array();
+    foreach ($user_groups as $group) {
+        $group_type = get_post_meta($group->ID, 'group_type', true);
+        if ($group_type === 'volunteers') {
+            $assigned_groups[] = strtoupper($group->post_title);
+        }
+    }
+    
+    // Query projects based on user access
+    $args = array(
+        'post_type' => 'villa_projects',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'meta_query' => array()
+    );
+    
+    // Filter by visibility based on user roles
+    if (!in_array('bod', $user_roles) && !in_array('staff', $user_roles)) {
+        $args['meta_query'][] = array(
+            'key' => 'project_visibility',
+            'value' => array('public', 'members'),
+            'compare' => 'IN'
+        );
+    }
+    
+    $projects = get_posts($args);
+    
+    echo '<div class="dashboard-section">';
+    echo '<div class="dashboard-header">';
+    echo '<h2>Villa Projects</h2>';
+    echo '<p>Community roadmap, committee work, and project management</p>';
+    echo '</div>';
+    
+    // Quick stats
+    $total_projects = count($projects);
+    $active_projects = 0;
+    $my_projects = 0;
+    
+    foreach ($projects as $project) {
+        $status = wp_get_post_terms($project->ID, 'project_status');
+        if (!empty($status) && in_array($status[0]->slug, array('active', 'planning', 'review'))) {
+            $active_projects++;
+        }
+        
+        $assigned_to = get_post_meta($project->ID, 'assigned_to', true);
+        if (is_array($assigned_to) && in_array($user->ID, $assigned_to)) {
+            $my_projects++;
+        }
+    }
+    
+    echo '<div class="dashboard-stats-grid">';
+    echo '<div class="stat-card">';
+    echo '<div class="stat-number">' . $total_projects . '</div>';
+    echo '<div class="stat-label">Total Projects</div>';
+    echo '</div>';
+    echo '<div class="stat-card">';
+    echo '<div class="stat-number">' . $active_projects . '</div>';
+    echo '<div class="stat-label">Active Projects</div>';
+    echo '</div>';
+    echo '<div class="stat-card">';
+    echo '<div class="stat-number">' . $my_projects . '</div>';
+    echo '<div class="stat-label">My Projects</div>';
+    echo '</div>';
+    echo '</div>';
+    
+    // Filter tabs
+    echo '<div class="projects-filter-tabs">';
+    echo '<button class="filter-tab active" data-filter="all">All Projects</button>';
+    echo '<button class="filter-tab" data-filter="roadmap">Roadmap</button>';
+    echo '<button class="filter-tab" data-filter="committee_board">Committee Work</button>';
+    echo '<button class="filter-tab" data-filter="survey">Surveys</button>';
+    echo '<button class="filter-tab" data-filter="event">Events</button>';
+    echo '<button class="filter-tab" data-filter="my">My Projects</button>';
+    echo '</div>';
+    
+    // Projects grid
+    echo '<div class="projects-grid">';
+    
+    if (empty($projects)) {
+        echo '<div class="no-projects">';
+        echo '<h3>No Projects Yet</h3>';
+        echo '<p>Projects will appear here as they are created by committees and staff.</p>';
+        echo '</div>';
+    } else {
+        foreach ($projects as $project) {
+            $project_types = wp_get_post_terms($project->ID, 'project_type');
+            $project_status = wp_get_post_terms($project->ID, 'project_status');
+            $assigned_group = wp_get_post_terms($project->ID, 'assigned_group');
+            $priority = wp_get_post_terms($project->ID, 'priority');
+            
+            $type_slug = !empty($project_types) ? $project_types[0]->slug : 'task';
+            $type_name = !empty($project_types) ? $project_types[0]->name : 'Task';
+            $status_name = !empty($project_status) ? $project_status[0]->name : 'Planning';
+            $status_slug = !empty($project_status) ? $project_status[0]->slug : 'planning';
+            $group_name = !empty($assigned_group) ? $assigned_group[0]->name : '';
+            $priority_name = !empty($priority) ? $priority[0]->name : 'Medium';
+            
+            $project_goals = get_post_meta($project->ID, 'project_goals', true);
+            $start_date = get_post_meta($project->ID, 'project_start_date', true);
+            $end_date = get_post_meta($project->ID, 'project_end_date', true);
+            $assigned_to = get_post_meta($project->ID, 'assigned_to', true);
+            
+            $is_my_project = is_array($assigned_to) && in_array($user->ID, $assigned_to);
+            
+            echo '<div class="project-card" data-type="' . esc_attr($type_slug) . '" data-my="' . ($is_my_project ? 'true' : 'false') . '">';
+            
+            // Project header
+            echo '<div class="project-header">';
+            echo '<div class="project-type-badge type-' . esc_attr($type_slug) . '">' . esc_html($type_name) . '</div>';
+            echo '<div class="project-status status-' . esc_attr($status_slug) . '">' . esc_html($status_name) . '</div>';
+            echo '</div>';
+            
+            // Project featured image
+            if (has_post_thumbnail($project->ID)) {
+                echo '<div class="project-image">';
+                echo get_the_post_thumbnail($project->ID, 'medium', array('class' => 'project-thumbnail'));
+                echo '</div>';
+            }
+            
+            // Project content
+            echo '<div class="project-content">';
+            echo '<h3>' . esc_html($project->post_title) . '</h3>';
+            if ($project_goals) {
+                echo '<p class="project-goals">' . esc_html(wp_trim_words($project_goals, 20)) . '</p>';
+            }
+            echo '</div>';
+            
+            // Project meta
+            echo '<div class="project-meta">';
+            if ($group_name) {
+                echo '<span class="project-group">' . esc_html($group_name) . '</span>';
+            }
+            echo '<span class="project-priority priority-' . esc_attr(strtolower($priority_name)) . '">' . esc_html($priority_name) . '</span>';
+            if ($start_date) {
+                echo '<span class="project-date">' . date('M j, Y', strtotime($start_date)) . '</span>';
+            }
+            echo '</div>';
+            
+            echo '</div>'; // project-card
+        }
+    }
+    
+    echo '</div>'; // projects-grid
+    
+    // Create project button for authorized users
+    if (in_array('bod', $user_roles) || in_array('staff', $user_roles) || !empty($assigned_groups)) {
+        echo '<div class="dashboard-actions">';
+        echo '<a href="' . admin_url('post-new.php?post_type=villa_projects') . '" class="btn btn-primary">Create New Project</a>';
+        echo '</div>';
+    }
+    
+    echo '</div>'; // dashboard-section
 }

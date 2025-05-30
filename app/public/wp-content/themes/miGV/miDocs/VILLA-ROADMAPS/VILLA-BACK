@@ -1,0 +1,273 @@
+# Villa Capriani Platform Architecture
+## Comprehensive Owner Portal & Collaboration System
+
+### 🎯 **PLATFORM OVERVIEW**
+A dual-purpose WordPress platform serving both **public visitors** (potential renters/buyers) and **private community members** (owners, committees, staff) with seamless integration between frontend marketing and backend collaboration.
+
+---
+
+## 📋 **COMPLETE MODULE CHECKLIST**
+
+### **🏗️ FOUNDATION MODULES ROUGH-IN** *(Current Status)*
+- [x] **Properties System** - 116 units (58A side, 58B side) ✅ COMPLETE
+- [ ] **Support Tickets** - Basic structure ✅ 
+- [x] **User Roles & Permissions** - Owner, BOD, Staff, Committee ✅ COMPLETE
+- [x] **Dashboard Framework** - Role-based access ✅ COMPLETE
+- [x] **Groups/Committees CPT** - Committee structure 🔄 COMPLETE
+
+### **🎯 CORE COLLABORATION MODULES**
+- [ ] **Roadmap System** - Project management & voting
+- [ ] **Committee Boards** - Individual committee workspaces
+- [ ] **Ticket Routing** - Auto-assign by category/expertise
+- [ ] **Announcement System** - Community communications
+- [ ] **Document Management** - HOA docs, bylaws, regulations
+- [ ] **Calendar System** - Meetings, events, schedules
+
+### **💬 COMMUNICATION MODULES**
+- [ ] **Email Campaigns** - Automated community updates
+- [ ] **SMS Notifications** - Emergency alerts
+- [ ] **Post-to-Email** - Announcements auto-generate emails
+- [ ] **Notification Settings** - User preference management
+- [ ] **Survey System** - Community voting and feedback
+
+### **🌐 FRONTEND MODULES**
+- [ ] **Public Property Listings** - Rental/sale marketplace
+- [ ] **Committee Directory** - Meet our committees
+- [ ] **Board Member Profiles** - Meet the board
+- [ ] **Staff Directory** - Meet our staff
+- [ ] **Public Articles** - SEO content, local attractions
+- [ ] **Public Roadmap** - Community transparency
+
+---
+
+## 🏛️ **SITE ARCHITECTURE**
+
+### **FRONTEND SITE** *(Public Facing)*
+**Purpose:** Marketing, transparency, community showcase
+
+#### **Homepage**
+- [ ] Hero section with community overview
+- [ ] Featured properties carousel
+- [ ] Committee highlights
+- [ ] Recent community achievements
+- [ ] Quick actions: Login, Browse Properties, Learn More
+
+#### **Properties Section**
+- [ ] **Browse Properties** - Filterable rental/sale listings
+- [ ] **Property Details** - Individual property pages
+- [ ] **Search & Filter** - By type, price, availability
+- [ ] **Contact Forms** - Inquiry submission
+- [ ] **Virtual Tours** - Property showcases
+
+#### **Community Section**
+- [ ] **Meet the Board** - BOD member profiles
+- [ ] **Our Committees** - Committee directory & missions
+- [ ] **Meet Our Staff** - Staff profiles & roles
+- [ ] **Community Roadmap** - Public project transparency
+- [ ] **News & Updates** - Community articles
+
+#### **Information Section**
+- [ ] **About Villa Capriani** - Community history & amenities
+- [ ] **Local Attractions** - Area guide for potential residents
+- [ ] **HOA Information** - Public policies & procedures
+- [ ] **Contact Us** - General inquiries
+
+### **BACKEND PORTAL** *(Private Member Area)*
+**Purpose:** Community management, collaboration, property ownership
+
+#### **Owner Dashboard**
+- [ ] **My Properties Widget** - Quick property overview
+- [ ] **Recent Announcements** - Community updates
+- [ ] **My Tickets** - Support request status
+- [ ] **Roadmap Highlights** - Items I can vote on
+- [ ] **Quick Actions** - Pay bills, submit ticket, join committee
+
+#### **Property Management**
+- [ ] **My Properties** - Detailed property management
+- [ ] **Listing Management** - Mark for rent/sale
+- [ ] **Property History** - Ticket history, repairs, approvals
+- [ ] **Document Storage** - Property-specific documents
+- [ ] **Image Management** - Property photos & descriptions
+
+#### **Committee Workspace**
+- [ ] **Committee Dashboard** - Individual committee home
+- [ ] **Project Boards** - Fluent Board integration
+- [ ] **Ticket Assignment** - Category-specific tickets
+- [ ] **Meeting Calendar** - Committee schedules
+- [ ] **Member Directory** - Committee member profiles
+- [ ] **Cross-Committee Collaboration** - Inter-committee projects
+
+#### **Support Center**
+- [ ] **Submit Ticket** - Categorized support requests
+- [ ] **My Tickets** - Track request status
+- [ ] **Knowledge Base** - Common questions & policies
+- [ ] **Emergency Contacts** - Category-specific contacts
+
+#### **Community Engagement**
+- [ ] **Roadmap Participation** - Vote, suggest, comment
+- [ ] **Committee Directory** - Browse & join committees
+- [ ] **Announcements** - Read community updates
+- [ ] **Surveys & Voting** - Community decision participation
+- [ ] **Document Library** - HOA rules, bylaws, regulations
+
+---
+
+## 👥 **USER ROLES & ACCESS MATRIX**
+
+### **🏠 OWNERS**
+**Access Level:** Property Management + Community Participation
+- [x] Property ownership and management
+- [x] Support ticket submission and tracking
+- [ ] Roadmap voting and suggestions
+- [ ] Committee participation (request to join)
+- [ ] Announcement reading
+- [ ] Document access (HOA rules, bylaws)
+- [ ] Bill payment links (external)
+
+### **🏛️ BOARD OF DIRECTORS (BOD)**
+**Access Level:** All Owner Permissions + Governance
+- [x] All owner permissions
+- [ ] Cross-committee project oversight
+- [ ] Roadmap approval authority
+- [ ] Policy and procedure management
+- [ ] Financial report access
+- [ ] Emergency communication authority
+
+### **👥 COMMITTEE MEMBERS**
+**Access Level:** Owner Permissions + Committee Management
+- [x] All owner permissions
+- [ ] Committee-specific project management
+- [ ] Ticket oversight for their domain
+- [ ] Roadmap item creation and editing
+- [ ] Committee meeting management
+- [ ] Cross-committee collaboration
+
+### **🔧 STAFF/PROPERTY MANAGEMENT**
+**Access Level:** Operational Management
+- [ ] Ticket management and resolution
+- [ ] Property maintenance oversight
+- [ ] Owner communication
+- [ ] Project status updates
+- [ ] Emergency response coordination
+
+### **🌐 PUBLIC VISITORS**
+**Access Level:** Information and Inquiry
+- [ ] Property browsing (available units)
+- [ ] Community information access
+- [ ] Contact form submission
+- [ ] Public roadmap viewing
+- [ ] General community content
+
+---
+
+## 🔄 **WORKFLOW CONNECTIONS**
+
+### **Property → Ticket → Committee Flow**
+1. **Owner** submits ticket for property issue
+2. **System** auto-routes to appropriate committee based on category
+3. **Committee** reviews and assigns to staff/contractor
+4. **Staff** updates progress and resolution
+5. **System** maintains property history for future owners
+
+### **Roadmap → Committee → Owner Flow**
+1. **Committee** creates project proposal
+2. **BOD** reviews and approves for roadmap
+3. **System** displays on public and owner roadmaps
+4. **Owners** vote and provide feedback
+5. **Committee** implements based on approval and feedback
+
+### **Announcement → Communication Flow**
+1. **Staff/BOD** creates announcement
+2. **System** categorizes and distributes via:
+   - Website announcement board
+   - Email to relevant groups
+   - SMS for emergency items
+   - Owner portal notifications
+3. **Owners** receive via preferred communication method
+
+---
+
+## 📊 **COMMITTEE STRUCTURE**
+
+### **💻 Technology & Marketing**
+**Responsibilities:** Website, digital tools, community marketing
+- [ ] Website maintenance and updates
+- [ ] Digital tool management
+- [ ] Community social media
+- [ ] Technology support tickets
+
+### **⚖️ Legal & Governance**
+**Responsibilities:** HOA compliance, legal matters, policy
+- [ ] HOA rule enforcement
+- [ ] Legal consultation coordination
+- [ ] Policy development and updates
+- [ ] Compliance monitoring
+
+### **🌿 Grounds & Appearance**
+**Responsibilities:** Landscaping, aesthetics, architectural review
+- [ ] Landscaping oversight
+- [ ] Architectural approval process
+- [ ] Community appearance standards
+- [ ] Grounds maintenance coordination
+
+### **💰 Budget & Revenue**
+**Responsibilities:** Financial planning, revenue generation
+- [ ] Budget development and monitoring
+- [ ] Revenue optimization strategies
+- [ ] Financial reporting
+- [ ] Cost management
+
+### **📋 Operations Review**
+**Responsibilities:** Process improvement, staff oversight
+- [ ] Operational efficiency review
+- [ ] Staff performance management
+- [ ] Process documentation
+- [ ] Quality assurance
+
+---
+
+## 🚀 **IMPLEMENTATION PHASES**
+
+### **PHASE 1: Foundation** *(Current)*
+- [x] Properties system
+- [x] Basic support tickets
+- [x] User roles and permissions
+- [x] Dashboard framework
+
+### **PHASE 2: Core Collaboration** *(Next)*
+- [ ] Committee structure (Groups CPT)
+- [ ] Enhanced ticket routing
+- [ ] Basic roadmap system
+- [ ] Announcement system
+
+### **PHASE 3: Advanced Features**
+- [ ] Fluent Board integration
+- [ ] Email campaign system
+- [ ] Survey and voting tools
+- [ ] Document management
+
+### **PHASE 4: Frontend Integration**
+- [ ] Public property listings
+- [ ] Committee directory
+- [ ] Public roadmap
+- [ ] SEO content system
+
+### **PHASE 5: Communication & Automation**
+- [ ] SMS notifications
+- [ ] Post-to-email automation
+- [ ] Advanced notification settings
+- [ ] Analytics and reporting
+
+---
+
+## 📝 **NEXT IMMEDIATE STEPS**
+
+1. **Complete Groups/Committees CPT** - Foundation for committee structure
+2. **Enhance Support Ticket Routing** - Auto-assignment by category
+3. **Create Basic Roadmap System** - Project visibility and voting
+4. **Implement Announcement System** - Community communication
+5. **Test and Refine Current Modules** - Ensure solid foundation
+
+---
+
+*This workflow serves as the master blueprint for the Villa Capriani platform development. Each module builds upon the foundation to create a comprehensive community management and collaboration system.*
