@@ -1,17 +1,21 @@
 ---
-description: AI-Powered Live Editor Tech Stack & Workflow Documentation
+description: GutenVibes + Villa Community Integration - Complete AI Live Editor Documentation
 ---
 
-# AI-Powered Live Editor Tech Stack & Workflow
+# GutenVibes + Villa Community Integration
+**AI-Powered Live Editor Project Setup & Technical Architecture**
 
-## 🎯 **Project Vision**
-Building an AI-powered WordPress plugin that enables live visual editing with real-time preview, responsive breakpoint switching, and AI agent integration.
+---
 
-### **Core Concept**
-- Click on any component (hero, cards, etc.) → Fields appear in left sidebar
-- Fill out fields → Live preview updates instantly
+## 🎯 **Project Overview**
+
+This document provides complete documentation for Daniel's GutenVibes AI-powered live editor system integration with the Villa Community WordPress project, including technical architecture, development workflow, and current Villa progress.
+
+### **Core Vision**
+- Click on any component → Fields appear in left sidebar
+- Fill out fields → Live preview updates instantly  
 - Switch between mobile/tablet/desktop breakpoints
-- AI agents can generate and modify content in real-time
+- AI agents generate and modify content in real-time
 
 ---
 
@@ -179,142 +183,165 @@ villa_register_component('hero_section', array(
 - **Timber/Twig 2.0+** - Modern template engine with component support
 - **Custom Post Types** - Structured content (Properties, Businesses, etc.)
 - **REST API Extended** - Custom endpoints for live editing
-- **WebSocket Support** - Real-time communication (optional)
 
-### **Frontend (Live Editor)**
-- **React 18+** - UI framework with concurrent features
-- **Web Components** - Browser-native reusable elements
-- **CSS Custom Properties** - Dynamic theming and responsive design
-- **PostMessage API** - Secure cross-frame communication
-- **Service Workers** - Offline capabilities and caching
+### **Frontend (React + Web Components)**
+- **React 18+** - Sidebar interface and field management
+- **Web Components** - Reusable UI elements with Shadow DOM
+- **PostMessage API** - Cross-frame communication for live updates
+- **CSS Container Queries** - Modern responsive design
+- **Intersection Observer** - Component visibility and lazy loading
 
 ### **AI Integration**
-- **OpenAI API** - GPT models for content generation
-- **Custom AI Agents** - Specialized tasks (SEO, accessibility, etc.)
-- **Context Processors** - Site data analysis and user behavior
-- **Learning Algorithms** - Continuous improvement of suggestions
+- **OpenAI API** - GPT-4 for content generation and suggestions
+- **Custom AI Endpoints** - WordPress REST API extensions for AI
+- **Context Management** - Site data aggregation for AI context
+- **Learning Pipeline** - User interaction tracking for AI improvement
 
 ### **Development Tools**
-- **Composer** - PHP dependency management
-- **npm/Yarn** - JavaScript package management
-- **Webpack/Vite** - Modern asset bundling and HMR
-- **Git** - Version control with branching strategy
-- **Local by Flywheel** - WordPress development environment
+- **Webpack/Vite** - Modern build system for React components
+- **TypeScript** - Type safety for complex React interfaces
+- **Sass/PostCSS** - Advanced CSS preprocessing
+- **Jest/Testing Library** - Component testing framework
 
 ---
 
-## 📁 **File Structure**
+## 📋 **Villa Development Phases**
+
+### **Phase 1: Foundation Alignment** ✅ *COMPLETE*
+- [x] CMB2 blocks with AI-ready data attributes
+- [x] JSON-friendly field structure
+- [x] Live-target CSS selectors prepared
+- [x] Block categorization and metadata
+
+### **Phase 2: Live Editor Core** 🔄 *AWAITING DANIEL*
+- [ ] React-based sidebar interface
+- [ ] Real-time field updates via WebSocket/PostMessage
+- [ ] Responsive breakpoint switcher
+- [ ] Click-to-edit overlay system
+
+### **Phase 3: AI Integration** 📅 *PLANNED*
+- [ ] AI agent communication API
+- [ ] Content generation endpoints
+- [ ] Natural language field updates
+- [ ] Automated component suggestions
+
+### **Phase 4: Multi-site Management** 📅 *FUTURE*
+- [ ] Independent web app interface
+- [ ] Cross-site content management
+- [ ] Centralized AI command center
+- [ ] Bulk editing capabilities
+
+---
+
+## 🔧 **Current Villa File Structure**
 
 ```
-wp-content/
-├── themes/your-theme/
-│   ├── templates/           # Twig component templates
-│   │   ├── components/      # Reusable UI components
-│   │   ├── layouts/         # Page layout templates
-│   │   └── partials/        # Template partials
-│   ├── assets/
-│   │   ├── css/            # Compiled stylesheets
-│   │   ├── js/             # JavaScript bundles
-│   │   └── images/         # Static images
-│   ├── src/                # Source files
-│   │   ├── scss/           # Sass stylesheets
-│   │   ├── js/             # JavaScript modules
-│   │   └── components/     # Component-specific assets
-│   ├── theme.json          # WordPress theme configuration
-│   └── functions.php       # Theme initialization
-├── mu-plugins/
-│   ├── ai-live-editor/     # Main plugin directory
-│   │   ├── core/           # CMB2 enhancements and core functionality
-│   │   ├── components/     # Component registration and management
-│   │   ├── api/           # REST API endpoints
-│   │   ├── ai/            # AI integration and agents
-│   │   ├── assets/        # Plugin assets (React app, etc.)
-│   │   └── ai-live-editor.php # Main plugin file
-│   └── project-specific/   # Custom functionality per project
-│       ├── villa-community/ # Villa-specific features
-│       └── other-projects/  # Other project customizations
-└── uploads/
-    ├── ai-cache/           # Cached AI-generated content
-    └── component-assets/   # User-uploaded component assets
+villa-community20/
+├── app/public/wp-content/
+│   ├── mu-plugins/
+│   │   ├── villa-cmb2-blocks.php          ✅ AI-ready blocks
+│   │   ├── villa-frontend-dashboard.php    ✅ User interface
+│   │   ├── villa-dashboard-post-types.php  ✅ CPT definitions
+│   │   ├── villa-live-editor.php          🔄 Live editor prototype
+│   │   └── assets/
+│   │       ├── villa-live-editor.js       📅 React components (Daniel)
+│   │       └── villa-live-editor.css      📅 Live editor styles (Daniel)
+│   └── themes/miGV/
+│       ├── templates/blocks/              ✅ Twig templates
+│       └── miDocs/                        📁 This documentation
 ```
 
 ---
 
-## 🚀 **Implementation Strategy**
+## 📊 **Villa Progress Tracking**
 
-### **Phase 1: Foundation (Current - ✅ Complete)**
-- ✅ CMB2 field definitions with data attributes
-- ✅ Twig template system with component structure
-- ✅ Component registration system
-- ✅ Theme integration with CSS custom properties
-- ✅ Basic dashboard functionality
+### **Completed Features** ✅
+- **Property Showcase Block** - AI-ready with data attributes
+- **Dashboard Layout Block** - AI-ready with data attributes
+- **Properties Management Block** - AI-ready with data attributes
+- **Support Tickets Block** - AI-ready with data attributes
+- **Business Management Block** - AI-ready with data attributes
+- **User Profile Management** - Role-based access system
+- **Multi-owner Property System** - Ownership tracking via meta fields
+- **Admin Property Assignment** - Manual owner assignment interface
 
-### **Phase 2: Live Editor Core (Next)**
-- React sidebar interface with CMB2 field rendering
-- Click-to-edit overlay system with component detection
-- Real-time field updates via PostMessage/REST API
-- Responsive breakpoint switcher with live preview
+### **Current Villa Stack** 
+- **WordPress Core** - CMS foundation
+- **CMB2** - Custom fields (ready for Daniel's enhancement)
+- **Timber/Twig** - Template engine
+- **Custom Post Types** - Properties, Tickets, Businesses, Users
 
-### **Phase 3: AI Integration**
-- AI agent communication layer with context awareness
-- Content generation endpoints with field-specific hints
-- Context-aware suggestions based on site data
-- Learning and improvement system with user feedback
-
-### **Phase 4: Advanced Features**
-- Multi-site management from single interface
-- Version control and rollback functionality
-- Performance optimization and caching
-- Plugin marketplace integration
+### **Integration Points for Daniel**
+1. **CMB2 Enhancement** - Replace meta boxes with React sidebar
+2. **Template Integration** - Use existing Twig templates for live preview
+3. **Data Structure** - Leverage existing JSON-friendly field setup
+4. **Component System** - Convert existing blocks to live-editable components
 
 ---
 
-## 🎯 **Key Principles**
+## 🎨 **Villa Field Standards**
 
-### **AI-First Design**
-- Every field has AI generation capability with context hints
-- Context-aware content suggestions based on site data
-- Learning from user preferences and content patterns
-- Seamless human-AI collaboration with easy refinement
+### **AI-Ready Attributes** (Already Implemented)
+Every CMB2 field includes:
+```php
+'attributes' => array(
+    'data-ai-field' => 'field_purpose',      // AI identification
+    'data-live-target' => '.css-selector',   // Live editing target
+    'data-json-key' => 'object.property'     // JSON structure mapping
+),
+```
 
-### **Developer Experience**
-- Minimal code approach - less boilerplate, more functionality
-- JSON-friendly architecture for easy API integration
-- Familiar CMB2 syntax with enhanced capabilities
-- Easy component creation with auto-registration
-
-### **User Experience**
-- Live visual editing without page refresh
-- Intuitive click-to-edit interface
-- Real-time responsive design testing
-- Contextual AI suggestions that make sense
-
-### **Performance & Scalability**
-- Lazy loading components and assets
-- Efficient DOM updates with minimal reflow
-- Cached AI responses with smart invalidation
-- Optimized asset delivery with modern bundling
+### **Block Classification** (Already Implemented)
+```php
+'classes' => 'villa-ai-ready-block',
+'data' => array(
+    'block-type' => 'component-name',
+    'ai-editable' => 'true',
+    'live-preview' => 'true'
+),
+```
 
 ---
 
-## 🔄 **Integration Points**
+## 🚀 **Current Workflow**
 
-### **Current Villa Project → Live Editor**
-1. **CMB2 Fields** → Enhanced with live editing capabilities
-2. **Twig Templates** → Add data attributes for live targeting
-3. **Dashboard System** → Integrate with live editor interface
-4. **Theme Integration** → Maintain CSS custom properties approach
+### **Shanna's Tasks** (Ongoing)
+1. **Content Structure** - Continue building CMB2 blocks following AI-ready patterns
+2. **Template Creation** - Twig templates with live-target classes
+3. **Data Architecture** - Ensure JSON-friendly field relationships
+4. **Villa Features** - Dashboard, properties, user management
 
-### **Daniel's System Integration**
-1. **Page Builder Field** → Replaces traditional CMB2 meta boxes
-2. **React Sidebar** → Renders CMB2 fields dynamically
-3. **Live Preview** → Uses existing Twig templates with real-time updates
-4. **AI Layer** → Adds content generation to existing field structure
+### **Daniel's Integration Points** (When Ready)
+1. **React Conversion** - Convert CMB2 meta boxes to React sidebar
+2. **Live Preview Engine** - Real-time field → DOM updates using existing Twig templates
+3. **AI API Layer** - Agent communication and content generation
+4. **Component System** - Web Components for reusable elements
 
 ---
 
-This architecture provides a solid foundation for Daniel's vision while maintaining compatibility with existing WordPress workflows and enabling seamless AI integration. The current Villa Community setup aligns perfectly with this approach and will require minimal changes when Daniel's live editor system is ready.
+## 📝 **Key Decisions & Notes**
 
+### **Why This Approach Works**
+- **Villa foundation is AI-ready** - All fields have proper data attributes
+- **Minimal changes needed** - Daniel's system will enhance, not replace
+- **Existing templates work** - Twig templates already have live-target selectors
+- **JSON-friendly structure** - Data is already API-ready
+
+### **Integration Benefits**
+- **Seamless transition** - From meta boxes to live editor
+- **Preserved functionality** - All Villa features remain intact
+- **Enhanced UX** - Live editing without losing existing workflows
+- **AI-powered content** - Automatic generation for all Villa content types
+
+---
+
+## 🔗 **Related Documentation**
+
+- **`/villa-portol`** - Villa Community project overview and features
+- **Villa Development Tracker** - Detailed feature progress and implementation notes
+
+---
+
+**Status:** Foundation Complete - Ready for Daniel's Live Editor Integration  
 **Last Updated:** May 30, 2025  
-**Status:** Foundation Complete, Ready for Live Editor Integration  
-**Next Steps:** Await Daniel's CMB2 page builder field implementation
+**Next Steps:** Await Daniel's CMB2 enhancement and React sidebar implementation
