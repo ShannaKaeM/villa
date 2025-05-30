@@ -14,17 +14,17 @@
             "palette": [
                 {
                     "slug": "primary",
-                    "color": "#2563eb",
+                    "color": "#5a7f80",
                     "name": "Primary"
                 },
                 {
                     "slug": "primary-light",
-                    "color": "#93c5fd",
+                    "color": "#8dabac",
                     "name": "Primary Light"
                 },
                 {
                     "slug": "primary-dark",
-                    "color": "#1d4ed8",
+                    "color": "#425a5b",
                     "name": "Primary Dark"
                 },
                 {

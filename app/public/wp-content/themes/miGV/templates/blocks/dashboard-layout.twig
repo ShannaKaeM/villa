@@ -1,0 +1,140 @@
+{# Villa Dashboard Layout Block Template #}
+
+{% if not user %}
+    <div class="villa-dashboard-login">
+        <p>Please <a href="{{ wp.wp_login_url(wp.get_permalink()) }}">log in</a> to access your dashboard.</p>
+    </div>
+{% else %}
+    {% set current_tab = wp.get_query_var('tab') ?: 'profile' %}
+    {% set dashboard_title = block.dashboard_layout_title ?: 'Villa Community Dashboard' %}
+    {% set layout_style = block.dashboard_layout_style ?: 'sidebar' %}
+    
+    <div class="villa-dashboard-container layout-{{ layout_style }}">
+        <!-- Sidebar Navigation -->
+        <div class="villa-sidebar">
+            <!-- Logo/Brand -->
+            <div class="villa-sidebar-header">
+                <div class="villa-logo">
+                    <img src="{{ wp.wp_get_upload_dir().baseurl }}/2025/05/villa-community-logo-150x150.png" alt="Villa Community Logo" />
+                    <span>Villa Community</span>
+                </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <nav class="villa-sidebar-nav">
+                <div class="villa-nav-section">
+                    <ul class="villa-nav-list">
+                        <!-- Temporarily disabled for testing -->
+                        {% if false and user_roles %}
+                            <li>
+                                <a href="?tab=properties" class="villa-nav-item {{ current_tab == 'properties' ? 'active' : '' }}" data-tab="properties">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>Properties</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <!-- All other sections temporarily disabled -->
+                        {% if false %}
+                        <!-- Support Tickets, Announcements, etc. temporarily disabled -->
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- User Section - Only active section for testing -->
+                <div class="villa-nav-section villa-nav-user">
+                    <ul class="villa-nav-list">
+                        <li>
+                            <a href="?tab=profile" class="villa-nav-item {{ current_tab == 'profile' ? 'active' : '' }}" data-tab="profile">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ wp.wp_logout_url(wp.home_url()) }}" class="villa-nav-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="villa-main-content">
+            <!-- Top Header -->
+            <div class="villa-content-header">
+                <div class="villa-header-left">
+                    <h1 class="villa-page-title">
+                        {% if current_tab == 'profile' %}
+                            Profile
+                        {% else %}
+                            Dashboard
+                        {% endif %}
+                    </h1>
+                </div>
+                <div class="villa-header-right">
+                    <div class="villa-user-info">
+                        <span class="villa-user-name">{{ user.display_name }}</span>
+                        <div class="villa-user-avatar">
+                            {{ wp.get_avatar(user.ID, 32) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="villa-page-content">
+                {% if current_tab == 'profile' %}
+                    <!-- Profile Section Content -->
+                    <div class="villa-profile-section">
+                        <div class="villa-card">
+                            <div class="villa-card-header">
+                                <h2>User Profile</h2>
+                            </div>
+                            <div class="villa-card-content">
+                                <div class="profile-info">
+                                    <div class="profile-field">
+                                        <label>Display Name:</label>
+                                        <span>{{ user.display_name }}</span>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Email:</label>
+                                        <span>{{ user.user_email }}</span>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label>Username:</label>
+                                        <span>{{ user.user_login }}</span>
+                                    </div>
+                                    {% if user_roles %}
+                                        <div class="profile-field">
+                                            <label>Villa Roles:</label>
+                                            <span>{{ user_roles|join(', ') }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Default Dashboard Welcome -->
+                    <div class="dashboard-welcome">
+                        <h2>Welcome to your Villa Community dashboard!</h2>
+                        <p>Click Profile to get started.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}

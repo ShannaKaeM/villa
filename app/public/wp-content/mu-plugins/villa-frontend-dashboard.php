@@ -49,6 +49,384 @@ function villa_dashboard_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'villa_dashboard_enqueue_assets');
 
 /**
+ * Add body class for dashboard pages and hide header
+ */
+function villa_dashboard_body_class($classes) {
+    global $post;
+    if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'villa_dashboard')) {
+        $classes[] = 'villa-dashboard-page';
+    }
+    return $classes;
+}
+add_filter('body_class', 'villa_dashboard_body_class');
+
+/**
+ * Style dashboard pages with modern Tailwind-inspired design
+ */
+function villa_dashboard_page_styles() {
+    global $post;
+    if (is_a($post, 'WP_Post') && has_shortcode($post->post_content, 'villa_dashboard')) {
+        echo '<style>
+            /* Hide default WordPress header on dashboard */
+            .villa-dashboard-page #masthead {
+                display: none !important;
+            }
+            
+            /* Hide unwanted WordPress content */
+            .villa-dashboard-page .widget-area,
+            .villa-dashboard-page #secondary,
+            .villa-dashboard-page .sidebar,
+            .villa-dashboard-page .wp-block-archives,
+            .villa-dashboard-page .wp-block-categories,
+            .villa-dashboard-page .wp-block-recent-comments,
+            .villa-dashboard-page .wp-block-recent-posts,
+            .villa-dashboard-page .wp-block-search,
+            .villa-dashboard-page .wp-block-tag-cloud,
+            .villa-dashboard-page .widget,
+            .villa-dashboard-page #comments,
+            .villa-dashboard-page .comments-area,
+            .villa-dashboard-page .post-navigation,
+            .villa-dashboard-page .posts-navigation {
+                display: none !important;
+            }
+            
+            /* Full height layout */
+            .villa-dashboard-page html,
+            .villa-dashboard-page body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .villa-dashboard-page .site {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .villa-dashboard-page .site-main {
+                flex: 1;
+                padding: 0;
+                margin: 0;
+                max-width: none;
+            }
+            
+            .villa-dashboard-page .entry-content {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            
+            .villa-dashboard-page .entry-header {
+                display: none;
+            }
+            
+            /* Dashboard container - full screen */
+            .villa-dashboard-page .villa-dashboard-container {
+                height: 100vh;
+                display: flex;
+                background: var(--wp--preset--color--gray-50, #f9fafb);
+                margin: 0;
+                padding: 0;
+                max-width: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            /* Fixed sidebar - FULL SCREEN HEIGHT */
+            .villa-dashboard-page .villa-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 288px; /* w-72 = 18rem = 288px */
+                height: 100vh; /* Full screen height */
+                background: var(--wp--preset--color--primary-dark, #1d4ed8);
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding: 24px;
+                z-index: 50;
+                overflow-y: auto;
+            }
+            
+            /* Sidebar logo area */
+            .villa-dashboard-page .villa-sidebar-header {
+                display: flex;
+                height: 64px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+            
+            .villa-dashboard-page .villa-sidebar-logo {
+                height: 32px;
+                width: auto;
+                filter: brightness(0) invert(1); /* Make logo white */
+            }
+            
+            /* Sidebar navigation */
+            .villa-dashboard-page .villa-sidebar nav {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+            }
+            
+            .villa-dashboard-page .villa-sidebar ul {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                gap: 28px;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .villa-dashboard-page .villa-sidebar .nav-section ul {
+                gap: 4px;
+                margin: 0 -8px;
+            }
+            
+            .villa-dashboard-page .villa-sidebar li {
+                margin: 0;
+            }
+            
+            .villa-dashboard-page .villa-sidebar a {
+                display: flex;
+                gap: 12px;
+                border-radius: 6px;
+                padding: 8px;
+                font-size: 14px;
+                line-height: 1.5;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                align-items: center;
+            }
+            
+            .villa-dashboard-page .villa-sidebar a:not(.active) {
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+            }
+            
+            .villa-dashboard-page .villa-sidebar a:not(.active):hover {
+                background: var(--wp--preset--color--primary, #2563eb);
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            .villa-dashboard-page .villa-sidebar a.active {
+                background: var(--wp--preset--color--primary, #2563eb);
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            /* Sidebar icons */
+            .villa-dashboard-page .villa-sidebar .nav-icon {
+                width: 24px;
+                height: 24px;
+                flex-shrink: 0;
+            }
+            
+            /* Teams section */
+            .villa-dashboard-page .villa-sidebar .teams-header {
+                font-size: 12px;
+                line-height: 1.5;
+                font-weight: 600;
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+                margin-bottom: 8px;
+            }
+            
+            .villa-dashboard-page .villa-sidebar .team-initial {
+                display: flex;
+                width: 24px;
+                height: 24px;
+                flex-shrink: 0;
+                align-items: center;
+                justify-content: center;
+                border-radius: 6px;
+                border: 1px solid var(--wp--preset--color--primary-light, #93c5fd);
+                background: var(--wp--preset--color--primary, #2563eb);
+                font-size: 10px;
+                font-weight: 500;
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            /* Settings at bottom */
+            .villa-dashboard-page .villa-sidebar .settings-section {
+                margin-top: auto;
+            }
+            
+            /* Main content area */
+            .villa-dashboard-page .villa-content {
+                margin-left: 288px; /* Same as sidebar width */
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            
+            /* Top header bar - MATCHING SIDEBAR COLORS */
+            .villa-dashboard-page .villa-top-header {
+                position: sticky;
+                top: 0;
+                z-index: 40;
+                display: flex;
+                height: 64px;
+                align-items: center;
+                gap: 16px;
+                border-bottom: 1px solid var(--wp--preset--color--primary, #2563eb);
+                background: var(--wp--preset--color--primary-dark, #1d4ed8);
+                padding: 0 16px;
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+                flex-shrink: 0; /* Prevent header from shrinking */
+            }
+            
+            /* Mobile menu button (hidden on desktop) */
+            .villa-dashboard-page .mobile-menu-btn {
+                display: none;
+                margin: -10px;
+                padding: 10px;
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+                transition: color 0.2s ease;
+            }
+            
+            .villa-dashboard-page .mobile-menu-btn:hover {
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            /* Search form */
+            .villa-dashboard-page .search-form {
+                display: grid;
+                flex: 1;
+                grid-template-columns: 1fr;
+                position: relative;
+            }
+            
+            .villa-dashboard-page .search-input {
+                grid-column: 1;
+                grid-row: 1;
+                display: block;
+                width: 100%;
+                background: var(--wp--preset--color--primary, #2563eb);
+                padding-left: 32px;
+                padding-right: 12px;
+                padding-top: 8px;
+                padding-bottom: 8px;
+                font-size: 14px;
+                color: var(--wp--preset--color--white, #ffffff);
+                outline: none;
+                border: 1px solid var(--wp--preset--color--primary-light, #93c5fd);
+                border-radius: 6px;
+            }
+            
+            .villa-dashboard-page .search-input::placeholder {
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+            }
+            
+            .villa-dashboard-page .search-icon {
+                grid-column: 1;
+                grid-row: 1;
+                pointer-events: none;
+                width: 16px;
+                height: 16px;
+                align-self: center;
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+                margin-left: 8px;
+            }
+            
+            /* Header actions */
+            .villa-dashboard-page .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            
+            .villa-dashboard-page .notification-btn {
+                margin: -10px;
+                padding: 10px;
+                color: var(--wp--preset--color--primary-light, #93c5fd);
+                transition: color 0.2s ease;
+            }
+            
+            .villa-dashboard-page .notification-btn:hover {
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            /* User profile dropdown */
+            .villa-dashboard-page .user-profile {
+                display: flex;
+                align-items: center;
+                margin: -6px;
+                padding: 6px;
+                position: relative;
+                border-radius: 6px;
+                transition: background-color 0.2s ease;
+            }
+            
+            .villa-dashboard-page .user-profile:hover {
+                background: var(--wp--preset--color--primary, #2563eb);
+            }
+            
+            .villa-dashboard-page .user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: var(--wp--preset--color--gray-50, #f9fafb);
+                border: 2px solid var(--wp--preset--color--primary-light, #93c5fd);
+            }
+            
+            .villa-dashboard-page .user-info {
+                margin-left: 12px;
+                font-size: 14px;
+                line-height: 1.5;
+                font-weight: 600;
+                color: var(--wp--preset--color--white, #ffffff);
+            }
+            
+            /* Main content - IMPROVED SCROLLING */
+            .villa-dashboard-page .main-content {
+                flex: 1;
+                padding: 40px 16px;
+                overflow-y: auto; /* Allow content to scroll */
+                min-height: 0; /* Important for flex scrolling */
+            }
+            
+            .villa-dashboard-page .content-inner {
+                padding: 0 16px;
+            }
+            
+            /* Mobile responsive */
+            @media (max-width: 1024px) {
+                .villa-dashboard-page .villa-sidebar {
+                    transform: translateX(-100%);
+                    transition: transform 0.3s ease;
+                }
+                
+                .villa-dashboard-page .villa-content {
+                    margin-left: 0;
+                }
+                
+                .villa-dashboard-page .mobile-menu-btn {
+                    display: block;
+                }
+                
+                .villa-dashboard-page .header-separator {
+                    display: block;
+                    height: 24px;
+                    width: 1px;
+                    background: var(--wp--preset--color--gray-900, #111827);
+                    opacity: 0.1;
+                }
+            }
+            
+            @media (min-width: 1024px) {
+                .villa-dashboard-page .header-separator {
+                    display: none;
+                }
+            }
+        </style>';
+    }
+}
+add_action('wp_head', 'villa_dashboard_page_styles');
+
+/**
  * Main dashboard shortcode
  */
 function villa_dashboard_shortcode($atts) {
@@ -100,110 +478,176 @@ function villa_render_dashboard($user, $user_roles) {
     
     ?>
     <div class="villa-dashboard-container">
-        <!-- Sidebar Navigation -->
+        <!-- Dashboard Sidebar -->
         <div class="villa-sidebar">
-            <!-- Logo/Brand -->
             <div class="villa-sidebar-header">
-                <div class="villa-logo">
-                    <img src="<?php echo wp_get_upload_dir()['baseurl']; ?>/2025/05/villa-community-logo-150x150.png" alt="Villa Community Logo" />
-                    <span>Villa Community</span>
-                </div>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo-white.svg" alt="Villa Logo" class="villa-sidebar-logo">
             </div>
-            
-            <!-- Main Navigation -->
-            <nav class="villa-sidebar-nav">
-                <div class="villa-nav-section">
-                    <ul class="villa-nav-list">
-                        <!-- Temporarily disabled for testing -->
-                        <?php if (false && villa_user_can_access_properties($user_roles)): ?>
+            <nav>
+                <ul>
+                    <!-- Main Navigation -->
+                    <li class="nav-section">
+                        <ul>
+                            <?php if (villa_user_can_access_properties($user_roles)): ?>
+                                <li>
+                                    <a href="?tab=properties" class="<?php echo $current_tab === 'properties' ? 'active' : ''; ?>">
+                                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        Properties
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            
+                            <?php if (villa_user_can_access_tickets($user_roles)): ?>
+                                <li>
+                                    <a href="?tab=tickets" class="<?php echo $current_tab === 'tickets' ? 'active' : ''; ?>">
+                                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                        </svg>
+                                        Tickets
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            
+                            <?php if (villa_user_can_access_announcements($user_roles)): ?>
+                                <li>
+                                    <a href="?tab=announcements" class="<?php echo $current_tab === 'announcements' ? 'active' : ''; ?>">
+                                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                                        </svg>
+                                        Announcements
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            
+                            <?php if (villa_user_can_access_owner_portal($user_roles)): ?>
+                                <li>
+                                    <a href="?tab=owner-portal" class="<?php echo $current_tab === 'owner-portal' ? 'active' : ''; ?>">
+                                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        Owner Portal
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
+                    
+                    <!-- Business Section -->
+                    <?php if (villa_user_can_access_business($user_roles) || villa_user_can_access_committees($user_roles) || villa_user_can_access_billing($user_roles)): ?>
+                        <li class="nav-section">
+                            <div class="teams-header">BUSINESS</div>
+                            <ul>
+                                <?php if (villa_user_can_access_business($user_roles)): ?>
+                                    <li>
+                                        <a href="?tab=business" class="<?php echo $current_tab === 'business' ? 'active' : ''; ?>">
+                                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                            </svg>
+                                            Directory
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                                
+                                <?php if (villa_user_can_access_committees($user_roles)): ?>
+                                    <li>
+                                        <a href="?tab=committees" class="<?php echo $current_tab === 'committees' ? 'active' : ''; ?>">
+                                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Committees
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                                
+                                <?php if (villa_user_can_access_billing($user_roles)): ?>
+                                    <li>
+                                        <a href="?tab=billing" class="<?php echo $current_tab === 'billing' ? 'active' : ''; ?>">
+                                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                            </svg>
+                                            Billing
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+                    
+                    <!-- Settings at bottom -->
+                    <li class="settings-section">
+                        <ul>
                             <li>
-                                <a href="?tab=properties" class="villa-nav-item <?php echo $current_tab === 'properties' ? 'active' : ''; ?>" data-tab="properties">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                <a href="?tab=profile" class="<?php echo $current_tab === 'profile' ? 'active' : ''; ?>">
+                                    <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
-                                    <span>Properties</span>
+                                    Settings
                                 </a>
                             </li>
-                        <?php endif; ?>
-                        
-                        <!-- All other sections temporarily disabled -->
-                        <?php if (false): ?>
-                        <!-- Support Tickets, Announcements, etc. temporarily disabled -->
-                        <?php endif; ?>
-                    </ul>
-                </div>
-                
-                <!-- User Section - Only active section for testing -->
-                <div class="villa-nav-section villa-nav-user">
-                    <ul class="villa-nav-list">
-                        <li>
-                            <a href="?tab=profile" class="villa-nav-item <?php echo $current_tab === 'profile' ? 'active' : ''; ?>" data-tab="profile">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                </svg>
-                                <span>Profile</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<?php echo wp_logout_url(home_url()); ?>" class="villa-nav-item">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                </svg>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                        </ul>
+                    </li>
+                </ul>
             </nav>
         </div>
         
         <!-- Main Content Area -->
-        <div class="villa-main-content">
-            <!-- Top Header -->
-            <div class="villa-content-header">
-                <div class="villa-header-left">
-                    <h1 class="villa-page-title">
-                        <?php 
-                        switch ($current_tab) {
-                            case 'profile': echo 'Profile'; break;
-                            default: echo 'Dashboard';
-                        }
-                        ?>
-                    </h1>
+        <div class="villa-content">
+            <!-- Top Header Bar -->
+            <div class="villa-top-header">
+                <button class="mobile-menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="search-form">
+                    <input type="search" class="search-input" placeholder="Search...">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search search-icon">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
                 </div>
-                <div class="villa-header-right">
-                    <div class="villa-user-info">
-                        <span class="villa-user-name"><?php echo esc_html($user->display_name); ?></span>
-                        <div class="villa-user-avatar">
-                            <?php echo get_avatar($user->ID, 32); ?>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </button>
+                    <div class="user-profile">
+                        <img src="<?php echo get_avatar_url($user->ID); ?>" alt="<?php echo esc_attr($user->display_name); ?>" class="user-avatar">
+                        <div class="user-info">
+                            <?php echo esc_html($user->display_name); ?>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Page Content -->
-            <div class="villa-page-content">
-                <?php if ($show_welcome && $welcome_message && $current_tab === 'profile'): ?>
-                    <div class="villa-welcome-message">
-                        <?php echo wp_kses_post($welcome_message); ?>
-                    </div>
-                <?php endif; ?>
-                
-                <?php
-                // Simplified switch - only Profile for testing
-                switch ($current_tab) {
-                    case 'profile':
-                        villa_render_dashboard_profile($user);
-                        break;
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="content-inner">
+                    <?php if ($show_welcome && $welcome_message && $current_tab === 'profile'): ?>
+                        <div class="villa-welcome-message">
+                            <?php echo wp_kses_post($welcome_message); ?>
+                        </div>
+                    <?php endif; ?>
                     
-                    default:
-                        echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Click Profile to get started.</div>';
-                }
-                ?>
+                    <?php
+                    // Simplified switch - only Profile for testing
+                    switch ($current_tab) {
+                        case 'profile':
+                            villa_render_dashboard_profile($user);
+                            break;
+                        
+                        default:
+                            echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Click Profile to get started.</div>';
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>

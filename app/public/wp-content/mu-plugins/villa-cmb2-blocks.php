@@ -64,87 +64,95 @@ function villa_register_property_showcase_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
-        'cmb2_theme_options' => array(
-            'block' => true,
-            'block_title' => __('Property Showcase', 'migv'),
-            'block_description' => __('Display featured properties in a grid layout', 'migv'),
-            'block_category' => 'villa-community',
-            'block_icon' => 'admin-home',
-            'block_keywords' => array('property', 'real estate', 'villa'),
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'property-showcase',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
         ),
     ));
 
     $cmb->add_field(array(
-        'name' => __('Block Title', 'migv'),
+        'name' => __('Showcase Title', 'migv'),
         'id'   => 'showcase_title',
         'type' => 'text',
         'default' => 'Featured Properties',
+        'attributes' => array(
+            'data-ai-field' => 'showcase_title',
+            'data-live-target' => '.property-showcase__title',
+            'data-json-key' => 'showcase.title'
+        ),
+    ));
+
+    $cmb->add_field(array(
+        'name' => __('Showcase Subtitle', 'migv'),
+        'id'   => 'showcase_subtitle',
+        'type' => 'textarea_small',
+        'attributes' => array(
+            'data-ai-field' => 'showcase_subtitle',
+            'data-live-target' => '.property-showcase__subtitle',
+            'data-json-key' => 'showcase.subtitle'
+        ),
     ));
 
     $cmb->add_field(array(
         'name' => __('Number of Properties', 'migv'),
         'id'   => 'showcase_count',
         'type' => 'text_small',
+        'default' => '6',
         'attributes' => array(
             'type' => 'number',
             'min'  => '1',
             'max'  => '12',
+            'data-ai-field' => 'showcase_count',
+            'data-live-target' => '.property-showcase',
+            'data-json-key' => 'showcase.count'
         ),
-        'default' => '6',
-    ));
-
-    $cmb->add_field(array(
-        'name' => __('Property Type Filter', 'migv'),
-        'id'   => 'showcase_type',
-        'type' => 'select',
-        'options' => array(
-            'all'        => __('All Types', 'migv'),
-            'villa'      => __('Villas Only', 'migv'),
-            'apartment'  => __('Apartments Only', 'migv'),
-            'condo'      => __('Condos Only', 'migv'),
-            'townhouse'  => __('Townhouses Only', 'migv'),
-            'commercial' => __('Commercial Only', 'migv'),
-        ),
-        'default' => 'all',
-    ));
-
-    $cmb->add_field(array(
-        'name' => __('Status Filter', 'migv'),
-        'id'   => 'showcase_status',
-        'type' => 'select',
-        'options' => array(
-            'all'       => __('All Statuses', 'migv'),
-            'available' => __('Available Only', 'migv'),
-            'sold'      => __('Sold Only', 'migv'),
-            'rented'    => __('Rented Only', 'migv'),
-        ),
-        'default' => 'available',
     ));
 
     $cmb->add_field(array(
         'name' => __('Layout Style', 'migv'),
         'id'   => 'showcase_layout',
         'type' => 'select',
-        'options' => array(
-            'grid'     => __('Grid Layout', 'migv'),
-            'carousel' => __('Carousel/Slider', 'migv'),
-            'list'     => __('List Layout', 'migv'),
-        ),
         'default' => 'grid',
+        'options' => array(
+            'grid' => __('Grid Layout', 'migv'),
+            'carousel' => __('Carousel', 'migv'),
+            'masonry' => __('Masonry', 'migv'),
+        ),
+        'attributes' => array(
+            'data-ai-field' => 'showcase_layout',
+            'data-live-target' => '.property-showcase',
+            'data-json-key' => 'showcase.layout'
+        ),
     ));
 
     $cmb->add_field(array(
-        'name' => __('Show Property Details', 'migv'),
-        'id'   => 'showcase_show_details',
+        'name' => __('Show Filters', 'migv'),
+        'id'   => 'showcase_show_filters',
+        'type' => 'checkbox',
+        'attributes' => array(
+            'data-ai-field' => 'showcase_show_filters',
+            'data-live-target' => '.property-showcase__filters',
+            'data-json-key' => 'showcase.showFilters'
+        ),
+    ));
+
+    $cmb->add_field(array(
+        'name' => __('Property Types to Show', 'migv'),
+        'id'   => 'showcase_property_types',
         'type' => 'multicheck',
         'options' => array(
-            'price'     => __('Price', 'migv'),
-            'bedrooms'  => __('Bedrooms', 'migv'),
-            'bathrooms' => __('Bathrooms', 'migv'),
-            'sqft'      => __('Square Feet', 'migv'),
-            'status'    => __('Status', 'migv'),
+            'villa' => __('Villa', 'migv'),
+            'apartment' => __('Apartment', 'migv'),
+            'townhouse' => __('Townhouse', 'migv'),
+            'commercial' => __('Commercial', 'migv'),
         ),
-        'default' => array('price', 'bedrooms', 'bathrooms'),
+        'attributes' => array(
+            'data-ai-field' => 'showcase_property_types',
+            'data-live-target' => '.property-showcase__items',
+            'data-json-key' => 'showcase.propertyTypes'
+        ),
     ));
 }
 
@@ -347,6 +355,12 @@ function villa_register_dashboard_properties_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-properties',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -354,6 +368,11 @@ function villa_register_dashboard_properties_block() {
         'id'   => 'dashboard_properties_title',
         'type' => 'text',
         'default' => 'My Properties',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_properties_title',
+            'data-live-target' => '.dashboard-properties__title',
+            'data-json-key' => 'dashboard.properties.title'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -361,6 +380,11 @@ function villa_register_dashboard_properties_block() {
         'id'   => 'dashboard_properties_show_form',
         'type' => 'checkbox',
         'default' => true,
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_properties_show_form',
+            'data-live-target' => '.dashboard-properties__form',
+            'data-json-key' => 'dashboard.properties.showForm'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -371,6 +395,9 @@ function villa_register_dashboard_properties_block() {
             'type' => 'number',
             'min'  => '1',
             'max'  => '20',
+            'data-ai-field' => 'dashboard_properties_per_page',
+            'data-live-target' => '.dashboard-properties__pagination',
+            'data-json-key' => 'dashboard.properties.perPage'
         ),
         'default' => '10',
     ));
@@ -387,6 +414,12 @@ function villa_register_dashboard_tickets_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-tickets',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -394,6 +427,11 @@ function villa_register_dashboard_tickets_block() {
         'id'   => 'dashboard_tickets_title',
         'type' => 'text',
         'default' => 'Support Tickets',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_tickets_title',
+            'data-live-target' => '.dashboard-tickets__title',
+            'data-json-key' => 'dashboard.tickets.title'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -401,6 +439,11 @@ function villa_register_dashboard_tickets_block() {
         'id'   => 'dashboard_tickets_show_form',
         'type' => 'checkbox',
         'default' => true,
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_tickets_show_form',
+            'data-live-target' => '.dashboard-tickets__form',
+            'data-json-key' => 'dashboard.tickets.showForm'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -414,6 +457,11 @@ function villa_register_dashboard_tickets_block() {
             'resolved'   => __('Resolved', 'migv'),
         ),
         'default' => 'open',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_tickets_default_filter',
+            'data-live-target' => '.dashboard-tickets__filter',
+            'data-json-key' => 'dashboard.tickets.defaultFilter'
+        ),
     ));
 }
 
@@ -428,6 +476,12 @@ function villa_register_dashboard_groups_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-groups',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -435,6 +489,11 @@ function villa_register_dashboard_groups_block() {
         'id'   => 'dashboard_groups_title',
         'type' => 'text',
         'default' => 'Groups & Committees',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_groups_title',
+            'data-live-target' => '.dashboard-groups__title',
+            'data-json-key' => 'dashboard.groups.title'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -442,6 +501,11 @@ function villa_register_dashboard_groups_block() {
         'id'   => 'dashboard_groups_show_directory',
         'type' => 'checkbox',
         'default' => true,
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_groups_show_directory',
+            'data-live-target' => '.dashboard-groups__directory',
+            'data-json-key' => 'dashboard.groups.showDirectory'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -456,6 +520,11 @@ function villa_register_dashboard_groups_block() {
             'volunteer'          => __('Volunteer Groups', 'migv'),
         ),
         'default' => 'all',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_groups_type_filter',
+            'data-live-target' => '.dashboard-groups__filter',
+            'data-json-key' => 'dashboard.groups.typeFilter'
+        ),
     ));
 }
 
@@ -470,6 +539,12 @@ function villa_register_dashboard_business_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-business',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -477,6 +552,11 @@ function villa_register_dashboard_business_block() {
         'id'   => 'dashboard_business_title',
         'type' => 'text',
         'default' => 'Business Listings',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_business_title',
+            'data-live-target' => '.dashboard-business__title',
+            'data-json-key' => 'dashboard.business.title'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -484,6 +564,11 @@ function villa_register_dashboard_business_block() {
         'id'   => 'dashboard_business_show_form',
         'type' => 'checkbox',
         'default' => true,
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_business_show_form',
+            'data-live-target' => '.dashboard-business__form',
+            'data-json-key' => 'dashboard.business.showForm'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -492,6 +577,11 @@ function villa_register_dashboard_business_block() {
         'type' => 'checkbox',
         'default' => true,
         'desc' => __('If unchecked, will show all businesses (for admin view)', 'migv'),
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_business_user_only',
+            'data-live-target' => '.dashboard-business__filter',
+            'data-json-key' => 'dashboard.business.userOnly'
+        ),
     ));
 }
 
@@ -506,6 +596,12 @@ function villa_register_dashboard_announcements_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-announcements',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -513,6 +609,11 @@ function villa_register_dashboard_announcements_block() {
         'id'   => 'dashboard_announcements_title',
         'type' => 'text',
         'default' => 'Announcements',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_announcements_title',
+            'data-live-target' => '.dashboard-announcements__title',
+            'data-json-key' => 'dashboard.announcements.title'
+        ),
     ));
 }
 
@@ -527,6 +628,12 @@ function villa_register_dashboard_owner_portal_block() {
         'context'      => 'normal',
         'priority'     => 'high',
         'show_names'   => true,
+        'classes'      => 'villa-ai-ready-block',
+        'data'         => array(
+            'block-type' => 'dashboard-owner-portal',
+            'ai-editable' => 'true',
+            'live-preview' => 'true'
+        ),
     ));
 
     $cmb->add_field(array(
@@ -534,6 +641,11 @@ function villa_register_dashboard_owner_portal_block() {
         'id'   => 'dashboard_owner_portal_title',
         'type' => 'text',
         'default' => 'Owner Portal',
+        'attributes' => array(
+            'data-ai-field' => 'dashboard_owner_portal_title',
+            'data-live-target' => '.dashboard-owner-portal__title',
+            'data-json-key' => 'dashboard.ownerPortal.title'
+        ),
     ));
 }
 

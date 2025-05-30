@@ -392,7 +392,13 @@ register_activation_hook(__FILE__, 'villa_create_um_pages');
 function villa_add_membership_menu_items($items, $args) {
     if ($args->theme_location == 'primary') {
         if (is_user_logged_in()) {
-            $items .= '<li class="menu-item"><a href="' . um_user_profile_url() . '">My Profile</a></li>';
+            // Check if Ultimate Member is active before using its functions
+            if (function_exists('um_user_profile_url')) {
+                $items .= '<li class="menu-item"><a href="' . um_user_profile_url() . '">My Profile</a></li>';
+            } else {
+                // Fallback to dashboard if UM not available
+                $items .= '<li class="menu-item"><a href="' . admin_url() . '">Dashboard</a></li>';
+            }
             $items .= '<li class="menu-item"><a href="' . wp_logout_url() . '">Logout</a></li>';
         } else {
             $items .= '<li class="menu-item"><a href="/login">Login</a></li>';

@@ -53,12 +53,13 @@
     background-color: var(--villa-primary-dark); /* Using your primary-dark color */
     color: var(--villa-white);
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
+    top: 100px; /* Match main content top margin + extra space */
+    left: 20px; /* Add left margin */
+    height: calc(100vh - 120px); /* Adjust height for header offset + margins */
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 999; /* Below header but above content */
     box-shadow: var(--villa-shadow-lg);
+    border-radius: var(--villa-border-radius); /* Add rounded corners */
 }
 
 .villa-sidebar-header {
@@ -158,7 +159,7 @@
     box-shadow: var(--villa-shadow);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .villa-page-title {
