@@ -423,3 +423,110 @@ input:focus, textarea:focus, select:focus {
 .migv-mt-4 { margin-top: var(--migv-space-4); }
 .migv-mt-6 { margin-top: var(--migv-space-6); }
 .migv-mt-8 { margin-top: var(--migv-space-8); }
+
+/* Header and Logo Styles */
+.site-header {
+    background-color: var(--migv-white);
+    border-bottom: 1px solid var(--migv-gray-200);
+    padding: var(--migv-space-4) 0;
+    position: sticky;
+    top: 0;
+    z-index: var(--migv-z-50);
+    box-shadow: var(--migv-shadow-sm);
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--migv-container-xl);
+    margin: 0 auto;
+    padding: 0 var(--migv-space-4);
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+    gap: var(--migv-space-3);
+}
+
+/* Custom Logo Styling */
+.custom-logo-link {
+    display: block;
+    line-height: 0;
+}
+
+.custom-logo {
+    max-height: 60px;
+    width: auto;
+    transition: transform var(--migv-transition-fast);
+}
+
+.custom-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Hide site title when custom logo is present */
+.custom-logo-link + .site-title {
+    display: none;
+}
+
+/* Site title styling (when no logo) */
+.site-title {
+    margin: 0;
+    font-size: var(--migv-font-size-2xl);
+    font-weight: var(--migv-font-weight-bold);
+    line-height: 1;
+}
+
+.site-title a {
+    color: var(--migv-gray-900);
+    text-decoration: none;
+    transition: color var(--migv-transition-fast);
+}
+
+.site-title a:hover {
+    color: var(--migv-primary);
+}
+
+/* Site description */
+.site-description {
+    margin: 0;
+    font-size: var(--migv-font-size-sm);
+    color: var(--migv-gray-600);
+    font-style: italic;
+}
+
+/* Navigation */
+.main-navigation {
+    display: flex;
+    align-items: center;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--migv-space-2);
+    color: var(--migv-gray-700);
+}
+
+/* Responsive header */
+@media (max-width: 768px) {
+    .site-header .container {
+        flex-wrap: wrap;
+    }
+    
+    .custom-logo {
+        max-height: 40px;
+    }
+    
+    .site-title {
+        font-size: var(--migv-font-size-xl);
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+}

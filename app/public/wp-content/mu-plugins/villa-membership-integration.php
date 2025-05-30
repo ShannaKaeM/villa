@@ -42,8 +42,8 @@ add_action('plugins_loaded', 'villa_membership_init');
  * Add custom user roles for villa community
  */
 function villa_add_custom_user_roles() {
-    // Property Owner role
-    add_role('property_owner', 'Property Owner', array(
+    // Owner role - Full administrative access
+    add_role('owner', 'Owner', array(
         'read' => true,
         'edit_posts' => true,
         'delete_posts' => true,
@@ -51,10 +51,28 @@ function villa_add_custom_user_roles() {
         'upload_files' => true,
         'edit_published_posts' => true,
         'delete_published_posts' => true,
+        'edit_others_posts' => true,
+        'delete_others_posts' => true,
+        'manage_categories' => true,
+        'moderate_comments' => true,
+        'manage_links' => true,
+        'edit_pages' => true,
+        'edit_others_pages' => true,
+        'edit_published_pages' => true,
+        'publish_pages' => true,
+        'delete_pages' => true,
+        'delete_others_pages' => true,
+        'delete_published_pages' => true,
+        'delete_private_pages' => true,
+        'edit_private_pages' => true,
+        'read_private_pages' => true,
+        'delete_private_posts' => true,
+        'edit_private_posts' => true,
+        'read_private_posts' => true,
     ));
     
-    // Business Owner role
-    add_role('business_owner', 'Business Owner', array(
+    // BOD (Board of Directors) role - High-level management access
+    add_role('bod', 'BOD', array(
         'read' => true,
         'edit_posts' => true,
         'delete_posts' => true,
@@ -62,9 +80,76 @@ function villa_add_custom_user_roles() {
         'upload_files' => true,
         'edit_published_posts' => true,
         'delete_published_posts' => true,
+        'edit_others_posts' => true,
+        'delete_others_posts' => true,
+        'manage_categories' => true,
+        'moderate_comments' => true,
+        'edit_pages' => true,
+        'edit_others_pages' => true,
+        'edit_published_pages' => true,
+        'publish_pages' => true,
+        'delete_pages' => true,
+        'delete_others_pages' => true,
+        'delete_published_pages' => true,
     ));
     
-    // Community Member role (default)
+    // Committee role - Committee member access
+    add_role('committee', 'Committee', array(
+        'read' => true,
+        'edit_posts' => true,
+        'delete_posts' => true,
+        'publish_posts' => true,
+        'upload_files' => true,
+        'edit_published_posts' => true,
+        'delete_published_posts' => true,
+        'moderate_comments' => true,
+        'edit_pages' => true,
+        'edit_published_pages' => true,
+        'publish_pages' => true,
+    ));
+    
+    // Staff role - Staff member access
+    add_role('staff', 'Staff', array(
+        'read' => true,
+        'edit_posts' => true,
+        'delete_posts' => true,
+        'publish_posts' => true,
+        'upload_files' => true,
+        'edit_published_posts' => true,
+        'delete_published_posts' => true,
+        'edit_pages' => true,
+        'edit_published_pages' => true,
+    ));
+    
+    // DOV role - Department of Villages access
+    add_role('dov', 'DOV', array(
+        'read' => true,
+        'edit_posts' => true,
+        'delete_posts' => true,
+        'publish_posts' => true,
+        'upload_files' => true,
+        'edit_published_posts' => true,
+        'delete_published_posts' => true,
+        'moderate_comments' => true,
+        'edit_pages' => true,
+        'edit_published_pages' => true,
+        'publish_pages' => true,
+    ));
+    
+    // Partner role - Business partner access
+    add_role('partner', 'Partner', array(
+        'read' => true,
+        'edit_posts' => true,
+        'delete_posts' => true,
+        'publish_posts' => true,
+        'upload_files' => true,
+        'edit_published_posts' => true,
+        'delete_published_posts' => true,
+        'edit_pages' => true,
+        'edit_published_pages' => true,
+    ));
+    
+    // Community Member role (default for residents)
     add_role('community_member', 'Community Member', array(
         'read' => true,
         'edit_posts' => false,
@@ -146,31 +231,67 @@ function villa_add_custom_profile_fields() {
         return;
     }
     
+    // Add role selection field
+    echo '<div class="um-field um-field-select um-field-user_role_preference">';
+    echo '<div class="um-field-label"><label for="user_role_preference">Role Type</label></div>';
+    echo '<div class="um-field-area">';
+    echo '<select name="user_role_preference" id="user_role_preference">';
+    echo '<option value="">Select your role...</option>';
+    echo '<option value="community_member">Community Member</option>';
+    echo '<option value="partner">Business Partner</option>';
+    echo '<option value="staff">Staff Member</option>';
+    echo '<option value="committee">Committee Member</option>';
+    echo '<option value="dov">Department of Villages</option>';
+    echo '<option value="bod">Board of Directors</option>';
+    echo '<option value="owner">Owner</option>';
+    echo '</select>';
+    echo '<div class="um-field-description">Note: Higher-level roles require approval.</div>';
+    echo '</div></div>';
+    
     // Add property interest field
     echo '<div class="um-field um-field-select um-field-property_interest">';
     echo '<div class="um-field-label"><label for="property_interest">Property Interest</label></div>';
     echo '<div class="um-field-area">';
     echo '<select name="property_interest" id="property_interest">';
     echo '<option value="">Select your interest...</option>';
-    echo '<option value="buying">Buying Property</option>';
-    echo '<option value="selling">Selling Property</option>';
-    echo '<option value="renting">Renting Property</option>';
-    echo '<option value="investing">Property Investment</option>';
+    echo '<option value="owner">Property Owner</option>';
+    echo '<option value="buyer">Looking to Buy</option>';
+    echo '<option value="seller">Looking to Sell</option>';
+    echo '<option value="renter">Looking to Rent</option>';
+    echo '<option value="investor">Property Investment</option>';
+    echo '<option value="resident">Current Resident</option>';
     echo '</select>';
     echo '</div></div>';
     
     // Add business type field
     echo '<div class="um-field um-field-select um-field-business_type">';
-    echo '<div class="um-field-label"><label for="business_type">Business Type</label></div>';
+    echo '<div class="um-field-label"><label for="business_type">Business Type (if applicable)</label></div>';
     echo '<div class="um-field-area">';
     echo '<select name="business_type" id="business_type">';
     echo '<option value="">Select business type...</option>';
-    echo '<option value="restaurant">Restaurant</option>';
-    echo '<option value="retail">Retail</option>';
-    echo '<option value="service">Service</option>';
+    echo '<option value="restaurant">Restaurant/Food Service</option>';
+    echo '<option value="retail">Retail/Shopping</option>';
+    echo '<option value="service">Professional Service</option>';
     echo '<option value="healthcare">Healthcare</option>';
     echo '<option value="education">Education</option>';
+    echo '<option value="recreation">Recreation/Entertainment</option>';
+    echo '<option value="maintenance">Maintenance/Repair</option>';
+    echo '<option value="real_estate">Real Estate</option>';
     echo '<option value="other">Other</option>';
+    echo '</select>';
+    echo '</div></div>';
+    
+    // Add community involvement field
+    echo '<div class="um-field um-field-select um-field-community_involvement">';
+    echo '<div class="um-field-label"><label for="community_involvement">Community Involvement</label></div>';
+    echo '<div class="um-field-area">';
+    echo '<select name="community_involvement" id="community_involvement">';
+    echo '<option value="">Select involvement level...</option>';
+    echo '<option value="active">Very Active</option>';
+    echo '<option value="moderate">Moderately Active</option>';
+    echo '<option value="occasional">Occasional Participation</option>';
+    echo '<option value="observer">Observer/Lurker</option>';
+    echo '<option value="new">New to Community</option>';
     echo '</select>';
     echo '</div></div>';
 }
@@ -313,18 +434,51 @@ function villa_add_dashboard_widget() {
     echo '<h3>Welcome back, ' . $current_user->display_name . '!</h3>';
     
     switch ($user_role) {
-        case 'property_owner':
-            echo '<p>Manage your properties and connect with potential buyers.</p>';
-            echo '<a href="/wp-admin/edit.php?post_type=property" class="button">Manage Properties</a>';
+        case 'owner':
+            echo '<p>Full administrative access to Villa Community management.</p>';
+            echo '<a href="/wp-admin/" class="button">Admin Dashboard</a>';
+            echo '<a href="/wp-admin/users.php" class="button">Manage Users</a>';
             break;
             
-        case 'business_owner':
-            echo '<p>Promote your business and connect with the community.</p>';
+        case 'bod':
+            echo '<p>Board of Directors - Manage community governance and policies.</p>';
+            echo '<a href="/wp-admin/edit.php" class="button">Manage Content</a>';
+            echo '<a href="/wp-admin/edit.php?post_type=page" class="button">Manage Pages</a>';
+            break;
+            
+        case 'committee':
+            echo '<p>Committee Member - Contribute to community decisions and content.</p>';
+            echo '<a href="/wp-admin/edit.php" class="button">Manage Posts</a>';
+            echo '<a href="/wp-admin/edit-comments.php" class="button">Moderate Comments</a>';
+            break;
+            
+        case 'staff':
+            echo '<p>Staff Member - Manage day-to-day community operations.</p>';
+            echo '<a href="/wp-admin/edit.php" class="button">Manage Content</a>';
+            echo '<a href="/wp-admin/upload.php" class="button">Media Library</a>';
+            break;
+            
+        case 'dov':
+            echo '<p>Department of Villages - Official community oversight and management.</p>';
+            echo '<a href="/wp-admin/edit.php" class="button">Manage Posts</a>';
+            echo '<a href="/wp-admin/edit.php?post_type=page" class="button">Manage Pages</a>';
+            break;
+            
+        case 'partner':
+            echo '<p>Business Partner - Promote your services to the community.</p>';
             echo '<a href="/wp-admin/edit.php?post_type=business" class="button">Manage Business</a>';
+            echo '<a href="/wp-admin/edit.php" class="button">Create Content</a>';
+            break;
+            
+        case 'community_member':
+            echo '<p>Community Member - Explore and engage with Villa Community.</p>';
+            echo '<a href="/properties" class="button">Browse Properties</a>';
+            echo '<a href="/businesses" class="button">Browse Businesses</a>';
+            echo '<a href="/members" class="button">Community Directory</a>';
             break;
             
         default:
-            echo '<p>Explore properties and businesses in your community.</p>';
+            echo '<p>Welcome to Villa Community!</p>';
             echo '<a href="/properties" class="button">Browse Properties</a>';
             echo '<a href="/businesses" class="button">Browse Businesses</a>';
     }

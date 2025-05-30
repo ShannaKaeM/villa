@@ -411,41 +411,150 @@ function mi_register_article_fields() {
 add_action('cmb2_admin_init', 'mi_register_article_fields');
 
 /**
- * Register User Profile Fields
+ * Register User Profile fields for User Profile CPT
  */
 function mi_register_user_profile_fields() {
-    if (!function_exists('new_cmb2_box')) {
-        return;
-    }
-
     $user_box = new_cmb2_box(array(
-        'id'           => 'user_profile',
-        'title'        => __('Additional Profile Information', 'migv'),
-        'object_types' => array('user'),
+        'id'           => 'user_profile_metabox',
+        'title'        => __('Profile Information', 'migv'),
+        'object_types' => array('user_profile'), 
+        'context'      => 'normal',
+        'priority'     => 'high',
         'show_names'   => true,
     ));
 
+    // Basic Contact Information
     $user_box->add_field(array(
         'name' => __('Phone Number', 'migv'),
-        'id'   => 'user_phone',
+        'id'   => 'profile_phone',
         'type' => 'text',
     ));
 
     $user_box->add_field(array(
+        'name' => __('Emergency Contact', 'migv'),
+        'id'   => 'profile_emergency_contact',
+        'type' => 'text',
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Emergency Phone', 'migv'),
+        'id'   => 'profile_emergency_phone',
+        'type' => 'text',
+    ));
+
+    // Villa Community Specific
+    $user_box->add_field(array(
+        'name' => __('Villa Community Roles', 'migv'),
+        'id'   => 'profile_villa_roles',
+        'type' => 'multicheck',
+        'options' => array(
+            'community_member' => __('Community Member', 'migv'),
+            'partner' => __('Business Partner', 'migv'),
+            'staff' => __('Staff Member', 'migv'),
+            'committee' => __('Committee Member', 'migv'),
+            'dov' => __('Department of Villages', 'migv'),
+            'bod' => __('Board of Directors', 'migv'),
+            'owner' => __('Owner', 'migv'),
+        ),
+        'desc' => __('Select all roles that apply to this user', 'migv'),
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Villa Address/Unit', 'migv'),
+        'id'   => 'profile_villa_address',
+        'type' => 'text',
+        'desc' => __('Your villa address or unit number', 'migv'),
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Move-in Date', 'migv'),
+        'id'   => 'profile_move_in_date',
+        'type' => 'text_date',
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Property Interest', 'migv'),
+        'id'   => 'profile_property_interest',
+        'type' => 'select',
+        'options' => array(
+            'owner' => __('Property Owner', 'migv'),
+            'buyer' => __('Looking to Buy', 'migv'),
+            'seller' => __('Looking to Sell', 'migv'),
+            'renter' => __('Looking to Rent', 'migv'),
+            'investor' => __('Property Investment', 'migv'),
+            'resident' => __('Current Resident', 'migv'),
+        ),
+    ));
+
+    // Professional Information
+    $user_box->add_field(array(
         'name' => __('Company', 'migv'),
-        'id'   => 'user_company',
+        'id'   => 'profile_company',
         'type' => 'text',
     ));
 
     $user_box->add_field(array(
         'name' => __('Job Title', 'migv'),
-        'id'   => 'user_job_title',
+        'id'   => 'profile_job_title',
         'type' => 'text',
     ));
 
     $user_box->add_field(array(
+        'name' => __('Business Type', 'migv'),
+        'id'   => 'profile_business_type',
+        'type' => 'select',
+        'options' => array(
+            '' => __('Select business type...', 'migv'),
+            'restaurant' => __('Restaurant/Food Service', 'migv'),
+            'retail' => __('Retail/Shopping', 'migv'),
+            'service' => __('Professional Service', 'migv'),
+            'healthcare' => __('Healthcare', 'migv'),
+            'education' => __('Education', 'migv'),
+            'recreation' => __('Recreation/Entertainment', 'migv'),
+            'maintenance' => __('Maintenance/Repair', 'migv'),
+            'real_estate' => __('Real Estate', 'migv'),
+            'other' => __('Other', 'migv'),
+        ),
+    ));
+
+    // Community Involvement
+    $user_box->add_field(array(
+        'name' => __('Community Involvement Level', 'migv'),
+        'id'   => 'profile_community_involvement',
+        'type' => 'select',
+        'options' => array(
+            'active' => __('Very Active', 'migv'),
+            'moderate' => __('Moderately Active', 'migv'),
+            'occasional' => __('Occasional Participation', 'migv'),
+            'observer' => __('Observer/Lurker', 'migv'),
+            'new' => __('New to Community', 'migv'),
+        ),
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Committee Memberships', 'migv'),
+        'id'   => 'profile_committees',
+        'type' => 'multicheck',
+        'options' => array(
+            'technology' => __('Technology & Marketing Committee', 'migv'),
+            'legal' => __('Legal & Governance Committee', 'migv'),
+            'grounds' => __('Grounds & Appearance Committee', 'migv'),
+            'budget' => __('Budget & Revenue Committee', 'migv'),
+            'operations' => __('Operations & Maintenance Committee', 'migv'),
+        ),
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Interests & Hobbies', 'migv'),
+        'id'   => 'profile_interests',
+        'type' => 'textarea_small',
+        'desc' => __('Share your interests and hobbies with the community', 'migv'),
+    ));
+
+    // Social Media
+    $user_box->add_field(array(
         'name' => __('Social Media Links', 'migv'),
-        'id'   => 'user_social_media',
+        'id'   => 'profile_social_media',
         'type' => 'group',
         'repeatable' => true,
         'options' => array(
@@ -456,7 +565,7 @@ function mi_register_user_profile_fields() {
         ),
     ));
 
-    $user_box->add_group_field('user_social_media', array(
+    $user_box->add_group_field('profile_social_media', array(
         'name' => __('Platform', 'migv'),
         'id'   => 'platform',
         'type' => 'select',
@@ -470,10 +579,30 @@ function mi_register_user_profile_fields() {
         ),
     ));
 
-    $user_box->add_group_field('user_social_media', array(
+    $user_box->add_group_field('profile_social_media', array(
         'name' => __('URL', 'migv'),
         'id'   => 'url',
         'type' => 'text_url',
+    ));
+
+    // Privacy Settings
+    $user_box->add_field(array(
+        'name' => __('Profile Visibility', 'migv'),
+        'id'   => 'profile_profile_visibility',
+        'type' => 'select',
+        'options' => array(
+            'public' => __('Public (visible to all)', 'migv'),
+            'members' => __('Members Only', 'migv'),
+            'private' => __('Private (only me)', 'migv'),
+        ),
+        'default' => 'members',
+    ));
+
+    $user_box->add_field(array(
+        'name' => __('Show Contact Information', 'migv'),
+        'id'   => 'profile_show_contact',
+        'type' => 'checkbox',
+        'desc' => __('Allow other members to see your contact information', 'migv'),
     ));
 }
 add_action('cmb2_admin_init', 'mi_register_user_profile_fields');
