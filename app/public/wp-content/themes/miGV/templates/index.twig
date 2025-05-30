@@ -1,0 +1,70 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <main id="primary" class="content-area">
+        {% if posts %}
+            <div class="posts-grid">
+                {% for post in posts %}
+                    <article class="post-card {{ post.post_type }}">
+                        {% if post.thumbnail %}
+                            <div class="post-thumbnail">
+                                <a href="{{ post.link }}">
+                                    <img src="{{ post.thumbnail.src('medium_large') }}" alt="{{ post.thumbnail.alt }}" />
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="post-content">
+                            <header class="entry-header">
+                                <h2 class="entry-title">
+                                    <a href="{{ post.link }}">{{ post.title }}</a>
+                                </h2>
+                                
+                                <div class="entry-meta">
+                                    <span class="posted-on">
+                                        <time datetime="{{ post.date|date('c') }}">{{ post.date }}</time>
+                                    </span>
+                                    {% if post.author %}
+                                        <span class="byline">
+                                            {{ __('by', 'migv') }} <a href="{{ post.author.link }}">{{ post.author.name }}</a>
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </header>
+
+                            {% if post.excerpt %}
+                                <div class="entry-summary">
+                                    {{ post.excerpt }}
+                                </div>
+                            {% endif %}
+                            
+                            <footer class="entry-footer">
+                                <a href="{{ post.link }}" class="read-more">
+                                    {{ __('Read More', 'migv') }}
+                                </a>
+                            </footer>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {% if pagination %}
+                <nav class="pagination">
+                    {{ pagination }}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="no-posts">
+                <h2>{{ __('Nothing here', 'migv') }}</h2>
+                <p>{{ __('It seems we can\'t find what you\'re looking for. Perhaps searching can help.', 'migv') }}</p>
+                {{ searchform }}
+            </div>
+        {% endif %}
+    </main>
+
+    {% if sidebar %}
+        <aside id="secondary" class="widget-area">
+            {{ sidebar }}
+        </aside>
+    {% endif %}
+{% endblock %}

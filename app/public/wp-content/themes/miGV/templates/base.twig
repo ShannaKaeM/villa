@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html {{ site.language_attributes }}>
+<head>
+    <meta charset="{{ site.charset }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    {{ wp_head() }}
+</head>
+
+<body class="{{ body_class }}">
+    {{ wp_body_open() }}
+    
+    <div id="page" class="site">
+        <a class="skip-link screen-reader-text" href="#primary">{{ __('Skip to content', 'migv') }}</a>
+
+        <header id="masthead" class="site-header">
+            <div class="container">
+                <div class="site-branding">
+                    {% if site.custom_logo %}
+                        <div class="site-logo">
+                            {{ site.custom_logo }}
+                        </div>
+                    {% endif %}
+                    
+                    {% if site.name %}
+                        <h1 class="site-title">
+                            <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
+                        </h1>
+                    {% endif %}
+                    
+                    {% if site.description %}
+                        <p class="site-description">{{ site.description }}</p>
+                    {% endif %}
+                </div>
+
+                <nav id="site-navigation" class="main-navigation">
+                    <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+                        <span class="sr-only">{{ __('Menu', 'migv') }}</span>
+                        <span class="hamburger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
+                    
+                    {% if menu %}
+                        {{ menu.get_items }}
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        <div id="content" class="site-content">
+            <div class="container">
+                {% block content %}
+                    Sorry, no content
+                {% endblock %}
+            </div>
+        </div>
+
+        <footer id="colophon" class="site-footer">
+            <div class="container">
+                {% if footer_widgets %}
+                    <div class="footer-widgets">
+                        {{ footer_widgets }}
+                    </div>
+                {% endif %}
+                
+                <div class="site-info">
+                    {% if footer_menu %}
+                        <nav class="footer-navigation">
+                            {{ footer_menu.get_items }}
+                        </nav>
+                    {% endif %}
+                    
+                    <div class="footer-copyright">
+                        {% if theme_options.copyright_text %}
+                            {{ theme_options.copyright_text }}
+                        {% else %}
+                            <p>&copy; {{ "now"|date("Y") }} {{ site.name }}. {{ __('All rights reserved.', 'migv') }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    {{ wp_footer() }}
+</body>
+</html>

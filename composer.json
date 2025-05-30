@@ -1,0 +1,26 @@
+{
+    "name": "miagency/villa-community",
+    "description": "Villa Community WordPress project with Timber and CMB2",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "timber/timber": "^2.0",
+        "cmb2/cmb2": "^2.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "VillaCommunity\\": "app/public/wp-content/mu-plugins/src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "extra": {
+        "installer-paths": {
+            "app/public/wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+            "app/public/wp-content/themes/{$name}/": ["type:wordpress-theme"]
+        }
+    }
+}
