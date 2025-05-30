@@ -658,12 +658,20 @@ function villa_render_dashboard($user, $user_roles) {
                     <?php
                     // Simplified switch - only Profile for testing
                     switch ($current_tab) {
+                        case 'properties':
+                            if (villa_user_can_access_properties($user_roles)) {
+                                villa_render_dashboard_properties($user);
+                            } else {
+                                echo '<div class="dashboard-no-access">You do not have permission to access properties.</div>';
+                            }
+                            break;
+                            
                         case 'profile':
                             villa_render_dashboard_profile($user);
                             break;
                         
                         default:
-                            echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Click Profile to get started.</div>';
+                            echo '<div class="dashboard-welcome">Welcome to your Villa Community dashboard! Navigate using the sidebar.</div>';
                     }
                     ?>
                 </div>

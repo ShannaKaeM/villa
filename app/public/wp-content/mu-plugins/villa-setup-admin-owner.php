@@ -53,7 +53,7 @@ function villa_setup_admin_as_owner() {
         'post_content' => 'This is a test property for the admin user to test the property management system.',
         'post_status' => 'publish',
         'post_type' => 'property',
-        'post_author' => $admin_user_id
+        'post_author' => 1 // System/admin creates property, but ownership is tracked separately
     );
     
     $property_id = wp_insert_post($property_data);
