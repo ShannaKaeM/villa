@@ -437,40 +437,21 @@ function villa_dashboard_shortcode($atts) {
     $user = wp_get_current_user();
     $user_roles = villa_get_user_villa_roles($user->ID);
     
-    // For admin users, create test profile data if it doesn't exist
+    // For admin users, assign owner and bod roles if they don't have any villa roles
     if (current_user_can('administrator') && empty($user_roles)) {
-        villa_create_test_profile_for_admin($user->ID);
+        villa_assign_admin_villa_roles($user->ID);
         $user_roles = villa_get_user_villa_roles($user->ID);
     }
     
-    // Admin test mode activation
-    if (current_user_can('administrator') && isset($_GET['admin_test_owner'])) {
-        villa_admin_test_as_owner($user->ID);
-        $user_roles = array_merge($user_roles, array('owner', 'bod'));
-    }
-    
-    // Allow admin users to bypass role check for testing
+    // Check if user has access
     if (empty($user_roles) && !current_user_can('administrator')) {
         return '<div class="villa-dashboard-no-access">Your account does not have access to the dashboard. Please contact an administrator.</div>';
     }
     
     // Ensure CSS is loaded
     wp_enqueue_style('villa-dashboard-styles');
-    
+
     ob_start();
-    
-    // Add admin test notice
-    if (current_user_can('administrator')) {
-        echo '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; margin-bottom: 20px; border-radius: 4px;">';
-        echo '<strong>Admin Test Mode:</strong> ';
-        if (get_user_meta($user->ID, 'villa_test_roles', true)) {
-            echo 'You are testing as an Owner. ';
-            echo '<a href="' . remove_query_arg('admin_test_owner') . '" style="color: #856404;">Exit Test Mode</a>';
-        } else {
-            echo '<a href="' . add_query_arg('admin_test_owner', '1') . '" style="color: #856404;">Test as Owner</a>';
-        }
-        echo '</div>';
-    }
     
     // Add a simple test to make sure we're rendering
     echo '<!-- Villa Dashboard Starting -->';
@@ -687,14 +668,6 @@ function villa_render_dashboard($user, $user_roles) {
 function villa_user_can_access_properties($user_roles) {
     $allowed_roles = array('owner', 'bod', 'staff', 'property_manager');
     
-    // Check if admin is testing as owner
-    if (current_user_can('administrator')) {
-        $test_roles = get_user_meta(get_current_user_id(), 'villa_test_roles', true);
-        if (is_array($test_roles)) {
-            $user_roles = array_merge($user_roles, $test_roles);
-        }
-    }
-    
     return !empty(array_intersect($user_roles, $allowed_roles));
 }
 
@@ -779,6 +752,57 @@ function villa_get_user_profile($user_id) {
 }
 
 /**
+ * Assign admin villa roles
+ */
+function villa_assign_admin_villa_roles($user_id) {
+    $profile = villa_get_user_profile($user_id);
+    if (!$profile) {
+        $profile = array(
+            'post_title' => 'Admin Profile',
+            'post_content' => '',
+            'post_status' => 'publish',
+            'post_type' => 'user_profile',
+            'meta_input' => array(
+                'profile_user_id' => $user_id,
+                'profile_villa_roles' => array('owner' => true, 'bod' => true)
+            )
+        );
+        $profile_id = wp_insert_post($profile);
+    } else {
+        update_post_meta($profile->ID, 'profile_villa_roles', array('owner' => true, 'bod' => true));
+    }
+    
+    // Assign admin to some existing properties for testing
+    villa_assign_admin_to_properties($user_id);
+}
+
+/**
+ * Assign admin to existing properties
+ */
+function villa_assign_admin_to_properties($user_id) {
+    // Get existing properties
+    $properties = get_posts(array(
+        'post_type' => 'property',
+        'posts_per_page' => 5, // Assign to first 5 properties
+        'post_status' => 'publish'
+    ));
+    
+    foreach ($properties as $property) {
+        // Get existing owners
+        $existing_owners = get_post_meta($property->ID, 'property_owners', true);
+        if (!is_array($existing_owners)) {
+            $existing_owners = array();
+        }
+        
+        // Add admin as owner if not already assigned
+        if (!in_array($user_id, $existing_owners)) {
+            $existing_owners[] = $user_id;
+            update_post_meta($property->ID, 'property_owners', $existing_owners);
+        }
+    }
+}
+
+/**
  * Get unread announcements count for user
  */
 function villa_get_unread_announcements_count($user_id) {
@@ -809,109 +833,6 @@ function villa_get_unread_announcements_count($user_id) {
 function villa_render_recent_activity($user_id) {
     // Get recent tickets, property updates, etc.
     echo '<p>Recent activity will be displayed here...</p>';
-}
-
-/**
- * Create test profile data for admin users
- */
-function villa_create_test_profile_for_admin($user_id) {
-    // Create a test profile for the admin user
-    $profile = array(
-        'post_title' => 'Admin Test Profile',
-        'post_content' => '',
-        'post_status' => 'publish',
-        'post_type' => 'user_profile',
-        'meta_input' => array(
-            'profile_user_id' => $user_id,
-            'profile_villa_roles' => array('owner' => true, 'bod' => true)
-        )
-    );
-    
-    $profile_id = wp_insert_post($profile);
-    
-    // Add some test properties for the admin user
-    $property = array(
-        'post_title' => 'Admin Test Property',
-        'post_content' => '',
-        'post_status' => 'publish',
-        'post_type' => 'property',
-        'meta_input' => array(
-            'property_user_id' => $user_id,
-            'property_listing_status' => 'for_sale'
-        )
-    );
-    
-    $property_id = wp_insert_post($property);
-}
-
-/**
- * Allow admin to test as owner - adds owner role temporarily
- */
-function villa_admin_test_as_owner($user_id) {
-    if (current_user_can('administrator')) {
-        // Add owner role to user meta for testing
-        update_user_meta($user_id, 'villa_test_roles', array('owner', 'bod'));
-        
-        // Create sample properties if none exist
-        $existing_properties = villa_get_user_properties($user_id);
-        if (empty($existing_properties)) {
-            villa_create_sample_properties_for_admin($user_id);
-        }
-        
-        return true;
-    }
-    return false;
-}
-
-/**
- * Create sample properties for admin testing
- */
-function villa_create_sample_properties_for_admin($user_id) {
-    $sample_properties = array(
-        array(
-            'title' => '123 Villa Lane - Main Residence',
-            'address' => '123 Villa Lane, Villa Community',
-            'type' => 'single_family',
-            'bedrooms' => 3,
-            'bathrooms' => 2.5,
-            'square_feet' => 2200,
-            'listing_status' => 'not_listed'
-        ),
-        array(
-            'title' => '456 Community Drive - Investment Property',
-            'address' => '456 Community Drive, Villa Community',
-            'type' => 'townhouse',
-            'bedrooms' => 2,
-            'bathrooms' => 2,
-            'square_feet' => 1800,
-            'listing_status' => 'for_rent'
-        )
-    );
-    
-    foreach ($sample_properties as $prop_data) {
-        $property = array(
-            'post_title' => $prop_data['title'],
-            'post_content' => 'Sample property for testing the Villa Community dashboard.',
-            'post_status' => 'publish',
-            'post_type' => 'property',
-            'post_author' => $user_id
-        );
-        
-        $property_id = wp_insert_post($property);
-        
-        if ($property_id && !is_wp_error($property_id)) {
-            // Add property meta
-            update_post_meta($property_id, 'property_address', $prop_data['address']);
-            update_post_meta($property_id, 'property_type', $prop_data['type']);
-            update_post_meta($property_id, 'property_bedrooms', $prop_data['bedrooms']);
-            update_post_meta($property_id, 'property_bathrooms', $prop_data['bathrooms']);
-            update_post_meta($property_id, 'property_square_feet', $prop_data['square_feet']);
-            update_post_meta($property_id, 'property_listing_status', $prop_data['listing_status']);
-            
-            // Set property owners (multiple owners supported)
-            update_post_meta($property_id, 'property_owners', array($user_id));
-        }
-    }
 }
 
 /**
@@ -1025,3 +946,58 @@ function villa_ajax_mark_announcement_read() {
     wp_send_json_success();
 }
 add_action('wp_ajax_villa_mark_announcement_read', 'villa_ajax_mark_announcement_read');
+
+/**
+ * Add admin menu for villa role management
+ */
+add_action('admin_menu', function() {
+    add_management_page(
+        'Villa Role Assignment',
+        'Villa Roles',
+        'manage_options',
+        'villa-role-assignment',
+        'villa_role_assignment_admin_page'
+    );
+});
+
+/**
+ * Admin page for villa role assignment
+ */
+function villa_role_assignment_admin_page() {
+    if (!current_user_can('manage_options')) {
+        wp_die('You do not have sufficient permissions to access this page.');
+    }
+    
+    $user = wp_get_current_user();
+    
+    // Handle form submission
+    if (isset($_POST['assign_roles']) && wp_verify_nonce($_POST['_wpnonce'], 'assign_villa_roles')) {
+        villa_assign_admin_villa_roles($user->ID);
+        echo '<div class="notice notice-success"><p><strong>Success!</strong> Villa roles assigned. You now have Owner and BOD access.</p></div>';
+    }
+    
+    $user_roles = villa_get_user_villa_roles($user->ID);
+    
+    echo '<div class="wrap">';
+    echo '<h1>Villa Role Assignment</h1>';
+    
+    echo '<div class="card">';
+    echo '<h2>Current Villa Roles</h2>';
+    if (!empty($user_roles)) {
+        echo '<p><strong>Your current villa roles:</strong> ' . implode(', ', array_keys(array_filter($user_roles))) . '</p>';
+    } else {
+        echo '<p>You currently have no villa roles assigned.</p>';
+    }
+    echo '</div>';
+    
+    echo '<div class="card">';
+    echo '<h2>Assign Villa Roles</h2>';
+    echo '<p>This will assign you Owner and BOD roles, and link you to existing properties for testing.</p>';
+    echo '<form method="post">';
+    wp_nonce_field('assign_villa_roles');
+    echo '<p><input type="submit" name="assign_roles" class="button button-primary" value="Assign Villa Roles" /></p>';
+    echo '</form>';
+    echo '</div>';
+    
+    echo '</div>';
+}
