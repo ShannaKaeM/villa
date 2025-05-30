@@ -204,6 +204,256 @@ Every CMB2 field includes:
 
 ---
 
+## 📁 **AI-Powered Live Editor Tech Stack & Workflow**
+
+### **Data Layer (Foundation)**
+```
+CMB2 Fields (Enhanced) → JSON API → React UI → Live Preview
+```
+
+#### **CMB2 Enhanced System**
+- **Custom CMB2 Field Types** - Daniel's page builder field extension
+- **JSON-Friendly Structure** - All data serializable for AI/API
+- **Data Attributes** - Live-editing target selectors
+- **Field Metadata** - AI generation hints and validation
+
+#### **Storage & Retrieval**
+- **WordPress Meta Tables** - Primary data storage
+- **REST API Endpoints** - Real-time data access
+- **WebSocket/PostMessage** - Live updates
+- **Version Control** - Change tracking for AI learning
+
+### **Presentation Layer**
+```
+Twig Templates → Web Components → Live DOM → AI Targets
+```
+
+#### **Template System**
+- **Timber/Twig** - Server-side rendering
+- **Component Templates** - Reusable UI blocks
+- **Data Binding** - CMB2 field → Template variable mapping
+- **CSS Custom Properties** - Theme integration
+
+#### **Frontend Components**
+- **Web Components** - Encapsulated UI elements
+- **CSS Grid/Flexbox** - Responsive layouts
+- **Theme Integration** - Uses theme.json variables
+- **Progressive Enhancement** - Works without JS
+
+### **Interface Layer**
+```
+Click Detection → Sidebar UI → Field Updates → Live Preview
+```
+
+#### **Live Editor Interface**
+- **React Sidebar** - Dynamic field rendering
+- **Click Overlay System** - Component selection
+- **Responsive Switcher** - Breakpoint testing
+- **Real-time Updates** - No page refresh needed
+
+#### **AI Integration**
+- **Agent Communication** - API endpoints for AI
+- **Content Generation** - Text, images, layouts
+- **Context Awareness** - Site data, user preferences
+- **Learning System** - Improves over time
+
+---
+
+## 🛠️ **Development Workflow**
+
+### **1. Component Creation Process**
+
+#### **Step 1: Define CMB2 Fields**
+```php
+// Enhanced CMB2 with Daniel's page builder field
+$cmb->add_field(array(
+    'name' => 'Hero Section',
+    'id' => 'hero_content',
+    'type' => 'page_builder', // Daniel's custom field
+    'ai_hints' => array(
+        'generate' => 'hero_content',
+        'context' => 'business_landing'
+    ),
+    'live_target' => '[data-component="hero"]'
+));
+```
+
+#### **Step 2: Create Twig Template**
+```twig
+{# hero-section.twig #}
+<section class="hero" data-component="hero" data-cmb2-field="hero_content">
+    <h1 data-field="title">{{ hero.title }}</h1>
+    <p data-field="subtitle">{{ hero.subtitle }}</p>
+    <a href="{{ hero.cta_url }}" data-field="cta">{{ hero.cta_text }}</a>
+</section>
+```
+
+#### **Step 3: Register Component**
+```php
+// Auto-registration via CMB2 enhanced system
+villa_register_component('hero_section', array(
+    'template' => 'hero-section.twig',
+    'fields' => 'hero_content',
+    'category' => 'layout',
+    'ai_enabled' => true
+));
+```
+
+### **2. Live Editing Workflow**
+
+#### **User Interaction Flow**
+1. **Click Component** → Overlay highlights, sidebar opens
+2. **Edit Fields** → React form renders CMB2 fields
+3. **Real-time Update** → Changes apply instantly via DOM manipulation
+4. **Save Changes** → Data persists to WordPress meta tables
+
+#### **AI Generation Flow**
+1. **Context Analysis** → AI reads site data, user intent
+2. **Content Generation** → AI creates field values
+3. **Live Preview** → Generated content appears instantly
+4. **User Refinement** → Human can edit AI suggestions
+
+### **3. Responsive Design Workflow**
+
+#### **Breakpoint System**
+```css
+/* CSS Custom Properties for responsive design */
+:root {
+    --mobile-max: 768px;
+    --tablet-max: 1024px;
+    --desktop-min: 1025px;
+}
+
+[data-component] {
+    /* Base styles */
+}
+
+@media (max-width: var(--mobile-max)) {
+    [data-component] {
+        /* Mobile overrides */
+    }
+}
+```
+
+#### **Live Responsive Testing**
+- **Breakpoint Switcher** - Toggle between device sizes
+- **Real-time Resize** - See changes across all breakpoints
+- **Device Simulation** - Accurate mobile/tablet preview
+
+---
+
+## 🔧 **Technical Stack**
+
+### **Backend (WordPress)**
+- **WordPress Core** - CMS foundation
+- **CMB2 Enhanced** - Daniel's page builder extension
+- **Timber/Twig** - Template engine
+- **Custom Post Types** - Content structure
+- **REST API** - Data endpoints
+- **WebSocket Support** - Real-time communication
+
+### **Frontend (Live Editor)**
+- **React 18+** - UI framework
+- **Web Components** - Reusable elements
+- **CSS Custom Properties** - Theme integration
+- **PostMessage API** - Cross-frame communication
+- **Service Workers** - Offline capabilities
+
+### **AI Integration**
+- **OpenAI API** - Content generation
+- **Custom AI Agents** - Specialized tasks
+- **Context Processors** - Site data analysis
+- **Learning Algorithms** - Improvement over time
+
+### **Development Tools**
+- **Composer** - PHP dependency management
+- **npm/Yarn** - JavaScript packages
+- **Webpack/Vite** - Asset bundling
+- **Git** - Version control
+- **Local by Flywheel** - Development environment
+
+---
+
+## 📁 **File Structure**
+
+```
+wp-content/
+├── themes/your-theme/
+│   ├── templates/           # Twig templates
+│   ├── assets/             # CSS, JS, images
+│   └── theme.json          # Theme configuration
+├── mu-plugins/
+│   ├── ai-live-editor/     # Main plugin
+│   │   ├── core/           # CMB2 enhancements
+│   │   ├── components/     # Component definitions
+│   │   ├── api/           # REST endpoints
+│   │   └── ai/            # AI integration
+│   └── project-specific/   # Custom functionality
+└── uploads/ai-cache/       # AI-generated content cache
+```
+
+---
+
+## 🚀 **Implementation Strategy**
+
+### **Phase 1: Foundation (Current)**
+- ✅ CMB2 field definitions with data attributes
+- ✅ Twig template system
+- ✅ Component registration system
+- ✅ Theme integration
+
+### **Phase 2: Live Editor Core**
+- React sidebar interface
+- Click-to-edit overlay system
+- Real-time field updates
+- Responsive breakpoint switcher
+
+### **Phase 3: AI Integration**
+- AI agent communication layer
+- Content generation endpoints
+- Context-aware suggestions
+- Learning and improvement system
+
+### **Phase 4: Advanced Features**
+- Multi-site management
+- Version control and rollback
+- Performance optimization
+- Plugin marketplace integration
+
+---
+
+## 🎯 **Key Principles**
+
+### **AI-First Design**
+- Every field has AI generation capability
+- Context-aware content suggestions
+- Learning from user preferences
+- Seamless human-AI collaboration
+
+### **Developer Experience**
+- Minimal code approach
+- JSON-friendly architecture
+- Familiar CMB2 syntax
+- Easy component creation
+
+### **User Experience**
+- Live visual editing
+- No page refresh needed
+- Intuitive click-to-edit
+- Responsive design testing
+
+### **Performance**
+- Lazy loading components
+- Efficient DOM updates
+- Cached AI responses
+- Optimized asset delivery
+
+---
+
+This architecture provides a solid foundation for Daniel's vision while maintaining compatibility with existing WordPress workflows and enabling seamless AI integration.
+
+---
+
 **Last Updated:** May 30, 2025  
 **Next Review:** When Daniel begins live editor integration  
 **Contact:** Shanna & Daniel for architecture decisions
