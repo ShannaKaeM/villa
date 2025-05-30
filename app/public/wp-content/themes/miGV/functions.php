@@ -351,6 +351,35 @@ function migv_register_block_category($categories) {
 add_filter('block_categories_all', 'migv_register_block_category');
 
 /**
+ * Custom page templates for membership pages
+ */
+function migv_custom_page_templates($template) {
+    if (is_page()) {
+        global $post;
+        $page_slug = $post->post_name;
+        
+        // Check for custom Twig templates
+        $custom_templates = array(
+            'login' => 'page-login.twig',
+            'register' => 'page-register.twig', 
+            'members' => 'page-members.twig',
+            'user' => 'page-profile.twig'
+        );
+        
+        if (isset($custom_templates[$page_slug])) {
+            $context = Timber::context();
+            $context['post'] = new Timber\Post();
+            
+            Timber::render($custom_templates[$page_slug], $context);
+            exit;
+        }
+    }
+    
+    return $template;
+}
+add_filter('template_include', 'migv_custom_page_templates');
+
+/**
  * Include required files
  */
 require get_template_directory() . '/inc/template-functions.php';
