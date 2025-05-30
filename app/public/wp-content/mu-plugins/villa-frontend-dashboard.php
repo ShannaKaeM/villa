@@ -443,6 +443,12 @@ function villa_dashboard_shortcode($atts) {
         $user_roles = villa_get_user_villa_roles($user->ID);
     }
     
+    // Admin test mode activation
+    if (current_user_can('administrator') && isset($_GET['admin_test_owner'])) {
+        villa_admin_test_as_owner($user->ID);
+        $user_roles = array_merge($user_roles, array('owner', 'bod'));
+    }
+    
     // Allow admin users to bypass role check for testing
     if (empty($user_roles) && !current_user_can('administrator')) {
         return '<div class="villa-dashboard-no-access">Your account does not have access to the dashboard. Please contact an administrator.</div>';
@@ -452,6 +458,19 @@ function villa_dashboard_shortcode($atts) {
     wp_enqueue_style('villa-dashboard-styles');
     
     ob_start();
+    
+    // Add admin test notice
+    if (current_user_can('administrator')) {
+        echo '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; margin-bottom: 20px; border-radius: 4px;">';
+        echo '<strong>Admin Test Mode:</strong> ';
+        if (get_user_meta($user->ID, 'villa_test_roles', true)) {
+            echo 'You are testing as an Owner. ';
+            echo '<a href="' . remove_query_arg('admin_test_owner') . '" style="color: #856404;">Exit Test Mode</a>';
+        } else {
+            echo '<a href="' . add_query_arg('admin_test_owner', '1') . '" style="color: #856404;">Test as Owner</a>';
+        }
+        echo '</div>';
+    }
     
     // Add a simple test to make sure we're rendering
     echo '<!-- Villa Dashboard Starting -->';
@@ -659,6 +678,15 @@ function villa_render_dashboard($user, $user_roles) {
  */
 function villa_user_can_access_properties($user_roles) {
     $allowed_roles = array('owner', 'bod', 'staff', 'property_manager');
+    
+    // Check if admin is testing as owner
+    if (current_user_can('administrator')) {
+        $test_roles = get_user_meta(get_current_user_id(), 'villa_test_roles', true);
+        if (is_array($test_roles)) {
+            $user_roles = array_merge($user_roles, $test_roles);
+        }
+    }
+    
     return !empty(array_intersect($user_roles, $allowed_roles));
 }
 
@@ -806,6 +834,76 @@ function villa_create_test_profile_for_admin($user_id) {
     );
     
     $property_id = wp_insert_post($property);
+}
+
+/**
+ * Allow admin to test as owner - adds owner role temporarily
+ */
+function villa_admin_test_as_owner($user_id) {
+    if (current_user_can('administrator')) {
+        // Add owner role to user meta for testing
+        update_user_meta($user_id, 'villa_test_roles', array('owner', 'bod'));
+        
+        // Create sample properties if none exist
+        $existing_properties = villa_get_user_properties($user_id);
+        if (empty($existing_properties)) {
+            villa_create_sample_properties_for_admin($user_id);
+        }
+        
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Create sample properties for admin testing
+ */
+function villa_create_sample_properties_for_admin($user_id) {
+    $sample_properties = array(
+        array(
+            'title' => '123 Villa Lane - Main Residence',
+            'address' => '123 Villa Lane, Villa Community',
+            'type' => 'single_family',
+            'bedrooms' => 3,
+            'bathrooms' => 2.5,
+            'square_feet' => 2200,
+            'listing_status' => 'not_listed'
+        ),
+        array(
+            'title' => '456 Community Drive - Investment Property',
+            'address' => '456 Community Drive, Villa Community',
+            'type' => 'townhouse',
+            'bedrooms' => 2,
+            'bathrooms' => 2,
+            'square_feet' => 1800,
+            'listing_status' => 'for_rent'
+        )
+    );
+    
+    foreach ($sample_properties as $prop_data) {
+        $property = array(
+            'post_title' => $prop_data['title'],
+            'post_content' => 'Sample property for testing the Villa Community dashboard.',
+            'post_status' => 'publish',
+            'post_type' => 'property',
+            'post_author' => $user_id
+        );
+        
+        $property_id = wp_insert_post($property);
+        
+        if ($property_id && !is_wp_error($property_id)) {
+            // Add property meta
+            update_post_meta($property_id, 'property_address', $prop_data['address']);
+            update_post_meta($property_id, 'property_type', $prop_data['type']);
+            update_post_meta($property_id, 'property_bedrooms', $prop_data['bedrooms']);
+            update_post_meta($property_id, 'property_bathrooms', $prop_data['bathrooms']);
+            update_post_meta($property_id, 'property_square_feet', $prop_data['square_feet']);
+            update_post_meta($property_id, 'property_listing_status', $prop_data['listing_status']);
+            
+            // Set property owners (multiple owners supported)
+            update_post_meta($property_id, 'property_owners', array($user_id));
+        }
+    }
 }
 
 /**
