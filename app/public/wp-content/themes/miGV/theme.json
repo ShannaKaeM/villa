@@ -90,7 +90,7 @@
                 {
                     "slug": "primary-light",
                     "name": "Primary Light",
-                    "color": "#b7c3bf"
+                    "color": "#d6dcd6"
                 },
                 {
                     "slug": "primary",
@@ -135,27 +135,27 @@
                 {
                     "slug": "base-lightest",
                     "name": "Base Lightest",
-                    "color": "#ededed"
+                    "color": "#e6e6e6"
                 },
                 {
                     "slug": "base-light",
                     "name": "Base Light",
-                    "color": "#a2a2a2"
+                    "color": "#b3b3b3"
                 },
                 {
                     "slug": "base",
                     "name": "Base",
-                    "color": "#626262"
+                    "color": "#808080"
                 },
                 {
                     "slug": "base-dark",
                     "name": "Base Dark",
-                    "color": "#2b2b2a"
+                    "color": "#676765"
                 },
                 {
                     "slug": "base-darkest",
                     "name": "Base Darkest",
-                    "color": "#0f0f0f"
+                    "color": "#4d4d4d"
                 },
                 {
                     "slug": "extreme-light",
@@ -476,7 +476,7 @@
                     "text": "var(--wp--preset--color--primary)"
                 },
                 "typography": {
-                    "textDecoration": "none"sto
+                    "textDecoration": "none"
                 },
                 ":hover": {
                     "color": {

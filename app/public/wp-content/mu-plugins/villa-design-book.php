@@ -100,7 +100,7 @@ class VillaDesignBook {
             '🃏 Card Book',
             'manage_options',
             'villa-card-book',
-            array($this, 'render_card_book')
+            array($this, 'render_component_book')
         );
         
         // SECTIONS SUBMENU PAGES
@@ -161,7 +161,15 @@ class VillaDesignBook {
         $theme_json_path = get_template_directory() . '/theme.json';
         if (file_exists($theme_json_path)) {
             $content = file_get_contents($theme_json_path);
-            return json_decode($content, true);
+            $decoded = json_decode($content, true);
+            
+            // Debug: Check for JSON errors
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log('Theme JSON parse error: ' . json_last_error_msg());
+                error_log('Theme JSON path: ' . $theme_json_path);
+            }
+            
+            return $decoded ?: array();
         }
         return array();
     }
@@ -324,9 +332,11 @@ class VillaDesignBook {
             echo '<h4>' . ucfirst(str_replace('-', ' ', $group_name)) . '</h4>';
             echo '<div class="color-row">';
             
+            $found_colors = 0;
             foreach ($group_colors as $color_slug) {
                 $color_data = $this->find_color_by_slug($colors, $color_slug);
                 if ($color_data) {
+                    $found_colors++;
                     $this->render_color_swatch($color_data);
                 }
             }
@@ -789,67 +799,321 @@ class VillaDesignBook {
      * Render ButtonBook page
      */
     public function render_button_book() {
+        $theme_json = $this->get_theme_json_data();
+        
+        // Define button variants
+        $button_variants = [
+            'primary' => ['name' => 'Primary', 'description' => 'Main call-to-action buttons'],
+            'secondary' => ['name' => 'Secondary', 'description' => 'Secondary action buttons'],
+            'neutral' => ['name' => 'Neutral', 'description' => 'Neutral utility buttons'],
+            'base' => ['name' => 'Base', 'description' => 'Base styling buttons']
+        ];
+        
+        $button_sizes = [
+            'sm' => ['name' => 'Small', 'description' => 'Compact buttons for tight spaces'],
+            'md' => ['name' => 'Medium', 'description' => 'Standard button size'],
+            'lg' => ['name' => 'Large', 'description' => 'Prominent action buttons']
+        ];
+        
         ?>
-        <div class="wrap villa-button-book">
-            <h1>🖋️ ButtonBook</h1>
-            <p class="description">Design and customize buttons with various styles, sizes, and colors.</p>
+        <div class="wrap design-button-book">
+            <h1>🖋️ Button Book</h1>
+            <p class="description">Comprehensive button system showing variants, design token breakdown, and interactive builder.</p>
             
-            <div class="button-book-container">
-                <div class="button-book-editor">
-                    <div class="button-controls">
-                        <div class="variant-group">
-                            <h3>Button Settings</h3>
+            <!-- Tab Navigation -->
+            <div class="button-book-tabs">
+                <button class="tab-button active" data-tab="variants">Button Variants</button>
+                <button class="tab-button" data-tab="tokens">Design Token Breakdown</button>
+                <button class="tab-button" data-tab="builder">Interactive Builder</button>
+            </div>
+            
+            <!-- Tab 1: Button Variants Gallery -->
+            <div class="tab-content active" id="variants-tab">
+                <div class="button-variants-container">
+                    <h2>Button Variants Gallery</h2>
+                    <p class="section-description">All button combinations showing how design tokens create consistent button variants.</p>
+                    
+                    <?php foreach ($button_variants as $variant_key => $variant_data): ?>
+                        <div class="variant-section">
+                            <h3><?php echo $variant_data['name']; ?> Buttons</h3>
+                            <p class="variant-description"><?php echo $variant_data['description']; ?></p>
                             
-                            <div class="variant-controls">
-                                <div class="control-group">
-                                    <label for="button-text">Text</label>
-                                    <input type="text" id="button-text" class="variant-control" value="Default Button" placeholder="Enter button text">
-                                </div>
-                                
-                                <div class="control-group">
-                                    <label for="button-style">Style</label>
-                                    <select name="button-style" class="variant-control">
-                                        <option value="primary">Primary</option>
-                                        <option value="secondary">Secondary</option>
-                                        <option value="tertiary">Tertiary</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="control-group">
-                                    <label for="button-size">Size</label>
-                                    <select name="button-size" class="variant-control">
-                                        <option value="small">Small</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="large">Large</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="control-group">
-                                    <label for="button-color">Color</label>
-                                    <select name="button-color" class="variant-control">
-                                        <option value="primary">Primary</option>
-                                        <option value="secondary">Secondary</option>
-                                        <option value="neutral">Neutral</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="button-actions">
-                                <button type="button" id="save-button" class="button button-primary">Save Button</button>
-                                <button type="button" id="reset-button" class="button">Reset to Default</button>
+                            <div class="button-size-grid">
+                                <?php foreach ($button_sizes as $size_key => $size_data): ?>
+                                    <div class="button-example">
+                                        <div class="button-label">
+                                            <strong><?php echo $variant_data['name']; ?> <?php echo $size_data['name']; ?></strong>
+                                            <span class="button-class">.btn-<?php echo $variant_key; ?>-<?php echo $size_key; ?></span>
+                                        </div>
+                                        <div class="button-preview">
+                                            <?php 
+                                            // Use the Twig component
+                                            echo Timber::compile('components/element-books/button-book.twig', [
+                                                'variant' => $variant_key,
+                                                'size' => $size_key,
+                                                'content' => $size_data['name'] . ' Button'
+                                            ]);
+                                            ?>
+                                        </div>
+                                        <div class="button-specs">
+                                            <small>
+                                                Color: <?php echo $variant_key; ?> | 
+                                                Size: <?php echo $size_key; ?> |
+                                                Usage: <?php echo strtolower($size_data['description']); ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Design Token Breakdown -->
+            <div class="tab-content" id="tokens-tab">
+                <div class="token-breakdown-container">
+                    <h2>Design Token Breakdown</h2>
+                    <p class="section-description">See exactly which primitive design tokens combine to create each button variant.</p>
                     
-                    <div class="button-preview">
-                        <h3>Live Preview</h3>
-                        <div class="button-preview-container">
-                            <button class="villa-button" id="button-preview">Default Button</button>
+                    <div class="token-breakdown-grid">
+                        <?php foreach ($button_variants as $variant_key => $variant_data): ?>
+                            <?php foreach ($button_sizes as $size_key => $size_data): ?>
+                                <div class="token-breakdown-card">
+                                    <div class="breakdown-header">
+                                        <h4><?php echo $variant_data['name']; ?> <?php echo $size_data['name']; ?></h4>
+                                        <div class="token-preview">
+                                            <?php 
+                                            // Use the Twig component
+                                            echo Timber::compile('components/element-books/button-book.twig', [
+                                                'variant' => $variant_key,
+                                                'size' => $size_key,
+                                                'content' => 'Sample Button'
+                                            ]);
+                                            ?>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="token-list">
+                                        <div class="token-item">
+                                            <span class="token-label">Background Color:</span>
+                                            <code>var(--wp--preset--color--<?php echo $variant_key; ?>)</code>
+                                        </div>
+                                        <div class="token-item">
+                                            <span class="token-label">Text Color:</span>
+                                            <code>var(--wp--preset--color--white)</code>
+                                        </div>
+                                        <div class="token-item">
+                                            <span class="token-label">Font Size:</span>
+                                            <code>var(--wp--preset--font-size--<?php echo $size_key === 'md' ? 'medium' : $size_key; ?>)</code>
+                                        </div>
+                                        <div class="token-item">
+                                            <span class="token-label">Padding:</span>
+                                            <code>var(--wp--preset--spacing--<?php echo $size_key === 'sm' ? 'small' : ($size_key === 'lg' ? 'large' : 'medium'); ?>)</code>
+                                        </div>
+                                        <div class="token-item">
+                                            <span class="token-label">Border Radius:</span>
+                                            <code>var(--wp--preset--border-radius--small)</code>
+                                        </div>
+                                        <div class="token-item">
+                                            <span class="token-label">Font Weight:</span>
+                                            <code>var(--wp--preset--font-weight--semibold)</code>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="css-output">
+                                        <h5>Generated CSS:</h5>
+                                        <pre><code>.btn-<?php echo $variant_key; ?>-<?php echo $size_key; ?> {
+  background: var(--wp--preset--color--<?php echo $variant_key; ?>);
+  color: var(--wp--preset--color--white);
+  font-size: var(--wp--preset--font-size--<?php echo $size_key === 'md' ? 'medium' : $size_key; ?>);
+  padding: var(--wp--preset--spacing--<?php echo $size_key === 'sm' ? 'small' : ($size_key === 'lg' ? 'large' : 'medium'); ?>);
+  border-radius: var(--wp--preset--border-radius--small);
+  font-weight: var(--wp--preset--font-weight--semibold);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}</code></pre>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Interactive Builder -->
+            <div class="tab-content" id="builder-tab">
+                <div class="button-builder-container">
+                    <h2>Interactive Button Builder</h2>
+                    <p class="section-description">Build custom buttons by selecting design tokens and see the results in real-time.</p>
+                    
+                    <div class="builder-interface">
+                        <div class="builder-controls">
+                            <div class="control-group">
+                                <label for="builder-variant">Color Variant:</label>
+                                <select id="builder-variant">
+                                    <?php foreach ($button_variants as $variant_key => $variant_data): ?>
+                                        <option value="<?php echo $variant_key; ?>"><?php echo $variant_data['name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="builder-size">Button Size:</label>
+                                <select id="builder-size">
+                                    <?php foreach ($button_sizes as $size_key => $size_data): ?>
+                                        <option value="<?php echo $size_key; ?>" <?php echo $size_key === 'md' ? 'selected' : ''; ?>><?php echo $size_data['name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="builder-text">Button Text:</label>
+                                <input type="text" id="builder-text" value="Custom Button" placeholder="Enter button text">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="builder-style">Button Style:</label>
+                                <select id="builder-style">
+                                    <option value="filled">Filled</option>
+                                    <option value="outline">Outline</option>
+                                    <option value="ghost">Ghost</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="builder-preview">
+                            <h3>Live Preview</h3>
+                            <div class="preview-container">
+                                <div id="builder-button" class="design-button btn-primary-md">Custom Button</div>
+                            </div>
+                            
+                            <div class="preview-info">
+                                <h4>Current Configuration:</h4>
+                                <div class="config-display">
+                                    <div class="config-item">
+                                        <strong>Class:</strong> <code id="current-class">btn-primary-md</code>
+                                    </div>
+                                    <div class="config-item">
+                                        <strong>Variant:</strong> <span id="current-variant">Primary</span>
+                                    </div>
+                                    <div class="config-item">
+                                        <strong>Size:</strong> <span id="current-size">Medium</span>
+                                    </div>
+                                    <div class="config-item">
+                                        <strong>Style:</strong> <span id="current-style">Filled</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="code-output">
+                                <h4>HTML Code:</h4>
+                                <div class="code-block">
+                                    <pre><code id="html-output">&lt;button class="design-button btn-primary-md"&gt;Custom Button&lt;/button&gt;</code></pre>
+                                    <button class="copy-code" data-target="html-output">Copy HTML</button>
+                                </div>
+                                
+                                <h4>CSS Classes:</h4>
+                                <div class="code-block">
+                                    <pre><code id="css-output">.design-button.btn-primary-md</code></pre>
+                                    <button class="copy-code" data-target="css-output">Copy CSS</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Button Book Actions -->
+            <div class="button-book-actions">
+                <button type="button" class="button button-primary" onclick="exportButtonTokens()">
+                    Export Button Tokens
+                </button>
+                <button type="button" class="button button-secondary" onclick="generateButtonCSS()">
+                    Generate CSS File
+                </button>
+                <button type="button" class="button" onclick="resetButtonBuilder()">
+                    Reset Builder
+                </button>
+            </div>
         </div>
+        
+        <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab + '-tab').classList.add('active');
+            });
+        });
+        
+        // Interactive builder functionality
+        function updateBuilderPreview() {
+            const variant = document.getElementById('builder-variant').value;
+            const size = document.getElementById('builder-size').value;
+            const text = document.getElementById('builder-text').value;
+            const style = document.getElementById('builder-style').value;
+            
+            const button = document.getElementById('builder-button');
+            const className = `design-button btn-${variant}-${size}${style !== 'filled' ? '-' + style : ''}`;
+            
+            button.className = className;
+            button.textContent = text;
+            
+            // Update info display
+            document.getElementById('current-class').textContent = className;
+            document.getElementById('current-variant').textContent = variant.charAt(0).toUpperCase() + variant.slice(1);
+            document.getElementById('current-size').textContent = size === 'sm' ? 'Small' : size === 'lg' ? 'Large' : 'Medium';
+            document.getElementById('current-style').textContent = style.charAt(0).toUpperCase() + style.slice(1);
+            
+            // Update code outputs
+            document.getElementById('html-output').textContent = `<button class="${className}">${text}</button>`;
+            document.getElementById('css-output').textContent = `.${className}`;
+        }
+        
+        // Add event listeners to builder controls
+        document.getElementById('builder-variant').addEventListener('change', updateBuilderPreview);
+        document.getElementById('builder-size').addEventListener('change', updateBuilderPreview);
+        document.getElementById('builder-text').addEventListener('input', updateBuilderPreview);
+        document.getElementById('builder-style').addEventListener('change', updateBuilderPreview);
+        
+        // Copy to clipboard functionality
+        document.querySelectorAll('.copy-code').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const text = document.getElementById(targetId).textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = this.dataset.target.includes('html') ? 'Copy HTML' : 'Copy CSS';
+                    }, 2000);
+                });
+            });
+        });
+        
+        // Action functions
+        function exportButtonTokens() {
+            alert('Button tokens export functionality - to be implemented');
+        }
+        
+        function generateButtonCSS() {
+            alert('CSS generation functionality - to be implemented');
+        }
+        
+        function resetButtonBuilder() {
+            document.getElementById('builder-variant').value = 'primary';
+            document.getElementById('builder-size').value = 'md';
+            document.getElementById('builder-text').value = 'Custom Button';
+            document.getElementById('builder-style').value = 'filled';
+            updateBuilderPreview();
+        }
+        </script>
         <?php
     }
     
@@ -958,58 +1222,55 @@ class VillaDesignBook {
                         <h3>Button Element (button-book.twig)</h3>
                         <p>Unified button element built with primitives:</p>
                         <div class="button-variants">
-                            <button class="villa-button villa-button--primary villa-button--medium" style="
-                                background-color: var(--wp--preset--color--primary);
-                                color: white;
-                                padding: var(--wp--custom--layout--spacing--md);
-                                border-radius: var(--wp--custom--layout--border-radius--md);
-                                border: none;
-                                font-size: var(--wp--preset--font-size--medium);
-                                font-weight: 500;
-                                margin-right: 8px;
-                            ">Primary Button</button>
+                            <?php 
+                            // Use the Twig component
+                            echo Timber::compile('components/element-books/button-book.twig', [
+                                'variant' => 'primary',
+                                'size' => 'medium',
+                                'content' => 'Primary Button'
+                            ]);
+                            ?>
                             
-                            <button class="villa-button villa-button--secondary villa-button--medium" style="
-                                background-color: var(--wp--preset--color--secondary);
-                                color: white;
-                                padding: var(--wp--custom--layout--spacing--md);
-                                border-radius: var(--wp--custom--layout--border-radius--md);
-                                border: none;
-                                font-size: var(--wp--preset--font-size--medium);
-                                font-weight: 500;
-                                margin-right: 8px;
-                            ">Secondary Button</button>
+                            <?php 
+                            // Use the Twig component
+                            echo Timber::compile('components/element-books/button-book.twig', [
+                                'variant' => 'secondary',
+                                'size' => 'medium',
+                                'content' => 'Secondary Button'
+                            ]);
+                            ?>
                             
-                            <button class="villa-button villa-button--outline villa-button--medium" style="
-                                background-color: transparent;
-                                color: var(--wp--preset--color--primary);
-                                padding: var(--wp--custom--layout--spacing--md);
-                                border-radius: var(--wp--custom--layout--border-radius--md);
-                                border: 2px solid var(--wp--preset--color--primary);
-                                font-size: var(--wp--preset--font-size--medium);
-                                font-weight: 500;
-                            ">Outline Button</button>
+                            <?php 
+                            // Use the Twig component
+                            echo Timber::compile('components/element-books/button-book.twig', [
+                                'variant' => 'outline',
+                                'size' => 'medium',
+                                'content' => 'Outline Button'
+                            ]);
+                            ?>
                         </div>
-                        <div class="code-example">
-                            <strong>Uses primitives:</strong>
-                            <ul>
-                                <li>typography.twig for font styling</li>
-                                <li>color.twig for background, text, and border colors</li>
-                                <li>spacing.twig for padding</li>
-                                <li>layout.twig for border radius</li>
-                            </ul>
-                        </div>
-                        <code>{% include 'elements/button-book.twig' with { 'variant': 'primary', 'size': 'medium', 'content': 'Button Text' } %}</code>
+                        <code>{% include 'components/element-books/button-book.twig' with { 'variant': 'primary', 'size': 'medium', 'content': 'Button Text' } %}</code>
                     </div>
 
                     <div class="element-demo">
                         <h3>Text Element (text-book.twig)</h3>
                         <p>Semantic text element with typography variants:</p>
                         <div class="text-variants">
-                            <div style="font-size: var(--wp--preset--font-size--small); color: var(--wp--preset--color--neutral); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Pretitle Text</div>
-                            <div style="font-size: var(--wp--preset--font-size--x-large); font-weight: 700; color: var(--wp--preset--color--base); margin-bottom: 8px;">Title Text</div>
-                            <div style="font-size: var(--wp--preset--font-size--large); font-weight: 600; color: var(--wp--preset--color--neutral); margin-bottom: 8px;">Subtitle Text</div>
-                            <div style="font-size: var(--wp--preset--font-size--medium); color: var(--wp--preset--color--neutral); line-height: 1.6;">Body text with proper line height and readable color for optimal user experience.</div>
+                            <?php 
+                            // Use the Twig component
+                            echo Timber::compile('elements/text-book.twig', [
+                                'type' => 'title',
+                                'content' => 'Title Text'
+                            ]);
+                            ?>
+                            
+                            <?php 
+                            // Use the Twig component
+                            echo Timber::compile('elements/text-book.twig', [
+                                'type' => 'description',
+                                'content' => 'This is a sample description text.'
+                            ]);
+                            ?>
                         </div>
                         <code>{% include 'elements/text-book.twig' with { 'type': 'title', 'content': 'Your Text' } %}</code>
                     </div>
@@ -1658,7 +1919,7 @@ class VillaDesignBook {
                                     <div class="villa-card basic-card" id="basic-card-preview">
                                         <h3 class="card-title">Card Title</h3>
                                         <p class="card-description">This is a sample card description that explains the content.</p>
-                                        <button class="villa-button primary">Learn More</button>
+                                        <button class="design-button primary">Learn More</button>
                                     </div>
                                 </div>
                             </div>
@@ -1772,7 +2033,7 @@ Feature 3</textarea>
                                             <li>Feature 2</li>
                                             <li>Feature 3</li>
                                         </ul>
-                                        <button class="villa-button primary">Choose Plan</button>
+                                        <button class="design-button primary">Choose Plan</button>
                                     </div>
                                 </div>
                             </div>
@@ -1799,7 +2060,7 @@ Feature 3</textarea>
                             <div class="token-category">
                                 <h4>🧱 Elements Used</h4>
                                 <ul>
-                                    <li><code>.villa-button</code> - Button element</li>
+                                    <li><code>.design-button</code> - Button element</li>
                                     <li><code>.text-book-*</code> - Text elements (title, description)</li>
                                     <li><code>.icon-*</code> - Icon elements</li>
                                 </ul>
@@ -1897,8 +2158,8 @@ Feature 3</textarea>
                                             <h2 class="hero-subtitle">Crafted for modern web experiences</h2>
                                             <p class="hero-description">Build stunning websites with our comprehensive design system that combines beautiful aesthetics with powerful functionality.</p>
                                             <div class="hero-actions">
-                                                <button class="villa-button primary large">Get Started</button>
-                                                <button class="villa-button secondary large">Learn More</button>
+                                                <button class="design-button primary large">Get Started</button>
+                                                <button class="design-button secondary large">Learn More</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1942,7 +2203,7 @@ Feature 3</textarea>
                                         <div class="hero-content">
                                             <h1 class="hero-title">Transform Your Business</h1>
                                             <p class="hero-description">Discover how our innovative solutions can help you achieve your goals and grow your business to new heights.</p>
-                                            <button class="villa-button primary large">Start Today</button>
+                                            <button class="design-button primary large">Start Today</button>
                                         </div>
                                         <div class="hero-image">
                                             <div class="image-placeholder">📊 Image Placeholder</div>
@@ -2031,7 +2292,7 @@ Feature 3</textarea>
                                         <div class="hero-content">
                                             <h1 class="hero-title">Experience Innovation</h1>
                                             <p class="hero-description">Watch how our technology transforms the way you work and live.</p>
-                                            <button class="villa-button primary large">Watch Demo</button>
+                                            <button class="design-button primary large">Watch Demo</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2069,7 +2330,7 @@ Feature 3</textarea>
                                 <h4>🧱 Elements Used</h4>
                                 <p>Reusable UI building blocks with variants</p>
                                 <ul>
-                                    <li><code>.villa-button</code> - Button elements</li>
+                                    <li><code>.design-button</code> - Button elements</li>
                                     <li><code>.hero-title</code> - Title text elements</li>
                                     <li><code>.hero-description</code> - Description text elements</li>
                                 </ul>
@@ -2529,8 +2790,8 @@ Feature 3</textarea>
                 'medium' => 1.0,
                 'large' => 1.25,
                 'x-large' => 1.5,
-                'xx-large' => 2.0,
-                'huge' => 6.25
+                '2xl' => 2.0,
+                '3xl' => 6.25
             ];
             
             foreach ($theme_json['settings']['typography']['fontSizes'] as &$font_size) {

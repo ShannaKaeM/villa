@@ -1137,3 +1137,611 @@
         gap: 0.5rem;
     }
 }
+
+/* ===================================
+   BUTTON BOOK STYLES
+   ================================== */
+
+/* Tab Navigation */
+.button-book-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-button {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: -2px;
+}
+
+.tab-button:hover {
+    background: #f1f5f9;
+}
+
+.tab-button.active {
+    background: white;
+    border-color: #007cba;
+    border-bottom: 2px solid white;
+    color: #007cba;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Button Variants Gallery */
+.button-variants-container {
+    padding: 2rem 0;
+}
+
+.variant-section {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.variant-section h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.variant-description {
+    color: var(--wp--preset--color--base-medium);
+    margin: 0 0 2rem 0;
+    font-style: italic;
+}
+
+.button-size-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.button-example {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.button-label {
+    margin-bottom: 1rem;
+}
+
+.button-label strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--wp--preset--color--base-darkest);
+}
+
+.button-class {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #64748b;
+}
+
+.button-preview {
+    margin: 1.5rem 0;
+}
+
+.button-specs {
+    color: var(--wp--preset--color--base-medium);
+    font-size: 0.85rem;
+    margin-top: 1rem;
+}
+
+/* Design Token Breakdown */
+.token-breakdown-container {
+    padding: 2rem 0;
+}
+
+.token-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.token-breakdown-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.breakdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.breakdown-header h4 {
+    margin: 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.token-list {
+    margin-bottom: 2rem;
+}
+
+.token-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.token-item:last-child {
+    border-bottom: none;
+}
+
+.token-label {
+    font-weight: 500;
+    color: var(--wp--preset--color--base-dark);
+}
+
+.token-item code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+    background: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #007cba;
+}
+
+.css-output {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.css-output h5 {
+    margin: 0 0 1rem 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.css-output pre {
+    margin: 0;
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Interactive Builder */
+.button-builder-container {
+    padding: 2rem 0;
+}
+
+.builder-interface {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.builder-controls {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.control-group {
+    margin-bottom: 1.5rem;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--wp--preset--color--base-darkest);
+}
+
+.control-group select,
+.control-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.control-group select:focus,
+.control-group input:focus {
+    outline: none;
+    border-color: #007cba;
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.1);
+}
+
+.builder-preview {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.builder-preview h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.preview-container {
+    background: #f8fafc;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.preview-info {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+}
+
+.preview-info h4 {
+    margin: 0 0 1rem 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.config-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.config-item strong {
+    color: var(--wp--preset--color--base-dark);
+}
+
+.config-item code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #007cba;
+}
+
+.code-output {
+    margin-top: 2rem;
+}
+
+.code-output h4 {
+    margin: 0 0 1rem 0;
+    color: var(--wp--preset--color--base-darkest);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.code-block {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.code-block pre {
+    margin: 0;
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.copy-code {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.copy-code:hover {
+    background: #005a87;
+}
+
+/* Button Book Actions */
+.button-book-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 3rem;
+}
+
+.button-book-actions .button {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+/* Button Styles for Preview */
+.design-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+/* Primary Buttons */
+.btn-primary-sm {
+    background: var(--wp--preset--color--primary);
+    color: white;
+    font-size: var(--wp--preset--font-size--small);
+    padding: 0.5rem 1rem;
+}
+
+.btn-primary-md {
+    background: var(--wp--preset--color--primary);
+    color: white;
+    font-size: var(--wp--preset--font-size--medium);
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-primary-lg {
+    background: var(--wp--preset--color--primary);
+    color: white;
+    font-size: var(--wp--preset--font-size--large);
+    padding: 1rem 2rem;
+}
+
+/* Secondary Buttons */
+.btn-secondary-sm {
+    background: var(--wp--preset--color--secondary);
+    color: white;
+    font-size: var(--wp--preset--font-size--small);
+    padding: 0.5rem 1rem;
+}
+
+.btn-secondary-md {
+    background: var(--wp--preset--color--secondary);
+    color: white;
+    font-size: var(--wp--preset--font-size--medium);
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-secondary-lg {
+    background: var(--wp--preset--color--secondary);
+    color: white;
+    font-size: var(--wp--preset--font-size--large);
+    padding: 1rem 2rem;
+}
+
+/* Neutral Buttons */
+.btn-neutral-sm {
+    background: var(--wp--preset--color--base-medium);
+    color: white;
+    font-size: var(--wp--preset--font-size--small);
+    padding: 0.5rem 1rem;
+}
+
+.btn-neutral-md {
+    background: var(--wp--preset--color--base-medium);
+    color: white;
+    font-size: var(--wp--preset--font-size--medium);
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-neutral-lg {
+    background: var(--wp--preset--color--base-medium);
+    color: white;
+    font-size: var(--wp--preset--font-size--large);
+    padding: 1rem 2rem;
+}
+
+/* Base Buttons */
+.btn-base-sm {
+    background: var(--wp--preset--color--base-dark);
+    color: white;
+    font-size: var(--wp--preset--font-size--small);
+    padding: 0.5rem 1rem;
+}
+
+.btn-base-md {
+    background: var(--wp--preset--color--base-dark);
+    color: white;
+    font-size: var(--wp--preset--font-size--medium);
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-base-lg {
+    background: var(--wp--preset--color--base-dark);
+    color: white;
+    font-size: var(--wp--preset--font-size--large);
+    padding: 1rem 2rem;
+}
+
+/* Button Hover Effects */
+.design-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.design-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design for Button Book */
+@media (max-width: 1024px) {
+    .builder-interface {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .token-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-size-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .button-book-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .tab-button.active {
+        border: 2px solid #007cba;
+    }
+    
+    .config-display {
+        grid-template-columns: 1fr;
+    }
+    
+    .breakdown-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .button-book-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* ===================================
+   TYPOGRAPHY BOOK STYLES (PRIMITIVES)
+   ================================== */
+
+/* Color Mode Tabs */
+.color-mode-tabs {
+    display: flex;
+    margin: 1rem 0 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.color-mode-tab {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #666;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.color-mode-tab:hover {
+    color: var(--wp--preset--color--primary);
+    background-color: #f8f9fa;
+}
+
+.color-mode-tab.active {
+    color: var(--wp--preset--color--primary);
+    border-bottom-color: var(--wp--preset--color--primary);
+    background-color: #fff;
+}
+
+/* Color Control Panels */
+.color-controls-panel {
+    display: none;
+    margin-top: 0.5rem;
+}
+
+.color-controls-panel.active {
+    display: block;
+}
+
+/* HSLA and CMYK Input Groups */
+.hsla-input-group,
+.cmyk-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hsla-input-group label,
+.cmyk-input-group label {
+    min-width: 80px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.hsla-value,
+.cmyk-value {
+    min-width: 40px;
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+}
