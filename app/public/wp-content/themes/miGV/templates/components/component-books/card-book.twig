@@ -1,266 +1,336 @@
 {# 
   Card Book Component - Villa Design System
-  Unified card component with multiple variants using design tokens
-  
-  Usage:
-  {% include 'components/card-book.twig' with {
-    'variant': 'villa',
-    'size': 'medium',
-    'title': 'Beautiful Villa',
-    'subtitle': 'Luxury Oceanfront Property',
-    'description': 'Experience the ultimate in luxury living...',
-    'image': 'villa-image.jpg',
-    'cta_text': 'View Details',
-    'cta_link': '/villa/123'
-  } %}
+  Showcases the card component system with multiple variants and demos
 #}
 
-{% set variant = variant|default('property') %}
-{% set size = size|default('medium') %}
-{% set title = title|default('Card Title') %}
-{% set subtitle = subtitle|default('') %}
-{% set description = description|default('') %}
-{% set image = image|default('') %}
-{% set cta_text = cta_text|default('Learn More') %}
-{% set cta_link = cta_link|default('#') %}
-
-{# Card Variants with different styling approaches #}
-{% set variants = {
-  'property': {
-    'background': 'white',
-    'border_radius': 'lg',
-    'shadow': 'md',
-    'padding': 'xl',
-    'text_color': 'base-darkest',
-    'subtitle_color': 'neutral',
-    'button_variant': 'primary'
-  },
-  'villa': {
-    'background': 'white',
-    'border_radius': 'lg',
-    'shadow': 'lg',
-    'padding': '2xl',
-    'text_color': 'base-darkest',
-    'subtitle_color': 'primary',
-    'button_variant': 'primary'
-  },
-  'luxury': {
-    'background': 'white',
-    'border_radius': 'xl',
-    'shadow': '2xl',
-    'padding': '3xl',
-    'text_color': 'base-darkest',
-    'subtitle_color': 'secondary',
-    'button_variant': 'secondary'
-  },
-  'minimal': {
-    'background': 'transparent',
-    'border_radius': 'md',
-    'shadow': 'none',
-    'padding': 'lg',
-    'text_color': 'base-darkest',
-    'subtitle_color': 'neutral',
-    'button_variant': 'outline'
-  },
-  'featured': {
-    'background': 'primary',
-    'border_radius': 'lg',
-    'shadow': 'xl',
-    'padding': '2xl',
-    'text_color': 'base-white',
-    'subtitle_color': 'base-lightest',
-    'button_variant': 'secondary'
-  }
-} %}
-
-{# Size configurations #}
-{% set sizes = {
-  'small': {
-    'padding': 'lg',
-    'title_size': 'medium',
-    'subtitle_size': 'small',
-    'body_size': 'small',
-    'button_size': 'small',
-    'image_aspect': '4/3'
-  },
-  'medium': {
-    'padding': 'xl',
-    'title_size': 'large',
-    'subtitle_size': 'medium',
-    'body_size': 'medium',
-    'button_size': 'medium',
-    'image_aspect': '16/9'
-  },
-  'large': {
-    'padding': '2xl',
-    'title_size': 'x-large',
-    'subtitle_size': 'medium',
-    'body_size': 'medium',
-    'button_size': 'large',
-    'image_aspect': '16/9'
-  }
-} %}
-
-{% set card_variant = variants[variant] %}
-{% set card_size = sizes[size] %}
-
-<article class="card-book card-book--{{ variant }} card-book--{{ size }}" style="
-  {% include 'components/primitives/layout.twig' with {
-    'border_radius': card_variant.border_radius,
-    'shadow': card_variant.shadow,
-    'background': card_variant.background
-  } %}
-  {% include 'components/primitives/spacing.twig' with {
-    'type': 'padding',
-    'size': card_size.padding,
-    'sides': 'all'
-  } %}
-  overflow: hidden;
-  transition: all 0.3s ease;
-  position: relative;
-">
+<div class="wrap villa-card-book">
+  <h1>🃏 CardBook</h1>
+  <p class="description">Explore our flexible card component system built with atomic design principles and theme.json tokens.</p>
   
-  {% if image %}
-    <div class="card-book__image" style="
-      {% include 'components/primitives/spacing.twig' with {
-        'type': 'margin',
-        'size': 'lg',
-        'sides': 'bottom'
-      } %}
-      {% include 'components/primitives/layout.twig' with {
-        'border_radius': 'md'
-      } %}
-      overflow: hidden;
-      aspect-ratio: {{ card_size.image_aspect }};
-      background-image: url('{{ image }}');
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    ">
-      <div class="card-book__image-overlay" style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          var(--wp--custom--layout--backgrounds--overlays--light-subtle) 0%,
-          var(--wp--custom--layout--backgrounds--overlays--dark-subtle) 100%
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      "></div>
+  {# Card Book Tabs #}
+  <div class="button-book-tabs">
+    <button class="tab-button active" data-tab="options">Card Options</button>
+    <button class="tab-button" data-tab="builder">Card Builder & Preview</button>
+    <button class="tab-button" data-tab="variants">Rendered Variants</button>
+  </div>
+  
+  {# Tab Content #}
+  <div class="tab-content-wrapper">
+    
+    {# Card Options Tab #}
+    <div id="options" class="tab-content active">
+      <h2>Card Configuration Options</h2>
+      <p>Understand all the available options and parameters for the card component.</p>
+      
+      <div class="design-book-grid">
+        
+        {# Variant Options #}
+        <div class="design-book-section">
+          <h3>🎨 Variants</h3>
+          <div class="option-list">
+            <div class="option-item">
+              <strong>default</strong>
+              <p>Clean, minimal design perfect for most content</p>
+              <code>variant: 'default'</code>
+            </div>
+            <div class="option-item">
+              <strong>elevated</strong>
+              <p>Enhanced shadow and visual weight for important content</p>
+              <code>variant: 'elevated'</code>
+            </div>
+            <div class="option-item">
+              <strong>minimal</strong>
+              <p>Subtle borders and no shadows for refined look</p>
+              <code>variant: 'minimal'</code>
+            </div>
+            <div class="option-item">
+              <strong>featured</strong>
+              <p>Primary color and special effects for highlighting</p>
+              <code>variant: 'featured'</code>
+            </div>
+          </div>
+        </div>
+        
+        {# Size Options #}
+        <div class="design-book-section">
+          <h3>📏 Sizes</h3>
+          <div class="option-list">
+            <div class="option-item">
+              <strong>small</strong>
+              <p>Compact size for sidebars and tight spaces</p>
+              <code>size: 'small'</code>
+            </div>
+            <div class="option-item">
+              <strong>medium</strong>
+              <p>Standard size for most content areas</p>
+              <code>size: 'medium'</code>
+            </div>
+            <div class="option-item">
+              <strong>large</strong>
+              <p>Spacious size for hero sections and featured content</p>
+              <code>size: 'large'</code>
+            </div>
+          </div>
+        </div>
+        
+        {# Content Options #}
+        <div class="design-book-section">
+          <h3>📝 Content Parameters</h3>
+          <div class="option-list">
+            <div class="option-item">
+              <strong>title</strong>
+              <p>Main heading text for the card</p>
+              <code>title: 'Card Title'</code>
+            </div>
+            <div class="option-item">
+              <strong>subtitle</strong>
+              <p>Optional secondary heading</p>
+              <code>subtitle: 'Optional Subtitle'</code>
+            </div>
+            <div class="option-item">
+              <strong>description</strong>
+              <p>Main body content for the card</p>
+              <code>description: 'Card description...'</code>
+            </div>
+            <div class="option-item">
+              <strong>cta_text</strong>
+              <p>Call-to-action button text</p>
+              <code>cta_text: 'Learn More'</code>
+            </div>
+            <div class="option-item">
+              <strong>cta_link</strong>
+              <p>Call-to-action button URL</p>
+              <code>cta_link: '/page-url'</code>
+            </div>
+          </div>
+        </div>
+        
+        {# Usage Example #}
+        <div class="design-book-section">
+          <h3>💻 Usage Example</h3>
+          <div class="code-example">
+            <pre><code>{% include 'components/card.twig' with {
+  'variant': 'elevated',
+  'size': 'medium',
+  'title': 'My Card Title',
+  'subtitle': 'Optional Subtitle',
+  'description': 'This is the card description that explains the content.',
+  'cta_text': 'Learn More',
+  'cta_link': '/learn-more'
+} %}</code></pre>
+          </div>
+        </div>
+        
+      </div>
     </div>
-  {% endif %}
-  
-  <div class="card-book__content">
-    {% if subtitle %}
-      {% include 'elements/text-book.twig' with {
-        'type': 'pretitle',
-        'content': subtitle,
-        'element': 'div',
-        'size': card_size.subtitle_size,
-        'color': card_variant.subtitle_color,
-        'class': 'card-book__subtitle',
-        'attributes': 'style="' ~ 
-          (include('components/primitives/spacing.twig', {
-            'type': 'margin',
-            'size': 'sm',
-            'sides': 'bottom'
-          })) ~ '"'
-      } %}
-    {% endif %}
     
-    {% if title %}
-      {% include 'elements/text-book.twig' with {
-        'type': 'title',
-        'content': title,
-        'element': 'h2',
-        'size': card_size.title_size,
-        'color': card_variant.text_color,
-        'class': 'card-book__title',
-        'attributes': 'style="' ~ 
-          (include('components/primitives/spacing.twig', {
-            'type': 'margin',
-            'size': 'md',
-            'sides': 'bottom'
-          })) ~ '"'
-      } %}
-    {% endif %}
+    {# Card Builder & Preview Tab #}
+    <div id="builder" class="tab-content">
+      <h2>Interactive Card Builder</h2>
+      <p>Build and preview your card in real-time with live updates.</p>
+      
+      <div class="builder-layout">
+        
+        {# Builder Controls #}
+        <div class="builder-controls">
+          <h3>🛠️ Card Configuration</h3>
+          
+          <div class="control-group">
+            <label for="builder-variant">Variant:</label>
+            <select id="builder-variant">
+              <option value="default">Default</option>
+              <option value="elevated">Elevated</option>
+              <option value="minimal">Minimal</option>
+              <option value="featured">Featured</option>
+            </select>
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-size">Size:</label>
+            <select id="builder-size">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-title">Title:</label>
+            <input type="text" id="builder-title" value="Sample Card Title" placeholder="Enter card title">
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-subtitle">Subtitle:</label>
+            <input type="text" id="builder-subtitle" value="Optional Subtitle" placeholder="Enter subtitle (optional)">
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-description">Description:</label>
+            <textarea id="builder-description" rows="4" placeholder="Enter card description">This is a sample description that shows how the card looks with different configurations. You can edit this text to see live updates.</textarea>
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-cta-text">CTA Button Text:</label>
+            <input type="text" id="builder-cta-text" value="Try It Out" placeholder="Button text">
+          </div>
+          
+          <div class="control-group">
+            <label for="builder-cta-link">CTA Button Link:</label>
+            <input type="text" id="builder-cta-link" value="#" placeholder="Button URL">
+          </div>
+          
+          {# Generated Code Output #}
+          <div class="generated-code">
+            <h4>📋 Generated Code</h4>
+            <textarea id="generated-code" readonly rows="8">{% include 'components/card.twig' with {
+  'variant': 'default',
+  'size': 'medium',
+  'title': 'Sample Card Title',
+  'subtitle': 'Optional Subtitle',
+  'description': 'This is a sample description...',
+  'cta_text': 'Try It Out',
+  'cta_link': '#'
+} %}</textarea>
+            <button id="copy-code" class="copy-button">Copy Code</button>
+          </div>
+        </div>
+        
+        {# Live Preview #}
+        <div class="builder-preview">
+          <h3>🔍 Live Preview</h3>
+          <div class="preview-container">
+            <div id="builder-card-preview">
+              {% include 'components/card.twig' with {
+                'variant': 'default',
+                'size': 'medium',
+                'title': 'Sample Card Title',
+                'subtitle': 'Optional Subtitle',
+                'description': 'This is a sample description that shows how the card looks with different configurations. You can edit this text to see live updates.',
+                'cta_text': 'Try It Out',
+                'cta_link': '#'
+              } %}
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
     
-    {% if description %}
-      {% include 'elements/text-book.twig' with {
-        'type': 'body',
-        'content': description,
-        'element': 'p',
-        'size': card_size.body_size,
-        'color': card_variant.text_color,
-        'class': 'card-book__description',
-        'attributes': 'style="' ~ 
-          (include('components/primitives/spacing.twig', {
-            'type': 'margin',
-            'size': 'xl',
-            'sides': 'bottom'
-          })) ~ '"'
-      } %}
-    {% endif %}
-    
-    {% if cta_text and cta_link %}
-      <div class="card-book__actions">
-        {% include 'elements/button-book.twig' with {
-          'variant': card_variant.button_variant,
-          'size': card_size.button_size,
-          'content': cta_text,
-          'element': 'a',
-          'attributes': 'href="' ~ cta_link ~ '"'
+    {# Rendered Variants Tab #}
+    <div id="variants" class="tab-content">
+      <h2>Card Variant Showcase</h2>
+      <p>See all card variants and sizes rendered with sample content.</p>
+      
+      {# All Variants Demo #}
+      <h3>🎨 All Variants</h3>
+      {% set demo_cards = [
+        {
+          'variant': 'default',
+          'title': 'Default Card',
+          'subtitle': 'Clean & Simple',
+          'description': 'The default card variant provides a clean, minimal design perfect for most content.',
+          'cta_text': 'Learn More',
+          'cta_link': '#'
+        },
+        {
+          'variant': 'elevated',
+          'title': 'Elevated Card',
+          'subtitle': 'Enhanced Presence',
+          'description': 'The elevated variant adds more shadow and visual weight for important content.',
+          'cta_text': 'Explore',
+          'cta_link': '#'
+        },
+        {
+          'variant': 'minimal',
+          'title': 'Minimal Card',
+          'subtitle': 'Subtle & Refined',
+          'description': 'The minimal variant uses subtle borders and no shadows for a refined look.',
+          'cta_text': 'View Details',
+          'cta_link': '#'
+        },
+        {
+          'variant': 'featured',
+          'title': 'Featured Card',
+          'subtitle': 'Premium Content',
+          'description': 'The featured variant uses your primary color and special effects for highlighting.',
+          'cta_text': 'Get Started',
+          'cta_link': '#'
+        }
+      ] %}
+      
+      <div class="card-variants-grid">
+        {% for card in demo_cards %}
+          {% include 'components/card.twig' with {
+            'variant': card.variant,
+            'size': 'medium',
+            'title': card.title,
+            'subtitle': card.subtitle,
+            'description': card.description,
+            'cta_text': card.cta_text,
+            'cta_link': card.cta_link
+          } %}
+        {% endfor %}
+      </div>
+      
+      {# Card Sizes Demo #}
+      <h3>📏 Size Variations</h3>
+      {% set size_demo_cards = [
+        {
+          'variant': 'default',
+          'title': 'Small Card',
+          'description': 'Compact size for sidebars and tight spaces.',
+          'cta_text': 'Small',
+          'cta_link': '#'
+        },
+        {
+          'variant': 'elevated',
+          'title': 'Medium Card',
+          'description': 'Standard size for most content areas and layouts.',
+          'cta_text': 'Medium',
+          'cta_link': '#'
+        },
+        {
+          'variant': 'featured',
+          'title': 'Large Card',
+          'description': 'Spacious size for hero sections and featured content.',
+          'cta_text': 'Large',
+          'cta_link': '#'
+        }
+      ] %}
+      
+      <div class="card-sizes-grid">
+        {% include 'components/card.twig' with {
+          'variant': size_demo_cards[0].variant,
+          'size': 'small',
+          'title': size_demo_cards[0].title,
+          'description': size_demo_cards[0].description,
+          'cta_text': size_demo_cards[0].cta_text,
+          'cta_link': size_demo_cards[0].cta_link
+        } %}
+        
+        {% include 'components/card.twig' with {
+          'variant': size_demo_cards[1].variant,
+          'size': 'medium',
+          'title': size_demo_cards[1].title,
+          'description': size_demo_cards[1].description,
+          'cta_text': size_demo_cards[1].cta_text,
+          'cta_link': size_demo_cards[1].cta_link
+        } %}
+        
+        {% include 'components/card.twig' with {
+          'variant': size_demo_cards[2].variant,
+          'size': 'large',
+          'title': size_demo_cards[2].title,
+          'description': size_demo_cards[2].description,
+          'cta_text': size_demo_cards[2].cta_text,
+          'cta_link': size_demo_cards[2].cta_link
         } %}
       </div>
-    {% endif %}
+    </div>
+    
   </div>
-</article>
+</div>
 
-<style>
-.card-book:hover {
-  transform: translateY(-2px);
-}
+<link rel="stylesheet" href="design-book.css">
 
-.card-book:hover .card-book__image-overlay {
-  opacity: 1;
-}
-
-.card-book--featured {
-  position: relative;
-}
-
-.card-book--featured::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(
-    45deg,
-    var(--wp--preset--color--primary),
-    var(--wp--preset--color--secondary),
-    var(--wp--preset--color--primary)
-  );
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card-book--featured:hover::before {
-  opacity: 1;
-}
-
-.card-book--minimal {
-  border: var(--wp--custom--layout--border-width--thin) solid var(--wp--preset--color--neutral-light);
-}
-
-.card-book--minimal:hover {
-  border-color: var(--wp--preset--color--primary);
-}
-</style>
+<script src="design-book.js"></script>

@@ -40,7 +40,7 @@ class VillaDesignBook {
             'DesignBook',
             'DesignBook',
             'manage_options',
-            'villa-design-book',
+            'design-book',
             array($this, 'render_main_page'),
             'dashicons-art',
             30
@@ -48,68 +48,68 @@ class VillaDesignBook {
         
         // PRIMITIVES SUBMENU PAGES
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Color Book',
             '🎨 Color Book',
             'manage_options',
-            'villa-color-book',
+            'color-book',
             array($this, 'render_color_book')
         );
         
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Typography Book',
             '📝 Typography Book',
             'manage_options',
-            'villa-typography-book',
+            'typography-book',
             array($this, 'render_typography_book')
         );
         
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Layout Book',
             '📐 Layout Book',
             'manage_options',
-            'villa-layout-book',
+            'layout-book',
             array($this, 'render_layout_book')
         );
         
         // ELEMENTS SUBMENU PAGES
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Button Book',
             '🖋️ Button Book',
             'manage_options',
-            'villa-button-book',
+            'button-book',
             array($this, 'render_button_book')
         );
         
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Text Book',
             '📄 Text Book',
             'manage_options',
-            'villa-text-book',
+            'text-book',
             array($this, 'render_text_book')
         );
         
         // COMPONENTS SUBMENU PAGES
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Card Book',
             '🃏 Card Book',
             'manage_options',
-            'villa-card-book',
+            'card-book',
             array($this, 'render_component_book')
         );
         
         // SECTIONS SUBMENU PAGES
         add_submenu_page(
-            'villa-design-book',
+            'design-book',
             'Hero Book',
             '🦸 Hero Book',
             'manage_options',
-            'villa-hero-book',
+            'hero-book',
             array($this, 'render_hero_book')
         );
     }
@@ -119,12 +119,12 @@ class VillaDesignBook {
      */
     public function enqueue_admin_scripts($hook) {
         // Only load on our admin pages
-        if (strpos($hook, 'villa-design-book') === false && 
-            strpos($hook, 'villa-color-book') === false && 
-            strpos($hook, 'villa-typography-book') === false && 
-            strpos($hook, 'villa-button-book') === false && 
-            strpos($hook, 'villa-component-book') === false && 
-            strpos($hook, 'villa-base-options') === false) {
+        if (strpos($hook, 'design-book') === false && 
+            strpos($hook, 'color-book') === false && 
+            strpos($hook, 'typography-book') === false && 
+            strpos($hook, 'button-book') === false && 
+            strpos($hook, 'component-book') === false && 
+            strpos($hook, 'base-options') === false) {
             return;
         }
         
@@ -133,24 +133,24 @@ class VillaDesignBook {
         
         // Enqueue our scripts and styles
         wp_enqueue_style(
-            'villa-design-book-css',
-            get_template_directory_uri() . '/assets/css/villa-design-book.css',
+            'design-book-css',
+            get_template_directory_uri() . '/assets/css/design-book.css',
             array(),
             '1.0.6' // Incremented for Base Options styling
         );
         
         wp_enqueue_script(
-            'villa-design-book-js',
-            get_template_directory_uri() . '/assets/js/villa-design-book.js',
+            'design-book-js',
+            get_template_directory_uri() . '/assets/js/design-book.js',
             array('jquery', 'media-upload', 'media-views'),
             '1.0.6', // Incremented for Base Options functionality
             true
         );
         
         // Localize script with AJAX data
-        wp_localize_script('villa-design-book-js', 'villa_design_book', array(
+        wp_localize_script('design-book-js', 'villaDesignBook', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('villa_design_book_nonce')
+            'nonce' => wp_create_nonce('migv_nonce')
         ));
     }
     
@@ -187,7 +187,7 @@ class VillaDesignBook {
      */
     public function render_main_page() {
         ?>
-        <div class="wrap villa-design-book">
+        <div class="wrap design-book">
             <h1>🎨 DesignBook</h1>
             <p class="description">Visual design system manager for Villa Community. Create, edit, and manage your design tokens with live preview.</p>
             
@@ -203,21 +203,21 @@ class VillaDesignBook {
                             <div class="card-icon">🎨</div>
                             <h3>Color Book</h3>
                             <p>Pure color tokens - primary, secondary, neutral palettes with light, medium, and dark variations.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-color-book'); ?>" class="button button-primary">Open Color Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=color-book'); ?>" class="button button-primary">Open Color Book</a>
                         </div>
                         
                         <div class="design-book-card">
                             <div class="card-icon">📝</div>
                             <h3>Typography Book</h3>
                             <p>Font sizes, weights, line heights, and letter spacing tokens.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-typography-book'); ?>" class="button button-primary">Open Typography Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=typography-book'); ?>" class="button button-primary">Open Typography Book</a>
                         </div>
                         
                         <div class="design-book-card">
                             <div class="card-icon">📐</div>
                             <h3>Layout Book</h3>
                             <p>Spacing, border radius, shadows, and grid layout tokens.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-layout-book'); ?>" class="button button-primary">Open Layout Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=layout-book'); ?>" class="button button-primary">Open Layout Book</a>
                         </div>
                         
                     </div>
@@ -233,14 +233,14 @@ class VillaDesignBook {
                             <div class="card-icon">🖋️</div>
                             <h3>Button Book</h3>
                             <p>Button variants and styles using color, typography, and layout primitives.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-button-book'); ?>" class="button button-primary">Open Button Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=button-book'); ?>" class="button button-primary">Open Button Book</a>
                         </div>
                         
                         <div class="design-book-card">
                             <div class="card-icon">📄</div>
                             <h3>Text Book</h3>
                             <p>Semantic text elements: pretitle, title, subtitle, description using typography primitives.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-text-book'); ?>" class="button button-primary">Open Text Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=text-book'); ?>" class="button button-primary">Open Text Book</a>
                         </div>
                         
                     </div>
@@ -256,7 +256,7 @@ class VillaDesignBook {
                             <div class="card-icon">🃏</div>
                             <h3>Card Book</h3>
                             <p>Card components combining text elements, buttons, and layout primitives.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-card-book'); ?>" class="button button-primary">Open Card Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=card-book'); ?>" class="button button-primary">Open Card Book</a>
                         </div>
                         
                     </div>
@@ -272,7 +272,7 @@ class VillaDesignBook {
                             <div class="card-icon">🦸</div>
                             <h3>Hero Book</h3>
                             <p>Hero sections combining cards, text elements, buttons, and layout primitives.</p>
-                            <a href="<?php echo admin_url('admin.php?page=villa-hero-book'); ?>" class="button button-primary">Open Hero Book</a>
+                            <a href="<?php echo admin_url('admin.php?page=hero-book'); ?>" class="button button-primary">Open Hero Book</a>
                         </div>
                         
                     </div>
@@ -296,7 +296,7 @@ class VillaDesignBook {
         $colors = $theme_data['settings']['color']['palette'] ?? array();
         
         ?>
-        <div class="wrap villa-color-book">
+        <div class="wrap design-color-book">
             <h1>🎨 ColorBook</h1>
             <p class="description">Manage your color palette with precision. Adjust Cyan, Magenta, Yellow, and Black (CMYK) values for perfect color harmony.</p>
             
@@ -608,7 +608,7 @@ class VillaDesignBook {
         $text_styles = array_merge($default_styles, $text_styles);
         
         ?>
-        <div class="wrap villa-text-book">
+        <div class="wrap design-text-book">
             <h1>🧱 Text Book</h1>
             <p class="description">Semantic text elements that use typography primitives for consistent text styling across your site.</p>
             
@@ -1122,7 +1122,7 @@ class VillaDesignBook {
      */
     public function render_component_book() {
         ?>
-        <div class="wrap villa-component-book">
+        <div class="wrap design-component-book">
             <h1>🧩 ComponentBook</h1>
             <p class="description">Design system architecture showcasing primitives, elements, and components built with design tokens.</p>
             
@@ -1369,7 +1369,7 @@ class VillaDesignBook {
         
         $layout_tokens = array_merge($default_layout, $layout_tokens);
         ?>
-        <div class="wrap villa-base-options">
+        <div class="wrap design-base-options">
             <h1>⚙️ Base Options</h1>
             <p class="description">Manage foundational design tokens that all components share: spacing, border radius, shadows, and sizes.</p>
             
@@ -1510,165 +1510,27 @@ class VillaDesignBook {
      * Render Typography Book page (Primitives)
      */
     public function render_typography_book() {
-        $theme_json = $this->get_theme_json_data();
-        $base_styles = villa_get_base_styles();
+        // Check if Timber is available
+        if (!class_exists('Timber\Timber')) {
+            echo '<div class="wrap"><h1>📝 Typography Book</h1><p>Timber is required for the Typography Book interface.</p></div>';
+            return;
+        }
+
+        // Prepare context for Twig template
+        $context = Timber\Timber::context();
+        $context['theme_json'] = $this->get_theme_json_data();
+        $context['base_styles'] = villa_get_base_styles();
         
-        // Get typography settings from theme.json
-        $font_sizes = $theme_json['settings']['typography']['fontSizes'] ?? [];
-        $font_families = $theme_json['settings']['typography']['fontFamilies'] ?? [];
+        // Add nonce for AJAX security
+        $context['migv_nonce'] = wp_create_nonce('migv_nonce');
         
-        ?>
-        <div class="wrap villa-typography-book">
-            <h1>📝 Typography Book</h1>
-            <p class="description">Core typography primitives - font sizes, weights, line heights, and letter spacing tokens.</p>
-            
-            <div class="typography-primitives-container">
-                
-                <!-- Font Sizes Section -->
-                <div class="primitive-section">
-                    <h2>📏 Font Sizes</h2>
-                    <p class="section-description">Base font size tokens used throughout the design system.</p>
-                    
-                    <div class="font-sizes-grid">
-                        <?php 
-                        $default_sizes = [
-                            'xs' => ['name' => 'Extra Small', 'size' => '0.75rem', 'pixels' => '12px'],
-                            'sm' => ['name' => 'Small', 'size' => '0.875rem', 'pixels' => '14px'],
-                            'base' => ['name' => 'Base', 'size' => '1rem', 'pixels' => '16px'],
-                            'lg' => ['name' => 'Large', 'size' => '1.125rem', 'pixels' => '18px'],
-                            'xl' => ['name' => 'Extra Large', 'size' => '1.25rem', 'pixels' => '20px'],
-                            '2xl' => ['name' => '2X Large', 'size' => '1.5rem', 'pixels' => '24px'],
-                            '3xl' => ['name' => '3X Large', 'size' => '1.875rem', 'pixels' => '30px'],
-                            '4xl' => ['name' => '4X Large', 'size' => '2.25rem', 'pixels' => '36px'],
-                            '5xl' => ['name' => '5X Large', 'size' => '3rem', 'pixels' => '48px'],
-                            '6xl' => ['name' => '6X Large', 'size' => '3.75rem', 'pixels' => '60px']
-                        ];
-                        
-                        foreach ($default_sizes as $size_key => $size_data): ?>
-                            <div class="font-size-card">
-                                <div class="size-info">
-                                    <h4><?php echo $size_data['name']; ?></h4>
-                                    <span class="size-value"><?php echo $size_data['size']; ?> / <?php echo $size_data['pixels']; ?></span>
-                                </div>
-                                <div class="size-preview" style="font-size: <?php echo $size_data['size']; ?>;">
-                                    Text
-                                </div>
-                                <div class="size-token">
-                                    <code>--wp--preset--font-size--<?php echo $size_key; ?></code>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                
-                <!-- Font Weights Section -->
-                <div class="primitive-section">
-                    <h2>💪 Font Weights</h2>
-                    <p class="section-description">Font weight tokens for typography hierarchy.</p>
-                    
-                    <div class="font-weights-grid">
-                        <?php 
-                        $font_weights = [
-                            'thin' => ['name' => 'Thin', 'weight' => '100'],
-                            'light' => ['name' => 'Light', 'weight' => '300'],
-                            'normal' => ['name' => 'Normal', 'weight' => '400'],
-                            'medium' => ['name' => 'Medium', 'weight' => '500'],
-                            'semibold' => ['name' => 'Semibold', 'weight' => '600'],
-                            'bold' => ['name' => 'Bold', 'weight' => '700'],
-                            'extrabold' => ['name' => 'Extra Bold', 'weight' => '800'],
-                            'black' => ['name' => 'Black', 'weight' => '900']
-                        ];
-                        
-                        foreach ($font_weights as $weight_key => $weight_data): ?>
-                            <div class="font-weight-card">
-                                <div class="weight-info">
-                                    <h4><?php echo $weight_data['name']; ?></h4>
-                                    <span class="weight-value"><?php echo $weight_data['weight']; ?></span>
-                                </div>
-                                <div class="weight-preview" style="font-weight: <?php echo $weight_data['weight']; ?>;">
-                                    Typography Sample
-                                </div>
-                                <div class="weight-token">
-                                    <code>font-weight: <?php echo $weight_data['weight']; ?></code>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                
-                <!-- Line Heights Section -->
-                <div class="primitive-section">
-                    <h2>📐 Line Heights</h2>
-                    <p class="section-description">Line height tokens for text readability and spacing.</p>
-                    
-                    <div class="line-heights-grid">
-                        <?php 
-                        $line_heights = [
-                            'tight' => ['name' => 'Tight', 'value' => '1.1'],
-                            'snug' => ['name' => 'Snug', 'value' => '1.2'],
-                            'normal' => ['name' => 'Normal', 'value' => '1.4'],
-                            'relaxed' => ['name' => 'Relaxed', 'value' => '1.6'],
-                            'loose' => ['name' => 'Loose', 'value' => '1.8']
-                        ];
-                        
-                        foreach ($line_heights as $height_key => $height_data): ?>
-                            <div class="line-height-card">
-                                <div class="height-info">
-                                    <h4><?php echo $height_data['name']; ?></h4>
-                                    <span class="height-value"><?php echo $height_data['value']; ?></span>
-                                </div>
-                                <div class="height-preview" style="line-height: <?php echo $height_data['value']; ?>;">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                </div>
-                                <div class="height-token">
-                                    <code>line-height: <?php echo $height_data['value']; ?></code>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                
-                <!-- Letter Spacing Section -->
-                <div class="primitive-section">
-                    <h2>🔤 Letter Spacing</h2>
-                    <p class="section-description">Letter spacing tokens for typography fine-tuning.</p>
-                    
-                    <div class="letter-spacing-grid">
-                        <?php 
-                        $letter_spacings = [
-                            'tighter' => ['name' => 'Tighter', 'value' => '-0.05em'],
-                            'tight' => ['name' => 'Tight', 'value' => '-0.025em'],
-                            'normal' => ['name' => 'Normal', 'value' => '0'],
-                            'wide' => ['name' => 'Wide', 'value' => '0.025em'],
-                            'wider' => ['name' => 'Wider', 'value' => '0.05em'],
-                            'widest' => ['name' => 'Widest', 'value' => '0.1em']
-                        ];
-                        
-                        foreach ($letter_spacings as $spacing_key => $spacing_data): ?>
-                            <div class="letter-spacing-card">
-                                <div class="spacing-info">
-                                    <h4><?php echo $spacing_data['name']; ?></h4>
-                                    <span class="spacing-value"><?php echo $spacing_data['value']; ?></span>
-                                </div>
-                                <div class="spacing-preview" style="letter-spacing: <?php echo $spacing_data['value']; ?>;">
-                                    TYPOGRAPHY SAMPLE
-                                </div>
-                                <div class="spacing-token">
-                                    <code>letter-spacing: <?php echo $spacing_data['value']; ?></code>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="typography-actions">
-                <button type="button" id="save-typography" class="button button-primary">💾 Save Typography Tokens</button>
-                <button type="button" id="reset-typography" class="button">🔄 Reset to Defaults</button>
-            </div>
-        </div>
-        <?php
+        // Add AJAX URL
+        $context['ajax_url'] = admin_url('admin-ajax.php');
+
+        // Render the Twig template
+        echo '<div class="wrap">';
+        Timber\Timber::render('components/prmimitive-books/typography-book.twig', $context);
+        echo '</div>';
     }
     
     /**
@@ -1678,7 +1540,7 @@ class VillaDesignBook {
         $theme_json = $this->get_theme_json_data();
         
         ?>
-        <div class="wrap villa-layout-book">
+        <div class="wrap design-layout-book">
             <h1>📐 Layout Book</h1>
             <p class="description">Core layout primitives - spacing, border radius, shadows, and grid layout tokens.</p>
             
@@ -1846,7 +1708,7 @@ class VillaDesignBook {
      */
     public function render_card_book() {
         ?>
-        <div class="wrap villa-card-book">
+        <div class="wrap design-card-book">
             <h1>🧩 Card Book</h1>
             <p class="description">Design and customize card components using elements and primitives from the design system.</p>
             
@@ -2084,7 +1946,7 @@ Feature 3</textarea>
      */
     public function render_hero_book() {
         ?>
-        <div class="wrap villa-hero-book">
+        <div class="wrap design-hero-book">
             <h1>🏗️ Hero Book</h1>
             <p class="description">Design and customize hero sections using components, elements, and primitives from the design system.</p>
             

@@ -1,0 +1,564 @@
+/* ===================================
+   VILLA DESIGN BOOK - STANDALONE VERSION
+   Using actual theme.json values for testing
+   ================================== */
+
+/* ===================================
+   DESIGN TOKENS FROM THEME.JSON
+   ================================== */
+
+:root {
+  /* Colors from theme.json */
+  --db-primary: #5a7b7c;
+  --db-primary-light: #d6dcd6;
+  --db-primary-dark: #3a5a59;
+  --db-secondary: #975d55;
+  --db-secondary-light: #c38484;
+  --db-secondary-dark: #853d2d;
+  --db-neutral: #b5b09f;
+  --db-neutral-light: #d1cfc2;
+  --db-neutral-dark: #9e9983;
+  --db-base: #808080;
+  --db-base-light: #b3b3b3;
+  --db-base-lightest: #e6e6e6;
+  --db-base-dark: #676765;
+  --db-base-darkest: #4d4d4d;
+  --db-white: #ffffff;
+  --db-black: #000000;
+
+  /* Typography from theme.json */
+  --db-font-primary: Inter, system-ui, sans-serif;
+  --db-font-display: Playfair Display, serif;
+  --db-font-mono: Roboto, sans-serif;
+
+  /* Font sizes from theme.json */
+  --db-text-xs: 0.8125rem;    /* small */
+  --db-text-sm: 1rem;         /* medium */
+  --db-text-base: 1rem;       /* medium */
+  --db-text-lg: 1.25rem;      /* large */
+  --db-text-xl: 1.5rem;       /* x-large */
+  --db-text-2xl: 2rem;        /* xx-large */
+  --db-text-3xl: 6.25rem;     /* huge */
+
+  /* Spacing from theme.json custom tokens */
+  --db-space-xs: 4px;
+  --db-space-sm: 8px;
+  --db-space-md: 12px;
+  --db-space-lg: 16px;
+  --db-space-xl: 20px;
+  --db-space-2xl: 24px;
+  --db-space-3xl: 32px;
+  --db-space-4xl: 40px;
+  --db-space-5xl: 48px;
+  --db-space-6xl: 64px;
+
+  /* Shadows */
+  --db-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --db-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --db-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Border radius */
+  --db-radius-sm: 4px;
+  --db-radius-md: 8px;
+  --db-radius-lg: 12px;
+  --db-radius-xl: 16px;
+
+  /* Typography weights and line heights */
+  --db-font-weight-light: 300;
+  --db-font-weight-normal: 400;
+  --db-font-weight-medium: 500;
+  --db-font-weight-semibold: 600;
+  --db-font-weight-bold: 700;
+
+  --db-line-height-tight: 1.25;
+  --db-line-height-normal: 1.5;
+  --db-line-height-relaxed: 1.625;
+  --db-line-height-loose: 2;
+}
+
+/* ===================================
+   GLOBAL STYLES
+   ================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-base);
+  line-height: var(--db-line-height-normal);
+  color: var(--db-base-darkest);
+  background-color: var(--db-base-lightest);
+  margin: 0;
+  padding: 0;
+}
+
+/* ===================================
+   DESIGN BOOK CONTAINER
+   ================================== */
+
+.villa-design-book {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--db-base-lightest) 0%, var(--db-white) 100%);
+  padding: var(--db-space-2xl);
+}
+
+.design-book-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--db-white);
+  border-radius: var(--db-radius-xl);
+  box-shadow: var(--db-shadow-lg);
+  overflow: hidden;
+}
+
+/* ===================================
+   HEADER
+   ================================== */
+
+.design-book-header {
+  background: linear-gradient(135deg, var(--db-primary) 0%, var(--db-primary-dark) 100%);
+  color: var(--db-white);
+  padding: var(--db-space-5xl) var(--db-space-4xl);
+  text-align: center;
+}
+
+.design-book-header h1 {
+  font-family: var(--db-font-display);
+  font-size: var(--db-text-3xl);
+  font-weight: var(--db-font-weight-bold);
+  margin: 0 0 var(--db-space-lg) 0;
+  line-height: var(--db-line-height-tight);
+}
+
+.design-book-header p {
+  font-size: var(--db-text-lg);
+  opacity: 0.9;
+  margin: 0;
+  font-weight: var(--db-font-weight-normal);
+}
+
+/* ===================================
+   TAB NAVIGATION
+   ================================== */
+
+.design-book-tabs {
+  display: flex;
+  background: var(--db-base-lightest);
+  border-bottom: 1px solid var(--db-base-light);
+  padding: 0;
+  margin: 0;
+}
+
+.tab-button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--db-space-lg) var(--db-space-2xl);
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-base);
+  font-weight: var(--db-font-weight-medium);
+  color: var(--db-base-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+  background: var(--db-white);
+  color: var(--db-primary);
+}
+
+.tab-button.active {
+  background: var(--db-white);
+  color: var(--db-primary);
+  border-bottom-color: var(--db-primary);
+}
+
+/* ===================================
+   TAB CONTENT
+   ================================== */
+
+.tab-content {
+  display: none;
+  padding: var(--db-space-4xl);
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab-content h2 {
+  font-family: var(--db-font-display);
+  font-size: var(--db-text-2xl);
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-primary-dark);
+  margin: 0 0 var(--db-space-2xl) 0;
+  line-height: var(--db-line-height-tight);
+}
+
+.tab-content h3 {
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-xl);
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-base-darkest);
+  margin: var(--db-space-2xl) 0 var(--db-space-lg) 0;
+}
+
+/* ===================================
+   TYPOGRAPHY SCALE TAB
+   ================================== */
+
+.scale-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--db-space-2xl);
+  margin-bottom: var(--db-space-4xl);
+  padding: var(--db-space-2xl);
+  background: var(--db-base-lightest);
+  border-radius: var(--db-radius-lg);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--db-space-sm);
+}
+
+.control-group label {
+  font-weight: var(--db-font-weight-medium);
+  color: var(--db-base-darkest);
+  font-size: var(--db-text-sm);
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: var(--db-base-light);
+  border-radius: var(--db-radius-sm);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--db-primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.control-group select {
+  padding: var(--db-space-sm) var(--db-space-md);
+  border: 1px solid var(--db-base-light);
+  border-radius: var(--db-radius-sm);
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-sm);
+  background: var(--db-white);
+}
+
+.value-display {
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-primary);
+  font-size: var(--db-text-sm);
+}
+
+.scale-preview {
+  background: var(--db-white);
+  border-radius: var(--db-radius-lg);
+  padding: var(--db-space-2xl);
+  box-shadow: var(--db-shadow-sm);
+}
+
+.scale-samples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--db-space-2xl);
+}
+
+.scale-item {
+  display: grid;
+  grid-template-columns: 150px 80px 1fr;
+  gap: var(--db-space-lg);
+  align-items: center;
+  padding: var(--db-space-lg);
+  border-radius: var(--db-radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.scale-item:hover {
+  background: var(--db-base-lightest);
+}
+
+.scale-label {
+  font-size: var(--db-text-sm);
+  font-weight: var(--db-font-weight-medium);
+  color: var(--db-base-dark);
+}
+
+.scale-size {
+  font-size: var(--db-text-xs);
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-primary);
+  font-family: var(--db-font-mono);
+}
+
+.scale-sample {
+  font-family: var(--db-font-primary);
+  color: var(--db-base-darkest);
+  line-height: var(--db-line-height-tight);
+}
+
+/* ===================================
+   TEXT STYLES TAB
+   ================================== */
+
+.text-styles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--db-space-2xl);
+  margin-bottom: var(--db-space-4xl);
+}
+
+.text-style-card {
+  background: var(--db-white);
+  border: 1px solid var(--db-base-light);
+  border-radius: var(--db-radius-lg);
+  padding: var(--db-space-2xl);
+  box-shadow: var(--db-shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.text-style-card:hover {
+  box-shadow: var(--db-shadow-md);
+}
+
+.style-preview {
+  background: var(--db-base-lightest);
+  border-radius: var(--db-radius-sm);
+  padding: var(--db-space-2xl);
+  margin-bottom: var(--db-space-lg);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.style-sample {
+  font-family: var(--db-font-primary);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.style-controls h4 {
+  font-size: var(--db-text-lg);
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-primary-dark);
+  margin: 0 0 var(--db-space-lg) 0;
+}
+
+.control-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--db-space-md);
+}
+
+.control-row label {
+  font-size: var(--db-text-sm);
+  font-weight: var(--db-font-weight-medium);
+  color: var(--db-base-darkest);
+}
+
+.control-row select {
+  padding: var(--db-space-xs) var(--db-space-sm);
+  border: 1px solid var(--db-base-light);
+  border-radius: var(--db-radius-sm);
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-xs);
+  background: var(--db-white);
+  min-width: 120px;
+}
+
+/* Style samples */
+.pretitle-style {
+  font-size: var(--db-text-sm);
+  font-weight: var(--db-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--db-primary);
+}
+
+.title-style {
+  font-size: var(--db-text-2xl);
+  font-weight: var(--db-font-weight-semibold);
+  font-family: var(--db-font-display);
+  color: var(--db-base-darkest);
+  line-height: var(--db-line-height-tight);
+}
+
+.subtitle-style {
+  font-size: var(--db-text-lg);
+  font-weight: var(--db-font-weight-normal);
+  color: var(--db-base-dark);
+  line-height: var(--db-line-height-normal);
+}
+
+.body-style {
+  font-size: var(--db-text-base);
+  font-weight: var(--db-font-weight-normal);
+  color: var(--db-base-darkest);
+  line-height: var(--db-line-height-relaxed);
+}
+
+/* ===================================
+   ACTION BUTTONS
+   ================================== */
+
+.style-actions {
+  display: flex;
+  gap: var(--db-space-lg);
+  justify-content: center;
+  padding-top: var(--db-space-2xl);
+  border-top: 1px solid var(--db-base-light);
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: var(--db-space-md) var(--db-space-2xl);
+  border-radius: var(--db-radius-sm);
+  font-family: var(--db-font-primary);
+  font-size: var(--db-text-base);
+  font-weight: var(--db-font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--db-primary);
+  color: var(--db-white);
+}
+
+.btn-primary:hover {
+  background: var(--db-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--db-shadow-md);
+}
+
+.btn-secondary {
+  background: var(--db-base-light);
+  color: var(--db-base-darkest);
+  border: 1px solid var(--db-base);
+}
+
+.btn-secondary:hover {
+  background: var(--db-base);
+  color: var(--db-white);
+}
+
+/* ===================================
+   DESIGN TOKENS TAB
+   ================================== */
+
+.tokens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--db-space-2xl);
+}
+
+.token-category {
+  background: var(--db-white);
+  border: 1px solid var(--db-base-light);
+  border-radius: var(--db-radius-lg);
+  padding: var(--db-space-2xl);
+  box-shadow: var(--db-shadow-sm);
+}
+
+.token-category h3 {
+  font-size: var(--db-text-lg);
+  font-weight: var(--db-font-weight-semibold);
+  color: var(--db-primary-dark);
+  margin: 0 0 var(--db-space-lg) 0;
+  border-bottom: 2px solid var(--db-primary-light);
+  padding-bottom: var(--db-space-sm);
+}
+
+.token-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--db-space-sm);
+}
+
+.token-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--db-space-sm);
+  background: var(--db-base-lightest);
+  border-radius: var(--db-radius-sm);
+  font-family: var(--db-font-mono);
+  font-size: var(--db-text-xs);
+}
+
+.token-name {
+  color: var(--db-primary);
+  font-weight: var(--db-font-weight-semibold);
+}
+
+.token-value {
+  color: var(--db-base-dark);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   ================================== */
+
+@media (max-width: 768px) {
+  .villa-design-book {
+    padding: var(--db-space-lg);
+  }
+  
+  .design-book-header {
+    padding: var(--db-space-3xl) var(--db-space-2xl);
+  }
+  
+  .design-book-header h1 {
+    font-size: var(--db-text-2xl);
+  }
+  
+  .design-book-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-content {
+    padding: var(--db-space-2xl);
+  }
+  
+  .scale-controls {
+    grid-template-columns: 1fr;
+  }
+  
+  .text-styles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tokens-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .scale-item {
+    grid-template-columns: 1fr;
+    gap: var(--db-space-sm);
+    text-align: center;
+  }
+  
+  .style-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

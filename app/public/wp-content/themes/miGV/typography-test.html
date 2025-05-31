@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villa Typography Book - Test</title>
+    <link rel="stylesheet" href="assets/css/design-book-standalone.css">
+</head>
+<body>
+
+<div class="villa-design-book typography-book">
+    <div class="design-book-container">
+        <!-- Header -->
+        <header class="design-book-header">
+            <h1>Villa Typography Book</h1>
+            <p>Design and manage your typography system with live preview</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="design-book-tabs">
+            <button class="tab-button active" data-tab="scale">Typography Scale</button>
+            <button class="tab-button" data-tab="styles">Text Styles</button>
+            <button class="tab-button" data-tab="tokens">Design Tokens</button>
+        </nav>
+
+        <!-- Typography Scale Tab -->
+        <div class="tab-content active" id="scale-tab">
+            <div class="scale-section">
+                <h2>Modular Typography Scale</h2>
+                <div class="scale-controls">
+                    <div class="control-group">
+                        <label for="base-font-size">Base Font Size</label>
+                        <input type="range" id="base-font-size" min="14" max="20" value="16" step="1">
+                        <span class="value-display">16px</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="scale-ratio">Scale Ratio</label>
+                        <select id="scale-ratio">
+                            <option value="1.125">Major Second (1.125)</option>
+                            <option value="1.2">Minor Third (1.2)</option>
+                            <option value="1.25" selected>Major Third (1.25)</option>
+                            <option value="1.333">Perfect Fourth (1.333)</option>
+                            <option value="1.414">Augmented Fourth (1.414)</option>
+                            <option value="1.5">Perfect Fifth (1.5)</option>
+                            <option value="1.618">Golden Ratio (1.618)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="scale-preview">
+                    <h3>Typography Scale Preview</h3>
+                    <div class="scale-samples">
+                        <div class="scale-item" data-step="6">
+                            <span class="scale-label">H1 (Step 6)</span>
+                            <span class="scale-size">61px</span>
+                            <div class="scale-sample">The quick brown fox</div>
+                        </div>
+                        <div class="scale-item" data-step="5">
+                            <span class="scale-label">H2 (Step 5)</span>
+                            <span class="scale-size">49px</span>
+                            <div class="scale-sample">The quick brown fox</div>
+                        </div>
+                        <div class="scale-item" data-step="4">
+                            <span class="scale-label">H3 (Step 4)</span>
+                            <span class="scale-size">39px</span>
+                            <div class="scale-sample">The quick brown fox</div>
+                        </div>
+                        <div class="scale-item" data-step="3">
+                            <span class="scale-label">H4 (Step 3)</span>
+                            <span class="scale-size">31px</span>
+                            <div class="scale-sample">The quick brown fox jumps</div>
+                        </div>
+                        <div class="scale-item" data-step="2">
+                            <span class="scale-label">H5 (Step 2)</span>
+                            <span class="scale-size">25px</span>
+                            <div class="scale-sample">The quick brown fox jumps</div>
+                        </div>
+                        <div class="scale-item" data-step="1">
+                            <span class="scale-label">H6 (Step 1)</span>
+                            <span class="scale-size">20px</span>
+                            <div class="scale-sample">The quick brown fox jumps over</div>
+                        </div>
+                        <div class="scale-item" data-step="0">
+                            <span class="scale-label">Body (Base)</span>
+                            <span class="scale-size">16px</span>
+                            <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
+                        </div>
+                        <div class="scale-item" data-step="-1">
+                            <span class="scale-label">Small (Step -1)</span>
+                            <span class="scale-size">13px</span>
+                            <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Styles Tab -->
+        <div class="tab-content" id="styles-tab">
+            <div class="styles-section">
+                <h2>Semantic Text Styles</h2>
+                <div class="text-styles-grid">
+                    <!-- Pretitle Style -->
+                    <div class="text-style-card" data-style="pretitle">
+                        <div class="style-preview">
+                            <div class="style-sample pretitle-style">PRETITLE</div>
+                        </div>
+                        <div class="style-controls">
+                            <h4>Pretitle</h4>
+                            <div class="control-row">
+                                <label>Font Size</label>
+                                <select class="font-size-control">
+                                    <option value="xs">Extra Small</option>
+                                    <option value="sm" selected>Small</option>
+                                    <option value="base">Base</option>
+                                    <option value="lg">Large</option>
+                                </select>
+                            </div>
+                            <div class="control-row">
+                                <label>Font Weight</label>
+                                <select class="font-weight-control">
+                                    <option value="normal">Normal</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="semibold" selected>Semibold</option>
+                                    <option value="bold">Bold</option>
+                                </select>
+                            </div>
+                            <div class="control-row">
+                                <label>Text Transform</label>
+                                <select class="text-transform-control">
+                                    <option value="none">None</option>
+                                    <option value="uppercase" selected>Uppercase</option>
+                                    <option value="lowercase">Lowercase</option>
+                                    <option value="capitalize">Capitalize</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Title Style -->
+                    <div class="text-style-card" data-style="title">
+                        <div class="style-preview">
+                            <div class="style-sample title-style">Page Title</div>
+                        </div>
+                        <div class="style-controls">
+                            <h4>Title</h4>
+                            <div class="control-row">
+                                <label>Font Size</label>
+                                <select class="font-size-control">
+                                    <option value="lg">Large</option>
+                                    <option value="xl">Extra Large</option>
+                                    <option value="2xl" selected>2X Large</option>
+                                    <option value="3xl">3X Large</option>
+                                    <option value="4xl">4X Large</option>
+                                </select>
+                            </div>
+                            <div class="control-row">
+                                <label>Font Weight</label>
+                                <select class="font-weight-control">
+                                    <option value="normal">Normal</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="semibold" selected>Semibold</option>
+                                    <option value="bold">Bold</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subtitle Style -->
+                    <div class="text-style-card" data-style="subtitle">
+                        <div class="style-preview">
+                            <div class="style-sample subtitle-style">Subtitle Text</div>
+                        </div>
+                        <div class="style-controls">
+                            <h4>Subtitle</h4>
+                            <div class="control-row">
+                                <label>Font Size</label>
+                                <select class="font-size-control">
+                                    <option value="base">Base</option>
+                                    <option value="lg" selected>Large</option>
+                                    <option value="xl">Extra Large</option>
+                                </select>
+                            </div>
+                            <div class="control-row">
+                                <label>Font Weight</label>
+                                <select class="font-weight-control">
+                                    <option value="light">Light</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="medium">Medium</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body Style -->
+                    <div class="text-style-card" data-style="body">
+                        <div class="style-preview">
+                            <div class="style-sample body-style">Body text content goes here with multiple lines to show how it looks in a real context.</div>
+                        </div>
+                        <div class="style-controls">
+                            <h4>Body</h4>
+                            <div class="control-row">
+                                <label>Font Size</label>
+                                <select class="font-size-control">
+                                    <option value="sm">Small</option>
+                                    <option value="base" selected>Base</option>
+                                    <option value="lg">Large</option>
+                                </select>
+                            </div>
+                            <div class="control-row">
+                                <label>Line Height</label>
+                                <select class="line-height-control">
+                                    <option value="tight">Tight</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="relaxed">Relaxed</option>
+                                    <option value="loose">Loose</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="style-actions">
+                    <button class="btn-primary" id="save-styles">Save Changes</button>
+                    <button class="btn-secondary" id="reset-styles">Reset to Defaults</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Tokens Tab -->
+        <div class="tab-content" id="tokens-tab">
+            <div class="tokens-section">
+                <h2>Design Tokens</h2>
+                <p>Copy these CSS custom properties to use in your components:</p>
+                
+                <div class="tokens-grid">
+                    <div class="token-category">
+                        <h3>Font Sizes</h3>
+                        <div class="token-list" id="font-size-tokens">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="token-category">
+                        <h3>Font Weights</h3>
+                        <div class="token-list" id="font-weight-tokens">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="token-category">
+                        <h3>Line Heights</h3>
+                        <div class="token-list" id="line-height-tokens">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/design-book.js"></script>
+<script>
+// Initialize Typography Book when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof VillaTypographyBook !== 'undefined') {
+        new VillaTypographyBook();
+    }
+});
+</script>
+
+</body>
+</html>

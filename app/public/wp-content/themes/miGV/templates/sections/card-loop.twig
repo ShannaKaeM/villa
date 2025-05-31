@@ -1,0 +1,208 @@
+{# 
+  Card Loop Section - Villa Design System
+  Displays a collection of cards in a responsive grid layout
+  
+  Usage:
+  {% include 'sections/card-loop.twig' with {
+    'title': 'Our Color Palette',
+    'description': 'Explore our carefully curated color system',
+    'cards': cards_array,
+    'card_type': 'color-card',
+    'columns': 3,
+    'gap': 'lg',
+    'size': 'medium'
+  } %}
+#}
+
+{% set title = title|default('') %}
+{% set description = description|default('') %}
+{% set cards = cards|default([]) %}
+{% set card_type = card_type|default('default') %}
+{% set columns = columns|default(3) %}
+{% set gap = gap|default('lg') %}
+{% set size = size|default('medium') %}
+{% set class = class|default('') %}
+
+{# Grid column configurations #}
+{% set column_configs = {
+  1: 'repeat(1, 1fr)',
+  2: 'repeat(2, 1fr)',
+  3: 'repeat(auto-fit, minmax(300px, 1fr))',
+  4: 'repeat(auto-fit, minmax(250px, 1fr))',
+  5: 'repeat(auto-fit, minmax(200px, 1fr))',
+  6: 'repeat(auto-fit, minmax(180px, 1fr))'
+} %}
+
+{# Gap sizes from spacing tokens #}
+{% set gap_sizes = {
+  'sm': 'var(--wp--preset--spacing--30)',
+  'md': 'var(--wp--preset--spacing--40)',
+  'lg': 'var(--wp--preset--spacing--50)',
+  'xl': 'var(--wp--preset--spacing--60)',
+  '2xl': 'var(--wp--preset--spacing--70)'
+} %}
+
+<section class="card-loop card-loop--{{ card_type }} {{ class }}" style="
+  {% include 'components/prmimitive-books/spacing.twig' with {
+    'type': 'padding',
+    'size': '2xl',
+    'sides': 'vertical'
+  } %}
+">
+
+  {% if title or description %}
+    <header class="card-loop__header" style="
+      {% include 'components/prmimitive-books/spacing.twig' with {
+        'type': 'margin',
+        'size': '2xl',
+        'sides': 'bottom'
+      } %}
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    ">
+      
+      {% if title %}
+        <h2 class="card-loop__title" style="
+          {% include 'components/prmimitive-books/typography.twig' with {
+            'size': 'xx-large',
+            'weight': 'bold',
+            'family': 'playfair-display'
+          } %}
+          {% include 'components/prmimitive-books/color.twig' with {
+            'property': 'color',
+            'color': 'primary-dark'
+          } %}
+          {% include 'components/prmimitive-books/spacing.twig' with {
+            'type': 'margin',
+            'size': 'lg',
+            'sides': 'bottom'
+          } %}
+          margin-top: 0;
+        ">{{ title }}</h2>
+      {% endif %}
+      
+      {% if description %}
+        <p class="card-loop__description" style="
+          {% include 'components/prmimitive-books/typography.twig' with {
+            'size': 'large',
+            'line_height': 'relaxed'
+          } %}
+          {% include 'components/prmimitive-books/color.twig' with {
+            'property': 'color',
+            'color': 'base'
+          } %}
+          margin: 0;
+        ">{{ description }}</p>
+      {% endif %}
+      
+    </header>
+  {% endif %}
+
+  {% if cards|length > 0 %}
+    <div class="card-loop__grid" style="
+      display: grid;
+      grid-template-columns: {{ column_configs[columns] }};
+      gap: {{ gap_sizes[gap] }};
+      align-items: start;
+    ">
+      
+      {% for card in cards %}
+        {% if card_type == 'color-card' %}
+          {% include 'components/color-card.twig' with {
+            'color_name': card.name,
+            'color_value': card.value,
+            'color_token': card.token,
+            'hex_value': card.hex,
+            'rgb_value': card.rgb,
+            'hsl_value': card.hsl,
+            'usage': card.usage,
+            'size': size
+          } %}
+        {% else %}
+          {% include 'components/card.twig' with {
+            'variant': card.variant|default('default'),
+            'size': size,
+            'title': card.title,
+            'subtitle': card.subtitle,
+            'description': card.description,
+            'image': card.image,
+            'cta_text': card.cta_text,
+            'cta_link': card.cta_link,
+            'class': card.class
+          } %}
+        {% endif %}
+      {% endfor %}
+      
+    </div>
+  {% else %}
+    <div class="card-loop__empty" style="
+      text-align: center;
+      {% include 'components/prmimitive-books/spacing.twig' with {
+        'type': 'padding',
+        'size': '3xl',
+        'sides': 'all'
+      } %}
+      {% include 'components/prmimitive-books/color.twig' with {
+        'property': 'background-color',
+        'color': 'neutral-light'
+      } %}
+      {% include 'components/prmimitive-books/layout.twig' with {
+        'border_radius': 'lg'
+      } %}
+    ">
+      <p style="
+        {% include 'components/prmimitive-books/typography.twig' with {
+          'size': 'large'
+        } %}
+        {% include 'components/prmimitive-books/color.twig' with {
+          'property': 'color',
+          'color': 'base'
+        } %}
+        margin: 0;
+      ">No cards to display</p>
+    </div>
+  {% endif %}
+
+</section>
+
+<style>
+.card-loop__grid {
+  /* Responsive adjustments */
+}
+
+@media (max-width: 768px) {
+  .card-loop__grid {
+    grid-template-columns: 1fr;
+    gap: var(--wp--preset--spacing--40);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-loop__grid {
+    gap: var(--wp--preset--spacing--30);
+  }
+}
+
+/* Animation for cards appearing */
+.card-loop__grid > * {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.card-loop__grid > *:nth-child(1) { animation-delay: 0.1s; }
+.card-loop__grid > *:nth-child(2) { animation-delay: 0.2s; }
+.card-loop__grid > *:nth-child(3) { animation-delay: 0.3s; }
+.card-loop__grid > *:nth-child(4) { animation-delay: 0.4s; }
+.card-loop__grid > *:nth-child(5) { animation-delay: 0.5s; }
+.card-loop__grid > *:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

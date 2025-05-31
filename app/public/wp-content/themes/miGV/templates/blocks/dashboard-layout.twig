@@ -24,6 +24,18 @@
             <nav class="villa-sidebar-nav">
                 <div class="villa-nav-section">
                     <ul class="villa-nav-list">
+                        <!-- Design System Navigation -->
+                        <li>
+                            <a href="/design-system" class="villa-nav-item {{ current_tab == 'design-system' ? 'active' : '' }}" data-tab="design-system">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                                <span>Design System</span>
+                            </a>
+                        </li>
+                        
                         <!-- Temporarily disabled for testing -->
                         {% if false and user_roles %}
                             <li>
@@ -79,6 +91,8 @@
                     <h1 class="villa-page-title">
                         {% if current_tab == 'profile' %}
                             Profile
+                        {% elseif current_tab == 'design-system' %}
+                            Design System
                         {% else %}
                             Dashboard
                         {% endif %}
@@ -96,44 +110,52 @@
             
             <!-- Page Content -->
             <div class="villa-page-content">
-                {% if current_tab == 'profile' %}
-                    <!-- Profile Section Content -->
-                    <div class="villa-profile-section">
-                        <div class="villa-card">
-                            <div class="villa-card-header">
-                                <h2>User Profile</h2>
-                            </div>
-                            <div class="villa-card-content">
-                                <div class="profile-info">
-                                    <div class="profile-field">
-                                        <label>Display Name:</label>
-                                        <span>{{ user.display_name }}</span>
-                                    </div>
-                                    <div class="profile-field">
-                                        <label>Email:</label>
-                                        <span>{{ user.user_email }}</span>
-                                    </div>
-                                    <div class="profile-field">
-                                        <label>Username:</label>
-                                        <span>{{ user.user_login }}</span>
-                                    </div>
-                                    {% if user_roles %}
+                {% block dashboard_content %}
+                    {% if current_tab == 'profile' %}
+                        <!-- Profile Section Content -->
+                        <div class="villa-profile-section">
+                            <div class="villa-card">
+                                <div class="villa-card-header">
+                                    <h2>User Profile</h2>
+                                </div>
+                                <div class="villa-card-content">
+                                    <div class="profile-info">
                                         <div class="profile-field">
-                                            <label>Villa Roles:</label>
-                                            <span>{{ user_roles|join(', ') }}</span>
+                                            <label>Display Name:</label>
+                                            <span>{{ user.display_name }}</span>
                                         </div>
-                                    {% endif %}
+                                        <div class="profile-field">
+                                            <label>Email:</label>
+                                            <span>{{ user.user_email }}</span>
+                                        </div>
+                                        <div class="profile-field">
+                                            <label>Username:</label>
+                                            <span>{{ user.user_login }}</span>
+                                        </div>
+                                        {% if user_roles %}
+                                            <div class="profile-field">
+                                                <label>Villa Roles:</label>
+                                                <span>{{ user_roles|join(', ') }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% else %}
-                    <!-- Default Dashboard Welcome -->
-                    <div class="dashboard-welcome">
-                        <h2>Welcome to your Villa Community dashboard!</h2>
-                        <p>Click Profile to get started.</p>
-                    </div>
-                {% endif %}
+                    {% elseif current_tab == 'design-system' %}
+                        <!-- Design System Section Content -->
+                        <div class="villa-design-system-section">
+                            <h2>Design System</h2>
+                            <p>This is the Design System page.</p>
+                        </div>
+                    {% else %}
+                        <!-- Default Dashboard Welcome -->
+                        <div class="dashboard-welcome">
+                            <h2>Welcome to your Villa Community dashboard!</h2>
+                            <p>Click Profile to get started.</p>
+                        </div>
+                    {% endif %}
+                {% endblock %}
             </div>
         </div>
     </div>

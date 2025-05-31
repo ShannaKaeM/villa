@@ -161,12 +161,12 @@
             <i class="icon-{{ icon }}"></i>
         {% endif %}
         
-        {# Apply typography primitive #}
-        {% include 'components/primitives/typography.twig' with {
-            'font_size': size_config.font_size,
-            'font_weight': 'semiBold',
+        {# Use text-book element with button type #}
+        {% include 'components/element-books/text-book.twig' with {
+            'type': 'button',
+            'size': size_config.font_size,
             'content': content,
-            'inline': true
+            'element': 'span'
         } %}
         
         {% if icon and icon_position == 'right' %}
@@ -174,32 +174,7 @@
         {% endif %}
     </{{ element }}>
 
-    {# Apply color primitive for background #}
-    {% include 'components/primitives/color.twig' with {
-        'color': config.bg_color,
-        'property': 'background-color',
-        'inline': true
-    } %}
-
-    {# Apply color primitive for text #}
-    {% include 'components/primitives/color.twig' with {
-        'color': config.text_color,
-        'property': 'color',
-        'inline': true
-    } %}
-
-    {# Apply spacing primitive for padding #}
-    {% include 'components/primitives/spacing.twig' with {
-        'type': 'padding',
-        'size': size_config.padding,
-        'inline': true
-    } %}
-
-    {# Apply layout primitive for border radius #}
-    {% include 'components/primitives/layout.twig' with {
-        'border_radius': 'md',
-        'inline': true
-    } %}
+{# Button styling handled via CSS classes using design tokens #}
 
     <style>
     .villa-button {

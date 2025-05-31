@@ -1,0 +1,215 @@
+{% extends "blocks/dashboard-layout.twig" %}
+
+{% block dashboard_content %}
+<div class="villa-design-book typography-book">
+    
+    {# Design Book Header #}
+    <div class="design-book-header">
+        <div class="header-content">
+            <div class="breadcrumbs">
+                {% for crumb in design_book.breadcrumbs %}
+                    {% if crumb.url %}
+                        <a href="{{ crumb.url }}">{{ crumb.name }}</a>
+                    {% else %}
+                        <span>{{ crumb.name }}</span>
+                    {% endif %}
+                    {% if not loop.last %} / {% endif %}
+                {% endfor %}
+            </div>
+            <h1 class="design-book-title">{{ design_book.section_config.name }}</h1>
+            <p class="design-book-description">{{ design_book.section_config.description }}</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" id="export-typography">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7,10 12,15 17,10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export Typography
+            </button>
+            <button class="btn btn-primary" id="save-typography">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17,21 17,13 7,13 7,21"/>
+                    <polyline points="7,3 7,8 15,8"/>
+                </svg>
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    {# Section Navigation #}
+    <div class="design-book-section-nav">
+        {% for nav_item in design_book.navigation %}
+            <a href="{{ nav_item.url }}" class="section-nav-item {% if nav_item.active %}active{% endif %}">
+                <div class="nav-icon">{{ nav_item.icon }}</div>
+                <div class="nav-content">
+                    <span class="nav-name">{{ nav_item.name }}</span>
+                    <span class="nav-description">{{ nav_item.description }}</span>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    {# Typography Content Tabs #}
+    <div class="design-book-tabs">
+        <button class="tab-button active" data-tab="scale">Typography Scale</button>
+        <button class="tab-button" data-tab="styles">Text Styles</button>
+        <button class="tab-button" data-tab="fonts">Font Families</button>
+        <button class="tab-button" data-tab="tokens">Typography Tokens</button>
+    </div>
+
+    {# Typography Scale Tab #}
+    <div class="tab-content active" id="scale-tab">
+        <div class="scale-section">
+            <h2>Modular Typography Scale</h2>
+            <div class="scale-controls">
+                <div class="control-group">
+                    <label for="base-font-size">Base Font Size</label>
+                    <input type="range" id="base-font-size" min="14" max="20" value="{{ typography.base_font_size ?: 16 }}" step="1">
+                    <span class="value-display">{{ typography.base_font_size ?: 16 }}px</span>
+                </div>
+                <div class="control-group">
+                    <label for="scale-ratio">Scale Ratio</label>
+                    <select id="scale-ratio">
+                        <option value="1.125" {% if typography.current_scale == 1.125 %}selected{% endif %}>Major Second (1.125)</option>
+                        <option value="1.2" {% if typography.current_scale == 1.2 %}selected{% endif %}>Minor Third (1.2)</option>
+                        <option value="1.25" {% if typography.current_scale == 1.25 or not typography.current_scale %}selected{% endif %}>Major Third (1.25)</option>
+                        <option value="1.333" {% if typography.current_scale == 1.333 %}selected{% endif %}>Perfect Fourth (1.333)</option>
+                        <option value="1.414" {% if typography.current_scale == 1.414 %}selected{% endif %}>Augmented Fourth (1.414)</option>
+                        <option value="1.5" {% if typography.current_scale == 1.5 %}selected{% endif %}>Perfect Fifth (1.5)</option>
+                        <option value="1.618" {% if typography.current_scale == 1.618 %}selected{% endif %}>Golden Ratio (1.618)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="scale-preview">
+                <h3>Typography Scale Preview</h3>
+                <div class="scale-samples">
+                    <div class="scale-item" data-step="6">
+                        <span class="scale-label">H1 (Step 6)</span>
+                        <span class="scale-size">61px</span>
+                        <div class="scale-sample">The quick brown fox</div>
+                    </div>
+                    <div class="scale-item" data-step="5">
+                        <span class="scale-label">H2 (Step 5)</span>
+                        <span class="scale-size">49px</span>
+                        <div class="scale-sample">The quick brown fox</div>
+                    </div>
+                    <div class="scale-item" data-step="4">
+                        <span class="scale-label">H3 (Step 4)</span>
+                        <span class="scale-size">39px</span>
+                        <div class="scale-sample">The quick brown fox</div>
+                    </div>
+                    <div class="scale-item" data-step="3">
+                        <span class="scale-label">H4 (Step 3)</span>
+                        <span class="scale-size">31px</span>
+                        <div class="scale-sample">The quick brown fox jumps</div>
+                    </div>
+                    <div class="scale-item" data-step="2">
+                        <span class="scale-label">H5 (Step 2)</span>
+                        <span class="scale-size">25px</span>
+                        <div class="scale-sample">The quick brown fox jumps</div>
+                    </div>
+                    <div class="scale-item" data-step="1">
+                        <span class="scale-label">H6 (Step 1)</span>
+                        <span class="scale-size">20px</span>
+                        <div class="scale-sample">The quick brown fox jumps over</div>
+                    </div>
+                    <div class="scale-item" data-step="0">
+                        <span class="scale-label">Body (Base)</span>
+                        <span class="scale-size">{{ typography.base_font_size ?: 16 }}px</span>
+                        <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
+                    </div>
+                    <div class="scale-item" data-step="-1">
+                        <span class="scale-label">Small (Step -1)</span>
+                        <span class="scale-size">13px</span>
+                        <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Text Styles Tab #}
+    <div class="tab-content" id="styles-tab">
+        <div class="styles-section">
+            <h2>Semantic Text Styles</h2>
+            <div class="text-styles-grid">
+                {# Dynamic text styles will be populated by JavaScript #}
+            </div>
+            <div class="style-actions">
+                <button class="btn-primary" id="save-styles">Save Text Styles</button>
+                <button class="btn-secondary" id="reset-styles">Reset to Defaults</button>
+            </div>
+        </div>
+    </div>
+
+    {# Font Families Tab #}
+    <div class="tab-content" id="fonts-tab">
+        <div class="fonts-section">
+            <h2>Font Families</h2>
+            <div class="font-families-grid">
+                {% for font in typography.font_families %}
+                    <div class="font-family-card">
+                        <div class="font-preview" style="font-family: {{ font.fontFamily }}">
+                            <div class="font-sample-large">{{ font.name }}</div>
+                            <div class="font-sample-text">The quick brown fox jumps over the lazy dog</div>
+                            <div class="font-sample-numbers">1234567890</div>
+                        </div>
+                        <div class="font-details">
+                            <h4>{{ font.name }}</h4>
+                            <code>{{ font.fontFamily }}</code>
+                            <span class="font-slug">{{ font.slug }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {# Typography Tokens Tab #}
+    <div class="tab-content" id="tokens-tab">
+        <div class="tokens-section">
+            <h2>Typography Design Tokens</h2>
+            <p>Copy these CSS custom properties to use in your components:</p>
+            
+            <div class="tokens-grid">
+                <div class="token-category">
+                    <h3>Font Sizes</h3>
+                    <div class="token-list" id="font-size-tokens">
+                        {% for size in typography.font_sizes %}
+                            <div class="token-item">
+                                <span class="token-name">--wp--preset--font-size--{{ size.slug }}</span>
+                                <span class="token-value">{{ size.size }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="token-category">
+                    <h3>Font Families</h3>
+                    <div class="token-list" id="font-family-tokens">
+                        {% for font in typography.font_families %}
+                            <div class="token-item">
+                                <span class="token-name">--wp--preset--font-family--{{ font.slug }}</span>
+                                <span class="token-value">{{ font.fontFamily }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize Typography Book when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof VillaTypographyBook !== 'undefined') {
+        new VillaTypographyBook();
+    }
+});
+</script>
+{% endblock %}

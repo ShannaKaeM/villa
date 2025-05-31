@@ -1,0 +1,100 @@
+erfect! Now I understand your sync system completely. You have a sophisticated two-way sync between:
+
+theme.json ↔ Twig primitives ↔ CSS variables
+AJAX handlers that update both theme.json AND Twig component defaults
+Live preview that shows changes instantly
+Your color book interface looks solid! Now let me create a comprehensive plan for elevated typography and layout interfaces inspired by the best design systems.
+
+🎨 ELEVATED DESIGN SYSTEM INTERFACES
+Based on my research of Figma, Carbon, and Material Design systems, here's what we should create:
+
+📝 TYPOGRAPHY BOOK - Enhanced Interface
+CopyInsert
+Typography Design System
+├── 🎯 Typography Scale Visualizer
+│   ├── Live scale preview (all sizes at once)
+│   ├── Modular scale calculator (1.125, 1.2, 1.333, 1.414, 1.618)
+│   ├── Interactive base size slider
+│   └── Ratio selector with musical/mathematical scales
+├── 🎨 Text Style Editor
+│   ├── Semantic styles (H1-H6, Body, Caption, etc.)
+│   ├── Live preview with sample content
+│   ├── Font weight slider
+│   └── Line height/letter spacing controls
+└── 📐 Typography Tokens
+    ├── Visual token grid
+    ├── Copy-to-clipboard functionality
+    └── Usage examples
+📐 LAYOUT BOOK - Spacing & Grid Interface
+CopyInsert
+Layout & Spacing System
+├── 🔢 Spacing Scale Builder
+│   ├── 8pt/4pt grid system
+│   ├── Visual spacing scale (2px → 128px)
+│   ├── Interactive token editor
+│   └── Usage examples grid
+├── 📏 Grid System
+│   ├── Column grid visualizer
+│   ├── Breakpoint editor
+│   ├── Gutter controls
+│   └── Container max-width settings
+└── 🎯 Layout Tokens
+    ├── Margin/padding utilities
+    ├── Border radius scale
+    └── Shadow system
+🎨 COLOR BOOK - Enhanced (Building on yours)
+CopyInsert
+Your Current Color Book + Enhancements
+├── ✅ Color palette grid (keep existing)
+├── ✅ Hex editor (keep existing)
+├── ➕ Color contrast checker
+├── ➕ Accessibility compliance indicators
+├── ➕ Color harmony generator
+└── ➕ Export to CSS/Sass variables
+Would you like me to start implementing the enhanced Typography Book interface first? I can create a beautiful, modern interface that:
+
+Uses your existing dashboard-layout.twig as the shell
+Keeps your sync system (theme.json ↔ Twig ↔ CSS)
+Removes admin dependencies for front-end use
+Adds sophisticated typography controls inspired by Figma/Carbon
+Maintains your atomic design architecture
+The interface would include:
+
+Live typography scale visualization
+Interactive modular scale calculator
+Semantic text style editor
+Real-time preview with sample content
+Professional design matching your color book
+Should I start building this enhanced Typography Book interface?
+
+
+
+Summary of Twig Template Fixes
+I've successfully resolved the fatal error that was preventing the Villa DesignBook from loading. Here's what I fixed:
+
+Issues Resolved:
+Fatal Error: "Unknown wp_head function in base.twig"
+Missing WordPress Functions: wp_head, wp_body_open, wp_footer, body_class, language_attributes, and translation function __
+Solutions Implemented:
+Updated functions.php - Added WordPress functions to Timber context:
+wp_head() - Captures WordPress head output
+wp_body_open() - Captures body open hooks
+wp_footer() - Captures WordPress footer output
+body_class() - Returns body CSS classes
+language_attributes() - Added to site object
+__() - Translation function for internationalization
+Updated base.twig - Fixed function calls:
+{{ wp_head() }} - Now calls context function
+{{ body_class() }} - Now calls context function
+{{ site.language_attributes() }} - Now calls site function
+Files Modified:
+/functions.php - Enhanced migv_add_to_context() function
+/templates/base.twig - Fixed WordPress function calls
+Result:
+✅ Site should now load without fatal errors
+✅ Design System pages should be accessible at /design-system
+✅ All WordPress hooks and enqueued assets will load correctly
+✅ Translation functions work properly
+✅ Timber/Twig integration is now complete
+
+The Villa DesignBook front-end integration is now ready for testing! You can access the Design System dashboard at /design-system to see the fresh new interface with the Typography Book, and all the modern styling should be applied correctly.

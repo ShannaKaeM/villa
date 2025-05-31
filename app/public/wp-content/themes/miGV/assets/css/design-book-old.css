@@ -14,6 +14,46 @@
 .villa-base-options {
     max-width: 1400px;
     margin: 0;
+    font-family: var(--wp--preset--font-family--inter);
+    color: var(--wp--preset--color--base-dark);
+    background-color: var(--wp--preset--color--base-lightest);
+}
+
+/* ===================================
+   VILLA DESIGN BOOK STYLES - USING THEME.JSON TOKENS
+   ================================== */
+
+/* Global DesignBook Typography */
+.villa-design-book h1,
+.villa-color-book h1,
+.villa-text-book h1,
+.villa-typography-book h1,
+.villa-layout-book h1,
+.villa-card-book h1,
+.villa-hero-book h1,
+.villa-button-book h1,
+.villa-component-book h1,
+.villa-base-options h1 {
+    font-family: var(--wp--preset--font-family--playfair-display);
+    font-size: var(--wp--preset--font-size--xx-large);
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: 1rem;
+}
+
+.villa-design-book .description,
+.villa-color-book .description,
+.villa-text-book .description,
+.villa-typography-book .description,
+.villa-layout-book .description,
+.villa-card-book .description,
+.villa-hero-book .description,
+.villa-button-book .description,
+.villa-component-book .description,
+.villa-base-options .description {
+    font-size: var(--wp--preset--font-size--medium);
+    color: var(--wp--preset--color--base);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
 }
 
 /* ===================================
@@ -32,8 +72,8 @@
 }
 
 .design-book-card {
-    background: white;
-    border: 1px solid #e0e0e0;
+    background: var(--wp--preset--color--base-lightest);
+    border: 1px solid var(--wp--preset--color--neutral-light);
     border-radius: 12px;
     padding: 2rem;
     text-align: center;
@@ -48,7 +88,7 @@
 }
 
 .design-book-card .card-icon {
-    font-size: 3rem;
+    font-size: var(--wp--preset--font-size--huge);
     margin-bottom: 1rem;
     display: block;
 }
@@ -56,7 +96,8 @@
 .design-book-card h3 {
     margin: 0 0 1rem 0;
     color: var(--wp--preset--color--base-darkest);
-    font-size: 1.5rem;
+    font-size: var(--wp--preset--font-size--x-large);
+    font-family: var(--wp--preset--font-family--playfair-display);
     font-weight: 600;
 }
 
@@ -64,6 +105,7 @@
     color: var(--wp--preset--color--base-dark);
     margin-bottom: 1.5rem;
     line-height: 1.6;
+    font-size: var(--wp--preset--font-size--medium);
 }
 
 .design-book-actions {
@@ -71,7 +113,7 @@
     gap: 1rem;
     justify-content: center;
     padding: 2rem;
-    background: #f8f9fa;
+    background: var(--wp--preset--color--neutral-light);
     border-radius: 8px;
     margin-top: 2rem;
 }
@@ -83,17 +125,18 @@
 .design-book-section {
     margin-bottom: 3rem;
     padding: 2rem;
-    background: white;
+    background: var(--wp--preset--color--base-lightest);
     border-radius: 8px;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--wp--preset--color--neutral-light);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .design-book-section h2 {
     margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+    font-size: var(--wp--preset--font-size--x-large);
+    font-family: var(--wp--preset--font-family--playfair-display);
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--wp--preset--color--primary-dark);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -101,8 +144,8 @@
 
 .design-book-section .section-description {
     margin: 0 0 1.5rem 0;
-    color: #6c757d;
-    font-size: 0.95rem;
+    color: var(--wp--preset--color--base);
+    font-size: var(--wp--preset--font-size--medium);
     line-height: 1.5;
 }
 
@@ -122,7 +165,7 @@
 
 .design-book-section .design-book-card:hover {
     border-color: #007cba;
-    box-shadow: 0 4px 8px rgba(0, 124, 186, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
 }
 
@@ -1685,7 +1728,7 @@
 .color-mode-tabs {
     display: flex;
     margin: 1rem 0 0.5rem 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--wp--preset--color--neutral-light);
 }
 
 .color-mode-tab {
@@ -1693,22 +1736,23 @@
     border: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-family: var(--wp--preset--font-family--inter);
     font-weight: 500;
-    color: #666;
+    color: var(--wp--preset--color--base);
     border-bottom: 2px solid transparent;
     transition: all 0.2s ease;
 }
 
 .color-mode-tab:hover {
     color: var(--wp--preset--color--primary);
-    background-color: #f8f9fa;
+    background-color: var(--wp--preset--color--neutral-light);
 }
 
 .color-mode-tab.active {
     color: var(--wp--preset--color--primary);
     border-bottom-color: var(--wp--preset--color--primary);
-    background-color: #fff;
+    background-color: var(--wp--preset--color--base-lightest);
 }
 
 /* Color Control Panels */
@@ -1733,15 +1777,854 @@
 .hsla-input-group label,
 .cmyk-input-group label {
     min-width: 80px;
-    font-size: 0.8rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-family: var(--wp--preset--font-family--inter);
     font-weight: 500;
-    color: #555;
+    color: var(--wp--preset--color--base-dark);
 }
 
 .hsla-value,
 .cmyk-value {
     min-width: 40px;
-    font-size: 0.8rem;
-    color: #666;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base);
     text-align: right;
+}
+
+/* ===================================
+   CARD COMPONENT SYSTEM
+   ================================== */
+
+/* Base Card Styles */
+.design-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--wp--custom--layout--border-radius--md);
+}
+
+/* Card Variants */
+.design-card--default {
+  background-color: var(--wp--preset--color--base-lightest);
+  border-color: var(--wp--preset--color--neutral-light);
+  box-shadow: var(--wp--custom--layout--shadows--sm);
+}
+
+.design-card--elevated {
+  background-color: var(--wp--preset--color--base-lightest);
+  border-color: var(--wp--preset--color--neutral-light);
+  box-shadow: var(--wp--custom--layout--shadows--lg);
+}
+
+.design-card--minimal {
+  background-color: transparent;
+  border-color: var(--wp--preset--color--neutral-light);
+  box-shadow: none;
+}
+
+.design-card--featured {
+  background-color: var(--wp--preset--color--primary);
+  border-color: var(--wp--preset--color--primary-dark);
+  box-shadow: var(--wp--custom--layout--shadows--lg);
+}
+
+/* Card Content */
+.design-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.design-card__image {
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--wp--custom--layout--border-radius--sm);
+}
+
+.design-card__image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.design-card:hover .design-card__image-overlay {
+  opacity: 1;
+}
+
+.design-card__actions {
+  margin-top: auto;
+}
+
+/* Spacing Utilities */
+.p-lg { padding: var(--wp--custom--layout--spacing--lg); }
+.p-xl { padding: var(--wp--custom--layout--spacing--xl); }
+.p-2xl { padding: var(--wp--custom--layout--spacing--2xl); }
+
+.mb-sm { margin-bottom: var(--wp--custom--layout--spacing--sm); }
+.mb-md { margin-bottom: var(--wp--custom--layout--spacing--md); }
+.mb-lg { margin-bottom: var(--wp--custom--layout--spacing--lg); }
+.mb-xl { margin-bottom: var(--wp--custom--layout--spacing--xl); }
+
+.mt-auto { margin-top: auto; }
+
+/* Button Element Styles - Atomic Design */
+.villa-button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--wp--custom--layout--border-radius--md);
+  font-family: var(--wp--preset--font-family--inter);
+}
+
+/* Button Variants */
+.villa-button--primary {
+  background-color: var(--wp--preset--color--primary);
+  color: var(--wp--preset--color--base-lightest);
+}
+
+.villa-button--primary:hover {
+  background-color: var(--wp--preset--color--primary-dark);
+}
+
+.villa-button--secondary {
+  background-color: var(--wp--preset--color--secondary);
+  color: var(--wp--preset--color--base-lightest);
+}
+
+.villa-button--secondary:hover {
+  background-color: var(--wp--preset--color--secondary-dark);
+}
+
+.villa-button--outline {
+  background-color: transparent;
+  color: var(--wp--preset--color--primary);
+  border: 1px solid var(--wp--preset--color--primary);
+}
+
+.villa-button--outline:hover {
+  background-color: var(--wp--preset--color--primary);
+  color: var(--wp--preset--color--base-lightest);
+}
+
+.villa-button--ghost {
+  background-color: transparent;
+  color: var(--wp--preset--color--primary);
+}
+
+.villa-button--ghost:hover {
+  background-color: var(--wp--preset--color--primary-light);
+}
+
+/* Button Sizes */
+.villa-button--small {
+  padding: var(--wp--custom--layout--spacing--sm) var(--wp--custom--layout--spacing--md);
+}
+
+.villa-button--medium {
+  padding: var(--wp--custom--layout--spacing--md) var(--wp--custom--layout--spacing--lg);
+}
+
+.villa-button--large {
+  padding: var(--wp--custom--layout--spacing--lg) var(--wp--custom--layout--spacing--xl);
+}
+
+/* Button Icons */
+.villa-button .icon {
+  width: 1em;
+  height: 1em;
+}
+
+.villa-button .icon--left {
+  margin-right: 0.5em;
+}
+
+.villa-button .icon--right {
+  margin-left: 0.5em;
+}
+
+/* ===================================
+   TYPOGRAPHY BOOK STYLES
+   ================================== */
+
+.typography-book {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.typography-book .design-book-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.typography-book .design-book-header h1 {
+    font-size: var(--font-size-xx-large);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.typography-book .design-book-header .description {
+    font-size: var(--font-size-large);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Typography Book Tabs */
+.textbook-tabs {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.textbook-tab {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: none;
+    border: none;
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.textbook-tab:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-background-secondary);
+}
+
+.textbook-tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    background-color: var(--color-background-secondary);
+}
+
+/* Typography Book Content */
+.textbook-content {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.design-book-section h2 {
+    font-size: var(--font-size-x-large);
+    font-weight: var(--font-weight-semiBold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.section-description {
+    font-size: var(--font-size-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Text Styles Grid */
+.text-styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Text Style Cards */
+.text-style-card {
+    background: var(--color-background-primary);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    transition: all 0.2s ease;
+}
+
+.text-style-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.text-style-card .style-preview {
+    background: var(--color-background-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-style-card .preview-text {
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+/* Preview Text Styles */
+#preview-pretitle {
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+
+#preview-title {
+    font-size: var(--font-size-x-large);
+    font-weight: var(--font-weight-semiBold);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text-primary);
+}
+
+#preview-subtitle {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+#preview-body {
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    max-width: 300px;
+}
+
+#preview-button {
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-semiBold);
+    text-transform: uppercase;
+    color: var(--color-background-primary);
+    background: var(--color-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+}
+
+#preview-caption {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+}
+
+/* Text Style Controls */
+.text-style-controls h3 {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semiBold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.text-style-controls .control-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.text-style-controls label {
+    display: block;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.text-style-controls select {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-medium);
+    transition: border-color 0.2s ease;
+}
+
+.text-style-controls select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Base Typography Controls */
+.base-typography-controls {
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl) auto;
+}
+
+.base-typography-controls .control-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+}
+
+.base-typography-controls label {
+    flex: 0 0 150px;
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.base-typography-controls input[type="range"] {
+    flex: 1;
+    height: 6px;
+    background: var(--color-border);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.base-typography-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.base-typography-controls input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.base-typography-controls .value-display {
+    flex: 0 0 60px;
+    text-align: right;
+    font-weight: var(--font-weight-semiBold);
+    color: var(--color-primary);
+}
+
+/* Design Tokens Display */
+.tokens-display h3 {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semiBold);
+    color: var(--color-text-primary);
+    margin: var(--spacing-xl) 0 var(--spacing-md) 0;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: var(--spacing-sm);
+}
+
+.token-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.token-item {
+    background: var(--color-background-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+}
+
+.token-item .token-name {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    margin-bottom: var(--spacing-xs);
+}
+
+.token-item .token-value {
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-semiBold);
+    color: var(--color-text-primary);
+    font-family: monospace;
+}
+
+/* Design Book Actions */
+.design-book-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl) 0;
+    border-top: 2px solid var(--color-border);
+}
+
+.design-book-actions .button {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-semiBold);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    min-width: 160px;
+}
+
+.design-book-actions .button-primary {
+    background: var(--color-primary);
+    color: var(--color-background-primary);
+}
+
+.design-book-actions .button-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+}
+
+.design-book-actions .button-secondary {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-border);
+}
+
+.design-book-actions .button-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .typography-book {
+        padding: var(--spacing-md);
+    }
+    
+    .textbook-tabs {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .text-styles-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .base-typography-controls .control-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-sm);
+    }
+    
+    .base-typography-controls label {
+        flex: none;
+    }
+    
+    .design-book-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.villa-design-book.typography-book {
+    padding: var(--wp--preset--spacing--large);
+    background-color: var(--wp--preset--color--base-lightest);
+    min-height: 100vh;
+}
+
+.villa-design-book.typography-book .design-book-header {
+    text-align: center;
+    margin-bottom: var(--wp--preset--spacing--x-large);
+    padding: var(--wp--preset--spacing--large) 0;
+    border-bottom: 2px solid var(--wp--preset--color--border-light);
+}
+
+.villa-design-book.typography-book .design-book-header h1 {
+    font-family: var(--wp--preset--font-family--playfair-display);
+    font-size: var(--wp--preset--font-size--xxx-large);
+    font-weight: var(--wp--preset--font-weight--bold);
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: var(--wp--preset--spacing--medium);
+    text-align: center;
+}
+
+.villa-design-book.typography-book .design-book-header .description {
+    font-size: var(--wp--preset--font-size--large);
+    color: var(--wp--preset--color--base);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.villa-design-book.typography-book .textbook-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: var(--wp--preset--spacing--x-large);
+    border-bottom: 3px solid var(--wp--preset--color--border-light);
+    background-color: var(--wp--preset--color--base-light);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+}
+
+.villa-design-book.typography-book .textbook-tab {
+    padding: var(--wp--preset--spacing--medium) var(--wp--preset--spacing--large);
+    background: var(--wp--preset--color--base-light);
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-family: var(--wp--preset--font-family--inter);
+    font-size: var(--wp--preset--font-size--medium);
+    font-weight: var(--wp--preset--font-weight--medium);
+    color: var(--wp--preset--color--base);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.villa-design-book.typography-book .textbook-tab:hover {
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--primary);
+}
+
+.villa-design-book.typography-book .textbook-tab.active {
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--primary-dark);
+    border-bottom-color: var(--wp--preset--color--primary);
+    font-weight: var(--wp--preset--font-weight--semi-bold);
+}
+
+.villa-design-book.typography-book .textbook-content {
+    background: var(--wp--preset--color--base-lightest);
+    border-radius: 0 0 12px 12px;
+    padding: var(--wp--preset--spacing--x-large);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.villa-design-book.typography-book .design-book-section h2 {
+    font-family: var(--wp--preset--font-family--playfair-display);
+    font-size: var(--wp--preset--font-size--xx-large);
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: var(--wp--preset--spacing--medium);
+    text-align: center;
+}
+
+.villa-design-book.typography-book .section-description {
+    font-size: var(--wp--preset--font-size--large);
+    color: var(--wp--preset--color--base);
+    text-align: center;
+    margin-bottom: var(--wp--preset--spacing--x-large);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.villa-design-book.typography-book .text-styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: var(--wp--preset--spacing--large);
+    margin-bottom: var(--wp--preset--spacing--x-large);
+}
+
+.villa-design-book.typography-book .text-style-card {
+    background: white;
+    border-radius: 12px;
+    padding: var(--wp--preset--spacing--large);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--wp--preset--color--border-light);
+    transition: all 0.3s ease;
+}
+
+.villa-design-book.typography-book .text-style-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border-color: var(--wp--preset--color--primary-light);
+}
+
+.villa-design-book.typography-book .text-style-card .style-preview {
+    background: var(--wp--preset--color--base-lightest);
+    border-radius: 8px;
+    padding: var(--wp--preset--spacing--large);
+    margin-bottom: var(--wp--preset--spacing--medium);
+    border: 1px solid var(--wp--preset--color--border-light);
+}
+
+.villa-design-book.typography-book .text-style-card .preview-text {
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.villa-design-book.typography-book .text-style-controls h3 {
+    font-family: var(--wp--preset--font-family--inter);
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: var(--wp--preset--font-weight--semi-bold);
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: var(--wp--preset--spacing--medium);
+    text-align: center;
+}
+
+.villa-design-book.typography-book .control-group {
+    margin-bottom: var(--wp--preset--spacing--medium);
+}
+
+.villa-design-book.typography-book .control-group label {
+    display: block;
+    font-family: var(--wp--preset--font-family--inter);
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: var(--wp--preset--font-weight--medium);
+    color: var(--wp--preset--color--base-dark);
+    margin-bottom: var(--wp--preset--spacing--x-small);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.villa-design-book.typography-book .control-group select {
+    width: 100%;
+    padding: var(--wp--preset--spacing--small) var(--wp--preset--spacing--medium);
+    border: 2px solid var(--wp--preset--color--border-light);
+    border-radius: 6px;
+    font-family: var(--wp--preset--font-family--inter);
+    font-size: var(--wp--preset--font-size--medium);
+    background: white;
+    color: var(--wp--preset--color--base-dark);
+    transition: border-color 0.3s ease;
+}
+
+.villa-design-book.typography-book .control-group select:focus {
+    outline: none;
+    border-color: var(--wp--preset--color--primary);
+    box-shadow: 0 0 0 3px rgba(var(--wp--preset--color--primary-rgb), 0.1);
+}
+
+.villa-design-book.typography-book .base-typography-controls {
+    max-width: 600px;
+    margin: 0 auto var(--wp--preset--spacing--x-large);
+    background: white;
+    padding: var(--wp--preset--spacing--x-large);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.villa-design-book.typography-book .base-typography-controls .control-group {
+    display: flex;
+    align-items: center;
+    gap: var(--wp--preset--spacing--medium);
+    margin-bottom: var(--wp--preset--spacing--large);
+}
+
+.villa-design-book.typography-book .base-typography-controls .control-group label {
+    flex: 0 0 150px;
+    margin-bottom: 0;
+    font-size: var(--wp--preset--font-size--medium);
+}
+
+.villa-design-book.typography-book .base-typography-controls input[type="range"] {
+    flex: 1;
+    margin: 0 var(--wp--preset--spacing--medium);
+}
+
+.villa-design-book.typography-book .base-typography-controls .value-display {
+    flex: 0 0 60px;
+    text-align: right;
+    font-weight: var(--wp--preset--font-weight--semi-bold);
+    color: var(--wp--preset--color--primary-dark);
+}
+
+.villa-design-book.typography-book .tokens-display {
+    background: white;
+    border-radius: 12px;
+    padding: var(--wp--preset--spacing--x-large);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.villa-design-book.typography-book .tokens-display h3 {
+    font-family: var(--wp--preset--font-family--playfair-display);
+    font-size: var(--wp--preset--font-size--x-large);
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: var(--wp--preset--spacing--medium);
+    padding-bottom: var(--wp--preset--spacing--small);
+    border-bottom: 2px solid var(--wp--preset--color--border-light);
+}
+
+.villa-design-book.typography-book .token-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--wp--preset--spacing--medium);
+    margin-bottom: var(--wp--preset--spacing--x-large);
+}
+
+.villa-design-book.typography-book .design-book-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--wp--preset--spacing--medium);
+    margin-top: var(--wp--preset--spacing--x-large);
+    padding-top: var(--wp--preset--spacing--large);
+    border-top: 2px solid var(--wp--preset--color--border-light);
+}
+
+.villa-design-book.typography-book .design-book-actions .button {
+    padding: var(--wp--preset--spacing--medium) var(--wp--preset--spacing--x-large);
+    border-radius: 8px;
+    font-family: var(--wp--preset--font-family--inter);
+    font-size: var(--wp--preset--font-size--medium);
+    font-weight: var(--wp--preset--font-weight--semi-bold);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid;
+    cursor: pointer;
+}
+
+.villa-design-book.typography-book .design-book-actions .button-primary {
+    background: var(--wp--preset--color--primary);
+    color: white;
+    border-color: var(--wp--preset--color--primary);
+}
+
+.villa-design-book.typography-book .design-book-actions .button-primary:hover {
+    background: var(--wp--preset--color--primary-dark);
+    border-color: var(--wp--preset--color--primary-dark);
+}
+
+.villa-design-book.typography-book .design-book-actions .button-secondary {
+    background: white;
+    color: var(--wp--preset--color--base-dark);
+    border-color: var(--wp--preset--color--border);
+}
+
+.villa-design-book.typography-book .design-book-actions .button-secondary:hover {
+    border-color: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--primary);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .villa-design-book.typography-book {
+        padding: var(--wp--preset--spacing--medium);
+    }
+    
+    .villa-design-book.typography-book .text-styles-grid {
+        grid-template-columns: 1fr;
+        gap: var(--wp--preset--spacing--medium);
+    }
+    
+    .villa-design-book.typography-book .textbook-tabs {
+        flex-direction: column;
+    }
+    
+    .villa-design-book.typography-book .design-book-actions {
+        flex-direction: column;
+        align-items: center;
+    }
 }
