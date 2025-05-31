@@ -1,0 +1,84 @@
+{% set type = type|default('body') %}
+{% set size = size|default('medium') %}
+{% set weight = weight|default('regular') %}
+{% set color = color|default('base') %}
+{% set transform = transform|default('normal') %}
+{% set spacing = spacing|default('normal') %}
+{% set element = element|default('span') %}
+
+{# Predefined text type styles using design tokens #}
+{% set type_styles = {
+    'pretitle': 'font-size: var(--wp--preset--font-size--small); font-weight: var(--wp--custom--typography--base-styles--font-weights--medium); text-transform: uppercase; letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--wider); color: var(--wp--preset--color--primary);',
+    'title': 'font-size: var(--wp--preset--font-size--x-large); font-weight: var(--wp--custom--typography--base-styles--font-weights--bold);',
+    'subtitle': 'font-size: var(--wp--preset--font-size--large); font-weight: var(--wp--custom--typography--base-styles--font-weights--semiBold);',
+    'section-title': 'font-size: var(--wp--preset--font-size--xx-large); font-weight: var(--wp--custom--typography--base-styles--font-weights--bold); margin-bottom: var(--wp--custom--layout--spacing--lg);',
+    'body': 'font-size: var(--wp--preset--font-size--medium);',
+    'caption': 'font-size: var(--wp--preset--font-size--small); color: var(--wp--preset--color--neutral);',
+    'button': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--medium);'
+} %}
+
+{# Size styles using design tokens #}
+{% set size_styles = {
+    'small': 'font-size: var(--wp--preset--font-size--small);',
+    'medium': 'font-size: var(--wp--preset--font-size--medium);',
+    'large': 'font-size: var(--wp--preset--font-size--large);',
+    'x-large': 'font-size: var(--wp--preset--font-size--x-large);',
+    'xx-large': 'font-size: var(--wp--preset--font-size--xx-large);',
+    'huge': 'font-size: var(--wp--preset--font-size--huge);'
+} %}
+
+{# Weight styles using design tokens #}
+{% set weight_styles = {
+    'regular': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--regular);',
+    'medium': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--medium);',
+    'semiBold': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--semiBold);',
+    'bold': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--bold);',
+    'extraBold': 'font-weight: var(--wp--custom--typography--base-styles--font-weights--extraBold);'
+} %}
+
+{# Color styles using design tokens #}
+{% set color_styles = {
+    'primary': 'color: var(--wp--preset--color--primary);',
+    'secondary': 'color: var(--wp--preset--color--secondary);',
+    'neutral': 'color: var(--wp--preset--color--neutral);',
+    'base': 'color: var(--wp--preset--color--base);',
+    'base-dark': 'color: var(--wp--preset--color--base-dark);',
+    'base-darkest': 'color: var(--wp--preset--color--base-darkest);',
+    'white': 'color: var(--wp--preset--color--base-white);'
+} %}
+
+{# Letter spacing styles using design tokens #}
+{% set spacing_styles = {
+    'tight': 'letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--tight);',
+    'normal': 'letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--normal);',
+    'wide': 'letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--wide);',
+    'wider': 'letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--wider);',
+    'widest': 'letter-spacing: var(--wp--custom--typography--base-styles--letter-spacing--widest);'
+} %}
+
+{# Text transform styles #}
+{% set transform_styles = {
+    'normal': '',
+    'uppercase': 'text-transform: uppercase;',
+    'lowercase': 'text-transform: lowercase;',
+    'capitalize': 'text-transform: capitalize;'
+} %}
+
+{# Build combined styles #}
+{% set base_styles = type_styles[type]|default('') %}
+{% set combined_styles = [
+    base_styles,
+    size_styles[size]|default(''),
+    weight_styles[weight]|default(''),
+    color_styles[color]|default(''),
+    spacing_styles[spacing]|default(''),
+    transform_styles[transform]|default('')
+]|join(' ') %}
+
+<{{ element }} 
+    class="villa-text villa-text--{{ type }} villa-text--{{ size }}{{ class ? ' ' ~ class : '' }}"
+    style="{{ combined_styles }}"
+    {{ attributes|raw }}
+>
+    {{ content|raw }}
+</{{ element }}>

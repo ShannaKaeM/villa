@@ -95,6 +95,109 @@
             };
             return '#' + toHex(r) + toHex(g) + toHex(b);
         },
+
+        /**
+         * Convert hex to HSLA
+         */
+        hexToHsla: function(hex) {
+            const rgb = this.hexToRgb(hex);
+            if (!rgb) return null;
+            return this.rgbToHsla(rgb.r, rgb.g, rgb.b);
+        },
+
+        /**
+         * Convert HSLA to hex
+         */
+        hslaToHex: function(h, s, l, a) {
+            const rgb = this.hslaToRgb(h, s, l, a);
+            if (!rgb) return null;
+            return this.rgbToHex(rgb.r, rgb.g, rgb.b);
+        },
+
+        /**
+         * Convert RGB to HSLA
+         */
+        rgbToHsla: function(r, g, b) {
+            // Normalize RGB values to 0-1
+            r = r / 255;
+            g = g / 255;
+            b = b / 255;
+
+            // Calculate HSL
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const delta = max - min;
+            let h = 0;
+            let s = 0;
+            let l = (max + min) / 2;
+
+            if (delta !== 0) {
+                s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+                switch (max) {
+                    case r:
+                        h = (g - b) / delta + (g < b ? 6 : 0);
+                        break;
+                    case g:
+                        h = (b - r) / delta + 2;
+                        break;
+                    case b:
+                        h = (r - g) / delta + 4;
+                        break;
+                }
+                h = h / 6;
+            }
+
+            // Calculate A (alpha)
+            const a = 1;
+
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100),
+                a: Math.round(a * 100)
+            };
+        },
+
+        /**
+         * Convert HSLA to RGB
+         */
+        hslaToRgb: function(h, s, l, a) {
+            // Normalize HSLA values to 0-1
+            h = h / 360;
+            s = s / 100;
+            l = l / 100;
+            a = a / 100;
+
+            // Calculate RGB
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = this.hueToRgb(p, q, h + 1/3);
+                g = this.hueToRgb(p, q, h);
+                b = this.hueToRgb(p, q, h - 1/3);
+            }
+
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        },
+
+        /**
+         * Helper function for HSLA to RGB conversion
+         */
+        hueToRgb: function(p, q, t) {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        },
     };
 
     // Main DesignBook functionality
@@ -137,6 +240,15 @@
                     $swatch.find('.black-slider').val(cmyk.k);
                 }
                 
+                // Convert hex to HSLA and set slider values
+                const hsla = ColorUtils.hexToHsla(hex);
+                if (hsla) {
+                    $swatch.find('.hue-slider').val(hsla.h);
+                    $swatch.find('.saturation-slider').val(hsla.s);
+                    $swatch.find('.lightness-slider').val(hsla.l);
+                    $swatch.find('.alpha-slider').val(hsla.a);
+                }
+                
                 // Update preview box
                 $swatch.find('.color-preview-box').css('background-color', hex);
             });
@@ -164,6 +276,15 @@
                 $swatch.find('.black-slider').val(cmyk.k);
             }
             
+            // Convert to HSLA and update sliders
+            const hsla = ColorUtils.hexToHsla(hex);
+            if (hsla) {
+                $swatch.find('.hue-slider').val(hsla.h);
+                $swatch.find('.saturation-slider').val(hsla.s);
+                $swatch.find('.lightness-slider').val(hsla.l);
+                $swatch.find('.alpha-slider').val(hsla.a);
+            }
+            
             DesignBook.updatePreview();
         },
 
@@ -183,6 +304,49 @@
                 // Update color picker and preview
                 $swatch.find('.color-picker').val(hex);
                 $swatch.find('.color-preview-box').css('background-color', hex);
+            }
+            
+            DesignBook.updatePreview();
+        },
+
+        onHslaSliderChange: function(e) {
+            const $slider = $(e.target);
+            const $swatch = $slider.closest('.color-swatch');
+            
+            // Get HSLA values from sliders
+            const h = parseFloat($swatch.find('.hue-slider').val());
+            const s = parseFloat($swatch.find('.saturation-slider').val());
+            const l = parseFloat($swatch.find('.lightness-slider').val());
+            const a = parseFloat($swatch.find('.alpha-slider').val());
+            
+            // Update value displays
+            $swatch.find('.hue-slider').siblings('.hsla-value').text(h + '°');
+            $swatch.find('.saturation-slider').siblings('.hsla-value').text(s + '%');
+            $swatch.find('.lightness-slider').siblings('.hsla-value').text(l + '%');
+            $swatch.find('.alpha-slider').siblings('.hsla-value').text(a + '%');
+            
+            // Convert to hex
+            const hex = ColorUtils.hslaToHex(h, s, l, a);
+            if (hex) {
+                // Update color picker, hex input, and preview
+                $swatch.find('.color-picker').val(hex);
+                $swatch.find('.hex-input').val(hex);
+                $swatch.find('.color-preview-box').css('background-color', hex);
+                
+                // Convert to CMYK and update sliders
+                const cmyk = ColorUtils.hexToCmyk(hex);
+                if (cmyk) {
+                    $swatch.find('.cyan-slider').val(cmyk.c);
+                    $swatch.find('.magenta-slider').val(cmyk.m);
+                    $swatch.find('.yellow-slider').val(cmyk.y);
+                    $swatch.find('.black-slider').val(cmyk.k);
+                    
+                    // Update value displays
+                    $swatch.find('.cyan-slider').siblings('.cmyk-value').text(cmyk.c + '%');
+                    $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
+                    $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
+                    $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+                }
             }
             
             DesignBook.updatePreview();
@@ -288,6 +452,41 @@
                 // Update CSS custom property
                 document.documentElement.style.setProperty(`--wp--preset--color--${slug}`, color);
             });
+            
+            // Update background preview
+            $('.background-swatch').each(function() {
+                const $swatch = $(this);
+                const slug = $swatch.data('slug');
+                const background = $swatch.find('.background-picker').val();
+                
+                // Update CSS custom property
+                document.documentElement.style.setProperty(`--wp--preset--background--${slug}`, background);
+            });
+            
+            // Update background preview handling for colors, gradients, overlays, and patterns
+            $('.background-preview').each(function() {
+                const $preview = $(this);
+                const category = $preview.data('category');
+                const key = $preview.data('key');
+                const value = $preview.val();
+                
+                switch (category) {
+                    case 'sizes':
+                        $preview.css({
+                            'width': value,
+                            'height': value
+                        });
+                        break;
+                        
+                    case 'backgrounds':
+                        if ($preview.hasClass('color-preview')) {
+                            $preview.css('background-color', value);
+                        } else if ($preview.hasClass('overlay-preview')) {
+                            $preview.find('::after').css('background-color', value);
+                        }
+                        break;
+                }
+            });
         },
 
         saveColors: function(e) {
@@ -295,20 +494,37 @@
             
             // Collect all color data
             const colors = [];
+            const cmykData = {};
+            const hslaData = {};
+
             $('.color-swatch').each(function() {
                 const $swatch = $(this);
                 const slug = $swatch.data('slug');
-                const color = $swatch.find('.color-picker').val();
                 const name = $swatch.find('label').first().text();
+                const hex = $swatch.find('.hex-input').val();
                 
+                // Get CMYK values
+                const c = parseFloat($swatch.find('.cyan-slider').val());
+                const m = parseFloat($swatch.find('.magenta-slider').val());
+                const y = parseFloat($swatch.find('.yellow-slider').val());
+                const k = parseFloat($swatch.find('.black-slider').val());
+
+                // Get HSLA values
+                const h = parseFloat($swatch.find('.hue-slider').val());
+                const s = parseFloat($swatch.find('.saturation-slider').val());
+                const l = parseFloat($swatch.find('.lightness-slider').val());
+                const a = parseFloat($swatch.find('.alpha-slider').val());
+
                 colors.push({
                     slug: slug,
-                    color: color,
-                    name: name
+                    name: name,
+                    color: hex
                 });
+                
+                cmykData[slug] = { c: c, m: m, y: y, k: k };
+                hslaData[slug] = { h: h, s: s, l: l, a: a };
             });
-            
-            // Send to server
+
             $.ajax({
                 url: villaDesignBook.ajax_url,
                 type: 'POST',
@@ -316,7 +532,9 @@
                     action: 'villa_save_design_tokens',
                     nonce: villaDesignBook.nonce,
                     tokens: {
-                        colors: colors
+                        colors: colors,
+                        cmyk_data: JSON.stringify(cmykData),
+                        hsla_data: JSON.stringify(hslaData)
                     }
                 },
                 success: function(response) {
@@ -503,6 +721,7 @@
             this.initHexInputs();
             this.initSaveButton();
             this.initResetButton();
+            this.initColorModeTabs();
         },
 
         initColorPickers: function() {
@@ -511,6 +730,7 @@
 
         initSliders: function() {
             $('.cmyk-controls input[type="range"]').on('input', this.onSliderChange.bind(this));
+            $('.hsla-controls input[type="range"]').on('input', this.onHslaSliderChange.bind(this));
         },
         
         initHexInputs: function() {
@@ -525,6 +745,24 @@
             $('#reset-colors').on('click', this.resetColors.bind(this));
         },
 
+        initColorModeTabs: function() {
+            $('.color-mode-tab').on('click', this.onColorModeTabClick.bind(this));
+        },
+
+        onColorModeTabClick: function(e) {
+            const $tab = $(e.target);
+            const $swatch = $tab.closest('.color-swatch');
+            const mode = $tab.data('mode');
+
+            // Update tab states
+            $swatch.find('.color-mode-tab').removeClass('active');
+            $tab.addClass('active');
+
+            // Update panel visibility
+            $swatch.find('.color-controls-panel').removeClass('active');
+            $swatch.find('.' + mode + '-controls').addClass('active');
+        },
+
         onColorChange: function(e) {
             const $picker = $(e.target);
             const $swatch = $picker.closest('.color-swatch');
@@ -537,7 +775,7 @@
             $swatch.find('.color-preview-box').css('background-color', hex);
 
             // Convert to CMYK and update sliders
-            const cmyk = this.hexToCmyk(hex);
+            const cmyk = ColorUtils.hexToCmyk(hex);
             if (cmyk) {
                 $swatch.find('.cyan-slider').val(cmyk.c);
                 $swatch.find('.magenta-slider').val(cmyk.m);
@@ -549,6 +787,21 @@
                 $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
                 $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
                 $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+            }
+
+            // Convert to HSLA and update sliders
+            const hsla = ColorUtils.hexToHsla(hex);
+            if (hsla) {
+                $swatch.find('.hue-slider').val(hsla.h);
+                $swatch.find('.saturation-slider').val(hsla.s);
+                $swatch.find('.lightness-slider').val(hsla.l);
+                $swatch.find('.alpha-slider').val(hsla.a);
+                
+                // Update value displays
+                $swatch.find('.hue-slider').siblings('.hsla-value').text(hsla.h + '°');
+                $swatch.find('.saturation-slider').siblings('.hsla-value').text(hsla.s + '%');
+                $swatch.find('.lightness-slider').siblings('.hsla-value').text(hsla.l + '%');
+                $swatch.find('.alpha-slider').siblings('.hsla-value').text(hsla.a + '%');
             }
 
             DesignBook.updatePreview();
@@ -574,7 +827,7 @@
                 $swatch.find('.color-preview-box').css('background-color', hex);
                 
                 // Convert to CMYK and update sliders
-                const cmyk = this.hexToCmyk(hex);
+                const cmyk = ColorUtils.hexToCmyk(hex);
                 if (cmyk) {
                     $swatch.find('.cyan-slider').val(cmyk.c);
                     $swatch.find('.magenta-slider').val(cmyk.m);
@@ -586,6 +839,21 @@
                     $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
                     $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
                     $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+                }
+                
+                // Convert to HSLA and update sliders
+                const hsla = ColorUtils.hexToHsla(hex);
+                if (hsla) {
+                    $swatch.find('.hue-slider').val(hsla.h);
+                    $swatch.find('.saturation-slider').val(hsla.s);
+                    $swatch.find('.lightness-slider').val(hsla.l);
+                    $swatch.find('.alpha-slider').val(hsla.a);
+                    
+                    // Update value displays
+                    $swatch.find('.hue-slider').siblings('.hsla-value').text(hsla.h + '°');
+                    $swatch.find('.saturation-slider').siblings('.hsla-value').text(hsla.s + '%');
+                    $swatch.find('.lightness-slider').siblings('.hsla-value').text(hsla.l + '%');
+                    $swatch.find('.alpha-slider').siblings('.hsla-value').text(hsla.a + '%');
                 }
                 
                 DesignBook.updatePreview();
@@ -609,7 +877,7 @@
             $swatch.find('.black-slider').siblings('.cmyk-value').text(k + '%');
             
             // Convert to hex
-            const hex = this.cmykToHex(c, m, y, k);
+            const hex = ColorUtils.cmykToHex(c, m, y, k);
             if (hex) {
                 // Update color picker, hex input, and preview
                 $swatch.find('.color-picker').val(hex);
@@ -620,79 +888,57 @@
             DesignBook.updatePreview();
         },
         
+        onHslaSliderChange: function(e) {
+            const $slider = $(e.target);
+            const $swatch = $slider.closest('.color-swatch');
+            
+            // Get HSLA values from sliders
+            const h = parseFloat($swatch.find('.hue-slider').val());
+            const s = parseFloat($swatch.find('.saturation-slider').val());
+            const l = parseFloat($swatch.find('.lightness-slider').val());
+            const a = parseFloat($swatch.find('.alpha-slider').val());
+            
+            // Update value displays
+            $swatch.find('.hue-slider').siblings('.hsla-value').text(h + '°');
+            $swatch.find('.saturation-slider').siblings('.hsla-value').text(s + '%');
+            $swatch.find('.lightness-slider').siblings('.hsla-value').text(l + '%');
+            $swatch.find('.alpha-slider').siblings('.hsla-value').text(a + '%');
+            
+            // Convert to hex
+            const hex = ColorUtils.hslaToHex(h, s, l, a);
+            if (hex) {
+                // Update color picker, hex input, and preview
+                $swatch.find('.color-picker').val(hex);
+                $swatch.find('.hex-input').val(hex);
+                $swatch.find('.color-preview-box').css('background-color', hex);
+                
+                // Convert to CMYK and update sliders
+                const cmyk = ColorUtils.hexToCmyk(hex);
+                if (cmyk) {
+                    $swatch.find('.cyan-slider').val(cmyk.c);
+                    $swatch.find('.magenta-slider').val(cmyk.m);
+                    $swatch.find('.yellow-slider').val(cmyk.y);
+                    $swatch.find('.black-slider').val(cmyk.k);
+                    
+                    // Update value displays
+                    $swatch.find('.cyan-slider').siblings('.cmyk-value').text(cmyk.c + '%');
+                    $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
+                    $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
+                    $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+                }
+            }
+            
+            DesignBook.updatePreview();
+        },
+        
         isValidHex: function(hex) {
             return /^#[0-9A-F]{6}$/i.test(hex);
         },
         
-        hexToCmyk: function(hex) {
-            const rgb = this.hexToRgb(hex);
-            if (!rgb) return null;
-            return this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
-        },
-        
-        rgbToCmyk: function(r, g, b) {
-            // Normalize RGB values to 0-1
-            r = r / 255;
-            g = g / 255;
-            b = b / 255;
-
-            // Calculate K (black)
-            const k = 1 - Math.max(r, g, b);
-            
-            // Calculate CMY
-            const c = k === 1 ? 0 : (1 - r - k) / (1 - k);
-            const m = k === 1 ? 0 : (1 - g - k) / (1 - k);
-            const y = k === 1 ? 0 : (1 - b - k) / (1 - k);
-
-            return {
-                c: Math.round(c * 100),
-                m: Math.round(m * 100),
-                y: Math.round(y * 100),
-                k: Math.round(k * 100)
-            };
-        },
-        
-        cmykToHex: function(c, m, y, k) {
-            const rgb = this.cmykToRgb(c, m, y, k);
-            if (!rgb) return null;
-            return this.rgbToHex(rgb.r, rgb.g, rgb.b);
-        },
-        
-        cmykToRgb: function(c, m, y, k) {
-            // Normalize CMYK values to 0-1
-            c = c / 100;
-            m = m / 100;
-            y = y / 100;
-            k = k / 100;
-
-            // Calculate RGB
-            const r = 255 * (1 - c) * (1 - k);
-            const g = 255 * (1 - m) * (1 - k);
-            const b = 255 * (1 - y) * (1 - k);
-
-            return {
-                r: Math.round(Math.max(0, Math.min(255, r))),
-                g: Math.round(Math.max(0, Math.min(255, g))),
-                b: Math.round(Math.max(0, Math.min(255, b)))
-            };
-        },
-        
-        hexToRgb: function(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : null;
-        },
-        
-        rgbToHex: function(r, g, b) {
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-        },
-
         saveColors: function() {
             const colors = [];
             const cmykData = {};
+            const hslaData = {};
 
             $('.color-swatch').each(function() {
                 const $swatch = $(this);
@@ -706,6 +952,12 @@
                 const y = parseFloat($swatch.find('.yellow-slider').val());
                 const k = parseFloat($swatch.find('.black-slider').val());
 
+                // Get HSLA values
+                const h = parseFloat($swatch.find('.hue-slider').val());
+                const s = parseFloat($swatch.find('.saturation-slider').val());
+                const l = parseFloat($swatch.find('.lightness-slider').val());
+                const a = parseFloat($swatch.find('.alpha-slider').val());
+
                 colors.push({
                     slug: slug,
                     name: name,
@@ -713,6 +965,7 @@
                 });
                 
                 cmykData[slug] = { c: c, m: m, y: y, k: k };
+                hslaData[slug] = { h: h, s: s, l: l, a: a };
             });
 
             $.ajax({
@@ -722,17 +975,18 @@
                     action: 'villa_save_colors',
                     nonce: villa_design_book.nonce,
                     colors: JSON.stringify(colors),
-                    cmyk_data: JSON.stringify(cmykData)
+                    cmyk_data: JSON.stringify(cmykData),
+                    hsla_data: JSON.stringify(hslaData)
                 },
                 success: function(response) {
                     if (response.success) {
-                        alert('✅ Colors saved successfully!');
+                        DesignBook.showNotification('Colors saved successfully!', 'success');
                     } else {
-                        alert('❌ Error: ' + response.data);
+                        DesignBook.showNotification('Error: ' + response.data, 'error');
                     }
                 },
                 error: function() {
-                    alert('❌ Network error occurred');
+                    DesignBook.showNotification('Error saving colors', 'error');
                 }
             });
         },
@@ -748,14 +1002,14 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            alert('✅ Colors reset successfully!');
+                            DesignBook.showNotification('Colors reset successfully!', 'success');
                             location.reload();
                         } else {
-                            alert('❌ Error: ' + response.data);
+                            DesignBook.showNotification('Error: ' + response.data, 'error');
                         }
                     },
                     error: function() {
-                        alert('❌ Network error occurred');
+                        DesignBook.showNotification('Error resetting colors', 'error');
                     }
                 });
             }
@@ -1179,9 +1433,9 @@
         
         generateCardCSS: function() {
             const settings = this.getCardSettings();
-            const shadowValues = ['none', '0 2px 4px rgba(0,0,0,0.1)', '0 4px 12px rgba(0,0,0,0.1)', 
-                                 '0 8px 25px rgba(0,0,0,0.15)', '0 12px 35px rgba(0,0,0,0.2)', 
-                                 '0 16px 45px rgba(0,0,0,0.25)'];
+            const shadowValues = ['none', '0 2px 4px rgba(0, 0, 0, 0.1)', '0 4px 12px rgba(0, 0, 0, 0.1)', 
+                                 '0 8px 25px rgba(0, 0, 0, 0.15)', '0 12px 35px rgba(0, 0, 0, 0.2)', 
+                                 '0 16px 45px rgba(0, 0, 0, 0.25)'];
             
             const css = `.villa-card {
     background: #fff;
@@ -1566,6 +1820,14 @@
                         'height': value
                     });
                     break;
+                    
+                case 'backgrounds':
+                    if ($preview.hasClass('color-preview')) {
+                        $preview.css('background-color', value);
+                    } else if ($preview.hasClass('overlay-preview')) {
+                        $preview.find('::after').css('background-color', value);
+                    }
+                    break;
             }
         },
         
@@ -1581,7 +1843,11 @@
                 borderRadius: {},
                 borderWidth: {},
                 shadows: {},
-                sizes: {}
+                sizes: {},
+                backgrounds: {
+                    colors: {},
+                    overlays: {}
+                }
             };
             
             $('.villa-base-options .layout-control').each(function() {

@@ -1,0 +1,266 @@
+{# 
+  Card Book Component - Villa Design System
+  Unified card component with multiple variants using design tokens
+  
+  Usage:
+  {% include 'components/card-book.twig' with {
+    'variant': 'villa',
+    'size': 'medium',
+    'title': 'Beautiful Villa',
+    'subtitle': 'Luxury Oceanfront Property',
+    'description': 'Experience the ultimate in luxury living...',
+    'image': 'villa-image.jpg',
+    'cta_text': 'View Details',
+    'cta_link': '/villa/123'
+  } %}
+#}
+
+{% set variant = variant|default('property') %}
+{% set size = size|default('medium') %}
+{% set title = title|default('Card Title') %}
+{% set subtitle = subtitle|default('') %}
+{% set description = description|default('') %}
+{% set image = image|default('') %}
+{% set cta_text = cta_text|default('Learn More') %}
+{% set cta_link = cta_link|default('#') %}
+
+{# Card Variants with different styling approaches #}
+{% set variants = {
+  'property': {
+    'background': 'white',
+    'border_radius': 'lg',
+    'shadow': 'md',
+    'padding': 'xl',
+    'text_color': 'base-darkest',
+    'subtitle_color': 'neutral',
+    'button_variant': 'primary'
+  },
+  'villa': {
+    'background': 'white',
+    'border_radius': 'lg',
+    'shadow': 'lg',
+    'padding': '2xl',
+    'text_color': 'base-darkest',
+    'subtitle_color': 'primary',
+    'button_variant': 'primary'
+  },
+  'luxury': {
+    'background': 'white',
+    'border_radius': 'xl',
+    'shadow': '2xl',
+    'padding': '3xl',
+    'text_color': 'base-darkest',
+    'subtitle_color': 'secondary',
+    'button_variant': 'secondary'
+  },
+  'minimal': {
+    'background': 'transparent',
+    'border_radius': 'md',
+    'shadow': 'none',
+    'padding': 'lg',
+    'text_color': 'base-darkest',
+    'subtitle_color': 'neutral',
+    'button_variant': 'outline'
+  },
+  'featured': {
+    'background': 'primary',
+    'border_radius': 'lg',
+    'shadow': 'xl',
+    'padding': '2xl',
+    'text_color': 'base-white',
+    'subtitle_color': 'base-lightest',
+    'button_variant': 'secondary'
+  }
+} %}
+
+{# Size configurations #}
+{% set sizes = {
+  'small': {
+    'padding': 'lg',
+    'title_size': 'medium',
+    'subtitle_size': 'small',
+    'body_size': 'small',
+    'button_size': 'small',
+    'image_aspect': '4/3'
+  },
+  'medium': {
+    'padding': 'xl',
+    'title_size': 'large',
+    'subtitle_size': 'medium',
+    'body_size': 'medium',
+    'button_size': 'medium',
+    'image_aspect': '16/9'
+  },
+  'large': {
+    'padding': '2xl',
+    'title_size': 'x-large',
+    'subtitle_size': 'medium',
+    'body_size': 'medium',
+    'button_size': 'large',
+    'image_aspect': '16/9'
+  }
+} %}
+
+{% set card_variant = variants[variant] %}
+{% set card_size = sizes[size] %}
+
+<article class="card-book card-book--{{ variant }} card-book--{{ size }}" style="
+  {% include 'components/primitives/layout.twig' with {
+    'border_radius': card_variant.border_radius,
+    'shadow': card_variant.shadow,
+    'background': card_variant.background
+  } %}
+  {% include 'components/primitives/spacing.twig' with {
+    'type': 'padding',
+    'size': card_size.padding,
+    'sides': 'all'
+  } %}
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+">
+  
+  {% if image %}
+    <div class="card-book__image" style="
+      {% include 'components/primitives/spacing.twig' with {
+        'type': 'margin',
+        'size': 'lg',
+        'sides': 'bottom'
+      } %}
+      {% include 'components/primitives/layout.twig' with {
+        'border_radius': 'md'
+      } %}
+      overflow: hidden;
+      aspect-ratio: {{ card_size.image_aspect }};
+      background-image: url('{{ image }}');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    ">
+      <div class="card-book__image-overlay" style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          var(--wp--custom--layout--backgrounds--overlays--light-subtle) 0%,
+          var(--wp--custom--layout--backgrounds--overlays--dark-subtle) 100%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      "></div>
+    </div>
+  {% endif %}
+  
+  <div class="card-book__content">
+    {% if subtitle %}
+      {% include 'elements/text-book.twig' with {
+        'type': 'pretitle',
+        'content': subtitle,
+        'element': 'div',
+        'size': card_size.subtitle_size,
+        'color': card_variant.subtitle_color,
+        'class': 'card-book__subtitle',
+        'attributes': 'style="' ~ 
+          (include('components/primitives/spacing.twig', {
+            'type': 'margin',
+            'size': 'sm',
+            'sides': 'bottom'
+          })) ~ '"'
+      } %}
+    {% endif %}
+    
+    {% if title %}
+      {% include 'elements/text-book.twig' with {
+        'type': 'title',
+        'content': title,
+        'element': 'h2',
+        'size': card_size.title_size,
+        'color': card_variant.text_color,
+        'class': 'card-book__title',
+        'attributes': 'style="' ~ 
+          (include('components/primitives/spacing.twig', {
+            'type': 'margin',
+            'size': 'md',
+            'sides': 'bottom'
+          })) ~ '"'
+      } %}
+    {% endif %}
+    
+    {% if description %}
+      {% include 'elements/text-book.twig' with {
+        'type': 'body',
+        'content': description,
+        'element': 'p',
+        'size': card_size.body_size,
+        'color': card_variant.text_color,
+        'class': 'card-book__description',
+        'attributes': 'style="' ~ 
+          (include('components/primitives/spacing.twig', {
+            'type': 'margin',
+            'size': 'xl',
+            'sides': 'bottom'
+          })) ~ '"'
+      } %}
+    {% endif %}
+    
+    {% if cta_text and cta_link %}
+      <div class="card-book__actions">
+        {% include 'elements/button-book.twig' with {
+          'variant': card_variant.button_variant,
+          'size': card_size.button_size,
+          'content': cta_text,
+          'element': 'a',
+          'attributes': 'href="' ~ cta_link ~ '"'
+        } %}
+      </div>
+    {% endif %}
+  </div>
+</article>
+
+<style>
+.card-book:hover {
+  transform: translateY(-2px);
+}
+
+.card-book:hover .card-book__image-overlay {
+  opacity: 1;
+}
+
+.card-book--featured {
+  position: relative;
+}
+
+.card-book--featured::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(
+    45deg,
+    var(--wp--preset--color--primary),
+    var(--wp--preset--color--secondary),
+    var(--wp--preset--color--primary)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-book--featured:hover::before {
+  opacity: 1;
+}
+
+.card-book--minimal {
+  border: var(--wp--custom--layout--border-width--thin) solid var(--wp--preset--color--neutral-light);
+}
+
+.card-book--minimal:hover {
+  border-color: var(--wp--preset--color--primary);
+}
+</style>
