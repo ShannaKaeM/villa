@@ -250,49 +250,56 @@ function villa_render_dashboard_committees($user) {
                         $member_count = villa_get_group_member_count($committee->ID);
                         $user_role = villa_get_user_role_in_group($user->ID, $committee->ID);
                         ?>
-                        <div class="group-card committee-card">
-                            <div class="group-header">
-                                <h4><?php echo esc_html($committee_name ?: $committee->post_title); ?></h4>
-                                <span class="user-role"><?php echo esc_html($user_role); ?></span>
-                            </div>
+                        <div class="villa-card group-card committee-card">
+                            <?php if (has_post_thumbnail($committee->ID)): ?>
+                                <div class="villa-card__image">
+                                    <?php echo get_the_post_thumbnail($committee->ID, 'medium'); ?>
+                                </div>
+                            <?php endif; ?>
                             
-                            <div class="group-content">
-                                <?php if ($committee_mission): ?>
-                                    <p class="group-mission"><?php echo esc_html($committee_mission); ?></p>
-                                <?php endif; ?>
-                                
-                                <?php if ($committee_focus): ?>
-                                    <div class="group-focus">
-                                        <strong>Focus Areas:</strong> 
-                                        <?php 
-                                        if (is_array($committee_focus)) {
-                                            echo esc_html(implode(', ', $committee_focus));
-                                        } else {
-                                            echo esc_html($committee_focus);
-                                        }
-                                        ?>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <div class="group-meta">
-                                    <?php if ($meeting_schedule): ?>
-                                        <div class="meta-item">
-                                            <strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?>
+                            <div class="villa-card__content">
+                                <div class="villa-card__text">
+                                    <h4 class="villa-card__title"><?php echo esc_html($committee_name ?: $committee->post_title); ?></h4>
+                                    
+                                    <?php if ($committee_mission): ?>
+                                        <p class="villa-card__description"><?php echo esc_html($committee_mission); ?></p>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($committee_focus): ?>
+                                        <div class="villa-card__meta">
+                                            <strong>Focus Areas:</strong> 
+                                            <?php 
+                                            if (is_array($committee_focus)) {
+                                                echo esc_html(implode(', ', $committee_focus));
+                                            } else {
+                                                echo esc_html($committee_focus);
+                                            }
+                                            ?>
                                         </div>
                                     <?php endif; ?>
                                     
-                                    <div class="meta-item">
-                                        <strong>Members:</strong> <?php echo $member_count; ?>
-                                    </div>
-                                    
-                                    <?php if ($coordinator_id): ?>
-                                        <?php $coordinator = get_userdata($coordinator_id); ?>
-                                        <?php if ($coordinator): ?>
-                                            <div class="meta-item">
-                                                <strong>Coordinator:</strong> <?php echo esc_html($coordinator->display_name); ?>
-                                            </div>
+                                    <div class="villa-card__meta">
+                                        <?php if ($meeting_schedule): ?>
+                                            <span class="villa-card__tag">
+                                                <strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?>
+                                            </span>
                                         <?php endif; ?>
-                                    <?php endif; ?>
+                                        
+                                        <span class="villa-card__tag">
+                                            <strong>Members:</strong> <?php echo $member_count; ?>
+                                        </span>
+                                        
+                                        <?php if ($coordinator_id): ?>
+                                            <?php $coordinator = get_userdata($coordinator_id); ?>
+                                            <?php if ($coordinator): ?>
+                                                <span class="villa-card__tag">
+                                                    <strong>Coordinator:</strong> <?php echo esc_html($coordinator->display_name); ?>
+                                                </span>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        
+                                        <span class="villa-card__tag villa-card__tag--status user-role"><?php echo esc_html($user_role); ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -178,26 +178,406 @@
     border-color: var(--wp--preset--color--primary);
 }
 
-/* Cards */
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+
+/* ===================================
+   CARD SYSTEM - BEM Methodology
+   ================================== */
+
+/* Base Card Component */
 .villa-card {
-    padding: 1.5rem;
     background: var(--wp--preset--color--base-white);
     border: 1px solid var(--wp--preset--color--base-lightest);
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-.villa-card-header {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--wp--preset--color--base-lightest);
+.villa-card:hover {
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
 }
 
-.villa-card-title {
+/* Card Image */
+.villa-card__image {
+    position: relative;
+    overflow: hidden;
+    background: var(--wp--preset--color--base-lightest);
+    padding: 0;
+    margin: 0;
+}
+
+.villa-card__image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.villa-card:hover .villa-card__image img {
+    transform: scale(1.05);
+}
+
+/* Group Images - Full Bleed */
+/* REMOVED: Using base .villa-card__image styles for all images */
+
+/* Project Images - Full Bleed */
+/* REMOVED: Using base .villa-card__image styles for all images */
+
+/* Card Content */
+.villa-card__content {
+    padding: 0;
+}
+
+.villa-card__text {
+    padding: 1.5rem;
+}
+
+.villa-card__title {
     font-size: var(--wp--preset--font-size--large);
     font-weight: 600;
     color: var(--wp--preset--color--primary-dark);
-    margin: 0;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+.villa-card__subtitle {
+    font-size: var(--wp--preset--font-size--medium);
+    color: var(--wp--preset--color--base-dark);
+    margin: 0 0 1rem 0;
+    opacity: 0.8;
+}
+
+.villa-card__description {
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base-dark);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+}
+
+/* Card Meta (Tags/Status) */
+.villa-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
+}
+
+.villa-card__tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+/* Tag Variants */
+.villa-card__tag--status {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+}
+
+.villa-card__tag--available {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.villa-card__tag--occupied {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag--maintenance {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag--for-sale {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag--planning {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+}
+
+.villa-card__tag--active {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag--completed {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.villa-card__tag--on-hold {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag--tickets {
+    background: var(--wp--preset--color--accent);
+    color: var(--wp--preset--color--base-white);
+}
+
+/* Card Actions */
+.villa-card__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.villa-card__button {
+    padding: 0.5rem 1rem;
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.villa-card__button:hover {
+    background: var(--wp--preset--color--primary-dark);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.villa-card__button--secondary {
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--base-dark);
+}
+
+.villa-card__button--secondary:hover {
+    background: var(--wp--preset--color--base-light);
+    color: var(--wp--preset--color--base-dark);
+}
+
+/* ===================================
+   GRID SYSTEMS
+   ================================== */
+
+/* Properties Grid */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Projects Grid - Updated to use new card system */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* ===================================
+   LEGACY COMPATIBILITY
+   ================================== */
+
+/* Property Card - Updated to use new system */
+.property-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.property-card:hover {
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.property-image {
+    position: relative;
+    overflow: hidden;
+    background: var(--wp--preset--color--base-lightest);
+}
+
+.property-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.property-card:hover .property-image img {
+    transform: scale(1.05);
+}
+
+.property-info {
+    padding: 1.5rem;
+}
+
+.property-info h3 {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+.property-address {
+    font-size: var(--wp--preset--font-size--medium);
+    color: var(--wp--preset--color--base-dark);
+    margin: 0 0 1rem 0;
+    opacity: 0.8;
+}
+
+.property-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
+}
+
+.property-status,
+.listing-status,
+.ticket-count {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.property-status.status-available,
+.listing-status.listing-available {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.property-status.status-occupied,
+.listing-status.listing-occupied {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.property-status.status-maintenance {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.listing-status.listing-for_sale {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.ticket-count {
+    background: var(--wp--preset--color--accent);
+    color: var(--wp--preset--color--base-white);
+}
+
+.property-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.property-actions .button {
+    padding: 0.5rem 1rem;
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.property-actions .button:hover {
+    background: var(--wp--preset--color--primary-dark);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Project Card - Updated to use new system */
+.project-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 1.5rem;
+}
+
+.project-card:hover {
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.project-title {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+.project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
+}
+
+.project-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.project-status.planning {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+}
+
+.project-status.in-progress {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-status.completed {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.project-status.on-hold {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
 }
 
 /* Statistics Grid */
@@ -211,9 +591,15 @@
 .villa-stat-card {
     padding: 1.5rem;
     background: var(--wp--preset--color--primary-light);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     text-align: center;
     color: var(--wp--preset--color--base-white);
+    transition: all 0.2s ease;
+}
+
+.villa-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .villa-stat-number {
@@ -242,7 +628,7 @@
     background: var(--wp--preset--color--base-lightest);
     color: var(--wp--preset--color--base-dark);
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     font-size: var(--wp--preset--font-size--small);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -252,48 +638,325 @@
 .filter-tab:hover {
     background: var(--wp--preset--color--primary);
     color: var(--wp--preset--color--base-white);
+    transform: translateY(-1px);
 }
 
-/* Project Cards */
-.project-grid {
+/* ===================================
+   GROUP SPECIFIC STYLES
+   ================================== */
+
+/* Groups Grid */
+.groups-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
     margin: 2rem 0;
 }
 
+/* Group Meeting Info */
+.group-meeting-info {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    font-size: var(--wp--preset--font-size--small);
+}
+
+.meeting-item {
+    margin-bottom: 0.5rem;
+}
+
+.meeting-item:last-child {
+    margin-bottom: 0;
+}
+
+.meeting-item strong {
+    color: var(--wp--preset--color--primary-dark);
+}
+
+/* Group Stats */
+.group-stats {
+    margin: 1rem 0;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base-dark);
+}
+
+.member-count {
+    font-weight: 600;
+    color: var(--wp--preset--color--primary);
+}
+
+.max-members {
+    opacity: 0.7;
+}
+
+/* Member Badge */
+.member-badge {
+    padding: 0.25rem 0.75rem;
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+    border-radius: 1rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+}
+
+/* Directory Card Specific */
+.directory-card {
+    border-left: 4px solid var(--wp--preset--color--primary-light);
+}
+
+.directory-card.status-active {
+    border-left-color: var(--wp--preset--color--secondary);
+}
+
+.directory-card.status-inactive {
+    border-left-color: var(--wp--preset--color--neutral);
+    opacity: 0.8;
+}
+
+/* Committee Card Specific */
+.committee-card {
+    padding: 0;
+}
+
+.committee-card .villa-card__image {
+    margin: 0;
+    padding: 0;
+}
+
+.committee-card .villa-card__content {
+    padding: 0;
+}
+
+.committee-card .villa-card__text {
+    padding: 1.5rem;
+}
+
+/* ===================================
+   PROJECT SPECIFIC STYLES
+   ================================== */
+
+/* Project Type Badges */
+.villa-card__tag.type-roadmap {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag.type-committee_board {
+    background: var(--wp--preset--color--accent);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag.type-survey {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag.type-event {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+/* Priority Badges */
+.villa-card__tag.priority-high {
+    background: #ef4444;
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag.priority-medium {
+    background: #f59e0b;
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-card__tag.priority-low {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+}
+
+/* ===================================
+   GRID SYSTEMS
+   ================================== */
+
+/* Properties Grid */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Projects Grid - Updated to use new card system */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* ===================================
+   LEGACY COMPATIBILITY
+   ================================== */
+
+/* Property Card - Updated to use new system */
+.property-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.property-card:hover {
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.property-image {
+    position: relative;
+    overflow: hidden;
+    background: var(--wp--preset--color--base-lightest);
+}
+
+.property-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.property-card:hover .property-image img {
+    transform: scale(1.05);
+}
+
+.property-info {
+    padding: 1.5rem;
+}
+
+.property-info h3 {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
+}
+
+.property-address {
+    font-size: var(--wp--preset--font-size--medium);
+    color: var(--wp--preset--color--base-dark);
+    margin: 0 0 1rem 0;
+    opacity: 0.8;
+}
+
+.property-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
+}
+
+.property-status,
+.listing-status,
+.ticket-count {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.property-status.status-available,
+.listing-status.listing-available {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.property-status.status-occupied,
+.listing-status.listing-occupied {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.property-status.status-maintenance {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.listing-status.listing-for_sale {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.ticket-count {
+    background: var(--wp--preset--color--accent);
+    color: var(--wp--preset--color--base-white);
+}
+
+.property-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.property-actions .button {
+    padding: 0.5rem 1rem;
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.property-actions .button:hover {
+    background: var(--wp--preset--color--primary-dark);
+    color: var(--wp--preset--color--base-white);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Project Card - Updated to use new system */
 .project-card {
     background: var(--wp--preset--color--base-white);
     border: 1px solid var(--wp--preset--color--base-lightest);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
     padding: 1.5rem;
-    transition: box-shadow 0.2s ease;
 }
 
 .project-card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
 }
 
 .project-title {
     font-size: var(--wp--preset--font-size--large);
     font-weight: 600;
     color: var(--wp--preset--color--primary-dark);
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.3;
 }
 
 .project-meta {
     display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-    font-size: var(--wp--preset--font-size--small);
-    color: var(--wp--preset--color--base-dark);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
 }
 
 .project-status {
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
     font-size: var(--wp--preset--font-size--small);
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
 
 .project-status.planning {
@@ -316,44 +979,70 @@
     color: var(--wp--preset--color--base-white);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dashboard-tabs {
-        flex-direction: column;
-    }
-    
-    .dashboard-tab {
-        border-radius: 0.375rem;
-        margin-bottom: 0.25rem;
-    }
-    
-    .villa-stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .project-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .filter-tabs {
-        flex-direction: column;
-    }
+/* Statistics Grid */
+.villa-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
 }
 
-/* Utility Classes */
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.villa-stat-card {
+    padding: 1.5rem;
+    background: var(--wp--preset--color--primary-light);
+    border-radius: 0.75rem;
+    text-align: center;
+    color: var(--wp--preset--color--base-white);
+    transition: all 0.2s ease;
+}
 
-.mb-0 { margin-bottom: 0; }
-.mb-1 { margin-bottom: 0.5rem; }
-.mb-2 { margin-bottom: 1rem; }
-.mb-3 { margin-bottom: 1.5rem; }
+.villa-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-.mt-0 { margin-top: 0; }
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: 1rem; }
-.mt-3 { margin-top: 1.5rem; }
+.villa-stat-number {
+    font-size: var(--wp--preset--font-size--x-large);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.villa-stat-label {
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.5rem 1rem;
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--base-dark);
+    border: none;
+    border-radius: 0.375rem;
+    font-size: var(--wp--preset--font-size--small);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tab.active,
+.filter-tab:hover {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    transform: translateY(-1px);
+}
+
+/* ===================================
+   GROUPS MANAGEMENT DASHBOARD
+   ================================== */
 
 /* Groups Management Dashboard */
 .groups-management-dashboard {
@@ -743,6 +1432,29 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .dashboard-tabs {
+        flex-direction: column;
+    }
+    
+    .dashboard-tab {
+        border-radius: 0.375rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .villa-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-tabs {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
     .dashboard-stats-grid {
         grid-template-columns: 1fr;
     }
@@ -760,4 +1472,58 @@
         gap: 0.5rem;
         align-items: flex-start;
     }
+}
+
+/* Project Card Specific Styles */
+.project-card {
+    padding: 0;
+}
+
+.project-card .villa-card__image {
+    margin: 0;
+    padding: 0;
+}
+
+.project-card .villa-card__content {
+    padding: 0;
+}
+
+.project-card .villa-card__text {
+    padding: 1.5rem;
+}
+
+/* Group Card Specific Styles */
+.group-card {
+    padding: 0;
+}
+
+.group-card .villa-card__image {
+    margin: 0;
+    padding: 0;
+}
+
+.group-card .villa-card__content {
+    padding: 0;
+}
+
+.group-card .villa-card__text {
+    padding: 1.5rem;
+}
+
+/* Directory Card Specific Styles */
+.directory-card {
+    padding: 0;
+}
+
+.directory-card .villa-card__image {
+    margin: 0;
+    padding: 0;
+}
+
+.directory-card .villa-card__content {
+    padding: 0;
+}
+
+.directory-card .villa-card__text {
+    padding: 1.5rem;
 }
