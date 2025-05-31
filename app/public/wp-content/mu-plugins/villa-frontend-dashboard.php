@@ -1109,23 +1109,23 @@ function villa_render_dashboard_projects($user) {
         }
     }
     
-    echo '<div class="dashboard-stats-grid">';
-    echo '<div class="stat-card">';
-    echo '<div class="stat-number">' . $total_projects . '</div>';
-    echo '<div class="stat-label">Total Projects</div>';
+    echo '<div class="villa-stats-grid">';
+    echo '<div class="villa-stat-card">';
+    echo '<div class="villa-stat-number">' . $total_projects . '</div>';
+    echo '<div class="villa-stat-label">Total Projects</div>';
     echo '</div>';
-    echo '<div class="stat-card">';
-    echo '<div class="stat-number">' . $active_projects . '</div>';
-    echo '<div class="stat-label">Active Projects</div>';
+    echo '<div class="villa-stat-card">';
+    echo '<div class="villa-stat-number">' . $active_projects . '</div>';
+    echo '<div class="villa-stat-label">Active Projects</div>';
     echo '</div>';
-    echo '<div class="stat-card">';
-    echo '<div class="stat-number">' . $my_projects . '</div>';
-    echo '<div class="stat-label">My Projects</div>';
+    echo '<div class="villa-stat-card">';
+    echo '<div class="villa-stat-number">' . $my_projects . '</div>';
+    echo '<div class="villa-stat-label">My Projects</div>';
     echo '</div>';
     echo '</div>';
     
     // Filter tabs
-    echo '<div class="projects-filter-tabs">';
+    echo '<div class="filter-tabs">';
     echo '<button class="filter-tab active" data-filter="all">All Projects</button>';
     echo '<button class="filter-tab" data-filter="roadmap">Roadmap</button>';
     echo '<button class="filter-tab" data-filter="committee_board">Committee Work</button>';
@@ -1135,7 +1135,7 @@ function villa_render_dashboard_projects($user) {
     echo '</div>';
     
     // Projects grid
-    echo '<div class="projects-grid">';
+    echo '<div class="project-grid">';
     
     if (empty($projects)) {
         echo '<div class="no-projects">';
@@ -1163,45 +1163,51 @@ function villa_render_dashboard_projects($user) {
             
             $is_my_project = is_array($assigned_to) && in_array($user->ID, $assigned_to);
             
-            echo '<div class="project-card" data-type="' . esc_attr($type_slug) . '" data-my="' . ($is_my_project ? 'true' : 'false') . '">';
-            
-            // Project header
-            echo '<div class="project-header">';
-            echo '<div class="project-type-badge type-' . esc_attr($type_slug) . '">' . esc_html($type_name) . '</div>';
-            echo '<div class="project-status status-' . esc_attr($status_slug) . '">' . esc_html($status_name) . '</div>';
-            echo '</div>';
+            echo '<div class="villa-card project-card" data-type="' . esc_attr($type_slug) . '" data-my="' . ($is_my_project ? 'true' : 'false') . '">';
             
             // Project featured image
             if (has_post_thumbnail($project->ID)) {
-                echo '<div class="project-image">';
+                echo '<div class="villa-card__image">';
                 echo get_the_post_thumbnail($project->ID, 'medium', array('class' => 'project-thumbnail'));
                 echo '</div>';
             }
             
             // Project content
-            echo '<div class="project-content">';
-            echo '<h3>' . esc_html($project->post_title) . '</h3>';
+            echo '<div class="villa-card__content">';
+            echo '<div class="villa-card__text">';
+            echo '<h3 class="villa-card__title project-title">' . esc_html($project->post_title) . '</h3>';
+            
             if ($project_goals) {
-                echo '<p class="project-goals">' . esc_html(wp_trim_words($project_goals, 20)) . '</p>';
+                echo '<p class="villa-card__description project-goals">' . esc_html(wp_trim_words($project_goals, 20)) . '</p>';
             }
-            echo '</div>';
             
             // Project meta
-            echo '<div class="project-meta">';
+            echo '<div class="villa-card__meta project-meta">';
+            echo '<span class="villa-card__tag villa-card__tag--' . esc_attr($status_slug) . ' project-status ' . esc_attr($status_slug) . '">' . esc_html($status_name) . '</span>';
+            echo '<span class="villa-card__tag villa-card__tag--status project-type type-' . esc_attr($type_slug) . '">' . esc_html($type_name) . '</span>';
+            
             if ($group_name) {
-                echo '<span class="project-group">' . esc_html($group_name) . '</span>';
+                echo '<span class="villa-card__tag villa-card__tag--status project-group">' . esc_html($group_name) . '</span>';
             }
-            echo '<span class="project-priority priority-' . esc_attr(strtolower($priority_name)) . '">' . esc_html($priority_name) . '</span>';
-            if ($start_date) {
-                echo '<span class="project-date">' . date('M j, Y', strtotime($start_date)) . '</span>';
+            
+            echo '<span class="villa-card__tag villa-card__tag--status project-priority priority-' . esc_attr(strtolower($priority_name)) . '">' . esc_html($priority_name) . '</span>';
+            echo '</div>';
+            echo '</div>'; // villa-card__text
+            
+            // Project actions
+            echo '<div class="villa-card__actions project-actions">';
+            echo '<a href="' . get_permalink($project->ID) . '" class="villa-card__button">View Project</a>';
+            if (in_array('bod', $user_roles) || in_array('staff', $user_roles) || $is_my_project) {
+                echo '<a href="' . admin_url('post.php?action=edit&post=' . $project->ID) . '" class="villa-card__button villa-card__button--secondary">Edit</a>';
             }
             echo '</div>';
             
-            echo '</div>'; // project-card
+            echo '</div>'; // villa-card__content
+            echo '</div>'; // villa-card project-card
         }
     }
     
-    echo '</div>'; // projects-grid
+    echo '</div>'; // project-grid
     
     // Create project button for authorized users
     if (in_array('bod', $user_roles) || in_array('staff', $user_roles) || !empty($assigned_groups)) {

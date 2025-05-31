@@ -758,18 +758,18 @@ function villa_render_dashboard_groups($user) {
             <?php endif; ?>
         </div>
         
-        <div class="groups-stats">
-            <div class="stat-card">
-                <h3><?php echo count($user_groups); ?></h3>
-                <p>Your Groups</p>
+        <div class="villa-stats-grid groups-stats">
+            <div class="villa-stat-card">
+                <div class="villa-stat-number"><?php echo count($user_groups); ?></div>
+                <div class="villa-stat-label">Your Groups</div>
             </div>
-            <div class="stat-card">
-                <h3><?php echo count($all_groups); ?></h3>
-                <p>Total Groups</p>
+            <div class="villa-stat-card">
+                <div class="villa-stat-number"><?php echo count($all_groups); ?></div>
+                <div class="villa-stat-label">Total Groups</div>
             </div>
-            <div class="stat-card">
-                <h3><?php echo count(get_terms('group_type', array('hide_empty' => false))); ?></h3>
-                <p>Group Types</p>
+            <div class="villa-stat-card">
+                <div class="villa-stat-number"><?php echo count(get_terms('group_type', array('hide_empty' => false))); ?></div>
+                <div class="villa-stat-label">Group Types</div>
             </div>
         </div>
         
@@ -792,43 +792,66 @@ function villa_render_dashboard_groups($user) {
                         $user_role = villa_get_user_role_in_group($user->ID, $group->ID);
                         ?>
                         
-                        <div class="group-card status-<?php echo esc_attr($group_status); ?>">
-                            <div class="group-header">
-                                <h4><?php echo esc_html($group->post_title); ?></h4>
-                                <div class="group-type">
+                        <div class="villa-card group-card status-<?php echo esc_attr($group_status); ?>">
+                            <?php if (has_post_thumbnail($group->ID)): ?>
+                                <div class="villa-card__image">
+                                    <?php echo get_the_post_thumbnail($group->ID, 'medium'); ?>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="villa-card__content">
+                                <div class="villa-card__text">
+                                <h3 class="villa-card__title group-title"><?php echo esc_html($group->post_title); ?></h3>
+                                
+                                <div class="villa-card__meta group-meta">
                                     <?php if ($group_types && !is_wp_error($group_types)): ?>
-                                        <?php echo esc_html($group_types[0]->name); ?>
+                                        <span class="villa-card__tag villa-card__tag--status group-type">
+                                            <?php echo esc_html($group_types[0]->name); ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($group_status): ?>
+                                        <span class="villa-card__tag villa-card__tag--<?php echo esc_attr($group_status); ?> group-status">
+                                            <?php echo esc_html(ucwords(str_replace('_', ' ', $group_status))); ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($user_role): ?>
+                                        <span class="villa-card__tag villa-card__tag--status user-role">
+                                            <?php echo esc_html($user_role); ?>
+                                        </span>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-                            
-                            <div class="group-meta">
-                                <div class="meta-item">
-                                    <strong>Your Role:</strong> <?php echo esc_html($user_role ?: 'Member'); ?>
+                                
+                                <?php if ($group->post_content): ?>
+                                    <p class="villa-card__description group-description">
+                                        <?php echo wp_trim_words($group->post_content, 20); ?>
+                                    </p>
+                                <?php endif; ?>
+                                
+                                <?php if ($meeting_schedule || $meeting_location): ?>
+                                    <div class="group-meeting-info">
+                                        <?php if ($meeting_schedule): ?>
+                                            <div class="meeting-item">
+                                                <strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        
+                                        <?php if ($meeting_location): ?>
+                                            <div class="meeting-item">
+                                                <strong>Location:</strong> <?php echo esc_html($meeting_location); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                                </div> <!-- villa-card__text -->
+                                
+                                <div class="villa-card__actions group-actions">
+                                    <a href="<?php echo get_permalink($group->ID); ?>" class="villa-card__button" target="_blank">View Details</a>
+                                    <?php if (in_array('bod', $user_roles) || in_array('staff', $user_roles)): ?>
+                                        <a href="<?php echo admin_url('post.php?action=edit&post=' . $group->ID); ?>" class="villa-card__button villa-card__button--secondary" target="_blank">Edit Group</a>
+                                    <?php endif; ?>
                                 </div>
-                                
-                                <?php if ($meeting_schedule): ?>
-                                    <div class="meta-item">
-                                        <strong>Meetings:</strong> <?php echo esc_html($meeting_schedule); ?>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <?php if ($meeting_location): ?>
-                                    <div class="meta-item">
-                                        <strong>Location:</strong> <?php echo esc_html($meeting_location); ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                            
-                            <div class="group-description">
-                                <?php echo wp_trim_words($group->post_content, 20); ?>
-                            </div>
-                            
-                            <div class="group-actions">
-                                <a href="<?php echo get_permalink($group->ID); ?>" class="villa-btn villa-btn-small villa-btn-outline" target="_blank">View Details</a>
-                                <?php if (in_array('bod', $user_roles) || in_array('staff', $user_roles)): ?>
-                                    <a href="<?php echo admin_url('post.php?action=edit&post=' . $group->ID); ?>" class="villa-btn villa-btn-small villa-btn-secondary" target="_blank">Edit</a>
-                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -862,34 +885,53 @@ function villa_render_dashboard_groups($user) {
                     $is_member = villa_is_user_in_group($user->ID, $group->ID);
                     ?>
                     
-                    <div class="group-card directory-card" data-group-type="<?php echo $group_types ? esc_attr($group_types[0]->slug) : ''; ?>">
-                        <div class="group-header">
-                            <h4><?php echo esc_html($group->post_title); ?></h4>
-                            <div class="group-type">
+                    <div class="villa-card group-card directory-card" data-group-type="<?php echo $group_types ? esc_attr($group_types[0]->slug) : ''; ?>">
+                        <?php if (has_post_thumbnail($group->ID)): ?>
+                            <div class="villa-card__image">
+                                <?php echo get_the_post_thumbnail($group->ID, 'medium'); ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <div class="villa-card__content">
+                            <div class="villa-card__text">
+                            <h3 class="villa-card__title group-title"><?php echo esc_html($group->post_title); ?></h3>
+                            
+                            <div class="villa-card__meta group-meta">
                                 <?php if ($group_types && !is_wp_error($group_types)): ?>
-                                    <?php echo esc_html($group_types[0]->name); ?>
+                                    <span class="villa-card__tag villa-card__tag--status group-type">
+                                        <?php echo esc_html($group_types[0]->name); ?>
+                                    </span>
+                                <?php endif; ?>
+                                
+                                <?php if ($group_status): ?>
+                                    <span class="villa-card__tag villa-card__tag--<?php echo esc_attr($group_status); ?> group-status">
+                                        <?php echo esc_html(ucwords(str_replace('_', ' ', $group_status))); ?>
+                                    </span>
                                 <?php endif; ?>
                             </div>
-                        </div>
-                        
-                        <div class="group-stats">
-                            <span class="member-count"><?php echo $member_count; ?> member<?php echo $member_count !== 1 ? 's' : ''; ?></span>
-                            <?php if ($max_members): ?>
-                                <span class="max-members">/ <?php echo $max_members; ?> max</span>
+                            
+                            <?php if ($group->post_content): ?>
+                                <p class="villa-card__description group-description">
+                                    <?php echo wp_trim_words($group->post_content, 15); ?>
+                                </p>
                             <?php endif; ?>
-                        </div>
-                        
-                        <div class="group-description">
-                            <?php echo wp_trim_words($group->post_content, 15); ?>
-                        </div>
-                        
-                        <div class="group-actions">
-                            <a href="<?php echo get_permalink($group->ID); ?>" class="villa-btn villa-btn-small villa-btn-outline" target="_blank">Learn More</a>
-                            <?php if (!$is_member && $group_status === 'active'): ?>
-                                <button class="villa-btn villa-btn-small villa-btn-primary" onclick="requestToJoinGroup(<?php echo $group->ID; ?>)">Request to Join</button>
-                            <?php elseif ($is_member): ?>
-                                <span class="member-badge">Member</span>
-                            <?php endif; ?>
+                            
+                            <div class="group-stats">
+                                <span class="member-count"><?php echo $member_count; ?> member<?php echo $member_count !== 1 ? 's' : ''; ?></span>
+                                <?php if ($max_members): ?>
+                                    <span class="max-members">/ <?php echo $max_members; ?> max</span>
+                                <?php endif; ?>
+                            </div>
+                            </div> <!-- villa-card__text -->
+                            
+                            <div class="villa-card__actions group-actions">
+                                <a href="<?php echo get_permalink($group->ID); ?>" class="villa-card__button" target="_blank">Learn More</a>
+                                <?php if (!$is_member && $group_status === 'active'): ?>
+                                    <button class="villa-card__button villa-card__button--primary" onclick="requestToJoinGroup(<?php echo $group->ID; ?>)">Request to Join</button>
+                                <?php elseif ($is_member): ?>
+                                    <span class="member-badge">Member</span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>

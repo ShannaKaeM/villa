@@ -49,15 +49,15 @@ function villa_render_properties_list($user) {
         <?php else: ?>
             <div class="properties-grid">
                 <?php foreach ($user_properties as $property): ?>
-                    <div class="property-card">
+                    <div class="villa-card property-card">
                         <?php if (has_post_thumbnail($property->ID)): ?>
-                            <div class="property-image">
+                            <div class="villa-card__image property-image">
                                 <?php echo get_the_post_thumbnail($property->ID, 'medium'); ?>
                             </div>
                         <?php endif; ?>
                         
-                        <div class="property-info">
-                            <h3><?php echo esc_html($property->post_title); ?></h3>
+                        <div class="villa-card__content property-info">
+                            <h3 class="villa-card__title"><?php echo esc_html($property->post_title); ?></h3>
                             
                             <?php
                             $address = get_post_meta($property->ID, 'property_address', true);
@@ -67,31 +67,33 @@ function villa_render_properties_list($user) {
                             ?>
                             
                             <?php if ($address): ?>
-                                <p class="property-address"><?php echo esc_html($address); ?></p>
+                                <p class="villa-card__subtitle property-address"><?php echo esc_html($address); ?></p>
                             <?php endif; ?>
                             
-                            <div class="property-meta">
-                                <span class="property-status status-<?php echo esc_attr($status); ?>">
-                                    <?php echo esc_html(ucwords(str_replace('_', ' ', $status))); ?>
-                                </span>
+                            <div class="villa-card__meta property-meta">
+                                <?php if ($status): ?>
+                                    <span class="villa-card__tag villa-card__tag--<?php echo esc_attr($status); ?> property-status status-<?php echo esc_attr($status); ?>">
+                                        <?php echo esc_html(ucwords(str_replace('_', ' ', $status))); ?>
+                                    </span>
+                                <?php endif; ?>
                                 
                                 <?php if ($listing_status && $listing_status !== 'not_listed'): ?>
-                                    <span class="listing-status listing-<?php echo esc_attr($listing_status); ?>">
+                                    <span class="villa-card__tag villa-card__tag--<?php echo esc_attr($listing_status); ?> listing-status listing-<?php echo esc_attr($listing_status); ?>">
                                         <?php echo esc_html(ucwords(str_replace('_', ' ', $listing_status))); ?>
                                     </span>
                                 <?php endif; ?>
                                 
                                 <?php if ($open_tickets > 0): ?>
-                                    <span class="ticket-count">
+                                    <span class="villa-card__tag villa-card__tag--tickets ticket-count">
                                         <?php echo $open_tickets; ?> Open Tickets
                                     </span>
                                 <?php endif; ?>
                             </div>
                             
-                            <div class="property-actions">
-                                <a href="?tab=properties&action=view&property_id=<?php echo $property->ID; ?>" class="button">View</a>
-                                <a href="?tab=properties&action=edit&property_id=<?php echo $property->ID; ?>" class="button">Edit</a>
-                                <a href="?tab=tickets&property_id=<?php echo $property->ID; ?>" class="button">Tickets</a>
+                            <div class="villa-card__actions property-actions">
+                                <a href="?tab=properties&action=view&property_id=<?php echo $property->ID; ?>" class="villa-card__button button">View</a>
+                                <a href="?tab=properties&action=edit&property_id=<?php echo $property->ID; ?>" class="villa-card__button button">Edit</a>
+                                <a href="?tab=tickets&property_id=<?php echo $property->ID; ?>" class="villa-card__button villa-card__button--secondary button">Tickets</a>
                             </div>
                         </div>
                     </div>
