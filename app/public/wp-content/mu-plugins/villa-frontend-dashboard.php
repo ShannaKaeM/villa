@@ -14,7 +14,6 @@ require_once plugin_dir_path(__FILE__) . 'villa-dashboard-properties.php';
 require_once plugin_dir_path(__FILE__) . 'villa-dashboard-tickets.php';
 require_once plugin_dir_path(__FILE__) . 'villa-dashboard-announcements.php';
 require_once plugin_dir_path(__FILE__) . 'villa-dashboard-additional.php';
-require_once plugin_dir_path(__FILE__) . 'villa-dashboard-post-types.php';
 require_once plugin_dir_path(__FILE__) . 'villa-groups-cpt.php';
 require_once plugin_dir_path(__FILE__) . 'villa-projects-cpt.php';
 require_once plugin_dir_path(__FILE__) . 'villa-projects-fields.php';
