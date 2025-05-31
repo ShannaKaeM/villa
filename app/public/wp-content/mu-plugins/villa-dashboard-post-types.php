@@ -62,30 +62,6 @@ function villa_register_dashboard_post_types() {
         'map_meta_cap' => true
     ));
     
-    // Roadmap Item Post Type
-    register_post_type('roadmap_item', array(
-        'labels' => array(
-            'name' => 'Roadmap Items',
-            'singular_name' => 'Roadmap Item',
-            'add_new' => 'Add New Roadmap Item',
-            'add_new_item' => 'Add New Roadmap Item',
-            'edit_item' => 'Edit Roadmap Item',
-            'new_item' => 'New Roadmap Item',
-            'view_item' => 'View Roadmap Item',
-            'search_items' => 'Search Roadmap Items',
-            'not_found' => 'No roadmap items found',
-            'not_found_in_trash' => 'No roadmap items found in trash'
-        ),
-        'public' => false,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'menu_icon' => 'dashicons-chart-line',
-        'supports' => array('title', 'editor', 'custom-fields'),
-        'capability_type' => 'post',
-        'map_meta_cap' => true,
-        'show_in_rest' => true
-    ));
-    
     // Meeting Post Type
     register_post_type('meeting', array(
         'labels' => array(
@@ -105,54 +81,6 @@ function villa_register_dashboard_post_types() {
         'show_in_menu' => true,
         'menu_icon' => 'dashicons-calendar-alt',
         'supports' => array('title', 'editor', 'custom-fields'),
-        'capability_type' => 'post',
-        'map_meta_cap' => true,
-        'show_in_rest' => true
-    ));
-    
-    // Financial Report Post Type
-    register_post_type('financial_report', array(
-        'labels' => array(
-            'name' => 'Financial Reports',
-            'singular_name' => 'Financial Report',
-            'add_new' => 'Add New Financial Report',
-            'add_new_item' => 'Add New Financial Report',
-            'edit_item' => 'Edit Financial Report',
-            'new_item' => 'New Financial Report',
-            'view_item' => 'View Financial Report',
-            'search_items' => 'Search Financial Reports',
-            'not_found' => 'No financial reports found',
-            'not_found_in_trash' => 'No financial reports found in trash'
-        ),
-        'public' => false,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'menu_icon' => 'dashicons-chart-pie',
-        'supports' => array('title', 'editor', 'custom-fields'),
-        'capability_type' => 'post',
-        'map_meta_cap' => true,
-        'show_in_rest' => true
-    ));
-    
-    // Billing Statement Post Type
-    register_post_type('billing_statement', array(
-        'labels' => array(
-            'name' => 'Billing Statements',
-            'singular_name' => 'Billing Statement',
-            'add_new' => 'Add New Billing Statement',
-            'add_new_item' => 'Add New Billing Statement',
-            'edit_item' => 'Edit Billing Statement',
-            'new_item' => 'New Billing Statement',
-            'view_item' => 'View Billing Statement',
-            'search_items' => 'Search Billing Statements',
-            'not_found' => 'No billing statements found',
-            'not_found_in_trash' => 'No billing statements found in trash'
-        ),
-        'public' => false,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'menu_icon' => 'dashicons-money-alt',
-        'supports' => array('title', 'custom-fields'),
         'capability_type' => 'post',
         'map_meta_cap' => true,
         'show_in_rest' => true

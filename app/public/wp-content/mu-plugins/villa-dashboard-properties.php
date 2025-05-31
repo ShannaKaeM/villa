@@ -40,13 +40,11 @@ function villa_render_properties_list($user) {
     <div class="properties-dashboard">
         <div class="properties-header">
             <h2>My Properties</h2>
-            <a href="?tab=properties&action=new" class="button button-primary">Add New Property</a>
         </div>
         
         <?php if (empty($user_properties)): ?>
             <div class="no-properties">
                 <p>You don't have any properties yet.</p>
-                <a href="?tab=properties&action=new" class="button">Add Your First Property</a>
             </div>
         <?php else: ?>
             <div class="properties-grid">
@@ -145,7 +143,6 @@ function villa_render_property_form($user, $property_id = 0) {
     ?>
     <div class="property-form-container">
         <div class="form-header">
-            <h2><?php echo $is_edit ? 'Edit Property' : 'Add New Property'; ?></h2>
             <a href="?tab=properties" class="button">← Back to Properties</a>
         </div>
         

@@ -1,0 +1,763 @@
+/**
+ * Villa Dashboard Styles
+ * Uses theme.json CSS custom properties for consistent styling
+ */
+
+/* Dashboard Container */
+.villa-dashboard {
+    background: var(--wp--preset--color--base-white);
+    color: var(--wp--preset--color--base-black);
+    font-family: var(--wp--preset--font-family--inter);
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section-header {
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-section-title {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 1rem 0;
+}
+
+/* Dashboard Navigation Tabs */
+.dashboard-tabs {
+    margin: 0 0 2rem 0;
+    border-bottom: 1px solid var(--wp--preset--color--base-lightest);
+    display: flex;
+    gap: 0.25rem;
+}
+
+.dashboard-tab {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--wp--preset--color--base-dark);
+    border: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dashboard-tab.active {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.dashboard-tab:hover:not(.active) {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+/* Form Elements */
+.villa-form-group {
+    margin: 0 0 1.5rem 0;
+}
+
+.villa-form-label {
+    display: block;
+    font-weight: 500;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base-darkest);
+    margin: 0 0 0.5rem 0;
+}
+
+.villa-form-input,
+.villa-form-textarea,
+.villa-form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--wp--preset--color--base-light);
+    border-radius: 0.375rem;
+    background: var(--wp--preset--color--base-white);
+    color: var(--wp--preset--color--base-black);
+    font-size: var(--wp--preset--font-size--medium);
+    font-family: var(--wp--preset--font-family--inter);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.villa-form-input:focus,
+.villa-form-textarea:focus,
+.villa-form-select:focus {
+    outline: none;
+    border-color: var(--wp--preset--color--primary);
+    box-shadow: 0 0 0 2px var(--wp--preset--color--primary-light);
+}
+
+.villa-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Buttons */
+.villa-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: var(--wp--preset--font-size--medium);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.villa-btn-primary {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-btn-primary:hover {
+    background: var(--wp--preset--color--primary-dark);
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-btn-secondary {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.villa-btn-secondary:hover {
+    background: var(--wp--preset--color--secondary-dark);
+}
+
+.villa-btn-outline {
+    background: transparent;
+    color: var(--wp--preset--color--primary);
+    border: 1px solid var(--wp--preset--color--primary);
+}
+
+.villa-btn-outline:hover {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+/* Alert Messages */
+.villa-alert {
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid;
+    border-radius: 0.375rem;
+}
+
+.villa-alert-success {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+    border-color: var(--wp--preset--color--secondary-dark);
+}
+
+.villa-alert-warning {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+    border-color: var(--wp--preset--color--neutral);
+}
+
+.villa-alert-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+
+.villa-alert-info {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+    border-color: var(--wp--preset--color--primary);
+}
+
+/* Cards */
+.villa-card {
+    padding: 1.5rem;
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.villa-card-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--wp--preset--color--base-lightest);
+}
+
+.villa-card-title {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0;
+}
+
+/* Statistics Grid */
+.villa-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.villa-stat-card {
+    padding: 1.5rem;
+    background: var(--wp--preset--color--primary-light);
+    border-radius: 0.5rem;
+    text-align: center;
+    color: var(--wp--preset--color--base-white);
+}
+
+.villa-stat-number {
+    font-size: var(--wp--preset--font-size--x-large);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.villa-stat-label {
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.5rem 1rem;
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--base-dark);
+    border: none;
+    border-radius: 0.25rem;
+    font-size: var(--wp--preset--font-size--small);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tab.active,
+.filter-tab:hover {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+/* Project Cards */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.project-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.project-title {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 0.5rem 0;
+}
+
+.project-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base-dark);
+}
+
+.project-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+}
+
+.project-status.planning {
+    background: var(--wp--preset--color--neutral-light);
+    color: var(--wp--preset--color--base-black);
+}
+
+.project-status.in-progress {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-status.completed {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+}
+
+.project-status.on-hold {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-tabs {
+        flex-direction: column;
+    }
+    
+    .dashboard-tab {
+        border-radius: 0.375rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .villa-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-tabs {
+        flex-direction: column;
+    }
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+
+/* Groups Management Dashboard */
+.groups-management-dashboard {
+    background: var(--wp--preset--color--base-white);
+    color: var(--wp--preset--color--base-black);
+}
+
+.groups-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: var(--wp--preset--font-size--x-large);
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--wp--preset--color--base-white);
+}
+
+.stat-card p {
+    font-size: var(--wp--preset--font-size--small);
+    margin: 0;
+    opacity: 0.9;
+}
+
+.user-groups-section {
+    margin: 2rem 0;
+}
+
+.user-groups-section h3 {
+    font-size: var(--wp--preset--font-size--large);
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0 0 1.5rem 0;
+    font-weight: 600;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    color: var(--wp--preset--color--base-dark);
+}
+
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.group-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.group-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.group-card.status-active {
+    border-left: 4px solid var(--wp--preset--color--primary);
+}
+
+.group-card.status-inactive {
+    border-left: 4px solid var(--wp--preset--color--neutral);
+    opacity: 0.7;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.group-header h4 {
+    font-size: var(--wp--preset--font-size--large);
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    margin: 0;
+    flex: 1;
+}
+
+.group-type {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-black);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: var(--wp--preset--font-size--small);
+    font-weight: 500;
+}
+
+.group-meta {
+    margin: 1rem 0;
+}
+
+.meta-item {
+    margin: 0.5rem 0;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--base-dark);
+}
+
+.meta-item strong {
+    color: var(--wp--preset--color--base-darkest);
+}
+
+.group-description {
+    margin: 1rem 0;
+    color: var(--wp--preset--color--base-dark);
+    line-height: 1.5;
+}
+
+.group-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.villa-btn-small {
+    padding: 0.5rem 1rem;
+    font-size: var(--wp--preset--font-size--small);
+}
+
+/* Access Denied Message */
+.access-denied {
+    text-align: center;
+    padding: 2rem;
+    background: var(--wp--preset--color--neutral-light);
+    border-radius: 0.5rem;
+    color: var(--wp--preset--color--base-dark);
+    font-size: var(--wp--preset--font-size--medium);
+}
+
+/* ===== PROJECTS DASHBOARD ===== */
+
+/* Dashboard Stats Grid */
+.dashboard-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat-card {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: var(--wp--preset--font-size--small);
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Projects Filter Tabs */
+.projects-filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.75rem 1.25rem;
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--base-dark);
+    border: 1px solid var(--wp--preset--color--base-light);
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--wp--preset--font-size--small);
+}
+
+.filter-tab:hover {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+    border-color: var(--wp--preset--color--primary-light);
+}
+
+.filter-tab.active {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+    border-color: var(--wp--preset--color--primary);
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.project-card {
+    background: var(--wp--preset--color--base-white);
+    border: 1px solid var(--wp--preset--color--base-lightest);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.project-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--wp--preset--color--base-lightest);
+}
+
+.project-type-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.project-type-badge.type-roadmap {
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-type-badge.type-committee_board {
+    background: var(--wp--preset--color--secondary);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-type-badge.type-survey {
+    background: var(--wp--preset--color--neutral);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-type-badge.type-event {
+    background: var(--wp--preset--color--primary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-type-badge.type-task {
+    background: var(--wp--preset--color--base-dark);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.project-status.status-active {
+    background: #10b981;
+    color: white;
+}
+
+.project-status.status-planning {
+    background: #f59e0b;
+    color: white;
+}
+
+.project-status.status-review {
+    background: var(--wp--preset--color--primary);
+    color: white;
+}
+
+.project-status.status-completed {
+    background: var(--wp--preset--color--base-dark);
+    color: white;
+}
+
+.project-image {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-content {
+    padding: 1rem;
+}
+
+.project-content h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--wp--preset--color--primary-dark);
+    line-height: 1.3;
+}
+
+.project-goals {
+    color: var(--wp--preset--color--base-dark);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.project-meta {
+    padding: 1rem;
+    border-top: 1px solid var(--wp--preset--color--base-lightest);
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.project-group,
+.project-priority,
+.project-date {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.project-group {
+    background: var(--wp--preset--color--secondary-light);
+    color: var(--wp--preset--color--base-white);
+}
+
+.project-priority.priority-high {
+    background: #ef4444;
+    color: white;
+}
+
+.project-priority.priority-medium {
+    background: var(--wp--preset--color--neutral);
+    color: white;
+}
+
+.project-priority.priority-low {
+    background: var(--wp--preset--color--base-light);
+    color: var(--wp--preset--color--base-dark);
+}
+
+.project-date {
+    background: var(--wp--preset--color--base-lightest);
+    color: var(--wp--preset--color--base-dark);
+}
+
+/* No Projects State */
+.no-projects {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--wp--preset--color--base-dark);
+}
+
+.no-projects h3 {
+    color: var(--wp--preset--color--primary-dark);
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .projects-filter-tabs {
+        justify-content: center;
+    }
+    
+    .project-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}

@@ -203,45 +203,6 @@ function villa_render_dashboard_announcements($user) {
 }
 
 /**
- * Render owner portal roadmap
- */
-function villa_render_dashboard_roadmap($user) {
-    ?>
-    <div class="dashboard-section-header">
-        <h2 class="dashboard-section-title">Community Roadmap</h2>
-    </div>
-    
-    <div class="roadmap-content">
-        <?php
-        // Check if Fluent Boards is active
-        if (shortcode_exists('fluent_boards')) {
-            // You can customize these board IDs based on your Fluent Boards setup
-            echo '<div class="fluent-boards-roadmap">';
-            echo do_shortcode('[fluent_boards board_id="roadmap" view="kanban"]');
-            echo '</div>';
-        } else {
-            echo '<div class="villa-alert villa-alert-warning">';
-            echo '<p><strong>Fluent Boards Required:</strong> Please install and configure Fluent Boards to display the community roadmap.</p>';
-            echo '<p><a href="' . admin_url('plugin-install.php?s=fluent+boards&tab=search&type=term') . '" class="villa-btn villa-btn-primary">Install Fluent Boards</a></p>';
-            echo '</div>';
-        }
-        ?>
-    </div>
-    
-    <style>
-    .fluent-boards-roadmap {
-        margin-top: 1rem;
-    }
-    
-    .fluent-boards-roadmap .fbs_board_wrapper {
-        border-radius: var(--villa-border-radius);
-        box-shadow: var(--villa-shadow);
-    }
-    </style>
-    <?php
-}
-
-/**
  * Get announcements for user based on their roles
  */
 function villa_get_announcements_for_user($user_id) {
@@ -287,20 +248,6 @@ function villa_get_announcements_for_user($user_id) {
 function villa_is_announcement_read($user_id, $announcement_id) {
     $read_announcements = get_user_meta($user_id, 'read_announcements', true);
     return is_array($read_announcements) && in_array($announcement_id, $read_announcements);
-}
-
-/**
- * Get roadmap items
- */
-function villa_get_roadmap_items() {
-    return get_posts(array(
-        'post_type' => 'roadmap_item',
-        'post_status' => 'publish',
-        'posts_per_page' => -1,
-        'orderby' => 'meta_value',
-        'meta_key' => 'roadmap_target_date',
-        'order' => 'ASC'
-    ));
 }
 
 /**

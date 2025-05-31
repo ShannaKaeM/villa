@@ -115,8 +115,14 @@ function migv_scripts() {
     // Enqueue block styles
     wp_enqueue_style('migv-blocks', get_template_directory_uri() . '/assets/css/blocks.css', array('migv-style'), '1.0.0');
     
+    // Enqueue villa dashboard styles
+    wp_enqueue_style('villa-dashboard', get_template_directory_uri() . '/assets/css/villa-dashboard.css', array('migv-blocks'), '1.0.0');
+    
     // Enqueue main JavaScript
     wp_enqueue_script('migv-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.0.0', true);
+    
+    // Enqueue villa dashboard JavaScript
+    wp_enqueue_script('villa-dashboard', get_template_directory_uri() . '/assets/js/villa-dashboard.js', array('jquery'), '1.0.0', true);
     
     // Enqueue comment reply script
     if (is_singular() && comments_open() && get_option('thread_comments')) {
