@@ -9,27 +9,68 @@
     // Color conversion utilities
     const ColorUtils = {
         /**
-         * Convert hex to OKLCH
+         * Convert hex to CMYK
          */
-        hexToOklch: function(hex) {
-            // First convert hex to RGB
+        hexToCmyk: function(hex) {
             const rgb = this.hexToRgb(hex);
             if (!rgb) return null;
-            
-            // Convert RGB to OKLCH
-            return this.rgbToOklch(rgb.r, rgb.g, rgb.b);
+            return this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
         },
 
         /**
-         * Convert OKLCH to hex
+         * Convert CMYK to hex
          */
-        oklchToHex: function(l, c, h) {
-            // Convert OKLCH to RGB first
-            const rgb = this.oklchToRgb(l, c, h);
+        cmykToHex: function(c, m, y, k) {
+            const rgb = this.cmykToRgb(c, m, y, k);
             if (!rgb) return null;
-            
-            // Convert RGB to hex
             return this.rgbToHex(rgb.r, rgb.g, rgb.b);
+        },
+
+        /**
+         * Convert RGB to CMYK
+         */
+        rgbToCmyk: function(r, g, b) {
+            // Normalize RGB values to 0-1
+            r = r / 255;
+            g = g / 255;
+            b = b / 255;
+
+            // Calculate K (black)
+            const k = 1 - Math.max(r, g, b);
+            
+            // Calculate CMY
+            const c = k === 1 ? 0 : (1 - r - k) / (1 - k);
+            const m = k === 1 ? 0 : (1 - g - k) / (1 - k);
+            const y = k === 1 ? 0 : (1 - b - k) / (1 - k);
+
+            return {
+                c: Math.round(c * 100),
+                m: Math.round(m * 100),
+                y: Math.round(y * 100),
+                k: Math.round(k * 100)
+            };
+        },
+
+        /**
+         * Convert CMYK to RGB
+         */
+        cmykToRgb: function(c, m, y, k) {
+            // Normalize CMYK values to 0-1
+            c = c / 100;
+            m = m / 100;
+            y = y / 100;
+            k = k / 100;
+
+            // Calculate RGB
+            const r = 255 * (1 - c) * (1 - k);
+            const g = 255 * (1 - m) * (1 - k);
+            const b = 255 * (1 - y) * (1 - k);
+
+            return {
+                r: Math.round(Math.max(0, Math.min(255, r))),
+                g: Math.round(Math.max(0, Math.min(255, g))),
+                b: Math.round(Math.max(0, Math.min(255, b)))
+            };
         },
 
         /**
@@ -54,71 +95,6 @@
             };
             return '#' + toHex(r) + toHex(g) + toHex(b);
         },
-
-        /**
-         * Convert RGB to OKLCH (simplified approximation)
-         */
-        rgbToOklch: function(r, g, b) {
-            // Normalize RGB values
-            r = r / 255;
-            g = g / 255;
-            b = b / 255;
-
-            // Convert to linear RGB
-            const toLinear = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-            const rLin = toLinear(r);
-            const gLin = toLinear(g);
-            const bLin = toLinear(b);
-
-            // Convert to XYZ (simplified D65)
-            const x = 0.4124564 * rLin + 0.3575761 * gLin + 0.1804375 * bLin;
-            const y = 0.2126729 * rLin + 0.7151522 * gLin + 0.0721750 * bLin;
-            const z = 0.0193339 * rLin + 0.1191920 * gLin + 0.9503041 * bLin;
-
-            // Simplified OKLCH conversion (approximation)
-            const l = Math.cbrt(y) * 100; // Lightness (0-100)
-            const a = (x - y) * 500; // Green-Red axis
-            const bAxis = (y - z) * 200; // Blue-Yellow axis
-            
-            const c = Math.sqrt(a * a + bAxis * bAxis) / 100; // Chroma (0-0.4)
-            let h = Math.atan2(bAxis, a) * 180 / Math.PI; // Hue (0-360)
-            if (h < 0) h += 360;
-
-            return {
-                l: Math.max(0, Math.min(100, l)),
-                c: Math.max(0, Math.min(0.4, c)),
-                h: h
-            };
-        },
-
-        /**
-         * Convert OKLCH to RGB (simplified approximation)
-         */
-        oklchToRgb: function(l, c, h) {
-            // Convert to Lab-like values
-            const hRad = h * Math.PI / 180;
-            const a = c * 100 * Math.cos(hRad);
-            const bAxis = c * 100 * Math.sin(hRad);
-
-            // Convert to XYZ (simplified)
-            const y = Math.pow(l / 100, 3);
-            const x = y + a / 500;
-            const z = y - bAxis / 200;
-
-            // Convert to linear RGB
-            const rLin = 3.2404542 * x - 1.5371385 * y - 0.4985314 * z;
-            const gLin = -0.9692660 * x + 1.8760108 * y + 0.0415560 * z;
-            const bLin = 0.0556434 * x - 0.2040259 * y + 1.0572252 * z;
-
-            // Convert to sRGB
-            const fromLinear = (c) => c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
-            
-            return {
-                r: Math.round(Math.max(0, Math.min(255, fromLinear(rLin) * 255))),
-                g: Math.round(Math.max(0, Math.min(255, fromLinear(gLin) * 255))),
-                b: Math.round(Math.max(0, Math.min(255, fromLinear(bLin) * 255)))
-            };
-        }
     };
 
     // Main DesignBook functionality
@@ -152,12 +128,13 @@
                 const $colorPicker = $swatch.find('.color-picker');
                 const hex = $colorPicker.val();
                 
-                // Convert hex to OKLCH and set slider values
-                const oklch = ColorUtils.hexToOklch(hex);
-                if (oklch) {
-                    $swatch.find('.lightness-slider').val(oklch.l);
-                    $swatch.find('.chroma-slider').val(oklch.c);
-                    $swatch.find('.hue-slider').val(oklch.h);
+                // Convert hex to CMYK and set slider values
+                const cmyk = ColorUtils.hexToCmyk(hex);
+                if (cmyk) {
+                    $swatch.find('.cyan-slider').val(cmyk.c);
+                    $swatch.find('.magenta-slider').val(cmyk.m);
+                    $swatch.find('.yellow-slider').val(cmyk.y);
+                    $swatch.find('.black-slider').val(cmyk.k);
                 }
                 
                 // Update preview box
@@ -178,12 +155,13 @@
             // Update preview box
             $swatch.find('.color-preview-box').css('background-color', hex);
             
-            // Convert to OKLCH and update sliders
-            const oklch = ColorUtils.hexToOklch(hex);
-            if (oklch) {
-                $swatch.find('.lightness-slider').val(oklch.l);
-                $swatch.find('.chroma-slider').val(oklch.c);
-                $swatch.find('.hue-slider').val(oklch.h);
+            // Convert to CMYK and update sliders
+            const cmyk = ColorUtils.hexToCmyk(hex);
+            if (cmyk) {
+                $swatch.find('.cyan-slider').val(cmyk.c);
+                $swatch.find('.magenta-slider').val(cmyk.m);
+                $swatch.find('.yellow-slider').val(cmyk.y);
+                $swatch.find('.black-slider').val(cmyk.k);
             }
             
             DesignBook.updatePreview();
@@ -193,13 +171,14 @@
             const $slider = $(e.target);
             const $swatch = $slider.closest('.color-swatch');
             
-            // Get OKLCH values from sliders
-            const l = parseFloat($swatch.find('.lightness-slider').val());
-            const c = parseFloat($swatch.find('.chroma-slider').val());
-            const h = parseFloat($swatch.find('.hue-slider').val());
+            // Get CMYK values from sliders
+            const c = parseFloat($swatch.find('.cyan-slider').val());
+            const m = parseFloat($swatch.find('.magenta-slider').val());
+            const y = parseFloat($swatch.find('.yellow-slider').val());
+            const k = parseFloat($swatch.find('.black-slider').val());
             
             // Convert to hex
-            const hex = ColorUtils.oklchToHex(l, c, h);
+            const hex = ColorUtils.cmykToHex(c, m, y, k);
             if (hex) {
                 // Update color picker and preview
                 $swatch.find('.color-picker').val(hex);
@@ -289,14 +268,14 @@
         },
 
         getLetterSpacingValue: function(spacingKey) {
-            const spacingMap = {
-                'normal': 'normal',
-                '0.05em': '0.05em',
-                '0.1em': '0.1em',
-                '0.15em': '0.15em',
-                '0.2em': '0.2em'
+            const letterSpacingMap = {
+                'tight': '-0.025em',
+                'normal': '0',
+                'wide': '0.025em',
+                'wider': '0.05em',
+                'widest': '0.1em'
             };
-            return spacingMap[spacingKey] || spacingKey;
+            return letterSpacingMap[spacingKey] || spacingKey;
         },
 
         updatePreview: function() {
@@ -517,9 +496,740 @@
         }
     };
 
+    const ColorBook = {
+        init: function() {
+            this.initColorPickers();
+            this.initSliders();
+            this.initHexInputs();
+            this.initSaveButton();
+            this.initResetButton();
+        },
+
+        initColorPickers: function() {
+            $('.color-picker').on('change', this.onColorChange.bind(this));
+        },
+
+        initSliders: function() {
+            $('.cmyk-controls input[type="range"]').on('input', this.onSliderChange.bind(this));
+        },
+        
+        initHexInputs: function() {
+            $('.hex-input').on('input', this.onHexInput.bind(this));
+        },
+
+        initSaveButton: function() {
+            $('#save-colors').on('click', this.saveColors.bind(this));
+        },
+
+        initResetButton: function() {
+            $('#reset-colors').on('click', this.resetColors.bind(this));
+        },
+
+        onColorChange: function(e) {
+            const $picker = $(e.target);
+            const $swatch = $picker.closest('.color-swatch');
+            const hex = $picker.val();
+
+            // Update hex input
+            $swatch.find('.hex-input').val(hex);
+            
+            // Update preview box
+            $swatch.find('.color-preview-box').css('background-color', hex);
+
+            // Convert to CMYK and update sliders
+            const cmyk = this.hexToCmyk(hex);
+            if (cmyk) {
+                $swatch.find('.cyan-slider').val(cmyk.c);
+                $swatch.find('.magenta-slider').val(cmyk.m);
+                $swatch.find('.yellow-slider').val(cmyk.y);
+                $swatch.find('.black-slider').val(cmyk.k);
+                
+                // Update value displays
+                $swatch.find('.cyan-slider').siblings('.cmyk-value').text(cmyk.c + '%');
+                $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
+                $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
+                $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+            }
+
+            DesignBook.updatePreview();
+        },
+        
+        onHexInput: function(e) {
+            const $input = $(e.target);
+            const $swatch = $input.closest('.color-swatch');
+            let hex = $input.val();
+            
+            // Add # if missing
+            if (hex && !hex.startsWith('#')) {
+                hex = '#' + hex;
+                $input.val(hex);
+            }
+            
+            // Validate hex format
+            if (this.isValidHex(hex)) {
+                // Update color picker
+                $swatch.find('.color-picker').val(hex);
+                
+                // Update preview box
+                $swatch.find('.color-preview-box').css('background-color', hex);
+                
+                // Convert to CMYK and update sliders
+                const cmyk = this.hexToCmyk(hex);
+                if (cmyk) {
+                    $swatch.find('.cyan-slider').val(cmyk.c);
+                    $swatch.find('.magenta-slider').val(cmyk.m);
+                    $swatch.find('.yellow-slider').val(cmyk.y);
+                    $swatch.find('.black-slider').val(cmyk.k);
+                    
+                    // Update value displays
+                    $swatch.find('.cyan-slider').siblings('.cmyk-value').text(cmyk.c + '%');
+                    $swatch.find('.magenta-slider').siblings('.cmyk-value').text(cmyk.m + '%');
+                    $swatch.find('.yellow-slider').siblings('.cmyk-value').text(cmyk.y + '%');
+                    $swatch.find('.black-slider').siblings('.cmyk-value').text(cmyk.k + '%');
+                }
+                
+                DesignBook.updatePreview();
+            }
+        },
+
+        onSliderChange: function(e) {
+            const $slider = $(e.target);
+            const $swatch = $slider.closest('.color-swatch');
+            
+            // Get CMYK values from sliders
+            const c = parseFloat($swatch.find('.cyan-slider').val());
+            const m = parseFloat($swatch.find('.magenta-slider').val());
+            const y = parseFloat($swatch.find('.yellow-slider').val());
+            const k = parseFloat($swatch.find('.black-slider').val());
+            
+            // Update value displays
+            $swatch.find('.cyan-slider').siblings('.cmyk-value').text(c + '%');
+            $swatch.find('.magenta-slider').siblings('.cmyk-value').text(m + '%');
+            $swatch.find('.yellow-slider').siblings('.cmyk-value').text(y + '%');
+            $swatch.find('.black-slider').siblings('.cmyk-value').text(k + '%');
+            
+            // Convert to hex
+            const hex = this.cmykToHex(c, m, y, k);
+            if (hex) {
+                // Update color picker, hex input, and preview
+                $swatch.find('.color-picker').val(hex);
+                $swatch.find('.hex-input').val(hex);
+                $swatch.find('.color-preview-box').css('background-color', hex);
+            }
+            
+            DesignBook.updatePreview();
+        },
+        
+        isValidHex: function(hex) {
+            return /^#[0-9A-F]{6}$/i.test(hex);
+        },
+        
+        hexToCmyk: function(hex) {
+            const rgb = this.hexToRgb(hex);
+            if (!rgb) return null;
+            return this.rgbToCmyk(rgb.r, rgb.g, rgb.b);
+        },
+        
+        rgbToCmyk: function(r, g, b) {
+            // Normalize RGB values to 0-1
+            r = r / 255;
+            g = g / 255;
+            b = b / 255;
+
+            // Calculate K (black)
+            const k = 1 - Math.max(r, g, b);
+            
+            // Calculate CMY
+            const c = k === 1 ? 0 : (1 - r - k) / (1 - k);
+            const m = k === 1 ? 0 : (1 - g - k) / (1 - k);
+            const y = k === 1 ? 0 : (1 - b - k) / (1 - k);
+
+            return {
+                c: Math.round(c * 100),
+                m: Math.round(m * 100),
+                y: Math.round(y * 100),
+                k: Math.round(k * 100)
+            };
+        },
+        
+        cmykToHex: function(c, m, y, k) {
+            const rgb = this.cmykToRgb(c, m, y, k);
+            if (!rgb) return null;
+            return this.rgbToHex(rgb.r, rgb.g, rgb.b);
+        },
+        
+        cmykToRgb: function(c, m, y, k) {
+            // Normalize CMYK values to 0-1
+            c = c / 100;
+            m = m / 100;
+            y = y / 100;
+            k = k / 100;
+
+            // Calculate RGB
+            const r = 255 * (1 - c) * (1 - k);
+            const g = 255 * (1 - m) * (1 - k);
+            const b = 255 * (1 - y) * (1 - k);
+
+            return {
+                r: Math.round(Math.max(0, Math.min(255, r))),
+                g: Math.round(Math.max(0, Math.min(255, g))),
+                b: Math.round(Math.max(0, Math.min(255, b)))
+            };
+        },
+        
+        hexToRgb: function(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+        
+        rgbToHex: function(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        },
+
+        saveColors: function() {
+            const colors = [];
+            const cmykData = {};
+
+            $('.color-swatch').each(function() {
+                const $swatch = $(this);
+                const slug = $swatch.data('slug');
+                const name = $swatch.find('label').first().text();
+                const hex = $swatch.find('.hex-input').val();
+                
+                // Get CMYK values
+                const c = parseFloat($swatch.find('.cyan-slider').val());
+                const m = parseFloat($swatch.find('.magenta-slider').val());
+                const y = parseFloat($swatch.find('.yellow-slider').val());
+                const k = parseFloat($swatch.find('.black-slider').val());
+
+                colors.push({
+                    slug: slug,
+                    name: name,
+                    color: hex
+                });
+                
+                cmykData[slug] = { c: c, m: m, y: y, k: k };
+            });
+
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_save_colors',
+                    nonce: villa_design_book.nonce,
+                    colors: JSON.stringify(colors),
+                    cmyk_data: JSON.stringify(cmykData)
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('✅ Colors saved successfully!');
+                    } else {
+                        alert('❌ Error: ' + response.data);
+                    }
+                },
+                error: function() {
+                    alert('❌ Network error occurred');
+                }
+            });
+        },
+
+        resetColors: function() {
+            if (confirm('Are you sure you want to reset all colors to defaults?')) {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'villa_reset_colors',
+                        nonce: villa_design_book.nonce
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('✅ Colors reset successfully!');
+                            location.reload();
+                        } else {
+                            alert('❌ Error: ' + response.data);
+                        }
+                    },
+                    error: function() {
+                        alert('❌ Network error occurred');
+                    }
+                });
+            }
+        }
+    };
+
+    const TextBook = {
+        init() {
+            this.bindEvents();
+            this.initTabSwitching();
+            this.updateTextPreviews();
+        },
+
+        bindEvents() {
+            // Tab switching
+            $(document).on('click', '.textbook-tab', this.switchTab);
+            
+            // Semantic style controls
+            $(document).on('change', '.text-style-controls select', this.onSemanticStyleChange.bind(this));
+            
+            // Base style controls
+            $(document).on('input', '#base-font-size', this.onBaseFontSizeChange.bind(this));
+            
+            // Save/Reset buttons
+            $(document).on('click', '#save-text-styles', this.saveTextStyles.bind(this));
+            $(document).on('click', '#reset-text-styles', this.resetTextStyles.bind(this));
+            $(document).on('click', '#save-base-styles', this.saveBaseStyles.bind(this));
+            $(document).on('click', '#reset-base-styles', this.resetBaseStyles.bind(this));
+        },
+
+        initTabSwitching() {
+            $('.textbook-tab').on('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all tabs and content
+                $('.textbook-tab').removeClass('active');
+                $('.textbook-tab-content').removeClass('active');
+                
+                // Add active class to clicked tab
+                $(this).addClass('active');
+                
+                // Show corresponding content
+                const target = $(this).data('tab');
+                $('#' + target).addClass('active');
+            });
+        },
+
+        onSemanticStyleChange(e) {
+            const $control = $(e.target);
+            const $card = $control.closest('.text-style-card');
+            const styleKey = $card.data('style');
+            
+            this.updateTextPreview(styleKey);
+        },
+
+        onBaseFontSizeChange(e) {
+            // Update font scale preview when base font size changes
+            this.updateFontScalePreview();
+        },
+
+        updateTextPreview(styleKey) {
+            const $card = $(`.text-style-card[data-style="${styleKey}"]`);
+            const $preview = $card.find('.preview-text');
+            
+            // Get current values from controls
+            const fontSize = $card.find('[name$="_font_size"]').val();
+            const fontWeight = $card.find('[name$="_font_weight"]').val();
+            const letterSpacing = $card.find('[name$="_letter_spacing"]').val();
+            const color = $card.find('[name$="_color"]').val();
+            
+            // Apply styles to preview
+            const styles = {
+                'font-size': this.getFontSizeValue(fontSize),
+                'font-weight': fontWeight,
+                'letter-spacing': this.getLetterSpacingValue(letterSpacing),
+                'color': this.getColorValue(color)
+            };
+            
+            $preview.css(styles);
+        },
+
+        updateTextPreviews() {
+            // Update all text previews
+            $('.text-style-card').each((index, card) => {
+                const styleKey = $(card).data('style');
+                this.updateTextPreview(styleKey);
+            });
+        },
+
+        updateFontScalePreview() {
+            const baseFontSize = $('#base-font-size').val() || '1rem';
+            const baseNumeric = parseFloat(baseFontSize);
+            const unit = baseFontSize.replace(/[0-9.]/g, '') || 'rem';
+            
+            const scales = {
+                'Small': 0.8125,
+                'Medium': 1.0,
+                'Large': 1.25,
+                'X-Large': 1.5,
+                'XX-Large': 2.0,
+                'Huge': 6.25
+            };
+            
+            $('.scale-item').each(function() {
+                const label = $(this).find('.scale-label').text();
+                const scale = scales[label];
+                if (scale) {
+                    const calculatedSize = (baseNumeric * scale).toFixed(4);
+                    $(this).find('.scale-value').text(`${calculatedSize}${unit} (${scale}× base)`);
+                }
+            });
+        },
+
+        getFontSizeValue(sizeKey) {
+            const baseFontSize = $('#base-font-size').val() || '1rem';
+            const baseNumeric = parseFloat(baseFontSize);
+            const unit = baseFontSize.replace(/[0-9.]/g, '') || 'rem';
+            
+            const scales = {
+                'small': 0.8125,
+                'medium': 1.0,
+                'large': 1.25,
+                'x-large': 1.5,
+                'xx-large': 2.0,
+                'huge': 6.25
+            };
+            
+            const scale = scales[sizeKey] || 1.0;
+            return (baseNumeric * scale) + unit;
+        },
+
+        getLetterSpacingValue(spacingKey) {
+            const spacings = {
+                'tight': '-0.025em',
+                'normal': '0',
+                'wide': '0.025em',
+                'wider': '0.05em',
+                'widest': '0.1em'
+            };
+            return spacings[spacingKey] || '0';
+        },
+
+        getColorValue(colorKey) {
+            // Map color keys to CSS custom properties
+            const colors = {
+                'primary': 'var(--wp--preset--color--primary)',
+                'secondary': 'var(--wp--preset--color--secondary)',
+                'base-darkest': 'var(--wp--preset--color--base-darkest)',
+                'base-dark': 'var(--wp--preset--color--base-dark)',
+                'base': 'var(--wp--preset--color--base)',
+                'base-light': 'var(--wp--preset--color--base-light)'
+            };
+            return colors[colorKey] || '#000000';
+        },
+
+        saveTextStyles(e) {
+            e.preventDefault();
+            
+            const styles = {};
+            
+            // Collect data from each semantic style card
+            $('.text-style-card').each(function() {
+                const $card = $(this);
+                const styleKey = $card.data('style');
+                
+                styles[styleKey] = {
+                    fontSize: $card.find('[name$="_font_size"]').val(),
+                    fontWeight: $card.find('[name$="_font_weight"]').val(),
+                    letterSpacing: $card.find('[name$="_letter_spacing"]').val(),
+                    color: $card.find('[name$="_color"]').val()
+                };
+            });
+            
+            // Send AJAX request
+            $.ajax({
+                url: villa_design_book.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'save_text_styles',
+                    nonce: villa_design_book.nonce,
+                    styles: styles
+                },
+                success: (response) => {
+                    if (response.success) {
+                        DesignBook.showNotification('Text styles saved successfully!', 'success');
+                    } else {
+                        DesignBook.showNotification('Error saving text styles: ' + response.data, 'error');
+                    }
+                },
+                error: () => {
+                    DesignBook.showNotification('Error saving text styles', 'error');
+                }
+            });
+        },
+
+        resetTextStyles(e) {
+            e.preventDefault();
+            
+            if (!confirm('Are you sure you want to reset all text styles to default values?')) {
+                return;
+            }
+            
+            $.ajax({
+                url: villa_design_book.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'reset_text_styles',
+                    nonce: villa_design_book.nonce
+                },
+                success: (response) => {
+                    if (response.success) {
+                        DesignBook.showNotification('Text styles reset successfully!', 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        DesignBook.showNotification('Error resetting text styles: ' + response.data, 'error');
+                    }
+                },
+                error: () => {
+                    DesignBook.showNotification('Error resetting text styles', 'error');
+                }
+            });
+        },
+
+        saveBaseStyles(e) {
+            e.preventDefault();
+            
+            const styles = {
+                'base-font-size': $('#base-font-size').val()
+            };
+            
+            $.ajax({
+                url: villa_design_book.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'save_base_styles',
+                    nonce: villa_design_book.nonce,
+                    styles: styles
+                },
+                success: (response) => {
+                    if (response.success) {
+                        DesignBook.showNotification('Base styles saved successfully!', 'success');
+                        this.updateFontScalePreview();
+                        this.updateTextPreviews();
+                    } else {
+                        DesignBook.showNotification('Error saving base styles: ' + response.data, 'error');
+                    }
+                },
+                error: () => {
+                    DesignBook.showNotification('Error saving base styles', 'error');
+                }
+            });
+        },
+
+        resetBaseStyles(e) {
+            e.preventDefault();
+            
+            if (!confirm('Are you sure you want to reset base styles to default values?')) {
+                return;
+            }
+            
+            $.ajax({
+                url: villa_design_book.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'reset_base_styles',
+                    nonce: villa_design_book.nonce
+                },
+                success: (response) => {
+                    if (response.success) {
+                        DesignBook.showNotification('Base styles reset successfully!', 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        DesignBook.showNotification('Error resetting base styles: ' + response.data, 'error');
+                    }
+                },
+                error: () => {
+                    DesignBook.showNotification('Error resetting base styles', 'error');
+                }
+            });
+        }
+    };
+
+    const ComponentBook = {
+        init: function() {
+            this.bindCardEvents();
+            this.updateCardPreview();
+            this.generateCardCSS();
+        },
+        
+        bindCardEvents: function() {
+            const self = this;
+            
+            // Bind all card control events
+            $('.card-control').on('input change', function() {
+                self.updateCardPreview();
+                self.generateCardCSS();
+            });
+            
+            // Range slider value display
+            $('input[type="range"].card-control').on('input', function() {
+                const $this = $(this);
+                const value = $this.val();
+                const property = $this.data('property');
+                
+                let displayValue = value;
+                if (property === 'borderRadius') {
+                    displayValue = value + 'px';
+                }
+                
+                $this.siblings('.range-value').text(displayValue);
+            });
+            
+            // Save card component
+            $('#save-card-component').on('click', function() {
+                self.saveCardComponent();
+            });
+            
+            // Reset card component
+            $('#reset-card-component').on('click', function() {
+                self.resetCardComponent();
+            });
+        },
+        
+        updateCardPreview: function() {
+            const $preview = $('#card-preview');
+            const settings = this.getCardSettings();
+            
+            // Update content
+            $preview.find('.card-image img').attr('src', settings.image);
+            $preview.find('.card-pretitle').text(settings.pretitle);
+            $preview.find('.card-title').text(settings.title);
+            $preview.find('.card-description').text(settings.description);
+            
+            // Update styles
+            const shadowValues = ['none', '0 2px 4px rgba(0,0,0,0.1)', '0 4px 12px rgba(0,0,0,0.1)', 
+                                 '0 8px 25px rgba(0,0,0,0.15)', '0 12px 35px rgba(0,0,0,0.2)', 
+                                 '0 16px 45px rgba(0,0,0,0.25)'];
+            
+            $preview.css({
+                'border-radius': settings.borderRadius + 'px',
+                'box-shadow': shadowValues[settings.shadow] || shadowValues[2]
+            });
+        },
+        
+        getCardSettings: function() {
+            return {
+                image: $('#card-image').val(),
+                pretitle: $('#card-pretitle').val(),
+                title: $('#card-title').val(),
+                description: $('#card-description').val(),
+                borderRadius: $('#card-border-radius').val(),
+                shadow: $('#card-shadow').val()
+            };
+        },
+        
+        generateCardCSS: function() {
+            const settings = this.getCardSettings();
+            const shadowValues = ['none', '0 2px 4px rgba(0,0,0,0.1)', '0 4px 12px rgba(0,0,0,0.1)', 
+                                 '0 8px 25px rgba(0,0,0,0.15)', '0 12px 35px rgba(0,0,0,0.2)', 
+                                 '0 16px 45px rgba(0,0,0,0.25)'];
+            
+            const css = `.villa-card {
+    background: #fff;
+    border-radius: ${settings.borderRadius}px;
+    overflow: hidden;
+    box-shadow: ${shadowValues[settings.shadow] || shadowValues[2]};
+    max-width: 350px;
+    transition: all 0.3s ease;
+}
+
+.villa-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.villa-card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-pretitle {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wp--preset--color--primary);
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+}
+
+.card-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}`;
+            
+            $('#card-css-output').val(css);
+        },
+        
+        saveCardComponent: function() {
+            const settings = this.getCardSettings();
+            
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_save_card_component',
+                    nonce: villa_design_book.nonce,
+                    settings: JSON.stringify(settings)
+                },
+                success: function(response) {
+                    if (response.success) {
+                        DesignBook.showNotification('Card component saved successfully!', 'success');
+                    } else {
+                        DesignBook.showNotification('Error saving card component: ' + response.data, 'error');
+                    }
+                },
+                error: function() {
+                    DesignBook.showNotification('Error saving card component', 'error');
+                }
+            });
+        },
+        
+        resetCardComponent: function() {
+            // Reset to default values
+            $('#card-image').val('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop');
+            $('#card-pretitle').val('Featured Property');
+            $('#card-title').val('Modern Villa with Ocean View');
+            $('#card-description').val('Experience luxury living in this stunning modern villa featuring panoramic ocean views, contemporary design, and premium amenities.');
+            $('#card-border-radius').val(12);
+            $('#card-shadow').val(2);
+            
+            // Update range value displays
+            $('#card-border-radius').siblings('.range-value').text('12px');
+            $('#card-shadow').siblings('.range-value').text('2');
+            
+            // Update preview and CSS
+            this.updateCardPreview();
+            this.generateCardCSS();
+            
+            DesignBook.showNotification('Card component reset to default', 'info');
+        }
+    };
+
     // Initialize when document is ready
     $(document).ready(function() {
         DesignBook.init();
+        ColorBook.init();
+        TextBook.init();
+        ComponentBook.init();
     });
 
 })(jQuery);
@@ -563,269 +1273,3 @@ const notificationCSS = `
 const style = document.createElement('style');
 style.textContent = notificationCSS;
 document.head.appendChild(style);
-
-// TextBook functionality
-document.addEventListener('DOMContentLoaded', function() {
-    initializeTextBook();
-});
-
-function initializeTextBook() {
-    // Tab switching functionality
-    const tabs = document.querySelectorAll('.textbook-tab');
-    const tabContents = document.querySelectorAll('.textbook-tab-content');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const targetTab = this.dataset.tab;
-            
-            // Remove active class from all tabs and contents
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-            
-            // Add active class to clicked tab and corresponding content
-            this.classList.add('active');
-            const targetContent = document.getElementById(targetTab);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-        });
-    });
-
-    // Text style controls
-    const textStyleControls = document.querySelectorAll('.text-style-controls select');
-    textStyleControls.forEach(control => {
-        control.addEventListener('change', updateTextStylePreview);
-    });
-
-    // Base style controls
-    const baseStyleControls = document.querySelectorAll('.base-style-control input');
-    baseStyleControls.forEach(control => {
-        control.addEventListener('input', updateBaseStylePreview);
-    });
-
-    // Save and reset buttons
-    const saveButton = document.getElementById('save-text-styles');
-    const resetButton = document.getElementById('reset-text-styles');
-    const saveBaseButton = document.getElementById('save-base-styles');
-    const resetBaseButton = document.getElementById('reset-base-styles');
-
-    if (saveButton) {
-        saveButton.addEventListener('click', saveTextStyles);
-    }
-    if (resetButton) {
-        resetButton.addEventListener('click', resetTextStyles);
-    }
-    if (saveBaseButton) {
-        saveBaseButton.addEventListener('click', saveBaseStyles);
-    }
-    if (resetBaseButton) {
-        resetBaseButton.addEventListener('click', resetBaseStyles);
-    }
-
-    // Initialize preview
-    updateLivePreview();
-}
-
-function updateTextStylePreview() {
-    const card = this.closest('.text-style-card');
-    const styleType = card.dataset.style;
-    const preview = card.querySelector('.preview-element');
-    
-    if (!preview) return;
-
-    const htmlTag = card.querySelector('[data-control="html-tag"]').value;
-    const fontSize = card.querySelector('[data-control="font-size"]').value;
-    const fontWeight = card.querySelector('[data-control="font-weight"]').value;
-    const textTransform = card.querySelector('[data-control="text-transform"]').value;
-    const letterSpacing = card.querySelector('[data-control="letter-spacing"]').value;
-    const color = card.querySelector('[data-control="color"]')?.value || '';
-    const fontFamily = card.querySelector('[data-control="font-family"]')?.value || '';
-
-    // Update preview element
-    preview.style.fontSize = `var(--wp--preset--font-size--${fontSize})`;
-    preview.style.fontWeight = fontWeight;
-    preview.style.textTransform = textTransform;
-    preview.style.letterSpacing = letterSpacing;
-    
-    if (color) {
-        preview.style.color = color;
-    }
-    if (fontFamily) {
-        preview.style.fontFamily = fontFamily;
-    }
-
-    // Update live preview
-    updateLivePreview();
-}
-
-function updateBaseStylePreview() {
-    // Update live preview when base styles change
-    updateLivePreview();
-}
-
-function updateLivePreview() {
-    const previewElements = document.querySelectorAll('.preview-text');
-    
-    previewElements.forEach(element => {
-        const styleType = element.classList[1]; // e.g., 'pre-title', 'title', etc.
-        const card = document.querySelector(`[data-style="${styleType}"]`);
-        
-        if (!card) return;
-
-        const htmlTag = card.querySelector('[data-control="html-tag"]')?.value;
-        const fontSize = card.querySelector('[data-control="font-size"]')?.value;
-        const fontWeight = card.querySelector('[data-control="font-weight"]')?.value;
-        const textTransform = card.querySelector('[data-control="text-transform"]')?.value;
-        const letterSpacing = card.querySelector('[data-control="letter-spacing"]')?.value;
-        const color = card.querySelector('[data-control="color"]')?.value || '';
-        const fontFamily = card.querySelector('[data-control="font-family"]')?.value || '';
-
-        if (fontSize) element.style.fontSize = `var(--wp--preset--font-size--${fontSize})`;
-        if (fontWeight) element.style.fontWeight = fontWeight;
-        if (textTransform) element.style.textTransform = textTransform;
-        if (letterSpacing) element.style.letterSpacing = letterSpacing;
-        if (color) element.style.color = color;
-        if (fontFamily) element.style.fontFamily = fontFamily;
-    });
-}
-
-function saveTextStyles() {
-    const textStyles = {};
-    const cards = document.querySelectorAll('.text-style-card');
-    
-    cards.forEach(card => {
-        const styleType = card.dataset.style;
-        const htmlTag = card.querySelector('[data-control="html-tag"]').value;
-        const fontSize = card.querySelector('[data-control="font-size"]').value;
-        const fontWeight = card.querySelector('[data-control="font-weight"]').value;
-        const textTransform = card.querySelector('[data-control="text-transform"]').value;
-        const letterSpacing = card.querySelector('[data-control="letter-spacing"]').value;
-        const color = card.querySelector('[data-control="color"]')?.value || '';
-        const fontFamily = card.querySelector('[data-control="font-family"]')?.value || '';
-        
-        textStyles[styleType] = {
-            htmlTag,
-            fontSize,
-            fontWeight,
-            textTransform,
-            letterSpacing,
-            color,
-            fontFamily
-        };
-    });
-
-    // Send AJAX request
-    fetch(ajaxurl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            action: 'villa_save_text_styles',
-            nonce: villa_design_book.nonce,
-            text_styles: JSON.stringify(textStyles)
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Text styles saved successfully!', 'success');
-        } else {
-            showNotification('Error saving text styles: ' + data.data, 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Error saving text styles: ' + error.message, 'error');
-    });
-}
-
-function resetTextStyles() {
-    if (!confirm('Are you sure you want to reset all text styles to default values?')) {
-        return;
-    }
-
-    fetch(ajaxurl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            action: 'villa_reset_text_styles',
-            nonce: villa_design_book.nonce
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Text styles reset successfully!', 'success');
-            location.reload(); // Reload to show default values
-        } else {
-            showNotification('Error resetting text styles: ' + data.data, 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Error resetting text styles: ' + error.message, 'error');
-    });
-}
-
-function saveBaseStyles() {
-    const baseStyles = {};
-    const controls = document.querySelectorAll('.base-style-control input');
-    
-    controls.forEach(control => {
-        const property = control.dataset.property;
-        baseStyles[property] = control.value;
-    });
-
-    fetch(ajaxurl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            action: 'villa_save_base_styles',
-            nonce: villa_design_book.nonce,
-            base_styles: JSON.stringify(baseStyles)
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Base styles saved successfully!', 'success');
-        } else {
-            showNotification('Error saving base styles: ' + data.data, 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Error saving base styles: ' + error.message, 'error');
-    });
-}
-
-function resetBaseStyles() {
-    if (!confirm('Are you sure you want to reset all base styles to default values?')) {
-        return;
-    }
-
-    fetch(ajaxurl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            action: 'villa_reset_base_styles',
-            nonce: villa_design_book.nonce
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Base styles reset successfully!', 'success');
-            location.reload(); // Reload to show default values
-        } else {
-            showNotification('Error resetting base styles: ' + data.data, 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Error resetting base styles: ' + error.message, 'error');
-    });
-}
