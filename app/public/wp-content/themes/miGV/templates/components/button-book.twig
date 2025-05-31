@@ -1,0 +1,78 @@
+{% set variants = {
+    'primary': {
+        'label': 'Primary Button',
+        'description': 'Main call-to-action button',
+        'color': 'primary',
+        'size': 'medium',
+        'rounded': 'medium',
+        'shadow': 'medium'
+    },
+    'secondary': {
+        'label': 'Secondary Button',
+        'description': 'Secondary action button',
+        'color': 'secondary',
+        'size': 'medium',
+        'rounded': 'medium',
+        'shadow': 'small'
+    },
+    'outline': {
+        'label': 'Outline Button',
+        'description': 'Lightweight button with border',
+        'variant': 'outline',
+        'size': 'medium',
+        'rounded': 'medium',
+        'shadow': 'none'
+    },
+    'ghost': {
+        'label': 'Ghost Button',
+        'description': 'Transparent button with hover effect',
+        'variant': 'ghost',
+        'size': 'medium',
+        'rounded': 'medium',
+        'shadow': 'none'
+    },
+    'text': {
+        'label': 'Text Button',
+        'description': 'Simple text button',
+        'variant': 'text',
+        'size': 'medium',
+        'rounded': 'none',
+        'shadow': 'none'
+    }
+} %}
+
+<div class="button-book p-8">
+    <h2 class="mb-6">Button Variants</h2>
+    
+    {% for variant, settings in variants %}
+        <div class="mb-8">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold">{{ settings.label }}</h3>
+                <p class="text-sm text-neutral">{{ settings.description }}</p>
+            </div>
+            
+            <div class="flex gap-4">
+                {% include 'components/primitives/button.twig' with {
+                    'variant': settings.variant|default('primary'),
+                    'size': settings.size,
+                    'color': settings.color,
+                    'rounded': settings.rounded,
+                    'shadow': settings.shadow,
+                    'content': 'Button Text',
+                    'attributes': 'class="mb-4"'
+                } %}
+                
+                {% include 'components/primitives/button.twig' with {
+                    'variant': settings.variant|default('primary'),
+                    'size': settings.size,
+                    'color': settings.color,
+                    'rounded': settings.rounded,
+                    'shadow': settings.shadow,
+                    'content': 'Button with Icon',
+                    'icon': '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>',
+                    'icon_position': 'right'
+                } %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

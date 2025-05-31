@@ -1,0 +1,72 @@
+{% set variant = variant|default('primary') %}
+{% set size = size|default('medium') %}
+{% set color = color|default('primary') %}
+{% set icon = icon|default(null) %}
+{% set icon_position = icon_position|default('left') %}
+{% set rounded = rounded|default('medium') %}
+{% set shadow = shadow|default('none') %}
+{% set padding = padding|default('normal') %}
+
+{% set style_classes = {
+    'variant': {
+        'primary': 'bg-primary text-white hover:bg-primary-dark',
+        'secondary': 'bg-secondary text-white hover:bg-secondary-dark',
+        'outline': 'border-2 border-primary text-primary hover:bg-primary-dark hover:text-white',
+        'ghost': 'text-primary hover:bg-primary-light',
+        'text': 'text-primary hover:text-primary-dark'
+    },
+    'size': {
+        'small': 'text-sm px-3 py-1.5',
+        'medium': 'text-base px-4 py-2',
+        'large': 'text-lg px-5 py-2.5'
+    },
+    'rounded': {
+        'none': 'rounded-none',
+        'small': 'rounded-sm',
+        'medium': 'rounded',
+        'large': 'rounded-lg',
+        'full': 'rounded-full'
+    },
+    'shadow': {
+        'none': 'shadow-none',
+        'small': 'shadow-sm',
+        'medium': 'shadow-md',
+        'large': 'shadow-lg'
+    },
+    'padding': {
+        'normal': 'px-4 py-2',
+        'tight': 'px-3 py-1.5',
+        'loose': 'px-5 py-2.5'
+    }
+} %}
+
+{% set button_classes = style_classes.variant[variant] ~ ' ' ~
+    style_classes.size[size] ~ ' ' ~
+    style_classes.rounded[rounded] ~ ' ' ~
+    style_classes.shadow[shadow] ~ ' ' ~
+    style_classes.padding[padding] ~ ' ' ~
+    'transition-all duration-200 ease-in-out'
+%}
+
+<button type="{{ type|default('button') }}" class="{{ button_classes }}"{% if attributes %} {{ attributes }}{% endif %}>
+    {% if icon and icon_position == 'left' %}
+        <span class="mr-2">
+            {{ icon }}
+        </span>
+    {% endif %}
+    
+    {% set text_component = 'components/primitives/text.twig' %}
+    {% include text_component with {
+        'type': 'button',
+        'size': size,
+        'weight': 'medium',
+        'color': color,
+        'content': content|default('Button')
+    } %}
+    
+    {% if icon and icon_position == 'right' %}
+        <span class="ml-2">
+            {{ icon }}
+        </span>
+    {% endif %}
+</button>

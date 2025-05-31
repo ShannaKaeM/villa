@@ -15,7 +15,7 @@ class VillaDesignBook {
     
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('wp_ajax_villa_save_design_tokens', array($this, 'save_design_tokens'));
         add_action('wp_ajax_villa_export_design_tokens', array($this, 'export_design_tokens'));
         add_action('wp_ajax_villa_import_design_tokens', array($this, 'import_design_tokens'));
@@ -26,6 +26,10 @@ class VillaDesignBook {
         add_action('wp_ajax_villa_save_base_styles', array($this, 'save_base_styles'));
         add_action('wp_ajax_villa_reset_base_styles', array($this, 'reset_base_styles'));
         add_action('wp_ajax_villa_save_card_component', array($this, 'save_card_component')); // Add AJAX handler for saving card component settings
+        add_action('wp_ajax_villa_save_button_styles', array($this, 'save_button_styles'));
+        add_action('wp_ajax_villa_reset_button_styles', array($this, 'reset_button_styles'));
+        add_action('wp_ajax_villa_save_layout_tokens', array($this, 'save_layout_tokens')); // Add AJAX handler for saving layout tokens
+        add_action('wp_ajax_villa_reset_layout_tokens', array($this, 'reset_layout_tokens')); // Add AJAX handler for resetting layout tokens
     }
     
     /**
@@ -63,6 +67,15 @@ class VillaDesignBook {
         
         add_submenu_page(
             'villa-design-book',
+            'ButtonBook',
+            'ButtonBook',
+            'manage_options',
+            'villa-button-book',
+            array($this, 'render_button_book')
+        );
+        
+        add_submenu_page(
+            'villa-design-book',
             'ComponentBook',
             'ComponentBook',
             'manage_options',
@@ -81,20 +94,40 @@ class VillaDesignBook {
     }
     
     /**
-     * Enqueue scripts and styles
+     * Enqueue admin scripts and styles
      */
-    public function enqueue_scripts($hook) {
-        if (strpos($hook, 'villa-design-book') === false && strpos($hook, 'villa-color-book') === false && 
-            strpos($hook, 'villa-text-book') === false && strpos($hook, 'villa-component-book') === false &&
+    public function enqueue_admin_scripts($hook) {
+        // Only load on our admin pages
+        if (strpos($hook, 'villa-design-book') === false && 
+            strpos($hook, 'villa-color-book') === false && 
+            strpos($hook, 'villa-text-book') === false && 
+            strpos($hook, 'villa-button-book') === false && 
+            strpos($hook, 'villa-component-book') === false && 
             strpos($hook, 'villa-base-options') === false) {
             return;
         }
         
-        wp_enqueue_style('villa-design-book-css', get_template_directory_uri() . '/assets/css/villa-design-book.css', array(), '1.0.0');
-        wp_enqueue_script('villa-design-book-js', get_template_directory_uri() . '/assets/js/villa-design-book.js', array('jquery'), '1.0.0', true);
+        // Enqueue WordPress media scripts
+        wp_enqueue_media();
         
-        // Localize script for AJAX
-        wp_localize_script('villa-design-book-js', 'villaDesignBook', array(
+        // Enqueue our scripts and styles
+        wp_enqueue_style(
+            'villa-design-book-css',
+            get_template_directory_uri() . '/assets/css/villa-design-book.css',
+            array(),
+            '1.0.6' // Incremented for Base Options styling
+        );
+        
+        wp_enqueue_script(
+            'villa-design-book-js',
+            get_template_directory_uri() . '/assets/js/villa-design-book.js',
+            array('jquery', 'media-upload', 'media-views'),
+            '1.0.6', // Incremented for Base Options functionality
+            true
+        );
+        
+        // Localize script with AJAX data
+        wp_localize_script('villa-design-book-js', 'villa_design_book', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('villa_design_book_nonce')
         ));
@@ -144,6 +177,13 @@ class VillaDesignBook {
                         <h3>TextBook</h3>
                         <p>Define semantic text styles: pre-title, title, subtitle, description, and body text with proper HTML tags.</p>
                         <a href="<?php echo admin_url('admin.php?page=villa-text-book'); ?>" class="button button-primary">Open TextBook</a>
+                    </div>
+                    
+                    <div class="design-book-card">
+                        <div class="card-icon">🖋️</div>
+                        <h3>ButtonBook</h3>
+                        <p>Design and customize buttons with various styles, sizes, and colors.</p>
+                        <a href="<?php echo admin_url('admin.php?page=villa-button-book'); ?>" class="button button-primary">Open ButtonBook</a>
                     </div>
                     
                     <div class="design-book-card">
@@ -395,8 +435,8 @@ class VillaDesignBook {
         $text_styles = array_merge($default_styles, $text_styles);
         
         ?>
-        <div class="wrap villa-design-book">
-            <h1>TextBook - Typography Management</h1>
+        <div class="wrap villa-text-book">
+            <h1>📝 TextBook</h1>
             <p class="description">Manage your site's typography with semantic text styles and proportional base font scaling.</p>
             
             <div class="textbook-container">
@@ -623,6 +663,74 @@ class VillaDesignBook {
     }
     
     /**
+     * Render ButtonBook page
+     */
+    public function render_button_book() {
+        ?>
+        <div class="wrap villa-button-book">
+            <h1>🖋️ ButtonBook</h1>
+            <p class="description">Design and customize buttons with various styles, sizes, and colors.</p>
+            
+            <div class="button-book-container">
+                <div class="button-book-editor">
+                    <div class="button-controls">
+                        <div class="variant-group">
+                            <h3>Button Settings</h3>
+                            
+                            <div class="variant-controls">
+                                <div class="control-group">
+                                    <label for="button-text">Text</label>
+                                    <input type="text" id="button-text" class="variant-control" value="Default Button" placeholder="Enter button text">
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="button-style">Style</label>
+                                    <select name="button-style" class="variant-control">
+                                        <option value="primary">Primary</option>
+                                        <option value="secondary">Secondary</option>
+                                        <option value="tertiary">Tertiary</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="button-size">Size</label>
+                                    <select name="button-size" class="variant-control">
+                                        <option value="small">Small</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="button-color">Color</label>
+                                    <select name="button-color" class="variant-control">
+                                        <option value="primary">Primary</option>
+                                        <option value="secondary">Secondary</option>
+                                        <option value="neutral">Neutral</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="button-actions">
+                                <button type="button" id="save-button" class="button button-primary">Save Button</button>
+                                <button type="button" id="reset-button" class="button">Reset to Default</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-preview">
+                        <h3>Live Preview</h3>
+                        <div class="button-preview-container">
+                            <button class="villa-button" id="button-preview">Default Button</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
      * Render ComponentBook page
      */
     public function render_component_book() {
@@ -641,10 +749,18 @@ class VillaDesignBook {
                             <h3>Card Settings</h3>
                             
                             <div class="control-group">
-                                <label for="card-image">Image URL</label>
-                                <input type="url" id="card-image" class="card-control" data-property="image" 
-                                       value="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop" 
-                                       placeholder="Enter image URL">
+                                <label for="card-image">Image</label>
+                                <div class="media-upload-wrapper">
+                                    <input type="hidden" id="card-image" class="card-control" data-property="image" 
+                                           value="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop">
+                                    <div class="media-preview">
+                                        <img id="card-image-preview" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop" alt="Card Image Preview">
+                                    </div>
+                                    <div class="media-buttons">
+                                        <button type="button" id="upload-card-image" class="button">Choose Image</button>
+                                        <button type="button" id="remove-card-image" class="button">Remove</button>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="control-group">
@@ -716,7 +832,145 @@ class VillaDesignBook {
      * Render Base Options page
      */
     public function render_base_options() {
-        echo '<div class="wrap"><h1>⚙️ Base Options</h1><p>Coming soon...</p></div>';
+        $theme_json = $this->get_theme_json_data();
+        $layout_tokens = $theme_json['settings']['custom']['layout'] ?? [];
+        
+        // Default layout tokens if not set
+        $default_layout = [
+            'spacing' => [
+                'xs' => '4px', 'sm' => '8px', 'md' => '12px', 'lg' => '16px',
+                'xl' => '20px', '2xl' => '24px', '3xl' => '32px', '4xl' => '40px',
+                '5xl' => '48px', '6xl' => '64px'
+            ],
+            'borderRadius' => [
+                'none' => '0', 'sm' => '4px', 'md' => '6px', 'lg' => '8px',
+                'xl' => '12px', '2xl' => '16px', '3xl' => '24px', 'full' => '9999px'
+            ],
+            'borderWidth' => [
+                'none' => '0', 'thin' => '1px', 'medium' => '2px', 'thick' => '3px', 'heavy' => '4px'
+            ],
+            'shadows' => [
+                'none' => 'none',
+                'sm' => '0 1px 2px rgba(0, 0, 0, 0.05)',
+                'md' => '0 2px 4px rgba(0, 0, 0, 0.1)',
+                'lg' => '0 4px 8px rgba(0, 0, 0, 0.15)',
+                'xl' => '0 8px 16px rgba(0, 0, 0, 0.2)',
+                '2xl' => '0 16px 32px rgba(0, 0, 0, 0.25)',
+                'inner' => 'inset 0 2px 4px rgba(0, 0, 0, 0.1)'
+            ],
+            'sizes' => [
+                'xs' => '20px', 'sm' => '24px', 'md' => '32px', 'lg' => '40px',
+                'xl' => '48px', '2xl' => '56px', '3xl' => '64px'
+            ]
+        ];
+        
+        $layout_tokens = array_merge($default_layout, $layout_tokens);
+        ?>
+        <div class="wrap villa-base-options">
+            <h1>⚙️ Base Options</h1>
+            <p class="description">Manage foundational design tokens that all components share: spacing, border radius, shadows, and sizes.</p>
+            
+            <div class="base-options-container">
+                <div class="base-options-tabs">
+                    <button class="base-tab active" data-tab="spacing">Spacing</button>
+                    <button class="base-tab" data-tab="border-radius">Border Radius</button>
+                    <button class="base-tab" data-tab="border-width">Border Width</button>
+                    <button class="base-tab" data-tab="shadows">Shadows</button>
+                    <button class="base-tab" data-tab="sizes">Sizes</button>
+                </div>
+                
+                <!-- Spacing Tab -->
+                <div id="spacing" class="base-tab-content active">
+                    <h2>Spacing Scale</h2>
+                    <p>Define the spacing scale used for padding, margins, and gaps throughout your design system.</p>
+                    <div class="token-grid">
+                        <?php foreach ($layout_tokens['spacing'] as $key => $value): ?>
+                            <div class="token-item">
+                                <label for="spacing-<?php echo $key; ?>"><?php echo strtoupper($key); ?></label>
+                                <input type="text" id="spacing-<?php echo $key; ?>" class="layout-control" 
+                                       data-category="spacing" data-key="<?php echo $key; ?>" 
+                                       value="<?php echo esc_attr($value); ?>" placeholder="e.g., 12px">
+                                <div class="token-preview spacing-preview" style="width: <?php echo $value; ?>; height: <?php echo $value; ?>"></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <!-- Border Radius Tab -->
+                <div id="border-radius" class="base-tab-content">
+                    <h2>Border Radius Scale</h2>
+                    <p>Define border radius values for consistent rounded corners across components.</p>
+                    <div class="token-grid">
+                        <?php foreach ($layout_tokens['borderRadius'] as $key => $value): ?>
+                            <div class="token-item">
+                                <label for="border-radius-<?php echo $key; ?>"><?php echo strtoupper($key); ?></label>
+                                <input type="text" id="border-radius-<?php echo $key; ?>" class="layout-control" 
+                                       data-category="borderRadius" data-key="<?php echo $key; ?>" 
+                                       value="<?php echo esc_attr($value); ?>" placeholder="e.g., 6px">
+                                <div class="token-preview radius-preview" style="border-radius: <?php echo $value; ?>"></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <!-- Border Width Tab -->
+                <div id="border-width" class="base-tab-content">
+                    <h2>Border Width Scale</h2>
+                    <p>Define border width values for consistent stroke weights across components.</p>
+                    <div class="token-grid">
+                        <?php foreach ($layout_tokens['borderWidth'] as $key => $value): ?>
+                            <div class="token-item">
+                                <label for="border-width-<?php echo $key; ?>"><?php echo strtoupper($key); ?></label>
+                                <input type="text" id="border-width-<?php echo $key; ?>" class="layout-control" 
+                                       data-category="borderWidth" data-key="<?php echo $key; ?>" 
+                                       value="<?php echo esc_attr($value); ?>" placeholder="e.g., 2px">
+                                <div class="token-preview border-preview" style="border: <?php echo $value; ?> solid #333"></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <!-- Shadows Tab -->
+                <div id="shadows" class="base-tab-content">
+                    <h2>Shadow Scale</h2>
+                    <p>Define box shadow values for consistent elevation and depth across components.</p>
+                    <div class="token-grid">
+                        <?php foreach ($layout_tokens['shadows'] as $key => $value): ?>
+                            <div class="token-item">
+                                <label for="shadows-<?php echo $key; ?>"><?php echo strtoupper($key); ?></label>
+                                <input type="text" id="shadows-<?php echo $key; ?>" class="layout-control" 
+                                       data-category="shadows" data-key="<?php echo $key; ?>" 
+                                       value="<?php echo esc_attr($value); ?>" placeholder="e.g., 0 2px 4px rgba(0,0,0,0.1)">
+                                <div class="token-preview shadow-preview" style="box-shadow: <?php echo $value; ?>"></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <!-- Sizes Tab -->
+                <div id="sizes" class="base-tab-content">
+                    <h2>Component Sizes</h2>
+                    <p>Define size values for consistent component dimensions and heights.</p>
+                    <div class="token-grid">
+                        <?php foreach ($layout_tokens['sizes'] as $key => $value): ?>
+                            <div class="token-item">
+                                <label for="sizes-<?php echo $key; ?>"><?php echo strtoupper($key); ?></label>
+                                <input type="text" id="sizes-<?php echo $key; ?>" class="layout-control" 
+                                       data-category="sizes" data-key="<?php echo $key; ?>" 
+                                       value="<?php echo esc_attr($value); ?>" placeholder="e.g., 32px">
+                                <div class="token-preview size-preview" style="width: <?php echo $value; ?>; height: <?php echo $value; ?>"></div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <div class="base-actions">
+                    <button type="button" id="save-layout-tokens" class="button button-primary">Save Layout Tokens</button>
+                    <button type="button" id="reset-layout-tokens" class="button">Reset to Defaults</button>
+                </div>
+            </div>
+        </div>
+        <?php
     }
     
     /**
@@ -1003,7 +1257,6 @@ class VillaDesignBook {
         
         // Read current theme.json
         $theme_json_path = get_template_directory() . '/theme.json';
-        
         if (!file_exists($theme_json_path)) {
             wp_send_json_error('theme.json file not found');
             return;
@@ -1200,20 +1453,8 @@ class VillaDesignBook {
         if (isset($theme_json['settings']['typography']['fontSizes'])) {
             foreach ($theme_json['settings']['typography']['fontSizes'] as &$font_size) {
                 switch ($font_size['slug']) {
-                    case 'small':
-                        $font_size['size'] = $defaults['base-font-size'];
-                        break;
                     case 'medium':
                         $font_size['size'] = $defaults['base-font-size'];
-                        break;
-                    case 'large':
-                        $font_size['size'] = '1.25rem';
-                        break;
-                    case 'x-large':
-                        $font_size['size'] = '1.5rem';
-                        break;
-                    case 'xx-large':
-                        $font_size['size'] = '2rem';
                         break;
                 }
             }
@@ -1274,6 +1515,206 @@ class VillaDesignBook {
         } else {
             wp_send_json_error('Failed to save card component');
         }
+    }
+    
+    public function save_button_styles() {
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'villa_design_book_nonce')) {
+            wp_die('Security check failed');
+        }
+        
+        // Check user capabilities
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+            return;
+        }
+        
+        // Get and sanitize settings
+        $settings_json = stripslashes($_POST['settings']);
+        $settings = json_decode($settings_json, true);
+        
+        if (!$settings) {
+            wp_send_json_error('Invalid settings data');
+            return;
+        }
+        
+        // Sanitize the settings
+        $sanitized_settings = [
+            'text' => sanitize_text_field($settings['text']),
+            'style' => sanitize_text_field($settings['style']),
+            'size' => sanitize_text_field($settings['size']),
+            'color' => sanitize_text_field($settings['color'])
+        ];
+        
+        // Save to WordPress options
+        $result = update_option('villa_button_component', $sanitized_settings);
+        
+        if ($result) {
+            wp_send_json_success('Button component saved successfully');
+        } else {
+            wp_send_json_error('Failed to save button component');
+        }
+    }
+    
+    public function reset_button_styles() {
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'], 'villa_design_book_nonce')) {
+            wp_die('Security check failed');
+        }
+        
+        // Check user capabilities
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+            return;
+        }
+        
+        // Default button styles
+        $defaults = [
+            'text' => 'Default Button',
+            'style' => 'primary',
+            'size' => 'medium',
+            'color' => 'primary'
+        ];
+        
+        // Save to WordPress options
+        $result = update_option('villa_button_component', $defaults);
+        
+        if ($result) {
+            wp_send_json_success('Button component reset to defaults');
+        } else {
+            wp_send_json_error('Failed to reset button component');
+        }
+    }
+    
+    /**
+     * Save layout tokens to theme.json
+     */
+    public function save_layout_tokens() {
+        check_ajax_referer('villa_design_book_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized');
+        }
+        
+        $layout_data = $_POST['layout_data'] ?? [];
+        
+        // Sanitize layout data
+        $sanitized_layout = [];
+        foreach ($layout_data as $category => $tokens) {
+            if (in_array($category, ['spacing', 'borderRadius', 'borderWidth', 'shadows', 'sizes'])) {
+                $sanitized_layout[$category] = [];
+                foreach ($tokens as $key => $value) {
+                    $sanitized_layout[$category][sanitize_key($key)] = sanitize_text_field($value);
+                }
+            }
+        }
+        
+        // Read current theme.json
+        $theme_json_path = get_template_directory() . '/theme.json';
+        if (!file_exists($theme_json_path)) {
+            wp_send_json_error('theme.json not found');
+            return;
+        }
+        
+        $theme_json_content = file_get_contents($theme_json_path);
+        $theme_json = json_decode($theme_json_content, true);
+        
+        if (!$theme_json) {
+            wp_send_json_error('Invalid theme.json format');
+            return;
+        }
+        
+        // Update layout tokens
+        if (!isset($theme_json['settings'])) {
+            $theme_json['settings'] = [];
+        }
+        if (!isset($theme_json['settings']['custom'])) {
+            $theme_json['settings']['custom'] = [];
+        }
+        
+        $theme_json['settings']['custom']['layout'] = $sanitized_layout;
+        
+        // Write back to theme.json
+        $updated_json = json_encode($theme_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (file_put_contents($theme_json_path, $updated_json) === false) {
+            wp_send_json_error('Failed to save theme.json');
+            return;
+        }
+        
+        wp_send_json_success('Layout tokens saved successfully');
+    }
+    
+    /**
+     * Reset layout tokens to defaults
+     */
+    public function reset_layout_tokens() {
+        check_ajax_referer('villa_design_book_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_die('Unauthorized');
+        }
+        
+        $default_layout = [
+            'spacing' => [
+                'xs' => '4px', 'sm' => '8px', 'md' => '12px', 'lg' => '16px',
+                'xl' => '20px', '2xl' => '24px', '3xl' => '32px', '4xl' => '40px',
+                '5xl' => '48px', '6xl' => '64px'
+            ],
+            'borderRadius' => [
+                'none' => '0', 'sm' => '4px', 'md' => '6px', 'lg' => '8px',
+                'xl' => '12px', '2xl' => '16px', '3xl' => '24px', 'full' => '9999px'
+            ],
+            'borderWidth' => [
+                'none' => '0', 'thin' => '1px', 'medium' => '2px', 'thick' => '3px', 'heavy' => '4px'
+            ],
+            'shadows' => [
+                'none' => 'none',
+                'sm' => '0 1px 2px rgba(0, 0, 0, 0.05)',
+                'md' => '0 2px 4px rgba(0, 0, 0, 0.1)',
+                'lg' => '0 4px 8px rgba(0, 0, 0, 0.15)',
+                'xl' => '0 8px 16px rgba(0, 0, 0, 0.2)',
+                '2xl' => '0 16px 32px rgba(0, 0, 0, 0.25)',
+                'inner' => 'inset 0 2px 4px rgba(0, 0, 0, 0.1)'
+            ],
+            'sizes' => [
+                'xs' => '20px', 'sm' => '24px', 'md' => '32px', 'lg' => '40px',
+                'xl' => '48px', '2xl' => '56px', '3xl' => '64px'
+            ]
+        ];
+        
+        // Read current theme.json
+        $theme_json_path = get_template_directory() . '/theme.json';
+        if (!file_exists($theme_json_path)) {
+            wp_send_json_error('theme.json not found');
+            return;
+        }
+        
+        $theme_json_content = file_get_contents($theme_json_path);
+        $theme_json = json_decode($theme_json_content, true);
+        
+        if (!$theme_json) {
+            wp_send_json_error('Invalid theme.json format');
+            return;
+        }
+        
+        // Reset layout tokens
+        if (!isset($theme_json['settings'])) {
+            $theme_json['settings'] = [];
+        }
+        if (!isset($theme_json['settings']['custom'])) {
+            $theme_json['settings']['custom'] = [];
+        }
+        
+        $theme_json['settings']['custom']['layout'] = $default_layout;
+        
+        // Write back to theme.json
+        $updated_json = json_encode($theme_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (file_put_contents($theme_json_path, $updated_json) === false) {
+            wp_send_json_error('Failed to save theme.json');
+            return;
+        }
+        
+        wp_send_json_success(['message' => 'Layout tokens reset to defaults', 'layout' => $default_layout]);
     }
 }
 

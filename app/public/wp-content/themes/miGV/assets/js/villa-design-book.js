@@ -1041,6 +1041,7 @@
     const ComponentBook = {
         init: function() {
             this.bindCardEvents();
+            this.initializeRangeValues();
             this.updateCardPreview();
             this.generateCardCSS();
         },
@@ -1054,7 +1055,7 @@
                 self.generateCardCSS();
             });
             
-            // Range slider value display
+            // Range slider value display and preview update
             $('input[type="range"].card-control').on('input', function() {
                 const $this = $(this);
                 const value = $this.val();
@@ -1066,6 +1067,55 @@
                 }
                 
                 $this.siblings('.range-value').text(displayValue);
+                
+                // Update preview immediately
+                self.updateCardPreview();
+                self.generateCardCSS();
+            });
+            
+            // WordPress Media Uploader
+            $('#upload-card-image').on('click', function(e) {
+                e.preventDefault();
+                
+                // Create the media frame
+                const frame = wp.media({
+                    title: 'Select Card Image',
+                    button: {
+                        text: 'Use this image'
+                    },
+                    multiple: false,
+                    library: {
+                        type: 'image'
+                    }
+                });
+                
+                // When an image is selected
+                frame.on('select', function() {
+                    const attachment = frame.state().get('selection').first().toJSON();
+                    
+                    // Update the hidden input and preview
+                    $('#card-image').val(attachment.url).trigger('change');
+                    $('#card-image-preview').attr('src', attachment.url);
+                    
+                    // Update the card preview
+                    self.updateCardPreview();
+                    self.generateCardCSS();
+                });
+                
+                // Open the media frame
+                frame.open();
+            });
+            
+            // Remove image
+            $('#remove-card-image').on('click', function(e) {
+                e.preventDefault();
+                
+                const defaultImage = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop';
+                $('#card-image').val(defaultImage).trigger('change');
+                $('#card-image-preview').attr('src', defaultImage);
+                
+                self.updateCardPreview();
+                self.generateCardCSS();
             });
             
             // Save card component
@@ -1076,6 +1126,22 @@
             // Reset card component
             $('#reset-card-component').on('click', function() {
                 self.resetCardComponent();
+            });
+        },
+        
+        initializeRangeValues: function() {
+            // Initialize range slider displays
+            $('input[type="range"].card-control').each(function() {
+                const $this = $(this);
+                const value = $this.val();
+                const property = $this.data('property');
+                
+                let displayValue = value;
+                if (property === 'borderRadius') {
+                    displayValue = value + 'px';
+                }
+                
+                $this.siblings('.range-value').text(displayValue);
             });
         },
         
@@ -1205,7 +1271,9 @@
         
         resetCardComponent: function() {
             // Reset to default values
-            $('#card-image').val('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop');
+            const defaultImage = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=250&fit=crop';
+            $('#card-image').val(defaultImage);
+            $('#card-image-preview').attr('src', defaultImage);
             $('#card-pretitle').val('Featured Property');
             $('#card-title').val('Modern Villa with Ocean View');
             $('#card-description').val('Experience luxury living in this stunning modern villa featuring panoramic ocean views, contemporary design, and premium amenities.');
@@ -1224,12 +1292,414 @@
         }
     };
 
+    const ButtonBook = {
+        init: function() {
+            this.bindEvents();
+            this.loadButtonSettings();
+            this.updateButtonPreview();
+        },
+        
+        bindEvents: function() {
+            // Bind control change events
+            $('#button-text').on('input', this.updateButtonPreview.bind(this));
+            $('select[name="button-style"]').on('change', this.updateButtonPreview.bind(this));
+            $('select[name="button-size"]').on('change', this.updateButtonPreview.bind(this));
+            $('select[name="button-color"]').on('change', this.updateButtonPreview.bind(this));
+            
+            // Bind save and reset buttons
+            $('#save-button').on('click', this.saveButtonStyles.bind(this));
+            $('#reset-button').on('click', this.resetButtonStyles.bind(this));
+        },
+        
+        updateButtonPreview: function() {
+            const text = $('#button-text').val() || 'Default Button';
+            const style = $('select[name="button-style"]').val();
+            const size = $('select[name="button-size"]').val();
+            const color = $('select[name="button-color"]').val();
+            
+            // Update button preview
+            const $preview = $('#button-preview');
+            $preview.text(text);
+            
+            // Remove existing classes
+            $preview.removeClass('villa-button--primary villa-button--secondary villa-button--tertiary');
+            $preview.removeClass('villa-button--small villa-button--medium villa-button--large');
+            $preview.removeClass('villa-button--primary-color villa-button--secondary-color villa-button--neutral-color');
+            
+            // Add new classes
+            $preview.addClass(`villa-button--${style}`);
+            $preview.addClass(`villa-button--${size}`);
+            $preview.addClass(`villa-button--${color}-color`);
+            
+            this.generateButtonCSS();
+        },
+        
+        generateButtonCSS: function() {
+            const style = $('select[name="button-style"]').val();
+            const size = $('select[name="button-size"]').val();
+            const color = $('select[name="button-color"]').val();
+            
+            // Generate CSS based on theme.json button variants
+            let css = `
+                .villa-button {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-decoration: none;
+                    border: none;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    font-family: inherit;
+                }
+                
+                .villa-button--primary {
+                    background-color: var(--wp--preset--color--primary);
+                    color: var(--wp--preset--color--base-white);
+                    border: 2px solid var(--wp--preset--color--primary);
+                    border-radius: 6px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+                
+                .villa-button--primary:hover {
+                    background-color: var(--wp--preset--color--primary-dark);
+                    border-color: var(--wp--preset--color--primary-dark);
+                }
+                
+                .villa-button--secondary {
+                    background-color: var(--wp--preset--color--secondary);
+                    color: var(--wp--preset--color--base-white);
+                    border: 2px solid var(--wp--preset--color--secondary);
+                    border-radius: 6px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+                
+                .villa-button--secondary:hover {
+                    background-color: var(--wp--preset--color--secondary-dark);
+                    border-color: var(--wp--preset--color--secondary-dark);
+                }
+                
+                .villa-button--tertiary {
+                    background-color: transparent;
+                    color: var(--wp--preset--color--primary);
+                    border: 2px solid var(--wp--preset--color--primary);
+                    border-radius: 6px;
+                }
+                
+                .villa-button--tertiary:hover {
+                    background-color: var(--wp--preset--color--primary);
+                    color: var(--wp--preset--color--base-white);
+                }
+                
+                .villa-button--small {
+                    padding: 8px 16px;
+                    font-size: var(--wp--preset--font-size--small);
+                }
+                
+                .villa-button--medium {
+                    padding: 12px 24px;
+                    font-size: var(--wp--preset--font-size--medium);
+                }
+                
+                .villa-button--large {
+                    padding: 16px 32px;
+                    font-size: var(--wp--preset--font-size--large);
+                }
+            `;
+            
+            // Update or create style element
+            let $style = $('#button-preview-styles');
+            if ($style.length === 0) {
+                $style = $('<style id="button-preview-styles"></style>');
+                $('head').append($style);
+            }
+            $style.text(css);
+        },
+        
+        saveButtonStyles: function() {
+            const settings = {
+                text: $('#button-text').val(),
+                style: $('select[name="button-style"]').val(),
+                size: $('select[name="button-size"]').val(),
+                color: $('select[name="button-color"]').val()
+            };
+            
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_save_button_styles',
+                    settings: JSON.stringify(settings),
+                    nonce: villa_design_book.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        DesignBook.showNotification('Button styles saved successfully!', 'success');
+                    } else {
+                        DesignBook.showNotification('Failed to save button styles: ' + response.data, 'error');
+                    }
+                },
+                error: function() {
+                    DesignBook.showNotification('Error saving button styles', 'error');
+                }
+            });
+        },
+        
+        resetButtonStyles: function() {
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_reset_button_styles',
+                    nonce: villa_design_book.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Reset form values
+                        $('#button-text').val('Default Button');
+                        $('select[name="button-style"]').val('primary');
+                        $('select[name="button-size"]').val('medium');
+                        $('select[name="button-color"]').val('primary');
+                        
+                        // Update preview
+                        ButtonBook.updateButtonPreview();
+                        
+                        DesignBook.showNotification('Button styles reset to defaults!', 'success');
+                    } else {
+                        DesignBook.showNotification('Failed to reset button styles: ' + response.data, 'error');
+                    }
+                },
+                error: function() {
+                    DesignBook.showNotification('Error resetting button styles', 'error');
+                }
+            });
+        },
+        
+        loadButtonSettings: function() {
+            // Load saved settings from WordPress options
+            // This would typically be loaded from PHP and passed to JavaScript
+            // For now, we'll use defaults
+            const defaults = {
+                text: 'Default Button',
+                style: 'primary',
+                size: 'medium',
+                color: 'primary'
+            };
+            
+            $('#button-text').val(defaults.text);
+            $('select[name="button-style"]').val(defaults.style);
+            $('select[name="button-size"]').val(defaults.size);
+            $('select[name="button-color"]').val(defaults.color);
+        }
+    };
+
+    const BaseOptions = {
+        init: function() {
+            this.bindEvents();
+            this.initializeTabs();
+        },
+        
+        bindEvents: function() {
+            // Tab switching
+            $(document).on('click', '.villa-base-options .base-tab', this.switchTab);
+            
+            // Input changes for live preview
+            $(document).on('input', '.villa-base-options .layout-control', this.updatePreview);
+            
+            // Save and reset buttons
+            $(document).on('click', '#save-layout-tokens', this.saveLayoutTokens);
+            $(document).on('click', '#reset-layout-tokens', this.resetLayoutTokens);
+        },
+        
+        initializeTabs: function() {
+            // Show first tab by default
+            $('.villa-base-options .base-tab:first').addClass('active');
+            $('.villa-base-options .base-tab-content:first').addClass('active');
+        },
+        
+        switchTab: function(e) {
+            e.preventDefault();
+            
+            const $tab = $(this);
+            const tabId = $tab.data('tab');
+            
+            // Update tab states
+            $('.villa-base-options .base-tab').removeClass('active');
+            $('.villa-base-options .base-tab-content').removeClass('active');
+            
+            $tab.addClass('active');
+            $('#' + tabId).addClass('active');
+        },
+        
+        updatePreview: function() {
+            const $input = $(this);
+            const category = $input.data('category');
+            const key = $input.data('key');
+            const value = $input.val();
+            
+            // Find the corresponding preview element
+            const $preview = $input.siblings('.token-preview');
+            
+            // Update preview based on category
+            switch (category) {
+                case 'spacing':
+                    $preview.css({
+                        'width': value,
+                        'height': value
+                    });
+                    break;
+                    
+                case 'borderRadius':
+                    $preview.css('border-radius', value);
+                    break;
+                    
+                case 'borderWidth':
+                    $preview.css('border-width', value);
+                    break;
+                    
+                case 'shadows':
+                    $preview.css('box-shadow', value);
+                    break;
+                    
+                case 'sizes':
+                    $preview.css({
+                        'width': value,
+                        'height': value
+                    });
+                    break;
+            }
+        },
+        
+        saveLayoutTokens: function(e) {
+            e.preventDefault();
+            
+            const $button = $(this);
+            const originalText = $button.text();
+            
+            // Collect all layout data
+            const layoutData = {
+                spacing: {},
+                borderRadius: {},
+                borderWidth: {},
+                shadows: {},
+                sizes: {}
+            };
+            
+            $('.villa-base-options .layout-control').each(function() {
+                const $input = $(this);
+                const category = $input.data('category');
+                const key = $input.data('key');
+                const value = $input.val();
+                
+                if (layoutData[category]) {
+                    layoutData[category][key] = value;
+                }
+            });
+            
+            // Show loading state
+            $button.text('Saving...').prop('disabled', true);
+            
+            // Send AJAX request
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_save_layout_tokens',
+                    nonce: villa_design_book.nonce,
+                    layout_data: layoutData
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $button.text('Saved!').removeClass('button-primary').addClass('button-secondary');
+                        setTimeout(function() {
+                            $button.text(originalText).removeClass('button-secondary').addClass('button-primary').prop('disabled', false);
+                        }, 2000);
+                        
+                        // Show success notification
+                        BaseOptions.showNotification('Layout tokens saved successfully!', 'success');
+                    } else {
+                        BaseOptions.showNotification('Error: ' + response.data, 'error');
+                        $button.text(originalText).prop('disabled', false);
+                    }
+                },
+                error: function() {
+                    BaseOptions.showNotification('Failed to save layout tokens', 'error');
+                    $button.text(originalText).prop('disabled', false);
+                }
+            });
+        },
+        
+        resetLayoutTokens: function(e) {
+            e.preventDefault();
+            
+            if (!confirm('Are you sure you want to reset all layout tokens to defaults? This cannot be undone.')) {
+                return;
+            }
+            
+            const $button = $(this);
+            const originalText = $button.text();
+            
+            // Show loading state
+            $button.text('Resetting...').prop('disabled', true);
+            
+            // Send AJAX request
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'villa_reset_layout_tokens',
+                    nonce: villa_design_book.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update all inputs with default values
+                        const defaultLayout = response.data.layout;
+                        
+                        Object.keys(defaultLayout).forEach(function(category) {
+                            Object.keys(defaultLayout[category]).forEach(function(key) {
+                                const value = defaultLayout[category][key];
+                                const $input = $(`[data-category="${category}"][data-key="${key}"]`);
+                                $input.val(value).trigger('input');
+                            });
+                        });
+                        
+                        BaseOptions.showNotification('Layout tokens reset to defaults!', 'success');
+                    } else {
+                        BaseOptions.showNotification('Error: ' + response.data, 'error');
+                    }
+                    
+                    $button.text(originalText).prop('disabled', false);
+                },
+                error: function() {
+                    BaseOptions.showNotification('Failed to reset layout tokens', 'error');
+                    $button.text(originalText).prop('disabled', false);
+                }
+            });
+        },
+        
+        showNotification: function(message, type) {
+            // Create notification element
+            const $notification = $('<div class="villa-notification villa-notification-' + type + '">' + message + '</div>');
+            
+            // Add to page
+            $('.villa-base-options .wrap').prepend($notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(function() {
+                $notification.fadeOut(function() {
+                    $(this).remove();
+                });
+            }, 3000);
+        }
+    };
+
     // Initialize when document is ready
     $(document).ready(function() {
         DesignBook.init();
         ColorBook.init();
         TextBook.init();
         ComponentBook.init();
+        ButtonBook.init();
+        BaseOptions.init();
     });
 
 })(jQuery);
