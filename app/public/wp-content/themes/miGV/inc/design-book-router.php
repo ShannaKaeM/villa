@@ -15,14 +15,14 @@ class VillaDesignBookRouter {
             'name' => 'Typography',
             'description' => 'Manage fonts, sizes, and text styles',
             'icon' => 'text',
-            'template' => 'design-book/typography.twig',
+            'template' => 'primitives/typography.twig',
             'capabilities' => ['edit_theme_options']
         ],
         'colors' => [
             'name' => 'Colors',
             'description' => 'Manage color palette and schemes',
             'icon' => 'palette',
-            'template' => 'design-book/colors.twig',
+            'template' => 'primitives/color.twig',
             'capabilities' => ['edit_theme_options']
         ],
         'layout' => [

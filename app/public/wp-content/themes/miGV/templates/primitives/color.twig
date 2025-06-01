@@ -1,50 +1,226 @@
 {#
-  Color Primitive - Pure Design Tokens
+  Color Book Interface
   
-  This primitive provides pure color design tokens from theme.json.
-  It should ONLY contain foundational color properties, no semantic styling.
-  
-  Usage:
-  {% include 'primitives/color.twig' with {
-    color: 'primary',
-    background_color: 'neutral-50',
-    border_color: 'neutral-200'
-  } %}
+  Complete color management interface displaying all theme.json colors
+  organized into sections with interactive controls and real-time preview.
 #}
 
-{% set color_tokens = {
-  colors: {
-    primary: 'var(--wp--preset--color--primary)',
-    secondary: 'var(--wp--preset--color--secondary)',
-    accent: 'var(--wp--preset--color--accent)',
-    neutral: 'var(--wp--preset--color--neutral)',
-    'neutral-50': 'var(--wp--preset--color--neutral-50)',
-    'neutral-100': 'var(--wp--preset--color--neutral-100)',
-    'neutral-200': 'var(--wp--preset--color--neutral-200)',
-    'neutral-300': 'var(--wp--preset--color--neutral-300)',
-    'neutral-400': 'var(--wp--preset--color--neutral-400)',
-    'neutral-500': 'var(--wp--preset--color--neutral-500)',
-    'neutral-600': 'var(--wp--preset--color--neutral-600)',
-    'neutral-700': 'var(--wp--preset--color--neutral-700)',
-    'neutral-800': 'var(--wp--preset--color--neutral-800)',
-    'neutral-900': 'var(--wp--preset--color--neutral-900)',
-    white: 'var(--wp--preset--color--white)',
-    black: 'var(--wp--preset--color--black)',
-    success: 'var(--wp--preset--color--success)',
-    warning: 'var(--wp--preset--color--warning)',
-    error: 'var(--wp--preset--color--error)'
-  }
-} %}
+<div class="color-book-container">
+    <div class="color-book-header">
+        <h2>Color Book</h2>
+        <p>Manage your color palette with real-time preview and multiple format support.</p>
+    </div>
 
-{# Apply color styles based on parameters #}
-{% if color %}
-  color: {{ color_tokens.colors[color] ?? color }};
-{% endif %}
+    <div class="color-sections">
+        <!-- Primary Colors -->
+        <div class="color-section">
+            <h3>Primary</h3>
+            <div class="color-grid">
+                {% for color in colors.palette %}
+                    {% if color.slug starts with 'primary' %}
+                        <div class="color-card">
+                            <div class="color-swatch" style="background-color: {{ color.color }};"></div>
+                            <div class="color-info">
+                                <div class="color-name">{{ color.name }}</div>
+                                <input type="text" class="hex-input" value="{{ color.color }}" data-color-slug="{{ color.slug }}">
+                                
+                                <div class="color-controls">
+                                    <div class="control-group">
+                                        <label>Hue</label>
+                                        <input type="range" class="hue-slider" min="0" max="360" value="182" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">182°</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Sat</label>
+                                        <input type="range" class="saturation-slider" min="0" max="100" value="16" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">16%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Light</label>
+                                        <input type="range" class="lightness-slider" min="0" max="100" value="42" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">42%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Alpha</label>
+                                        <input type="range" class="alpha-slider" min="0" max="100" value="100" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-{% if background_color %}
-  background-color: {{ color_tokens.colors[background_color] ?? background_color }};
-{% endif %}
+        <!-- Secondary Colors -->
+        <div class="color-section">
+            <h3>Secondary</h3>
+            <div class="color-grid">
+                {% for color in colors.palette %}
+                    {% if color.slug starts with 'secondary' %}
+                        <div class="color-card">
+                            <div class="color-swatch" style="background-color: {{ color.color }};"></div>
+                            <div class="color-info">
+                                <div class="color-name">{{ color.name }}</div>
+                                <input type="text" class="hex-input" value="{{ color.color }}" data-color-slug="{{ color.slug }}">
+                                
+                                <div class="color-controls">
+                                    <div class="control-group">
+                                        <label>Hue</label>
+                                        <input type="range" class="hue-slider" min="0" max="360" value="8" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">8°</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Sat</label>
+                                        <input type="range" class="saturation-slider" min="0" max="100" value="42" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">42%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Light</label>
+                                        <input type="range" class="lightness-slider" min="0" max="100" value="48" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">48%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Alpha</label>
+                                        <input type="range" class="alpha-slider" min="0" max="100" value="100" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-{% if border_color %}
-  border-color: {{ color_tokens.colors[border_color] ?? border_color }};
-{% endif %}
+        <!-- Neutral Colors -->
+        <div class="color-section">
+            <h3>Neutral</h3>
+            <div class="color-grid">
+                {% for color in colors.palette %}
+                    {% if color.slug starts with 'neutral' %}
+                        <div class="color-card">
+                            <div class="color-swatch" style="background-color: {{ color.color }};"></div>
+                            <div class="color-info">
+                                <div class="color-name">{{ color.name }}</div>
+                                <input type="text" class="hex-input" value="{{ color.color }}" data-color-slug="{{ color.slug }}">
+                                
+                                <div class="color-controls">
+                                    <div class="control-group">
+                                        <label>Hue</label>
+                                        <input type="range" class="hue-slider" min="0" max="360" value="52" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">52°</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Sat</label>
+                                        <input type="range" class="saturation-slider" min="0" max="100" value="15" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">15%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Light</label>
+                                        <input type="range" class="lightness-slider" min="0" max="100" value="68" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">68%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Alpha</label>
+                                        <input type="range" class="alpha-slider" min="0" max="100" value="100" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Base Colors -->
+        <div class="color-section">
+            <h3>Base</h3>
+            <div class="color-grid">
+                {% for color in colors.palette %}
+                    {% if color.slug starts with 'base' %}
+                        <div class="color-card">
+                            <div class="color-swatch" style="background-color: {{ color.color }};"></div>
+                            <div class="color-info">
+                                <div class="color-name">{{ color.name }}</div>
+                                <input type="text" class="hex-input" value="{{ color.color }}" data-color-slug="{{ color.slug }}">
+                                
+                                <div class="color-controls">
+                                    <div class="control-group">
+                                        <label>Hue</label>
+                                        <input type="range" class="hue-slider" min="0" max="360" value="0" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">0°</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Sat</label>
+                                        <input type="range" class="saturation-slider" min="0" max="100" value="0" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">0%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Light</label>
+                                        <input type="range" class="lightness-slider" min="0" max="100" value="50" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">50%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Alpha</label>
+                                        <input type="range" class="alpha-slider" min="0" max="100" value="100" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Extreme Colors -->
+        <div class="color-section">
+            <h3>Extreme</h3>
+            <div class="color-grid">
+                {% for color in colors.palette %}
+                    {% if color.slug starts with 'extreme' %}
+                        <div class="color-card">
+                            <div class="color-swatch" style="background-color: {{ color.color }};{% if color.slug == 'extreme-light' %}border: 1px solid #ddd;{% endif %}"></div>
+                            <div class="color-info">
+                                <div class="color-name">{{ color.name }}</div>
+                                <input type="text" class="hex-input" value="{{ color.color }}" data-color-slug="{{ color.slug }}">
+                                
+                                <div class="color-controls">
+                                    <div class="control-group">
+                                        <label>Hue</label>
+                                        <input type="range" class="hue-slider" min="0" max="360" value="0" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">0°</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Sat</label>
+                                        <input type="range" class="saturation-slider" min="0" max="100" value="0" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">0%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Light</label>
+                                        <input type="range" class="lightness-slider" min="0" max="100" value="{% if color.slug == 'extreme-light' %}100{% else %}0{% endif %}" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">{% if color.slug == 'extreme-light' %}100{% else %}0{% endif %}%</span>
+                                    </div>
+                                    <div class="control-group">
+                                        <label>Alpha</label>
+                                        <input type="range" class="alpha-slider" min="0" max="100" value="100" data-color-slug="{{ color.slug }}">
+                                        <span class="control-value">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="color-actions">
+        <button type="button" class="btn btn-primary" id="save-colors">Save Colors</button>
+        <button type="button" class="btn btn-secondary" id="reset-colors">Reset to Defaults</button>
+    </div>
+</div>
