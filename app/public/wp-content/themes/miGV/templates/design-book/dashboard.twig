@@ -2,19 +2,19 @@
 
 {% block content %}
 <div class="design-book-dashboard">
-    <div class="design-book-container">
+    <div class="dashboard-container">
         <!-- Header -->
-        <header class="design-book-header">
+        <header class="dashboard-header">
             <div class="design-book-logo">
-                <h1>🎨 Design Book</h1>
-                <p>Visual Design System Manager</p>
+                <h1 class="dashboard-title">🎨 Design Book</h1>
+                <p class="dashboard-subtitle">Visual Design System Manager</p>
             </div>
         </header>
 
         <!-- Navigation Grid -->
-        <div class="design-book-nav-grid">
+        <div class="navigation-grid">
             {% for item in design_book.navigation %}
-            <a href="{{ item.url }}" class="design-book-nav-card {{ item.active ? 'active' : '' }}">
+            <a href="{{ item.url }}" class="nav-card {{ item.active ? 'active' : '' }}">
                 <div class="nav-card-icon">
                     {% if item.slug == 'typography' %}
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,8 +43,8 @@
                     {% endif %}
                 </div>
                 <div class="nav-card-content">
-                    <h3>{{ item.name }}</h3>
-                    <p>
+                    <h3 class="nav-card-title">{{ item.name }}</h3>
+                    <p class="nav-card-description">
                         {% if item.slug == 'typography' %}
                             Manage fonts, sizes, and text styles
                         {% elseif item.slug == 'colors' %}
@@ -61,52 +61,49 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="design-book-stats">
+        <div class="dashboard-stats">
             <div class="stat-card">
-                <h4>Typography Styles</h4>
-                <span class="stat-number">12</span>
+                <h4 class="stat-number">12</h4>
+                <p class="stat-label">Typography Styles</p>
             </div>
             <div class="stat-card">
-                <h4>Color Tokens</h4>
-                <span class="stat-number">24</span>
+                <h4 class="stat-number">24</h4>
+                <p class="stat-label">Color Tokens</p>
             </div>
             <div class="stat-card">
-                <h4>Components</h4>
-                <span class="stat-number">8</span>
+                <h4 class="stat-number">8</h4>
+                <p class="stat-label">Components</p>
             </div>
             <div class="stat-card">
-                <h4>Layout Tokens</h4>
-                <span class="stat-number">16</span>
+                <h4 class="stat-number">16</h4>
+                <p class="stat-label">Layout Tokens</p>
             </div>
         </div>
 
         <!-- Recent Activity -->
-        <div class="design-book-activity">
-            <h3>Recent Updates</h3>
+        <div class="recent-activity">
+            <h3 class="activity-header">Recent Updates</h3>
             <div class="activity-list">
                 <div class="activity-item">
                     <span class="activity-icon">🎨</span>
                     <div class="activity-content">
-                        <p><strong>Typography updated</strong></p>
-                        <small>Base font size adjusted to 16px</small>
+                        <p class="activity-title"><strong>Typography updated</strong></p>
+                        <small class="activity-time">2 hours ago</small>
                     </div>
-                    <span class="activity-time">2 hours ago</span>
                 </div>
                 <div class="activity-item">
                     <span class="activity-icon">🌈</span>
                     <div class="activity-content">
-                        <p><strong>Color palette refined</strong></p>
-                        <small>Primary blue updated for better contrast</small>
+                        <p class="activity-title"><strong>Color palette refined</strong></p>
+                        <small class="activity-time">1 day ago</small>
                     </div>
-                    <span class="activity-time">1 day ago</span>
                 </div>
                 <div class="activity-item">
                     <span class="activity-icon">📐</span>
                     <div class="activity-content">
-                        <p><strong>Spacing tokens added</strong></p>
-                        <small>New responsive spacing scale implemented</small>
+                        <p class="activity-title"><strong>Spacing tokens added</strong></p>
+                        <small class="activity-time">3 days ago</small>
                     </div>
-                    <span class="activity-time">3 days ago</span>
                 </div>
             </div>
         </div>
@@ -114,174 +111,185 @@
 </div>
 
 <style>
-.design-book-dashboard {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 2rem;
-}
-
-.design-book-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.design-book-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    color: white;
-}
-
-.design-book-header h1 {
-    font-size: 3rem;
-    margin: 0 0 0.5rem 0;
-    font-weight: 700;
-}
-
-.design-book-header p {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    margin: 0;
-}
-
-.design-book-nav-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.design-book-nav-card {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    text-decoration: none;
-    color: #333;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.design-book-nav-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-    text-decoration: none;
-    color: #333;
-}
-
-.nav-card-icon {
-    margin-bottom: 1rem;
-    color: #667eea;
-}
-
-.nav-card-content h3 {
-    font-size: 1.5rem;
-    margin: 0 0 0.5rem 0;
-    color: #333;
-}
-
-.nav-card-content p {
-    color: #666;
-    margin: 0;
-    line-height: 1.5;
-}
-
-.design-book-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-.stat-card {
-    background: rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 1.5rem;
-    text-align: center;
-    color: white;
-    backdrop-filter: blur(10px);
-}
-
-.stat-card h4 {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.design-book-activity {
-    background: rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 2rem;
-    color: white;
-    backdrop-filter: blur(10px);
-}
-
-.design-book-activity h3 {
-    margin: 0 0 1.5rem 0;
-    font-size: 1.5rem;
-}
-
-.activity-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.activity-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255,255,255,0.1);
-    border-radius: 8px;
-}
-
-.activity-icon {
-    font-size: 1.5rem;
-}
-
-.activity-content {
-    flex: 1;
-}
-
-.activity-content p {
-    margin: 0 0 0.25rem 0;
-}
-
-.activity-content small {
-    opacity: 0.8;
-}
-
-.activity-time {
-    font-size: 0.8rem;
-    opacity: 0.7;
-}
-
-@media (max-width: 768px) {
     .design-book-dashboard {
-        padding: 1rem;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--wp--preset--color--primary) 0%, var(--wp--preset--color--secondary) 100%);
+        padding: 2rem 0;
+        font-family: var(--wp--preset--font-family--inter);
     }
     
-    .design-book-header h1 {
-        font-size: 2rem;
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
     
-    .design-book-nav-grid {
-        grid-template-columns: 1fr;
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: white;
     }
     
-    .design-book-stats {
-        grid-template-columns: repeat(2, 1fr);
+    .dashboard-title {
+        font-size: var(--wp--preset--font-size--x-large);
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        font-family: var(--wp--preset--font-family--playfair-display);
     }
-}
+    
+    .dashboard-subtitle {
+        font-size: var(--wp--preset--font-size--medium);
+        opacity: 0.9;
+        margin: 0;
+    }
+    
+    .navigation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    
+    .nav-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        text-decoration: none;
+        color: var(--wp--preset--color--base-darkest);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid var(--wp--preset--color--base-lightest);
+    }
+    
+    .nav-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        color: var(--wp--preset--color--primary-dark);
+        text-decoration: none;
+    }
+    
+    .nav-card-icon {
+        font-size: 2.5rem;
+        color: var(--wp--preset--color--primary);
+        margin-bottom: 1rem;
+        display: block;
+    }
+    
+    .nav-card-title {
+        font-size: var(--wp--preset--font-size--large);
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        font-family: var(--wp--preset--font-family--inter);
+    }
+    
+    .nav-card-description {
+        font-size: var(--wp--preset--font-size--small);
+        color: var(--wp--preset--color--base);
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--wp--preset--color--base-lightest);
+    }
+    
+    .stat-number {
+        font-size: var(--wp--preset--font-size--x-large);
+        font-weight: 700;
+        color: var(--wp--preset--color--primary-dark);
+        margin: 0 0 0.5rem 0;
+        font-family: var(--wp--preset--font-family--inter);
+    }
+    
+    .stat-label {
+        font-size: var(--wp--preset--font-size--small);
+        color: var(--wp--preset--color--base);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .recent-activity {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--wp--preset--color--base-lightest);
+    }
+    
+    .activity-header {
+        font-size: var(--wp--preset--font-size--large);
+        font-weight: 600;
+        margin: 0 0 1.5rem 0;
+        color: var(--wp--preset--color--base-darkest);
+        font-family: var(--wp--preset--font-family--inter);
+    }
+    
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--wp--preset--color--base-lightest);
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--wp--preset--color--primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 0.875rem;
+        color: var(--wp--preset--color--primary-dark);
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-title {
+        font-size: var(--wp--preset--font-size--small);
+        font-weight: 500;
+        margin: 0 0 0.25rem 0;
+        color: var(--wp--preset--color--base-darkest);
+    }
+    
+    .activity-time {
+        font-size: var(--wp--preset--font-size--small);
+        color: var(--wp--preset--color--base);
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 0 1rem;
+        }
+        
+        .navigation-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .dashboard-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 </style>
 {% endblock %}
