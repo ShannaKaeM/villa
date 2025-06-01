@@ -224,7 +224,11 @@ function migv_add_to_context($context) {
  * Add to Twig
  */
 function migv_add_to_twig($twig) {
-    // Add custom functions to Twig if needed
+    // Add WordPress functions to Twig for base.twig compatibility
+    $twig->addFunction(new Twig\TwigFunction('wp_head', 'wp_head'));
+    $twig->addFunction(new Twig\TwigFunction('wp_body_open', 'wp_body_open'));
+    $twig->addFunction(new Twig\TwigFunction('body_class', 'body_class'));
+    $twig->addFunction(new Twig\TwigFunction('language_attributes', 'language_attributes'));
     
     return $twig;
 }
