@@ -1,0 +1,107 @@
+{#
+  Text Book Element - Semantic Typography Component
+  
+  This element composes typography primitives into semantic text styles.
+  It provides predefined text types like headings, body text, captions, etc.
+  
+  Usage:
+  {% include 'elements/text-book.twig' with {
+    type: 'title',
+    content: 'Your text content here',
+    tag: 'h1',
+    class: 'additional-classes'
+  } %}
+  
+  Available types:
+  - pretitle: Small text above main headings
+  - title: Main page/section headings (H1-H2)
+  - subtitle: Secondary headings (H3-H4)
+  - body: Regular paragraph text
+  - caption: Small descriptive text
+  - button: Text for buttons and CTAs
+  - label: Form labels and small UI text
+#}
+
+{% set text_styles = {
+  pretitle: {
+    font_family: 'primary',
+    font_size: 'sm',
+    font_weight: 'medium',
+    line_height: 'tight',
+    letter_spacing: 'wide',
+    default_tag: 'span',
+    class: 'text-pretitle'
+  },
+  title: {
+    font_family: 'secondary',
+    font_size: '3xl',
+    font_weight: 'bold',
+    line_height: 'tight',
+    letter_spacing: 'tight',
+    default_tag: 'h1',
+    class: 'text-title'
+  },
+  subtitle: {
+    font_family: 'secondary',
+    font_size: 'xl',
+    font_weight: 'semibold',
+    line_height: 'snug',
+    letter_spacing: 'normal',
+    default_tag: 'h3',
+    class: 'text-subtitle'
+  },
+  body: {
+    font_family: 'primary',
+    font_size: 'base',
+    font_weight: 'normal',
+    line_height: 'relaxed',
+    letter_spacing: 'normal',
+    default_tag: 'p',
+    class: 'text-body'
+  },
+  caption: {
+    font_family: 'primary',
+    font_size: 'sm',
+    font_weight: 'normal',
+    line_height: 'normal',
+    letter_spacing: 'normal',
+    default_tag: 'span',
+    class: 'text-caption'
+  },
+  button: {
+    font_family: 'primary',
+    font_size: 'base',
+    font_weight: 'semibold',
+    line_height: 'tight',
+    letter_spacing: 'wide',
+    default_tag: 'span',
+    class: 'text-button'
+  },
+  label: {
+    font_family: 'primary',
+    font_size: 'sm',
+    font_weight: 'medium',
+    line_height: 'normal',
+    letter_spacing: 'normal',
+    default_tag: 'label',
+    class: 'text-label'
+  }
+} %}
+
+{# Get the style configuration for the specified type #}
+{% set style = text_styles[type] ?? text_styles.body %}
+{% set element_tag = tag ?? style.default_tag %}
+{% set element_class = [style.class, class]|join(' ')|trim %}
+
+{# Render the text element with composed typography primitive #}
+<{{ element_tag }}{% if element_class %} class="{{ element_class }}"{% endif %} style="
+  {%- include 'primitives/typography.twig' with {
+    font_family: style.font_family,
+    font_size: style.font_size,
+    font_weight: style.font_weight,
+    line_height: style.line_height,
+    letter_spacing: style.letter_spacing
+  } -%}
+">
+  {{- content|default('Sample text content') -}}
+</{{ element_tag }}>

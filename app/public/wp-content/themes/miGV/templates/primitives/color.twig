@@ -1,0 +1,50 @@
+{#
+  Color Primitive - Pure Design Tokens
+  
+  This primitive provides pure color design tokens from theme.json.
+  It should ONLY contain foundational color properties, no semantic styling.
+  
+  Usage:
+  {% include 'primitives/color.twig' with {
+    color: 'primary',
+    background_color: 'neutral-50',
+    border_color: 'neutral-200'
+  } %}
+#}
+
+{% set color_tokens = {
+  colors: {
+    primary: 'var(--wp--preset--color--primary)',
+    secondary: 'var(--wp--preset--color--secondary)',
+    accent: 'var(--wp--preset--color--accent)',
+    neutral: 'var(--wp--preset--color--neutral)',
+    'neutral-50': 'var(--wp--preset--color--neutral-50)',
+    'neutral-100': 'var(--wp--preset--color--neutral-100)',
+    'neutral-200': 'var(--wp--preset--color--neutral-200)',
+    'neutral-300': 'var(--wp--preset--color--neutral-300)',
+    'neutral-400': 'var(--wp--preset--color--neutral-400)',
+    'neutral-500': 'var(--wp--preset--color--neutral-500)',
+    'neutral-600': 'var(--wp--preset--color--neutral-600)',
+    'neutral-700': 'var(--wp--preset--color--neutral-700)',
+    'neutral-800': 'var(--wp--preset--color--neutral-800)',
+    'neutral-900': 'var(--wp--preset--color--neutral-900)',
+    white: 'var(--wp--preset--color--white)',
+    black: 'var(--wp--preset--color--black)',
+    success: 'var(--wp--preset--color--success)',
+    warning: 'var(--wp--preset--color--warning)',
+    error: 'var(--wp--preset--color--error)'
+  }
+} %}
+
+{# Apply color styles based on parameters #}
+{% if color %}
+  color: {{ color_tokens.colors[color] ?? color }};
+{% endif %}
+
+{% if background_color %}
+  background-color: {{ color_tokens.colors[background_color] ?? background_color }};
+{% endif %}
+
+{% if border_color %}
+  border-color: {{ color_tokens.colors[border_color] ?? border_color }};
+{% endif %}

@@ -1,0 +1,76 @@
+{#
+  Typography Primitive - Pure Design Tokens
+  
+  This primitive provides pure typography design tokens from theme.json.
+  It should ONLY contain foundational typography properties, no semantic styling.
+  
+  Usage:
+  {% include 'primitives/typography.twig' with {
+    font_family: 'primary',
+    font_size: 'large',
+    font_weight: 'bold',
+    line_height: 'tight',
+    letter_spacing: 'normal'
+  } %}
+#}
+
+{% set typography_tokens = {
+  font_families: {
+    primary: 'var(--wp--preset--font-family--inter)',
+    secondary: 'var(--wp--preset--font-family--playfair-display)',
+    mono: 'var(--wp--preset--font-family--roboto-mono)'
+  },
+  font_sizes: {
+    xs: 'var(--wp--preset--font-size--x-small)',
+    sm: 'var(--wp--preset--font-size--small)',
+    base: 'var(--wp--preset--font-size--medium)',
+    lg: 'var(--wp--preset--font-size--large)',
+    xl: 'var(--wp--preset--font-size--x-large)',
+    '2xl': 'var(--wp--preset--font-size--xx-large)',
+    '3xl': 'var(--wp--preset--font-size--huge)'
+  },
+  font_weights: {
+    light: '300',
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+    extrabold: '800'
+  },
+  line_heights: {
+    tight: '1.25',
+    snug: '1.375',
+    normal: '1.5',
+    relaxed: '1.625',
+    loose: '1.75'
+  },
+  letter_spacings: {
+    tighter: '-0.05em',
+    tight: '-0.025em',
+    normal: '0',
+    wide: '0.025em',
+    wider: '0.05em',
+    widest: '0.1em'
+  }
+} %}
+
+{# Apply typography styles based on parameters #}
+{% if font_family %}
+  font-family: {{ typography_tokens.font_families[font_family] ?? font_family }};
+{% endif %}
+
+{% if font_size %}
+  font-size: {{ typography_tokens.font_sizes[font_size] ?? font_size }};
+{% endif %}
+
+{% if font_weight %}
+  font-weight: {{ typography_tokens.font_weights[font_weight] ?? font_weight }};
+{% endif %}
+
+{% if line_height %}
+  line-height: {{ typography_tokens.line_heights[line_height] ?? line_height }};
+{% endif %}
+
+{% if letter_spacing %}
+  letter-spacing: {{ typography_tokens.letter_spacings[letter_spacing] ?? letter_spacing }};
+{% endif %}

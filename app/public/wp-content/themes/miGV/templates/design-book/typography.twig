@@ -17,16 +17,15 @@
                 {% endfor %}
             </div>
             <h1 class="design-book-title">{{ design_book.section_config.name }}</h1>
-            <p class="design-book-description">{{ design_book.section_config.description }}</p>
+            <p class="design-book-description">Edit foundational typography design tokens that power all text elements</p>
         </div>
         <div class="header-actions">
-            <button class="btn btn-secondary" id="export-typography">
+            <button class="btn btn-secondary" id="reset-typography">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7,10 12,15 17,10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
+                    <polyline points="23 4 23 10 17 10"/>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                 </svg>
-                Export Typography
+                Reset to Defaults
             </button>
             <button class="btn btn-primary" id="save-typography">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -39,177 +38,304 @@
         </div>
     </div>
 
-    {# Section Navigation #}
-    <div class="design-book-section-nav">
-        {% for nav_item in design_book.navigation %}
-            <a href="{{ nav_item.url }}" class="section-nav-item {% if nav_item.active %}active{% endif %}">
-                <div class="nav-icon">{{ nav_item.icon }}</div>
-                <div class="nav-content">
-                    <span class="nav-name">{{ nav_item.name }}</span>
-                    <span class="nav-description">{{ nav_item.description }}</span>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
-
-    {# Typography Content Tabs #}
+    {# Typography Primitive Editor Tabs #}
     <div class="design-book-tabs">
-        <button class="tab-button active" data-tab="scale">Typography Scale</button>
-        <button class="tab-button" data-tab="styles">Text Styles</button>
-        <button class="tab-button" data-tab="fonts">Font Families</button>
-        <button class="tab-button" data-tab="tokens">Typography Tokens</button>
-    </div>
-
-    {# Typography Scale Tab #}
-    <div class="tab-content active" id="scale-tab">
-        <div class="scale-section">
-            <h2>Modular Typography Scale</h2>
-            <div class="scale-controls">
-                <div class="control-group">
-                    <label for="base-font-size">Base Font Size</label>
-                    <input type="range" id="base-font-size" min="14" max="20" value="{{ typography.base_font_size ?: 16 }}" step="1">
-                    <span class="value-display">{{ typography.base_font_size ?: 16 }}px</span>
-                </div>
-                <div class="control-group">
-                    <label for="scale-ratio">Scale Ratio</label>
-                    <select id="scale-ratio">
-                        <option value="1.125" {% if typography.current_scale == 1.125 %}selected{% endif %}>Major Second (1.125)</option>
-                        <option value="1.2" {% if typography.current_scale == 1.2 %}selected{% endif %}>Minor Third (1.2)</option>
-                        <option value="1.25" {% if typography.current_scale == 1.25 or not typography.current_scale %}selected{% endif %}>Major Third (1.25)</option>
-                        <option value="1.333" {% if typography.current_scale == 1.333 %}selected{% endif %}>Perfect Fourth (1.333)</option>
-                        <option value="1.414" {% if typography.current_scale == 1.414 %}selected{% endif %}>Augmented Fourth (1.414)</option>
-                        <option value="1.5" {% if typography.current_scale == 1.5 %}selected{% endif %}>Perfect Fifth (1.5)</option>
-                        <option value="1.618" {% if typography.current_scale == 1.618 %}selected{% endif %}>Golden Ratio (1.618)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="scale-preview">
-                <h3>Typography Scale Preview</h3>
-                <div class="scale-samples">
-                    <div class="scale-item" data-step="6">
-                        <span class="scale-label">H1 (Step 6)</span>
-                        <span class="scale-size">61px</span>
-                        <div class="scale-sample">The quick brown fox</div>
-                    </div>
-                    <div class="scale-item" data-step="5">
-                        <span class="scale-label">H2 (Step 5)</span>
-                        <span class="scale-size">49px</span>
-                        <div class="scale-sample">The quick brown fox</div>
-                    </div>
-                    <div class="scale-item" data-step="4">
-                        <span class="scale-label">H3 (Step 4)</span>
-                        <span class="scale-size">39px</span>
-                        <div class="scale-sample">The quick brown fox</div>
-                    </div>
-                    <div class="scale-item" data-step="3">
-                        <span class="scale-label">H4 (Step 3)</span>
-                        <span class="scale-size">31px</span>
-                        <div class="scale-sample">The quick brown fox jumps</div>
-                    </div>
-                    <div class="scale-item" data-step="2">
-                        <span class="scale-label">H5 (Step 2)</span>
-                        <span class="scale-size">25px</span>
-                        <div class="scale-sample">The quick brown fox jumps</div>
-                    </div>
-                    <div class="scale-item" data-step="1">
-                        <span class="scale-label">H6 (Step 1)</span>
-                        <span class="scale-size">20px</span>
-                        <div class="scale-sample">The quick brown fox jumps over</div>
-                    </div>
-                    <div class="scale-item" data-step="0">
-                        <span class="scale-label">Body (Base)</span>
-                        <span class="scale-size">{{ typography.base_font_size ?: 16 }}px</span>
-                        <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
-                    </div>
-                    <div class="scale-item" data-step="-1">
-                        <span class="scale-label">Small (Step -1)</span>
-                        <span class="scale-size">13px</span>
-                        <div class="scale-sample">The quick brown fox jumps over the lazy dog</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Text Styles Tab #}
-    <div class="tab-content" id="styles-tab">
-        <div class="styles-section">
-            <h2>Semantic Text Styles</h2>
-            <div class="text-styles-grid">
-                {# Dynamic text styles will be populated by JavaScript #}
-            </div>
-            <div class="style-actions">
-                <button class="btn-primary" id="save-styles">Save Text Styles</button>
-                <button class="btn-secondary" id="reset-styles">Reset to Defaults</button>
-            </div>
-        </div>
+        <button class="tab-button active" data-tab="font-families">Font Families</button>
+        <button class="tab-button" data-tab="font-sizes">Font Sizes</button>
+        <button class="tab-button" data-tab="font-weights">Font Weights</button>
+        <button class="tab-button" data-tab="spacing">Line Height & Letter Spacing</button>
+        <button class="tab-button" data-tab="preview">Live Preview</button>
     </div>
 
     {# Font Families Tab #}
-    <div class="tab-content" id="fonts-tab">
-        <div class="fonts-section">
-            <h2>Font Families</h2>
-            <div class="font-families-grid">
-                {% for font in typography.font_families %}
-                    <div class="font-family-card">
-                        <div class="font-preview" style="font-family: {{ font.fontFamily }}">
-                            <div class="font-sample-large">{{ font.name }}</div>
-                            <div class="font-sample-text">The quick brown fox jumps over the lazy dog</div>
-                            <div class="font-sample-numbers">1234567890</div>
-                        </div>
-                        <div class="font-details">
-                            <h4>{{ font.name }}</h4>
-                            <code>{{ font.fontFamily }}</code>
-                            <span class="font-slug">{{ font.slug }}</span>
-                        </div>
+    <div class="tab-content active" id="font-families-tab">
+        <div class="typography-section">
+            <h3>Font Family Stack</h3>
+            <p class="section-description">Define the primary, secondary, and monospace font families for your design system.</p>
+            
+            <div class="font-family-grid">
+                <div class="font-family-card">
+                    <label for="primary-font">Primary Font</label>
+                    <select id="primary-font" name="primary_font">
+                        <option value="Inter">Inter (Current)</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="system-ui">System UI</option>
+                    </select>
+                    <div class="font-preview" style="font-family: var(--wp--preset--font-family--inter);">
+                        The quick brown fox jumps over the lazy dog
                     </div>
-                {% endfor %}
+                </div>
+
+                <div class="font-family-card">
+                    <label for="secondary-font">Secondary Font (Headings)</label>
+                    <select id="secondary-font" name="secondary_font">
+                        <option value="Playfair Display">Playfair Display (Current)</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Times">Times</option>
+                        <option value="serif">System Serif</option>
+                    </select>
+                    <div class="font-preview" style="font-family: var(--wp--preset--font-family--playfair-display);">
+                        The quick brown fox jumps over the lazy dog
+                    </div>
+                </div>
+
+                <div class="font-family-card">
+                    <label for="mono-font">Monospace Font</label>
+                    <select id="mono-font" name="mono_font">
+                        <option value="Roboto Mono">Roboto Mono (Current)</option>
+                        <option value="Monaco">Monaco</option>
+                        <option value="Consolas">Consolas</option>
+                        <option value="monospace">System Mono</option>
+                    </select>
+                    <div class="font-preview" style="font-family: var(--wp--preset--font-family--roboto-mono);">
+                        The quick brown fox jumps over the lazy dog
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    {# Typography Tokens Tab #}
-    <div class="tab-content" id="tokens-tab">
-        <div class="tokens-section">
-            <h2>Typography Design Tokens</h2>
-            <p>Copy these CSS custom properties to use in your components:</p>
+    {# Font Sizes Tab #}
+    <div class="tab-content" id="font-sizes-tab">
+        <div class="typography-section">
+            <h3>Font Size Scale</h3>
+            <p class="section-description">Define the font size scale using a modular ratio for consistent typography hierarchy.</p>
             
-            <div class="tokens-grid">
-                <div class="token-category">
-                    <h3>Font Sizes</h3>
-                    <div class="token-list" id="font-size-tokens">
-                        {% for size in typography.font_sizes %}
-                            <div class="token-item">
-                                <span class="token-name">--wp--preset--font-size--{{ size.slug }}</span>
-                                <span class="token-value">{{ size.size }}</span>
-                            </div>
-                        {% endfor %}
-                    </div>
+            <div class="scale-controls">
+                <div class="control-group">
+                    <label for="base-font-size">Base Font Size (rem)</label>
+                    <input type="range" id="base-font-size" min="0.8" max="1.4" step="0.1" value="1.0">
+                    <span class="control-value">1.0rem</span>
                 </div>
                 
-                <div class="token-category">
-                    <h3>Font Families</h3>
-                    <div class="token-list" id="font-family-tokens">
-                        {% for font in typography.font_families %}
-                            <div class="token-item">
-                                <span class="token-name">--wp--preset--font-family--{{ font.slug }}</span>
-                                <span class="token-value">{{ font.fontFamily }}</span>
+                <div class="control-group">
+                    <label for="scale-ratio">Scale Ratio</label>
+                    <select id="scale-ratio">
+                        <option value="1.125">Minor Second (1.125)</option>
+                        <option value="1.200" selected>Minor Third (1.200)</option>
+                        <option value="1.250">Major Third (1.250)</option>
+                        <option value="1.333">Perfect Fourth (1.333)</option>
+                        <option value="1.414">Augmented Fourth (1.414)</option>
+                        <option value="1.500">Perfect Fifth (1.500)</option>
+                        <option value="1.618">Golden Ratio (1.618)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="font-size-scale">
+                <div class="size-item" data-size="xs">
+                    <span class="size-label">XS</span>
+                    <span class="size-value">0.694rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="sm">
+                    <span class="size-label">SM</span>
+                    <span class="size-value">0.833rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="base">
+                    <span class="size-label">BASE</span>
+                    <span class="size-value">1.000rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="lg">
+                    <span class="size-label">LG</span>
+                    <span class="size-value">1.200rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="xl">
+                    <span class="size-label">XL</span>
+                    <span class="size-value">1.440rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="2xl">
+                    <span class="size-label">2XL</span>
+                    <span class="size-value">1.728rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+                <div class="size-item" data-size="3xl">
+                    <span class="size-label">3XL</span>
+                    <span class="size-value">2.074rem</span>
+                    <div class="size-preview">Sample text</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Font Weights Tab #}
+    <div class="tab-content" id="font-weights-tab">
+        <div class="typography-section">
+            <h3>Font Weight Scale</h3>
+            <p class="section-description">Define the available font weights for your typography system.</p>
+            
+            <div class="font-weight-grid">
+                <div class="weight-item">
+                    <label>Light</label>
+                    <input type="number" value="300" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 300;">Sample text</div>
+                </div>
+                <div class="weight-item">
+                    <label>Normal</label>
+                    <input type="number" value="400" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 400;">Sample text</div>
+                </div>
+                <div class="weight-item">
+                    <label>Medium</label>
+                    <input type="number" value="500" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 500;">Sample text</div>
+                </div>
+                <div class="weight-item">
+                    <label>Semibold</label>
+                    <input type="number" value="600" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 600;">Sample text</div>
+                </div>
+                <div class="weight-item">
+                    <label>Bold</label>
+                    <input type="number" value="700" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 700;">Sample text</div>
+                </div>
+                <div class="weight-item">
+                    <label>Extrabold</label>
+                    <input type="number" value="800" min="100" max="900" step="100">
+                    <div class="weight-preview" style="font-weight: 800;">Sample text</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Spacing Tab #}
+    <div class="tab-content" id="spacing-tab">
+        <div class="typography-section">
+            <h3>Typography Spacing</h3>
+            <p class="section-description">Define line heights and letter spacing values for optimal readability.</p>
+            
+            <div class="spacing-grid">
+                <div class="spacing-section">
+                    <h4>Line Heights</h4>
+                    <div class="spacing-controls">
+                        <div class="spacing-item">
+                            <label>Tight</label>
+                            <input type="number" value="1.25" min="1" max="2" step="0.125">
+                            <div class="spacing-preview" style="line-height: 1.25;">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
                             </div>
-                        {% endfor %}
+                        </div>
+                        <div class="spacing-item">
+                            <label>Normal</label>
+                            <input type="number" value="1.5" min="1" max="2" step="0.125">
+                            <div class="spacing-preview" style="line-height: 1.5;">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
+                            </div>
+                        </div>
+                        <div class="spacing-item">
+                            <label>Relaxed</label>
+                            <input type="number" value="1.625" min="1" max="2" step="0.125">
+                            <div class="spacing-preview" style="line-height: 1.625;">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spacing-section">
+                    <h4>Letter Spacing</h4>
+                    <div class="spacing-controls">
+                        <div class="spacing-item">
+                            <label>Tight</label>
+                            <input type="number" value="-0.025" min="-0.1" max="0.1" step="0.005">
+                            <div class="spacing-preview" style="letter-spacing: -0.025em;">
+                                Sample text with letter spacing
+                            </div>
+                        </div>
+                        <div class="spacing-item">
+                            <label>Normal</label>
+                            <input type="number" value="0" min="-0.1" max="0.1" step="0.005">
+                            <div class="spacing-preview" style="letter-spacing: 0;">
+                                Sample text with letter spacing
+                            </div>
+                        </div>
+                        <div class="spacing-item">
+                            <label>Wide</label>
+                            <input type="number" value="0.025" min="-0.1" max="0.1" step="0.005">
+                            <div class="spacing-preview" style="letter-spacing: 0.025em;">
+                                Sample text with letter spacing
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-// Initialize Typography Book when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof VillaTypographyBook !== 'undefined') {
-        new VillaTypographyBook();
-    }
-});
-</script>
+    {# Live Preview Tab #}
+    <div class="tab-content" id="preview-tab">
+        <div class="typography-section">
+            <h3>Live Preview</h3>
+            <p class="section-description">See how your typography primitives compose into semantic text elements.</p>
+            
+            <div class="preview-grid">
+                <div class="preview-item">
+                    <h4>Text Book Elements</h4>
+                    <div class="element-preview">
+                        {% include 'elements/text-book.twig' with {
+                            type: 'pretitle',
+                            content: 'Pretitle Text',
+                            class: 'mb-2'
+                        } %}
+                        {% include 'elements/text-book.twig' with {
+                            type: 'title',
+                            content: 'Main Title Heading',
+                            class: 'mb-4'
+                        } %}
+                        {% include 'elements/text-book.twig' with {
+                            type: 'subtitle',
+                            content: 'Subtitle or Section Heading',
+                            class: 'mb-4'
+                        } %}
+                        {% include 'elements/text-book.twig' with {
+                            type: 'body',
+                            content: 'This is body text that demonstrates how the typography primitives compose into readable paragraph content. It should be comfortable to read and well-spaced.',
+                            class: 'mb-4'
+                        } %}
+                        {% include 'elements/text-book.twig' with {
+                            type: 'caption',
+                            content: 'This is caption text for additional context',
+                            class: 'mb-2'
+                        } %}
+                        {% include 'elements/text-book.twig' with {
+                            type: 'button',
+                            content: 'Button Text',
+                            tag: 'span',
+                            class: 'inline-block px-4 py-2 bg-primary text-white rounded'
+                        } %}
+                    </div>
+                </div>
+
+                <div class="preview-item">
+                    <h4>Design Tokens</h4>
+                    <div class="tokens-display">
+                        <div class="token-group">
+                            <h5>Font Families</h5>
+                            <code>--wp--preset--font-family--inter</code>
+                            <code>--wp--preset--font-family--playfair-display</code>
+                            <code>--wp--preset--font-family--roboto-mono</code>
+                        </div>
+                        <div class="token-group">
+                            <h5>Font Sizes</h5>
+                            <code>--wp--preset--font-size--x-small</code>
+                            <code>--wp--preset--font-size--small</code>
+                            <code>--wp--preset--font-size--medium</code>
+                            <code>--wp--preset--font-size--large</code>
+                            <code>--wp--preset--font-size--x-large</code>
+                            <code>--wp--preset--font-size--xx-large</code>
+                            <code>--wp--preset--font-size--huge</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

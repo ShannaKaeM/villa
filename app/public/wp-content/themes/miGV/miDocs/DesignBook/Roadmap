@@ -8,265 +8,297 @@ The Villa Design Book is a frontend-only WordPress theme integration that provid
 
 ---
 
-## ✅ CURRENT STATUS - COMPLETED FEATURES
+## 🏗️ Atomic Design Architecture
 
-### 🏗️ Core Architecture (100% Complete)
-- **Custom Router**: `VillaDesignBookRouter` class handles dynamic routing
-- **URL Structure**: `/design-book/{section}/` (typography, colors, layout, components)
-- **Template System**: Timber/Twig integration with dedicated templates
-- **WordPress Integration**: Proper rewrite rules, query vars, and template hierarchy
+The Villa Design Book follows a strict atomic design hierarchy with four main sections:
 
-### 🎨 Dashboard (100% Complete)
-- **Beautiful landing page** at `/design-book/`
-- **Theme.json integration**: Uses actual brand colors and fonts
-- **Navigation cards**: Typography, Colors, Layout, Components
-- **Responsive design**: Mobile-first approach
-- **Stats display**: Shows design token counts
-- **Recent activity**: Design update timeline
+### **1. Primitives** (Pure Design Tokens)
+- **Location:** `templates/primitives/`
+- **Purpose:** Pure design tokens that sync directly with `theme.json`
+- **Naming:** No "book" suffix (e.g., `typography.twig`, `color.twig`, `spacing.twig`)
+- **Content:** Font families, sizes, weights, colors, spacing scales, shadows, borders
+- **Rule:** ONLY consume `theme.json` tokens, no composition
 
-### 📝 Typography Section (90% Complete)
-- **Working interface** at `/design-book/typography/`
-- **Font family management**: Inter, Playfair Display, Roboto
-- **Font size controls**: Visual sliders and inputs
-- **Live preview**: Real-time typography changes
-- **AJAX saving**: Secure nonce-based updates to theme.json
+### **2. Elements** (Semantic Components)
+- **Location:** `templates/elements/`
+- **Purpose:** Highly reusable semantic components that compose primitives
+- **Naming:** With "book" suffix (e.g., `text-book.twig`, `button-book.twig`)
+- **Content:** Text styles, buttons, form inputs, icons, badges
+- **Rule:** ONLY compose primitives, no other elements
 
-### 🔧 Technical Infrastructure (100% Complete)
-- **AJAX Handlers**: Secure saving with WordPress nonces
-- **Timber Context**: Proper WordPress function registration
-- **Error Handling**: All fatal errors resolved
-- **Git History**: Clean commit history with detailed messages
+### **3. Components** (Complex UI)
+- **Location:** `templates/components/`
+- **Purpose:** Complex UI components that compose elements and primitives
+- **Naming:** With "book" suffix (e.g., `card-book.twig`, `modal-book.twig`)
+- **Content:** Cards, modals, navigation, forms, media objects
+- **Rule:** Compose elements and primitives, business logic allowed
 
----
+### **4. Sections** (Page Sections)
+- **Location:** `templates/sections/`
+- **Purpose:** Large page sections that compose components and elements
+- **Naming:** With "book" suffix (e.g., `hero-book.twig`, `featured-book.twig`)
+- **Content:** Hero sections, featured content, testimonials, CTAs
+- **Rule:** Compose components and elements, layout and content logic
 
-## 🏗️ TECHNICAL ARCHITECTURE
+## 📁 Updated File Structure
 
-### File Structure
 ```
 /app/public/wp-content/themes/miGV/
-├── inc/design-book-router.php          # Core routing logic
-├── page-design-system.php              # WordPress page template
-├── functions.php                       # AJAX handlers & Twig setup
-├── templates/design-book/
-│   ├── dashboard.twig                  # Main dashboard (✅ Complete)
-│   └── typography.twig                 # Typography interface (✅ Complete)
-├── assets/css/design-book.css          # Shared styles
-├── assets/js/design-book.js            # Frontend JavaScript
-└── theme.json                          # Design tokens storage
+├── templates/
+│   ├── primitives/           # Pure design tokens (no "book" suffix)
+│   │   ├── typography.twig   # ✅ Font families, sizes, weights, spacing
+│   │   ├── color.twig        # ✅ Color palette and utilities
+│   │   ├── spacing.twig      # ✅ Padding, margin, gap scales
+│   │   ├── layout.twig       # 🔄 Grid, flexbox, container utilities
+│   │   ├── border.twig       # 📋 Border radius, width, style
+│   │   └── shadow.twig       # 📋 Box shadow scales
+│   │
+│   ├── elements/             # Semantic components (with "book" suffix)
+│   │   ├── text-book.twig    # ✅ Semantic text styles (title, body, caption)
+│   │   ├── button-book.twig  # ✅ Button variants (primary, secondary, outline)
+│   │   ├── input-book.twig   # 📋 Form input elements
+│   │   ├── icon-book.twig    # 📋 Icon system and variants
+│   │   └── badge-book.twig   # 📋 Status badges and labels
+│   │
+│   ├── components/           # Complex UI (with "book" suffix)
+│   │   ├── card-book.twig    # 🔄 Card variants and layouts
+│   │   ├── modal-book.twig   # 📋 Modal dialogs and overlays
+│   │   ├── nav-book.twig     # 📋 Navigation components
+│   │   ├── form-book.twig    # 📋 Complete form layouts
+│   │   └── media-book.twig   # 📋 Media objects and galleries
+│   │
+│   ├── sections/             # Page sections (with "book" suffix)
+│   │   ├── hero-book.twig    # 📋 Hero section variants
+│   │   ├── featured-book.twig # 📋 Featured content sections
+│   │   ├── testimonial-book.twig # 📋 Testimonial layouts
+│   │   ├── cta-book.twig     # 📋 Call-to-action sections
+│   │   └── footer-book.twig  # 📋 Footer section variants
+│   │
+│   └── design-book/          # Design Book interface templates
+│       ├── dashboard.twig    # ✅ Main dashboard
+│       ├── typography.twig   # ✅ Typography primitive editor
+│       ├── colors.twig       # 🔄 Color primitive editor (NEXT)
+│       ├── layout.twig       # 📋 Layout primitive editor
+│       └── components.twig   # 📋 Component showcase
+│
+├── inc/
+│   └── design-book-router.php # ✅ Custom routing system
+│
+├── assets/
+│   ├── css/design-book.css   # ✅ Design Book interface styling
+│   └── js/design-book.js     # ✅ Interactive functionality
+│
+└── functions.php             # ✅ AJAX handlers and Twig integration
 ```
 
-### Key Classes & Functions
-- **VillaDesignBookRouter**: Main routing and context management
-- **migv_save_typography_ajax()**: AJAX handler for typography updates
-- **migv_save_base_styles_ajax()**: AJAX handler for base styles
-- **migv_add_to_twig()**: WordPress function registration for Twig
+## ✅ Completed Features
 
-### WordPress Integration
-- **Page**: "Design Book" page with slug `design-book`
-- **Rewrite Rules**: Custom routing for sections
-- **Query Vars**: `design_book_section` for dynamic content
-- **Template Hierarchy**: Uses `page-design-system.php`
+### **Dashboard System**
+- ✅ Beautiful gradient dashboard at `/design-book/`
+- ✅ Navigation cards for all four main sections
+- ✅ Custom routing with `VillaDesignBookRouter`
+- ✅ Twig integration with WordPress functions
+- ✅ Theme.json design token integration
 
----
+### **Typography Primitive Editor**
+- ✅ Font family, size, weight, and spacing controls
+- ✅ Live preview system with element composition
+- ✅ Save/reset functionality with AJAX handlers
+- ✅ Pure primitive focus (no semantic text styles)
 
-## 🚧 NEXT STEPS - PRIORITY ORDER
+### **Atomic Design Foundation**
+- ✅ Primitives: `typography.twig`, `color.twig`, `spacing.twig`
+- ✅ Elements: `text-book.twig`, `button-book.twig`
+- ✅ Proper composition hierarchy established
+- ✅ Theme.json as single source of truth
 
-### 1. Colors Section (High Priority)
-**URL**: `/design-book/colors/`
-**Template**: `templates/design-book/colors.twig`
+## 🔄 Next Steps (Priority Order)
 
-**Required Features**:
-- Color palette grid showing all theme.json colors
-- Hex code editors for each color
-- Color contrast checker for accessibility
-- Live preview of color changes
-- AJAX saving to theme.json colors section
+### **Phase 1: Complete Primitives (Week 1)**
+1. **Colors Primitive Editor** `/design-book/colors/`
+   - Color palette management
+   - Semantic color naming (primary, secondary, neutral scales)
+   - Live preview with element composition
+   - Save to theme.json integration
 
-**Implementation Notes**:
-- Copy pattern from typography.twig
-- Use `VillaDesignBookRouter::render_design_book_section()` method
-- Add AJAX handler `migv_save_colors_ajax()` in functions.php
-- Reference existing color tokens in theme.json lines 80-149
+2. **Layout Primitives**
+   - Grid system utilities
+   - Container and spacing scales
+   - Flexbox utilities
+   - Border and shadow primitives
 
-### 2. Layout Section (Medium Priority)
-**URL**: `/design-book/layout/`
-**Template**: `templates/design-book/layout.twig`
+### **Phase 2: Expand Elements (Week 2)**
+3. **Input Book Element**
+   - Form input variants (text, email, password, textarea)
+   - Validation states and styling
+   - Compose typography and color primitives
 
-**Required Features**:
-- Spacing scale builder (2px, 4px, 8px, 16px, 32px, 64px, 128px)
-- Grid system controls (columns, gutters, breakpoints)
-- Container max-width settings
-- Border radius scale
-- Box shadow system
+4. **Icon Book Element**
+   - SVG icon system
+   - Size and color variants
+   - Accessibility considerations
 
-**Implementation Notes**:
-- Focus on theme.json spacing and layout settings
-- Add responsive breakpoint management
-- Include CSS Grid and Flexbox utilities
+### **Phase 3: Build Components (Week 3)**
+5. **Card Book Component**
+   - Multiple card layouts and variants
+   - Compose text-book and button-book elements
+   - Interactive builder interface
 
-### 3. Components Section (Lower Priority)
-**URL**: `/design-book/components/`
-**Template**: `templates/design-book/components.twig`
+6. **Modal Book Component**
+   - Dialog and overlay variants
+   - Compose elements for content and actions
 
-**Required Features**:
-- Button component builder
-- Card component editor
-- Form element styles
-- Navigation component styles
-- Modal/overlay components
+### **Phase 4: Create Sections (Week 4)**
+7. **Hero Book Section**
+   - Multiple hero layout variants
+   - Compose cards, text, and button elements
+   - Background and overlay options
 
-### 4. Documentation Section (Future)
-**URL**: `/design-book/docs/`
-**Template**: `templates/design-book/docs.twig`
+8. **Featured Book Section**
+   - Content showcase layouts
+   - Grid and list variants
+   - Media integration
 
-**Required Features**:
-- Usage guidelines
-- Code examples
-- Best practices
-- Export functionality
+## 🛠️ Development Patterns
 
----
-
-## 🔧 DEVELOPMENT GUIDELINES
-
-### Adding New Sections
-1. **Router Update**: Add section to `$sections` array in `VillaDesignBookRouter`
-2. **Template Creation**: Create new Twig template in `templates/design-book/`
-3. **AJAX Handler**: Add save handler in `functions.php` following existing pattern
-4. **JavaScript**: Add frontend logic to `assets/js/design-book.js`
-5. **Navigation**: Section automatically appears in dashboard navigation
-
-### AJAX Handler Pattern
+### **Adding New Primitives**
 ```php
-function migv_save_{section}_ajax() {
-    // Verify nonce
-    if (!wp_verify_nonce($_POST['nonce'], 'design_book_nonce')) {
-        wp_die('Security check failed');
-    }
-    
-    // Verify capabilities
-    if (!current_user_can('edit_theme_options')) {
-        wp_die('Insufficient permissions');
-    }
-    
-    // Process and save to theme.json
-    $theme_json = json_decode(file_get_contents(get_template_directory() . '/theme.json'), true);
-    // ... update logic ...
-    file_put_contents(get_template_directory() . '/theme.json', json_encode($theme_json, JSON_PRETTY_PRINT));
-    
-    wp_send_json_success(['message' => 'Saved successfully']);
+// 1. Create primitive template
+templates/primitives/new-primitive.twig
+
+// 2. Add theme.json tokens
+"settings": {
+  "custom": {
+    "newPrimitive": { /* tokens */ }
+  }
 }
-add_action('wp_ajax_save_{section}', 'migv_save_{section}_ajax');
+
+// 3. Create Design Book editor
+templates/design-book/new-primitive.twig
+
+// 4. Add AJAX handlers
+functions.php: villa_handle_save_new_primitive()
+
+// 5. Update router
+inc/design-book-router.php: add route
 ```
 
-### Twig Template Pattern
+### **Adding New Elements**
 ```twig
-{% extends "base.twig" %}
-
-{% block content %}
-<div class="design-book-section">
-    <header class="section-header">
-        <h1>{{ design_book.section_config.name }}</h1>
-        <nav class="breadcrumbs">
-            {% for crumb in design_book.breadcrumbs %}
-                <a href="{{ crumb.url }}">{{ crumb.name }}</a>
-            {% endfor %}
-        </nav>
-    </header>
-    
-    <main class="section-content">
-        <!-- Section-specific content -->
-    </main>
-</div>
-{% endblock %}
+{# templates/elements/new-book.twig #}
+{# Compose ONLY primitives #}
+{% include 'primitives/typography.twig' with {...} %}
+{% include 'primitives/color.twig' with {...} %}
+{% include 'primitives/spacing.twig' with {...} %}
 ```
 
----
+### **Adding New Components**
+```twig
+{# templates/components/new-book.twig #}
+{# Compose elements and primitives #}
+{% include 'elements/text-book.twig' with {...} %}
+{% include 'elements/button-book.twig' with {...} %}
+{% include 'primitives/layout.twig' with {...} %}
+```
 
-## 🎨 DESIGN SYSTEM INTEGRATION
+### **Adding New Sections**
+```twig
+{# templates/sections/new-book.twig #}
+{# Compose components and elements #}
+{% include 'components/card-book.twig' with {...} %}
+{% include 'elements/text-book.twig' with {...} %}
+```
 
-### Theme.json Structure
-The Design Book directly modifies these theme.json sections:
-- **settings.color.palette**: Color tokens
-- **settings.typography.fontFamilies**: Font families
-- **settings.typography.fontSizes**: Font size scale
-- **settings.spacing.spacingSizes**: Spacing tokens
-- **settings.layout**: Grid and container settings
+## 🎨 Design Book Interface Structure
 
-### CSS Custom Properties
-All theme.json tokens automatically generate CSS custom properties:
-- Colors: `var(--wp--preset--color--{slug})`
-- Fonts: `var(--wp--preset--font-family--{slug})`
-- Sizes: `var(--wp--preset--font-size--{slug})`
-- Spacing: `var(--wp--preset--spacing--{slug})`
+### **Main Navigation**
+- **Primitives** → Typography, Colors, Layout, Spacing
+- **Elements** → Text Book, Button Book, Input Book, Icon Book
+- **Components** → Card Book, Modal Book, Nav Book, Form Book
+- **Sections** → Hero Book, Featured Book, Testimonial Book, CTA Book
 
----
+### **Section URLs**
+- `/design-book/` - Main dashboard
+- `/design-book/typography/` - Typography primitive editor
+- `/design-book/colors/` - Color primitive editor
+- `/design-book/text-book/` - Text element showcase
+- `/design-book/button-book/` - Button element showcase
+- `/design-book/card-book/` - Card component builder
+- `/design-book/hero-book/` - Hero section variants
 
-## 🐛 KNOWN ISSUES & SOLUTIONS
+## 🔧 Technical Integration
 
-### Issue: Twig Function Errors
-**Solution**: Ensure all WordPress functions are registered in `migv_add_to_twig()`
-**Current Functions**: wp_head, wp_body_open, wp_footer, body_class, language_attributes
+### **AJAX Handler Pattern**
+```php
+function villa_handle_save_primitive() {
+    // Security checks
+    check_ajax_referer('design_book_nonce', 'nonce');
+    if (!current_user_can('edit_theme_options')) {
+        wp_die('Unauthorized');
+    }
+    
+    // Update theme.json
+    $theme_json = get_theme_file_path('theme.json');
+    // ... update logic
+    
+    // Update Twig primitive
+    $primitive_path = get_template_directory() . '/templates/primitives/';
+    // ... update logic
+    
+    wp_send_json_success('Saved successfully');
+}
+```
 
-### Issue: AJAX Security
-**Solution**: Always use WordPress nonces and capability checks
-**Pattern**: `wp_verify_nonce()` + `current_user_can('edit_theme_options')`
+### **Router Integration**
+```php
+// inc/design-book-router.php
+$this->sections = [
+    'typography' => ['type' => 'primitive'],
+    'colors' => ['type' => 'primitive'],
+    'text-book' => ['type' => 'element'],
+    'button-book' => ['type' => 'element'],
+    'card-book' => ['type' => 'component'],
+    'hero-book' => ['type' => 'section']
+];
+```
 
-### Issue: Theme.json Caching
-**Solution**: WordPress may cache theme.json. Clear cache after updates or use development mode.
+## 🚀 Success Metrics
 
----
+### **Completed Milestones**
+- ✅ Dashboard loads without errors
+- ✅ Typography primitive editor functional
+- ✅ Atomic design hierarchy established
+- ✅ Theme.json integration working
+- ✅ AJAX save/reset functionality
 
-## 🚀 DEPLOYMENT NOTES
+### **Upcoming Milestones**
+- 🔄 Colors primitive editor (Week 1)
+- 📋 All primitives complete (Week 1)
+- 📋 Core elements complete (Week 2)
+- 📋 Essential components complete (Week 3)
+- 📋 Key sections complete (Week 4)
 
-### Local Development
-- **URL**: `villa-community20.local/design-book/`
-- **Environment**: WordPress with Timber plugin
-- **Git Repository**: Clean commit history maintained
+## 📋 Handoff Checklist for AI Agents
 
-### Production Considerations
-- Ensure proper file permissions for theme.json writes
-- Consider backup strategy for theme.json
-- Test AJAX endpoints with production security settings
-- Verify rewrite rules flush on theme activation
+### **Immediate Next Task: Colors Primitive Editor**
+1. Copy `templates/design-book/typography.twig` structure
+2. Create color palette management interface
+3. Add color picker controls and semantic naming
+4. Implement AJAX handlers for color saving
+5. Update `primitives/color.twig` with new tokens
+6. Test integration with existing elements
 
----
+### **Development Environment**
+- Local URL: `villa-community20.local/design-book/`
+- WordPress admin: Standard WP admin access required
+- File editing: Direct file system access
+- Testing: Browser-based testing with live preview
 
-## 📋 HANDOFF CHECKLIST
+### **Key Files to Understand**
+- `inc/design-book-router.php` - Routing and context
+- `functions.php` - AJAX handlers and Twig integration
+- `theme.json` - Design token source of truth
+- `templates/primitives/` - Pure design token templates
+- `templates/elements/` - Semantic component templates
 
-### For Continuing AI Agent:
-- [ ] Review current codebase structure
-- [ ] Test existing dashboard and typography section
-- [ ] Understand AJAX handler pattern
-- [ ] Check theme.json integration
-- [ ] Review Git commit history for context
-- [ ] Start with Colors section implementation
-- [ ] Follow established patterns and conventions
-
-### Key Files to Understand:
-1. `inc/design-book-router.php` - Core routing logic
-2. `functions.php` - AJAX handlers and Twig setup
-3. `templates/design-book/dashboard.twig` - Dashboard template
-4. `templates/design-book/typography.twig` - Section template example
-5. `theme.json` - Design tokens storage
-
----
-
-## 🎯 SUCCESS METRICS
-
-### Completed (✅):
-- Dashboard loads without errors
-- Typography section functional
-- Theme.json integration working
-- AJAX saving operational
-- Responsive design implemented
-
-### Next Milestones:
-- Colors section fully functional
-- Layout section with spacing controls
-- Components section with reusable elements
-- Complete design system documentation
-
----
-
-*This roadmap provides complete context for any AI agent to continue development seamlessly. All architectural decisions, patterns, and next steps are documented for efficient handoff.*
+This roadmap provides complete context for continuing the Villa Design Book development with proper atomic design principles and clear naming conventions.

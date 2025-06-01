@@ -1,0 +1,118 @@
+{#
+  Button Book Element - Semantic Button Component
+  
+  This element composes typography, color, and spacing primitives into semantic button styles.
+  It provides predefined button variants like primary, secondary, outline, etc.
+  
+  Usage:
+  {% include 'elements/button-book.twig' with {
+    variant: 'primary',
+    size: 'md',
+    content: 'Click me',
+    href: '/link',
+    class: 'additional-classes'
+  } %}
+  
+  Available variants:
+  - primary: Main action buttons
+  - secondary: Secondary action buttons
+  - outline: Outlined buttons
+  - ghost: Text-only buttons
+  - danger: Destructive action buttons
+  
+  Available sizes:
+  - sm: Small buttons
+  - md: Medium buttons (default)
+  - lg: Large buttons
+#}
+
+{% set button_styles = {
+  primary: {
+    color: 'white',
+    background_color: 'primary',
+    border_color: 'primary',
+    font_weight: 'semibold',
+    class: 'btn-primary'
+  },
+  secondary: {
+    color: 'neutral-700',
+    background_color: 'neutral-100',
+    border_color: 'neutral-200',
+    font_weight: 'medium',
+    class: 'btn-secondary'
+  },
+  outline: {
+    color: 'primary',
+    background_color: 'transparent',
+    border_color: 'primary',
+    font_weight: 'medium',
+    class: 'btn-outline'
+  },
+  ghost: {
+    color: 'primary',
+    background_color: 'transparent',
+    border_color: 'transparent',
+    font_weight: 'medium',
+    class: 'btn-ghost'
+  },
+  danger: {
+    color: 'white',
+    background_color: 'error',
+    border_color: 'error',
+    font_weight: 'semibold',
+    class: 'btn-danger'
+  }
+} %}
+
+{% set button_sizes = {
+  sm: {
+    font_size: 'sm',
+    padding: 'sm',
+    class: 'btn-sm'
+  },
+  md: {
+    font_size: 'base',
+    padding: 'md',
+    class: 'btn-md'
+  },
+  lg: {
+    font_size: 'lg',
+    padding: 'lg',
+    class: 'btn-lg'
+  }
+} %}
+
+{# Get the style and size configurations #}
+{% set style = button_styles[variant] ?? button_styles.primary %}
+{% set size_config = button_sizes[size] ?? button_sizes.md %}
+{% set element_tag = href ? 'a' : 'button' %}
+{% set element_class = [style.class, size_config.class, class]|join(' ')|trim %}
+
+{# Render the button element with composed primitives #}
+<{{ element_tag }}{% if element_class %} class="{{ element_class }}"{% endif %}{% if href %} href="{{ href }}"{% endif %} style="
+  {%- include 'primitives/typography.twig' with {
+    font_size: size_config.font_size,
+    font_weight: style.font_weight,
+    line_height: 'tight',
+    letter_spacing: 'wide'
+  } -%}
+  {%- include 'primitives/color.twig' with {
+    color: style.color,
+    background_color: style.background_color,
+    border_color: style.border_color
+  } -%}
+  {%- include 'primitives/spacing.twig' with {
+    padding: size_config.padding
+  } -%}
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--wp--preset--border-radius--sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+">
+  {{- content|default('Button') -}}
+</{{ element_tag }}>
