@@ -109,6 +109,9 @@ add_action('after_setup_theme', 'migv_setup');
  * Enqueue scripts and styles
  */
 function migv_scripts() {
+    // Enqueue Google Fonts
+    wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap', array(), null);
+    
     // Enqueue main stylesheet
     wp_enqueue_style('migv-style', get_stylesheet_uri(), array(), '1.0.0');
     
@@ -123,6 +126,18 @@ function migv_scripts() {
     
     // Enqueue villa dashboard JavaScript
     wp_enqueue_script('villa-dashboard', get_template_directory_uri() . '/assets/js/villa-dashboard.js', array('jquery'), '1.0.0', true);
+    
+    // Enqueue Design Book assets on design book pages
+    if (is_page() && strpos(get_post_field('post_name'), 'design-book') !== false) {
+        wp_enqueue_style('design-book', get_template_directory_uri() . '/assets/css/design-book.css', array('migv-style'), '1.0.0');
+        wp_enqueue_script('design-book', get_template_directory_uri() . '/assets/js/design-book.js', array('jquery'), '1.0.0', true);
+        
+        // Localize script for Design Book AJAX
+        wp_localize_script('design-book', 'migv_ajax', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('migv_nonce'),
+        ));
+    }
     
     // Enqueue comment reply script
     if (is_singular() && comments_open() && get_option('thread_comments')) {
@@ -455,13 +470,12 @@ new MiGVSite();
 
 // Typography/Text Styles Handlers
 add_action('wp_ajax_villa_save_text_styles', 'villa_handle_save_text_styles');
-add_action('wp_ajax_save_text_styles', 'villa_handle_save_text_styles');
-
 add_action('wp_ajax_villa_reset_text_styles', 'villa_handle_reset_text_styles');
-add_action('wp_ajax_reset_text_styles', 'villa_handle_reset_text_styles');
+add_action('wp_ajax_villa_save_base_styles', 'villa_handle_save_base_styles');
+add_action('wp_ajax_villa_reset_base_styles', 'villa_handle_reset_base_styles');
 
-add_action('wp_ajax_save_base_styles', 'villa_handle_save_base_styles');
-add_action('wp_ajax_reset_base_styles', 'villa_handle_reset_base_styles');
+// Add AJAX hook for the action that JavaScript is actually calling
+add_action('wp_ajax_villa_save_typography_settings', 'villa_handle_save_typography_settings');
 
 /**
  * Handle saving text styles to theme.json and Twig components
@@ -586,55 +600,91 @@ function villa_update_theme_json_typography($text_styles) {
     }
     
     $theme_json = json_decode(file_get_contents($theme_json_path), true);
-    
     if (!$theme_json) {
-        throw new Exception('Invalid theme.json format');
+        throw new Exception('Failed to parse theme.json');
     }
     
-    // Update typography settings in theme.json
-    foreach ($text_styles as $style_key => $style_data) {
-        // Map to theme.json structure
-        if (isset($style_data['fontSize'])) {
-            $theme_json['settings']['typography']['fontSizes'][] = [
-                'slug' => $style_key,
-                'size' => $style_data['fontSize'],
-                'name' => ucfirst($style_key)
-            ];
+    // Update font families if provided
+    if (isset($text_styles['fontFamilies'])) {
+        $theme_json['settings']['typography']['fontFamilies'] = $text_styles['fontFamilies'];
+    }
+    
+    // Update font sizes if provided
+    if (isset($text_styles['fontSizes'])) {
+        $theme_json['settings']['typography']['fontSizes'] = $text_styles['fontSizes'];
+    }
+    
+    // Update individual font family selections
+    if (isset($text_styles['primary_font'])) {
+        // Find and update primary font in fontFamilies array
+        foreach ($theme_json['settings']['typography']['fontFamilies'] as &$font) {
+            if ($font['slug'] === 'primary') {
+                $font['fontFamily'] = $text_styles['primary_font'];
+                break;
+            }
         }
     }
     
-    // Write back to theme.json
-    file_put_contents($theme_json_path, json_encode($theme_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    if (isset($text_styles['secondary_font'])) {
+        // Find and update secondary font in fontFamilies array
+        foreach ($theme_json['settings']['typography']['fontFamilies'] as &$font) {
+            if ($font['slug'] === 'secondary') {
+                $font['fontFamily'] = $text_styles['secondary_font'];
+                break;
+            }
+        }
+    }
+    
+    if (isset($text_styles['monospace_font'])) {
+        // Find and update monospace font in fontFamilies array
+        foreach ($theme_json['settings']['typography']['fontFamilies'] as &$font) {
+            if ($font['slug'] === 'monospace') {
+                $font['fontFamily'] = $text_styles['monospace_font'];
+                break;
+            }
+        }
+    }
+    
+    // Write updated theme.json
+    $json_output = json_encode($theme_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    if (file_put_contents($theme_json_path, $json_output) === false) {
+        throw new Exception('Failed to write theme.json file');
+    }
+    
+    // Clear WordPress theme cache
+    villa_clear_theme_cache();
 }
 
 /**
- * Update typography.twig component defaults
+ * Update Typography Twig primitive defaults
  */
 function villa_update_typography_twig_defaults($text_styles) {
-    $typography_path = get_template_directory() . '/templates/components/prmimitive-books/typography.twig';
+    $typography_path = get_template_directory() . '/templates/primitives/typography.twig';
     
     if (!file_exists($typography_path)) {
-        return;
-    }
-    
-    $content = file_get_contents($typography_path);
-    
-    // Update default values in the Twig component
-    foreach ($text_styles as $style_key => $style_data) {
-        if (isset($style_data['fontSize'])) {
-            $pattern = "/({% set font_size = font_size\|default\(')([^']+)('\) %})/";
-            $replacement = '${1}' . $style_data['fontSize'] . '${3}';
-            $content = preg_replace($pattern, $replacement, $content);
-        }
+        // Create the typography primitive if it doesn't exist
+        $typography_content = '{# Typography Primitive - Design Book Tokens #}
+<div class="typography-primitive typography-{{ type|default(\'text\') }}"
+     style="
+        font-family: var(--db-font-{{ family|default(\'primary\') }});
+        font-size: var(--db-text-{{ size|default(\'base\') }});
+        font-weight: var(--db-weight-{{ weight|default(\'normal\') }});
+        line-height: var(--db-leading-{{ leading|default(\'normal\') }});
+        {{ style_overrides|raw }}
+     ">
+    {{ content|raw }}
+</div>';
         
-        if (isset($style_data['fontWeight'])) {
-            $pattern = "/({% set font_weight = font_weight\|default\(')([^']+)('\) %})/";
-            $replacement = '${1}' . $style_data['fontWeight'] . '${3}';
-            $content = preg_replace($pattern, $replacement, $content);
+        if (file_put_contents($typography_path, $typography_content) === false) {
+            throw new Exception('Failed to create typography.twig primitive');
         }
     }
     
-    file_put_contents($typography_path, $content);
+    // For now, we're not modifying the Twig file directly
+    // The Design Book tokens (--db-*) will be updated via CSS
+    // This function is a placeholder for future Twig token updates
+    
+    return true;
 }
 
 /**
@@ -684,3 +734,249 @@ function villa_reset_theme_json_base_typography() {
     // Implementation for resetting base typography
     error_log('Base typography reset called - implement default values');
 }
+
+/**
+ * Clear WordPress theme cache to ensure theme.json is reloaded
+ */
+function villa_clear_theme_cache() {
+    // Clear WordPress theme cache
+    wp_clean_themes_cache();
+    
+    // Clear any cached theme.json data
+    if (function_exists('wp_clean_theme_json_cache')) {
+        wp_clean_theme_json_cache();
+    }
+    
+    // Force reload of global settings
+    if (function_exists('wp_get_global_settings')) {
+        wp_cache_delete('wp_get_global_settings', 'theme_json');
+    }
+}
+
+// Clear cache when theme is activated or updated
+add_action('after_switch_theme', 'villa_clear_theme_cache');
+add_action('wp_loaded', 'villa_clear_theme_cache', 1);
+
+/**
+ * Handle saving typography settings from JavaScript (matches AJAX action name)
+ */
+function villa_handle_save_typography_settings() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'migv_nonce')) {
+        wp_send_json_error('Security check failed');
+        return;
+    }
+    
+    // Check user capabilities
+    if (!current_user_can('edit_theme_options')) {
+        wp_send_json_error('Insufficient permissions');
+        return;
+    }
+    
+    try {
+        $typography_settings = json_decode(stripslashes($_POST['typography_settings']), true);
+        if (!$typography_settings) {
+            wp_send_json_error('Invalid typography settings data');
+            return;
+        }
+        
+        // Extract font family changes from the settings
+        $font_changes = [];
+        
+        // Check if primary font was changed
+        if (isset($typography_settings['scale']['font'])) {
+            $font_changes['primary_font'] = $typography_settings['scale']['font'];
+        }
+        
+        // Update theme.json with font family changes
+        if (!empty($font_changes)) {
+            villa_update_theme_json_typography($font_changes);
+        }
+        
+        // Update Design Book tokens (--db-*) via CSS
+        villa_update_design_book_tokens($typography_settings);
+        
+        wp_send_json_success('Typography settings saved successfully');
+        
+    } catch (Exception $e) {
+        wp_send_json_error('Failed to save typography settings: ' . $e->getMessage());
+    }
+}
+
+/**
+ * Update Design Book CSS tokens
+ */
+function villa_update_design_book_tokens($settings) {
+    $css_path = get_template_directory() . '/assets/css/design-book.css';
+    
+    if (!file_exists($css_path)) {
+        throw new Exception('design-book.css file not found');
+    }
+    
+    $css_content = file_get_contents($css_path);
+    
+    // Update base font size if changed
+    if (isset($settings['scale']['baseSize'])) {
+        $base_size = intval($settings['scale']['baseSize']);
+        $css_content = preg_replace(
+            '/--db-text-base:\s*[^;]+;/',
+            "--db-text-base: {$base_size}px;",
+            $css_content
+        );
+    }
+    
+    // Update scale ratio if changed
+    if (isset($settings['scale']['ratio'])) {
+        $ratio = floatval($settings['scale']['ratio']);
+        // Calculate and update all scale sizes
+        $base_size = isset($settings['scale']['baseSize']) ? intval($settings['scale']['baseSize']) : 16;
+        
+        $sizes = [
+            'small' => $base_size * 0.8125,
+            'medium' => $base_size,
+            'large' => $base_size * $ratio,
+            'xl' => $base_size * pow($ratio, 2),
+            'xxl' => $base_size * pow($ratio, 3),
+            'huge' => $base_size * pow($ratio, 6)
+        ];
+        
+        foreach ($sizes as $size_name => $size_value) {
+            $size_rem = round($size_value / 16, 3);
+            $css_content = preg_replace(
+                "/--db-text-{$size_name}:\s*[^;]+;/",
+                "--db-text-{$size_name}: {$size_rem}rem;",
+                $css_content
+            );
+        }
+    }
+    
+    // Write updated CSS
+    if (file_put_contents($css_path, $css_content) === false) {
+        throw new Exception('Failed to write design-book.css file');
+    }
+}
+
+// AJAX handler for saving design book colors
+add_action('wp_ajax_save_design_book_colors', 'handle_save_design_book_colors');
+add_action('wp_ajax_nopriv_save_design_book_colors', 'handle_save_design_book_colors');
+
+// AJAX handler for getting design book colors
+add_action('wp_ajax_get_design_book_colors', 'handle_get_design_book_colors');
+add_action('wp_ajax_nopriv_get_design_book_colors', 'handle_get_design_book_colors');
+
+function handle_get_design_book_colors() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'migv_nonce')) {
+        wp_die('Security check failed');
+    }
+
+    // Get saved colors
+    $saved_colors = get_option('villa_design_book_colors', []);
+    
+    wp_send_json_success([
+        'colors' => $saved_colors,
+        'message' => 'Colors retrieved successfully'
+    ]);
+}
+
+function handle_save_design_book_colors() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'migv_nonce')) {
+        wp_die('Security check failed');
+    }
+
+    // Check user capabilities
+    if (!current_user_can('edit_theme_options')) {
+        wp_send_json_error('Insufficient permissions');
+        return;
+    }
+
+    // Get color data
+    $colors = json_decode(stripslashes($_POST['colors']), true);
+    
+    if (!$colors || !is_array($colors)) {
+        wp_send_json_error('Invalid color data');
+        return;
+    }
+
+    // Save colors to theme options
+    $saved_colors = get_option('villa_design_book_colors', []);
+    
+    foreach ($colors as $slug => $hex_value) {
+        // Validate hex color format
+        if (preg_match('/^#[0-9A-Fa-f]{6}$/', $hex_value)) {
+            $saved_colors[$slug] = $hex_value;
+        }
+    }
+
+    // Update the option
+    $result = update_option('villa_design_book_colors', $saved_colors);
+    
+    if ($result) {
+        // Also update theme.json if needed (for advanced implementations)
+        do_action('villa_design_book_colors_updated', $saved_colors);
+        
+        wp_send_json_success([
+            'message' => 'Colors saved successfully',
+            'colors' => $saved_colors
+        ]);
+    } else {
+        wp_send_json_error('Failed to save colors');
+    }
+}
+
+// Hook to update theme.json when colors are saved
+add_action('villa_design_book_colors_updated', 'sync_colors_to_theme_json');
+
+function sync_colors_to_theme_json($saved_colors) {
+    $theme_json_path = get_template_directory() . '/theme.json';
+    
+    if (!file_exists($theme_json_path)) {
+        return;
+    }
+    
+    // Read current theme.json
+    $theme_json_content = file_get_contents($theme_json_path);
+    $theme_json = json_decode($theme_json_content, true);
+    
+    if (!$theme_json || !isset($theme_json['settings']['color']['palette'])) {
+        return;
+    }
+    
+    // Update color palette with new values
+    foreach ($theme_json['settings']['color']['palette'] as &$color) {
+        $slug = $color['slug'];
+        if (isset($saved_colors[$slug])) {
+            $color['color'] = $saved_colors[$slug];
+        }
+    }
+    
+    // Write updated theme.json back to file
+    $updated_json = json_encode($theme_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    
+    if ($updated_json) {
+        file_put_contents($theme_json_path, $updated_json);
+        
+        // Clear any theme caches
+        if (function_exists('wp_clean_themes_cache')) {
+            wp_clean_themes_cache();
+        }
+    }
+}
+
+// Apply saved colors as CSS custom properties
+function apply_saved_colors_css() {
+    $saved_colors = get_option('villa_design_book_colors', array());
+    
+    if (!empty($saved_colors)) {
+        echo '<style id="villa-design-book-colors">';
+        echo ':root {';
+        foreach ($saved_colors as $slug => $color) {
+            echo '--wp--preset--color--' . esc_attr($slug) . ': ' . esc_attr($color) . ';';
+        }
+        echo '}';
+        echo '</style>';
+    }
+}
+add_action('wp_head', 'apply_saved_colors_css');
+add_action('admin_head', 'apply_saved_colors_css');

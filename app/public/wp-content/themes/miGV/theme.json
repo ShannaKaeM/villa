@@ -24,6 +24,11 @@
             "fluid": true,
             "fontFamilies": [
                 {
+                    "fontFamily": "Montserrat, sans-serif",
+                    "name": "Montserrat",
+                    "slug": "montserrat"
+                },
+                {
                     "fontFamily": "Inter, system-ui, sans-serif",
                     "name": "Inter",
                     "slug": "inter"
@@ -77,6 +82,9 @@
             "textTransform": true
         },
         "color": {
+            "background": true,
+            "text": true,
+            "link": true,
             "palette": [
                 {
                     "slug": "primary-light",
@@ -262,7 +270,7 @@
             "text": "var(--wp--preset--color--base-darkest)"
         },
         "typography": {
-            "fontFamily": "var(--wp--preset--font-family--inter)",
+            "fontFamily": "var(--wp--preset--font-family--montserrat)",
             "fontSize": "var(--wp--preset--font-size--medium)",
             "lineHeight": "1.6"
         }

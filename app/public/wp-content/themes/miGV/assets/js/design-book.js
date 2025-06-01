@@ -12,8 +12,6 @@ class VillaTypographyBook {
     }
 
     init() {
-        console.log('🎨 Villa Typography Book initialized');
-        
         // Initialize tab system
         this.initTabs();
         
@@ -25,6 +23,9 @@ class VillaTypographyBook {
         
         // Initialize tokens display
         this.initTokensDisplay();
+        
+        // Initialize color book
+        this.initColorBook();
     }
 
     bindEvents() {
@@ -33,6 +34,36 @@ class VillaTypographyBook {
             button.addEventListener('click', (e) => this.switchTab(e));
         });
 
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                this.switchTab(e.target.dataset.tab);
+            });
+        });
+
+        // Font family change events
+        const primaryFontSelect = document.getElementById('primary-font');
+        const displayFontSelect = document.getElementById('display-font');
+        const monoFontSelect = document.getElementById('mono-font');
+
+        if (primaryFontSelect) {
+            primaryFontSelect.addEventListener('change', (e) => {
+                this.updateFontFamilyPreview('primary', e.target.value);
+            });
+        }
+
+        if (displayFontSelect) {
+            displayFontSelect.addEventListener('change', (e) => {
+                this.updateFontFamilyPreview('display', e.target.value);
+            });
+        }
+
+        if (monoFontSelect) {
+            monoFontSelect.addEventListener('change', (e) => {
+                this.updateFontFamilyPreview('mono', e.target.value);
+            });
+        }
+
         // Scale controls
         const baseFontSize = document.getElementById('base-font-size');
         const baseFontSizeValue = document.getElementById('base-font-size-value');
@@ -40,20 +71,41 @@ class VillaTypographyBook {
         const primaryFont = document.getElementById('primary-font');
 
         if (baseFontSize) {
-            baseFontSize.addEventListener('input', (e) => this.updateBaseFontSize(e));
+            baseFontSize.addEventListener('input', (e) => this.updateScale(e));
         }
-        
         if (baseFontSizeValue) {
-            baseFontSizeValue.addEventListener('input', (e) => this.updateBaseFontSizeFromInput(e));
+            baseFontSizeValue.addEventListener('input', (e) => this.updateScale(e));
         }
-        
         if (scaleRatio) {
-            scaleRatio.addEventListener('change', (e) => this.updateScaleRatio(e));
+            scaleRatio.addEventListener('change', (e) => this.updateScale(e));
         }
-        
         if (primaryFont) {
             primaryFont.addEventListener('change', (e) => this.updatePrimaryFont(e));
         }
+
+        // Font size change events (existing)
+        document.querySelectorAll('.size-control input[data-size]').forEach(input => {
+            input.addEventListener('input', (e) => {
+                this.updateFontSizePreview(e.target.dataset.size, e.target.value);
+            });
+        });
+
+        // Typography primitive controls (font sizes, weights, etc.)
+        document.querySelectorAll('.size-control input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateFontSizePreview(e));
+        });
+        
+        document.querySelectorAll('.weight-control select').forEach(select => {
+            select.addEventListener('change', (e) => this.updateFontWeightPreview(e));
+        });
+        
+        document.querySelectorAll('.line-height-control input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateLineHeightPreview(e));
+        });
+        
+        document.querySelectorAll('.letter-spacing-control input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateLetterSpacingPreview(e));
+        });
 
         // Text style controls
         document.querySelectorAll('.font-size-control').forEach(control => {
@@ -72,16 +124,16 @@ class VillaTypographyBook {
             control.addEventListener('change', (e) => this.updateTextStyle(e));
         });
 
-        // Save and reset buttons
-        const saveButton = document.getElementById('save-typography');
-        const resetButton = document.getElementById('reset-typography');
+        // Save and Reset buttons
+        this.saveButton = document.getElementById('save-typography');
+        this.resetButton = document.getElementById('reset-typography');
         
-        if (saveButton) {
-            saveButton.addEventListener('click', () => this.saveTypography());
+        if (this.saveButton) {
+            this.saveButton.addEventListener('click', () => this.saveTypography());
         }
         
-        if (resetButton) {
-            resetButton.addEventListener('click', () => this.resetTypography());
+        if (this.resetButton) {
+            this.resetButton.addEventListener('click', () => this.resetToDefaults());
         }
     }
 
@@ -117,6 +169,29 @@ class VillaTypographyBook {
         }
     }
 
+    switchTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+
+        // Update preview content
+        document.querySelectorAll('.preview-content').forEach(preview => {
+            preview.classList.remove('active');
+        });
+        const previewElement = document.querySelector(`.${tabName}-preview`);
+        if (previewElement) {
+            previewElement.classList.add('active');
+        }
+    }
+
     initTypographyScale() {
         this.currentScale = {
             baseSize: 16,
@@ -125,6 +200,63 @@ class VillaTypographyBook {
         };
         
         this.updateScalePreview();
+    }
+
+    updateScale(event) {
+        const input = event.target;
+        const value = parseFloat(input.value);
+        
+        if (input.id === 'base-font-size' || input.id === 'base-font-size-value') {
+            this.currentScale.baseSize = value;
+            // Update the corresponding input if they're different
+            const baseFontSize = document.getElementById('base-font-size');
+            const baseFontSizeValue = document.getElementById('base-font-size-value');
+            if (baseFontSize && baseFontSize !== input) {
+                baseFontSize.value = value;
+            }
+            if (baseFontSizeValue && baseFontSizeValue !== input) {
+                baseFontSizeValue.value = value;
+            }
+        } else if (input.id === 'scale-ratio') {
+            this.currentScale.ratio = value;
+        }
+        
+        // Recalculate all font sizes based on new scale
+        this.calculateFontSizes();
+        this.updateLivePreview();
+    }
+
+    calculateFontSizes() {
+        const base = this.currentScale.baseSize / 16; // Convert px to rem (16px = 1rem)
+        const ratio = this.currentScale.ratio;
+        
+        // Calculate sizes based on scale in rem
+        const sizes = {
+            xs: Math.round((base / (ratio * ratio)) * 1000) / 1000, // Round to 3 decimal places
+            sm: Math.round((base / ratio) * 1000) / 1000,
+            base: Math.round(base * 1000) / 1000,
+            lg: Math.round((base * ratio) * 1000) / 1000,
+            xl: Math.round((base * ratio * ratio) * 1000) / 1000,
+            '2xl': Math.round((base * Math.pow(ratio, 2.5)) * 1000) / 1000,
+            '3xl': Math.round((base * Math.pow(ratio, 3)) * 1000) / 1000,
+            '4xl': Math.round((base * Math.pow(ratio, 3.5)) * 1000) / 1000,
+            '5xl': Math.round((base * Math.pow(ratio, 4)) * 1000) / 1000,
+            '6xl': Math.round((base * Math.pow(ratio, 4.5)) * 1000) / 1000
+        };
+        
+        // Update CSS custom properties with rem units
+        Object.entries(sizes).forEach(([size, value]) => {
+            const cssProperty = `--db-text-${size}`;
+            document.documentElement.style.setProperty(cssProperty, `${value}rem`);
+        });
+        
+        // Update input values in the font sizes tab
+        Object.entries(sizes).forEach(([size, value]) => {
+            const input = document.querySelector(`.size-control input[data-size="${size}"]`);
+            if (input) {
+                input.value = value;
+            }
+        });
     }
 
     updateBaseFontSize(event) {
@@ -449,18 +581,36 @@ class VillaTypographyBook {
         // Send to WordPress backend via AJAX
         this.saveToWordPress(settings);
         
+        // Reset save button state
+        this.resetSaveButton();
+        
         // Show success message
         this.showNotification('Typography settings saved successfully!', 'success');
+    }
+
+    resetSaveButton() {
+        const saveButton = document.getElementById('save-typography');
+        if (saveButton) {
+            saveButton.classList.remove('has-changes');
+            saveButton.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17,21 17,13 7,13 7,21"/>
+                    <polyline points="7,3 7,8 15,8"/>
+                </svg>
+                Save Changes
+            `;
+        }
     }
 
     saveToWordPress(settings) {
         // Prepare data for WordPress AJAX
         const formData = new FormData();
         formData.append('action', 'villa_save_typography_settings');
-        formData.append('nonce', window.migv_nonce || '');
+        formData.append('nonce', window.migv_ajax?.nonce || '');
         formData.append('typography_settings', JSON.stringify(settings));
         
-        fetch(window.ajaxurl || '/wp-admin/admin-ajax.php', {
+        fetch(window.migv_ajax?.ajax_url || '/wp-admin/admin-ajax.php', {
             method: 'POST',
             body: formData
         })
@@ -553,6 +703,541 @@ class VillaTypographyBook {
                 }
             }, 300);
         }, 3000);
+    }
+
+    updateFontSizePreview(event) {
+        const input = event.target;
+        const label = input.parentElement.querySelector('label').textContent.toLowerCase();
+        const value = input.value;
+        
+        // Map labels to CSS custom property names
+        const sizeMap = {
+            'xs': '--db-text-xs',
+            'sm': '--db-text-sm', 
+            'base': '--db-text-base',
+            'lg': '--db-text-lg',
+            'xl': '--db-text-xl',
+            '2xl': '--db-text-2xl',
+            '3xl': '--db-text-3xl',
+            '4xl': '--db-text-4xl',
+            '5xl': '--db-text-5xl',
+            '6xl': '--db-text-6xl'
+        };
+        
+        const cssProperty = sizeMap[label];
+        if (cssProperty) {
+            // Update CSS custom property on document root
+            document.documentElement.style.setProperty(cssProperty, `${value}rem`);
+            
+            // Update any preview elements that use this size
+            this.updateLivePreview();
+        }
+    }
+
+    updateFontWeightPreview(event) {
+        const select = event.target;
+        const weightType = select.dataset.weight; // light, regular, medium, semibold, bold, extrabold, black
+        const weightValue = select.value;
+        
+        // Update the corresponding CSS custom property
+        const cssProperty = `--db-weight-${weightType}`;
+        document.documentElement.style.setProperty(cssProperty, weightValue);
+        
+        // Find and update the specific preview element for this weight type
+        const weightSections = document.querySelectorAll('.weight-section');
+        
+        weightSections.forEach(section => {
+            const label = section.querySelector('.weight-label');
+            if (label) {
+                const labelText = label.textContent.toLowerCase().trim();
+                let expectedType = '';
+                
+                // Map label text to weight type
+                switch(labelText) {
+                    case 'light': expectedType = 'light'; break;
+                    case 'regular': expectedType = 'regular'; break;
+                    case 'medium': expectedType = 'medium'; break;
+                    case 'semibold': expectedType = 'semibold'; break;
+                    case 'bold': expectedType = 'bold'; break;
+                    case 'extra bold': expectedType = 'extrabold'; break;
+                    case 'black': expectedType = 'black'; break;
+                }
+                
+                // If this section matches our weight type, update it
+                if (expectedType === weightType) {
+                    const weightDisplay = section.querySelector('.weight-display');
+                    if (weightDisplay) {
+                        // Update both the CSS variable and direct style for immediate feedback
+                        weightDisplay.style.fontWeight = weightValue;
+                    }
+                }
+            }
+        });
+        
+        // Update live preview
+        this.updateLivePreview();
+    }
+
+    updateLineHeightPreview(event) {
+        const input = event.target;
+        const value = input.value;
+        // Update line height preview logic here
+        this.updateLivePreview();
+    }
+
+    updateLetterSpacingPreview(event) {
+        const input = event.target;
+        const value = input.value;
+        // Update letter spacing preview logic here
+        this.updateLivePreview();
+    }
+
+    updateLivePreview() {
+        // Force a repaint to show the updated CSS custom properties
+        const previewElements = document.querySelectorAll('#preview-tab .element-preview *');
+        previewElements.forEach(element => {
+            // Trigger a style recalculation
+            element.style.display = 'none';
+            element.offsetHeight; // Trigger reflow
+            element.style.display = '';
+        });
+    }
+
+    updateFontFamilyPreview(type, fontName) {
+        // Update the main CSS custom property directly (no more isolation)
+        document.documentElement.style.setProperty(`--db-font-${type}`, fontName);
+
+        // Update preview card display text and font family
+        const displayElement = document.getElementById(`${type}-font-display`);
+        
+        if (displayElement) {
+            displayElement.style.fontFamily = fontName;
+            displayElement.textContent = fontName;
+        }
+
+        // Show visual indicator for unsaved changes
+        this.showUnsavedChanges();
+    }
+
+    showUnsavedChanges() {
+        const saveButton = document.getElementById('save-typography');
+        if (saveButton) {
+            saveButton.classList.add('has-changes');
+            saveButton.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17,21 17,13 7,13 7,21"/>
+                    <polyline points="7,3 7,8 15,8"/>
+                </svg>
+                Save Changes *
+            `;
+        }
+    }
+
+    // Color Book functionality
+    initColorBook() {
+        // Load saved colors from database first
+        this.loadSavedColors();
+        
+        // Color input event listeners
+        document.querySelectorAll('.hex-input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateColorFromHex(e));
+            input.addEventListener('focus', (e) => this.selectColorForPreview(e));
+        });
+
+        // Color swatch click listeners
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', (e) => this.selectColorFromSwatch(e));
+        });
+
+        // HSLA input listeners
+        document.querySelectorAll('.hsla-input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateColorFromHSLA(e));
+        });
+
+        // CMYK input listeners
+        document.querySelectorAll('.cmyk-input').forEach(input => {
+            input.addEventListener('input', (e) => this.updateColorFromCMYK(e));
+        });
+
+        // Action button listeners
+        document.getElementById('save-colors')?.addEventListener('click', () => this.saveColors());
+        document.getElementById('reset-colors')?.addEventListener('click', () => this.resetColors());
+        document.getElementById('export-palette')?.addEventListener('click', () => this.exportPalette());
+
+        // Initialize with primary color selected
+        this.currentColor = 'primary';
+        this.updatePreviewFromCurrentColor();
+    }
+
+    loadSavedColors() {
+        // Load saved colors via AJAX
+        fetch(migv_ajax.ajax_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'get_design_book_colors',
+                nonce: migv_ajax.nonce
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data.colors) {
+                this.applySavedColors(data.data.colors);
+            }
+        })
+        .catch(error => {
+            console.log('No saved colors found, using defaults');
+        });
+    }
+
+    applySavedColors(savedColors) {
+        // Update all inputs and swatches with saved values
+        Object.entries(savedColors).forEach(([slug, color]) => {
+            const input = document.querySelector(`[data-color-slug="${slug}"]`);
+            const swatch = document.querySelector(`[data-color="${slug}"] .color-swatch`);
+            
+            if (input) input.value = color;
+            if (swatch) swatch.style.backgroundColor = color;
+            
+            // Update CSS custom property
+            document.documentElement.style.setProperty(`--wp--preset--color--${slug}`, color);
+        });
+
+        // Update preview if current color was loaded
+        if (savedColors[this.currentColor]) {
+            this.updateColorPreview(savedColors[this.currentColor]);
+        }
+    }
+
+    updateColorFromHex(event) {
+        const input = event.target;
+        const colorSlug = input.dataset.colorSlug;
+        const hexValue = input.value;
+
+        // Validate hex format
+        if (!/^#[0-9A-Fa-f]{6}$/.test(hexValue)) {
+            return;
+        }
+
+        // Update the color swatch
+        const colorItem = input.closest('.color-item');
+        const swatch = colorItem.querySelector('.color-swatch');
+        swatch.style.backgroundColor = hexValue;
+
+        // Update CSS custom property
+        document.documentElement.style.setProperty(`--wp--preset--color--${colorSlug}`, hexValue);
+
+        // Update preview if this is the current color
+        if (colorSlug === this.currentColor) {
+            this.updateColorPreview(hexValue);
+        }
+    }
+
+    selectColorForPreview(event) {
+        const input = event.target;
+        const colorSlug = input.dataset.colorSlug;
+        this.currentColor = colorSlug;
+        this.updateColorPreview(input.value);
+    }
+
+    selectColorFromSwatch(event) {
+        const swatch = event.target;
+        const colorItem = swatch.closest('.color-item');
+        const colorSlug = colorItem.dataset.color;
+        const hexInput = colorItem.querySelector('.hex-input');
+        
+        this.currentColor = colorSlug;
+        this.updateColorPreview(hexInput.value);
+    }
+
+    updateColorPreview(hexValue) {
+        const previewElement = document.getElementById('color-preview-main');
+        const hexDisplay = document.getElementById('preview-hex');
+        const hslaDisplay = document.getElementById('preview-hsla');
+        const cmykDisplay = document.getElementById('preview-cmyk');
+
+        if (previewElement) {
+            previewElement.style.backgroundColor = hexValue;
+        }
+
+        if (hexDisplay) {
+            hexDisplay.textContent = hexValue;
+        }
+
+        // Convert and display HSLA
+        const hsla = this.hexToHSLA(hexValue);
+        if (hslaDisplay && hsla) {
+            hslaDisplay.textContent = `hsla(${hsla.h}, ${hsla.s}%, ${hsla.l}%, ${hsla.a})`;
+        }
+
+        // Convert and display CMYK
+        const cmyk = this.hexToCMYK(hexValue);
+        if (cmykDisplay && cmyk) {
+            cmykDisplay.textContent = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+        }
+
+        // Update modifier inputs
+        this.updateModifierInputs(hexValue);
+    }
+
+    updateModifierInputs(hexValue) {
+        const hsla = this.hexToHSLA(hexValue);
+        const cmyk = this.hexToCMYK(hexValue);
+
+        // Update HSLA inputs
+        if (hsla) {
+            document.querySelector('.hsla-input[data-component="h"]').value = hsla.h;
+            document.querySelector('.hsla-input[data-component="s"]').value = hsla.s;
+            document.querySelector('.hsla-input[data-component="l"]').value = hsla.l;
+            document.querySelector('.hsla-input[data-component="a"]').value = hsla.a;
+        }
+
+        // Update CMYK inputs
+        if (cmyk) {
+            document.querySelector('.cmyk-input[data-component="c"]').value = cmyk.c;
+            document.querySelector('.cmyk-input[data-component="m"]').value = cmyk.m;
+            document.querySelector('.cmyk-input[data-component="y"]').value = cmyk.y;
+            document.querySelector('.cmyk-input[data-component="k"]').value = cmyk.k;
+        }
+    }
+
+    updateColorFromHSLA(event) {
+        const h = parseInt(document.querySelector('.hsla-input[data-component="h"]').value) || 0;
+        const s = parseInt(document.querySelector('.hsla-input[data-component="s"]').value) || 0;
+        const l = parseInt(document.querySelector('.hsla-input[data-component="l"]').value) || 0;
+        const a = parseFloat(document.querySelector('.hsla-input[data-component="a"]').value) || 1;
+
+        const hexValue = this.hslaToHex(h, s, l, a);
+        this.updateCurrentColorFromModifier(hexValue);
+    }
+
+    updateColorFromCMYK(event) {
+        const c = parseInt(document.querySelector('.cmyk-input[data-component="c"]').value) || 0;
+        const m = parseInt(document.querySelector('.cmyk-input[data-component="m"]').value) || 0;
+        const y = parseInt(document.querySelector('.cmyk-input[data-component="y"]').value) || 0;
+        const k = parseInt(document.querySelector('.cmyk-input[data-component="k"]').value) || 0;
+
+        const hexValue = this.cmykToHex(c, m, y, k);
+        this.updateCurrentColorFromModifier(hexValue);
+    }
+
+    updateCurrentColorFromModifier(hexValue) {
+        if (!this.currentColor) return;
+
+        // Update the current color's input and swatch
+        const colorItem = document.querySelector(`[data-color="${this.currentColor}"]`);
+        if (colorItem) {
+            const hexInput = colorItem.querySelector('.hex-input');
+            const swatch = colorItem.querySelector('.color-swatch');
+            
+            hexInput.value = hexValue;
+            swatch.style.backgroundColor = hexValue;
+            
+            // Update CSS custom property
+            document.documentElement.style.setProperty(`--wp--preset--color--${this.currentColor}`, hexValue);
+        }
+
+        // Update preview
+        this.updateColorPreview(hexValue);
+    }
+
+    updatePreviewFromCurrentColor() {
+        if (!this.currentColor) return;
+        
+        const colorItem = document.querySelector(`[data-color="${this.currentColor}"]`);
+        if (colorItem) {
+            const hexInput = colorItem.querySelector('.hex-input');
+            this.updateColorPreview(hexInput.value);
+        }
+    }
+
+    // Color conversion utilities
+    hexToHSLA(hex) {
+        const r = parseInt(hex.slice(1, 3), 16) / 255;
+        const g = parseInt(hex.slice(3, 5), 16) / 255;
+        const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+
+        return {
+            h: Math.round(h * 360),
+            s: Math.round(s * 100),
+            l: Math.round(l * 100),
+            a: 1
+        };
+    }
+
+    hslaToHex(h, s, l, a) {
+        l /= 100;
+        const c = (1 - Math.abs(2 * l - 1)) * s / 100;
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = l - c / 2;
+        let r = 0, g = 0, b = 0;
+
+        if (0 <= h && h < 60) {
+            r = c; g = x; b = 0;
+        } else if (60 <= h && h < 120) {
+            r = x; g = c; b = 0;
+        } else if (120 <= h && h < 180) {
+            r = 0; g = c; b = x;
+        } else if (180 <= h && h < 240) {
+            r = 0; g = x; b = c;
+        } else if (240 <= h && h < 300) {
+            r = x; g = 0; b = c;
+        } else if (300 <= h && h < 360) {
+            r = c; g = 0; b = x;
+        }
+
+        r = Math.round((r + m) * 255);
+        g = Math.round((g + m) * 255);
+        b = Math.round((b + m) * 255);
+
+        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
+    hexToCMYK(hex) {
+        const r = parseInt(hex.slice(1, 3), 16) / 255;
+        const g = parseInt(hex.slice(3, 5), 16) / 255;
+        const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+        const k = 1 - Math.max(r, g, b);
+        const c = (1 - r - k) / (1 - k) || 0;
+        const m = (1 - g - k) / (1 - k) || 0;
+        const y = (1 - b - k) / (1 - k) || 0;
+
+        return {
+            c: Math.round(c * 100),
+            m: Math.round(m * 100),
+            y: Math.round(y * 100),
+            k: Math.round(k * 100)
+        };
+    }
+
+    cmykToHex(c, m, y, k) {
+        c /= 100;
+        m /= 100;
+        y /= 100;
+        k /= 100;
+
+        const r = Math.round(255 * (1 - c) * (1 - k));
+        const g = Math.round(255 * (1 - m) * (1 - k));
+        const b = Math.round(255 * (1 - y) * (1 - k));
+
+        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+
+    saveColors() {
+        const colorData = {};
+        
+        // Collect all color values
+        document.querySelectorAll('.hex-input').forEach(input => {
+            const colorSlug = input.dataset.colorSlug;
+            colorData[colorSlug] = input.value;
+        });
+
+        // Save via AJAX
+        fetch(migv_ajax.ajax_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'save_design_book_colors',
+                nonce: migv_ajax.nonce,
+                colors: JSON.stringify(colorData)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                this.showNotification('Colors saved successfully!', 'success');
+            } else {
+                this.showNotification('Failed to save colors.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving colors:', error);
+            this.showNotification('Error saving colors.', 'error');
+        });
+    }
+
+    resetColors() {
+        if (confirm('Are you sure you want to reset all colors to their default values?')) {
+            // Reset to theme.json defaults
+            const defaults = {
+                'primary-light': '#d6dcd6',
+                'primary': '#5a7b7c',
+                'primary-dark': '#3a5a59',
+                'secondary-light': '#c38484',
+                'secondary': '#975d55',
+                'secondary-dark': '#853d2d',
+                'neutral-light': '#d1cfc2',
+                'neutral': '#b5b09f',
+                'neutral-dark': '#9e9983',
+                'base-lightest': '#e6e6e6',
+                'base-light': '#b3b3b3',
+                'base': '#808080',
+                'base-dark': '#676765',
+                'base-darkest': '#4d4d4d',
+                'extreme-light': '#ffffff',
+                'extreme-dark': '#000000'
+            };
+
+            // Update all inputs and swatches
+            Object.entries(defaults).forEach(([slug, color]) => {
+                const input = document.querySelector(`[data-color-slug="${slug}"]`);
+                const swatch = document.querySelector(`[data-color="${slug}"] .color-swatch`);
+                
+                if (input) input.value = color;
+                if (swatch) swatch.style.backgroundColor = color;
+                
+                // Update CSS custom property
+                document.documentElement.style.setProperty(`--wp--preset--color--${slug}`, color);
+            });
+
+            // Update preview
+            this.updatePreviewFromCurrentColor();
+            this.showNotification('Colors reset to defaults.', 'success');
+        }
+    }
+
+    exportPalette() {
+        const colorData = {};
+        
+        document.querySelectorAll('.hex-input').forEach(input => {
+            const colorSlug = input.dataset.colorSlug;
+            colorData[colorSlug] = input.value;
+        });
+
+        const dataStr = JSON.stringify(colorData, null, 2);
+        const dataBlob = new Blob([dataStr], {type: 'application/json'});
+        const url = URL.createObjectURL(dataBlob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'villa-color-palette.json';
+        link.click();
+        
+        URL.revokeObjectURL(url);
+        this.showNotification('Color palette exported!', 'success');
     }
 }
 

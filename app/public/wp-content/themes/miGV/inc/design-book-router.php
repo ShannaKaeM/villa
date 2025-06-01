@@ -148,7 +148,7 @@ class VillaDesignBookRouter {
 
         // Get Timber context
         $context = Timber::context();
-        $context['post'] = new Timber\Post();
+        $context['post'] = Timber::get_post();
 
         // Add design book context
         $context['design_book'] = [
@@ -229,9 +229,13 @@ class VillaDesignBookRouter {
     private function get_typography_data() {
         $theme_json = wp_get_global_settings();
         
+        // Ensure we have proper data structure
+        $font_families = isset($theme_json['typography']['fontFamilies']) ? $theme_json['typography']['fontFamilies'] : [];
+        $font_sizes = isset($theme_json['typography']['fontSizes']) ? $theme_json['typography']['fontSizes'] : [];
+        
         return [
-            'font_families' => $theme_json['typography']['fontFamilies'] ?? [],
-            'font_sizes' => $theme_json['typography']['fontSizes'] ?? [],
+            'font_families' => $font_families,
+            'font_sizes' => $font_sizes,
             'current_scale' => get_theme_mod('villa_typography_scale', 1.25),
             'base_font_size' => get_theme_mod('villa_base_font_size', 16)
         ];

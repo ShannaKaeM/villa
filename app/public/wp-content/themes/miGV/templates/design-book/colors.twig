@@ -1,0 +1,295 @@
+{#
+  Color Book Interface
+  
+  Provides a comprehensive interface for managing color design tokens.
+  Organized into 5 sections: Primary, Secondary, Neutral, Base, and Extreme.
+#}
+
+<style>
+  /* Ensure WordPress color custom properties are available */
+  :root {
+      --wp--preset--color--primary-light: #d6dcd6;
+      --wp--preset--color--primary: #5a7b7c;
+      --wp--preset--color--primary-dark: #3a5a59;
+      --wp--preset--color--secondary-light: #c38484;
+      --wp--preset--color--secondary: #975d55;
+      --wp--preset--color--secondary-dark: #853d2d;
+      --wp--preset--color--neutral-light: #d1cfc2;
+      --wp--preset--color--neutral: #b5b09f;
+      --wp--preset--color--neutral-dark: #9e9983;
+      --wp--preset--color--base-lightest: #e6e6e6;
+      --wp--preset--color--base-light: #b3b3b3;
+      --wp--preset--color--base: #808080;
+      --wp--preset--color--base-dark: #676765;
+      --wp--preset--color--base-darkest: #4d4d4d;
+      --wp--preset--color--extreme-light: #ffffff;
+      --wp--preset--color--extreme-dark: #000000;
+  }
+
+  .color-swatch[data-color-slug="primary-light"] {
+    background-color: var(--wp--preset--color--primary-light);
+  }
+
+  .color-swatch[data-color-slug="primary"] {
+    background-color: var(--wp--preset--color--primary);
+  }
+
+  .color-swatch[data-color-slug="primary-dark"] {
+    background-color: var(--wp--preset--color--primary-dark);
+  }
+
+  .color-swatch[data-color-slug="secondary-light"] {
+    background-color: var(--wp--preset--color--secondary-light);
+  }
+
+  .color-swatch[data-color-slug="secondary"] {
+    background-color: var(--wp--preset--color--secondary);
+  }
+
+  .color-swatch[data-color-slug="secondary-dark"] {
+    background-color: var(--wp--preset--color--secondary-dark);
+  }
+
+  .color-swatch[data-color-slug="neutral-light"] {
+    background-color: var(--wp--preset--color--neutral-light);
+  }
+
+  .color-swatch[data-color-slug="neutral"] {
+    background-color: var(--wp--preset--color--neutral);
+  }
+
+  .color-swatch[data-color-slug="neutral-dark"] {
+    background-color: var(--wp--preset--color--neutral-dark);
+  }
+
+  .color-swatch[data-color-slug="base-lightest"] {
+    background-color: var(--wp--preset--color--base-lightest);
+  }
+
+  .color-swatch[data-color-slug="base-light"] {
+    background-color: var(--wp--preset--color--base-light);
+  }
+
+  .color-swatch[data-color-slug="base"] {
+    background-color: var(--wp--preset--color--base);
+  }
+
+  .color-swatch[data-color-slug="base-dark"] {
+    background-color: var(--wp--preset--color--base-dark);
+  }
+
+  .color-swatch[data-color-slug="base-darkest"] {
+    background-color: var(--wp--preset--color--base-darkest);
+  }
+
+  .color-swatch[data-color-slug="extreme-light"] {
+    background-color: var(--wp--preset--color--extreme-light);
+    border: 1px solid #ccc;
+  }
+
+  .color-swatch[data-color-slug="extreme-dark"] {
+    background-color: var(--wp--preset--color--extreme-dark);
+  }
+
+  .preview-color {
+    background-color: var(--wp--preset--color--primary);
+  }
+</style>
+
+<div class="design-book-section colors-book">
+    <div class="section-header">
+        <h2>Color Book</h2>
+        <p>Manage your color palette with real-time preview and multiple format support.</p>
+    </div>
+
+    <!-- Color Preview Block -->
+    <div class="color-preview">
+        <div class="preview-color" id="preview-color"></div>
+        <div class="preview-info">
+            <div class="preview-format">
+                <strong>HEX</strong>
+                <span id="preview-hex">#5a7b7c</span>
+            </div>
+            <div class="preview-format">
+                <strong>HSLA</strong>
+                <span id="preview-hsla">hsla(182, 16%, 42%, 1)</span>
+            </div>
+            <div class="preview-format">
+                <strong>CMYK</strong>
+                <span id="preview-cmyk">cmyk(27%, 0%, 1%, 58%)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Sections -->
+    <div class="color-sections">
+        
+        <!-- Primary Colors -->
+        <div class="color-section">
+            <h3>Primary Colors</h3>
+            <div class="color-grid three-column">
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="primary-light"></div>
+                    <div class="color-label">Light</div>
+                    <input type="text" class="color-input" data-color-slug="primary-light" value="#d6dcd6" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="primary"></div>
+                    <div class="color-label">Primary</div>
+                    <input type="text" class="color-input" data-color-slug="primary" value="#5a7b7c" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="primary-dark"></div>
+                    <div class="color-label">Dark</div>
+                    <input type="text" class="color-input" data-color-slug="primary-dark" value="#3a5a59" maxlength="7">
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Colors -->
+        <div class="color-section">
+            <h3>Secondary Colors</h3>
+            <div class="color-grid three-column">
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="secondary-light"></div>
+                    <div class="color-label">Light</div>
+                    <input type="text" class="color-input" data-color-slug="secondary-light" value="#c38484" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="secondary"></div>
+                    <div class="color-label">Secondary</div>
+                    <input type="text" class="color-input" data-color-slug="secondary" value="#975d55" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="secondary-dark"></div>
+                    <div class="color-label">Dark</div>
+                    <input type="text" class="color-input" data-color-slug="secondary-dark" value="#853d2d" maxlength="7">
+                </div>
+            </div>
+        </div>
+
+        <!-- Neutral Colors -->
+        <div class="color-section">
+            <h3>Neutral Colors</h3>
+            <div class="color-grid three-column">
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="neutral-light"></div>
+                    <div class="color-label">Light</div>
+                    <input type="text" class="color-input" data-color-slug="neutral-light" value="#d1cfc2" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="neutral"></div>
+                    <div class="color-label">Neutral</div>
+                    <input type="text" class="color-input" data-color-slug="neutral" value="#b5b09f" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="neutral-dark"></div>
+                    <div class="color-label">Dark</div>
+                    <input type="text" class="color-input" data-color-slug="neutral-dark" value="#9e9983" maxlength="7">
+                </div>
+            </div>
+        </div>
+
+        <!-- Base Colors -->
+        <div class="color-section">
+            <h3>Base Colors</h3>
+            <div class="color-grid five-column">
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="base-lightest"></div>
+                    <div class="color-label">Lightest</div>
+                    <input type="text" class="color-input" data-color-slug="base-lightest" value="#e6e6e6" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="base-light"></div>
+                    <div class="color-label">Light</div>
+                    <input type="text" class="color-input" data-color-slug="base-light" value="#b3b3b3" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="base"></div>
+                    <div class="color-label">Base</div>
+                    <input type="text" class="color-input" data-color-slug="base" value="#808080" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="base-dark"></div>
+                    <div class="color-label">Dark</div>
+                    <input type="text" class="color-input" data-color-slug="base-dark" value="#676765" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="base-darkest"></div>
+                    <div class="color-label">Darkest</div>
+                    <input type="text" class="color-input" data-color-slug="base-darkest" value="#4d4d4d" maxlength="7">
+                </div>
+            </div>
+        </div>
+
+        <!-- Extreme Colors -->
+        <div class="color-section">
+            <h3>Extreme Colors</h3>
+            <div class="color-grid two-column">
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="extreme-light"></div>
+                    <div class="color-label">Light (White)</div>
+                    <input type="text" class="color-input" data-color-slug="extreme-light" value="#ffffff" maxlength="7">
+                </div>
+                <div class="color-item">
+                    <div class="color-swatch" data-color-slug="extreme-dark"></div>
+                    <div class="color-label">Dark (Black)</div>
+                    <input type="text" class="color-input" data-color-slug="extreme-dark" value="#000000" maxlength="7">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Modifiers -->
+    <div class="color-modifiers">
+        <h3>Color Modifiers</h3>
+        <p>Adjust the selected color using HSLA or CMYK values</p>
+        <div class="modifier-grid">
+            <div class="modifier-group">
+                <label for="hue-input">Hue (0-360°)</label>
+                <input type="number" id="hue-input" class="modifier-input" min="0" max="360" value="182">
+            </div>
+            <div class="modifier-group">
+                <label for="saturation-input">Saturation (0-100%)</label>
+                <input type="number" id="saturation-input" class="modifier-input" min="0" max="100" value="16">
+            </div>
+            <div class="modifier-group">
+                <label for="lightness-input">Lightness (0-100%)</label>
+                <input type="number" id="lightness-input" class="modifier-input" min="0" max="100" value="42">
+            </div>
+            <div class="modifier-group">
+                <label for="alpha-input">Alpha (0-1)</label>
+                <input type="number" id="alpha-input" class="modifier-input" min="0" max="1" step="0.01" value="1">
+            </div>
+            <div class="modifier-group">
+                <label for="cyan-input">Cyan (0-100%)</label>
+                <input type="number" id="cyan-input" class="modifier-input" min="0" max="100" value="27">
+            </div>
+            <div class="modifier-group">
+                <label for="magenta-input">Magenta (0-100%)</label>
+                <input type="number" id="magenta-input" class="modifier-input" min="0" max="100" value="0">
+            </div>
+            <div class="modifier-group">
+                <label for="yellow-input">Yellow (0-100%)</label>
+                <input type="number" id="yellow-input" class="modifier-input" min="0" max="100" value="1">
+            </div>
+            <div class="modifier-group">
+                <label for="black-input">Black (0-100%)</label>
+                <input type="number" id="black-input" class="modifier-input" min="0" max="100" value="58">
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="color-actions">
+        <button class="color-action-btn primary" id="save-colors">
+            Save Colors
+        </button>
+        <button class="color-action-btn secondary" id="reset-colors">
+            Reset to Defaults
+        </button>
+        <button class="color-action-btn secondary" id="export-palette">
+            Export Palette
+        </button>
+    </div>
+</div>

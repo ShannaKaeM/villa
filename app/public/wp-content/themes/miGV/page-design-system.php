@@ -9,13 +9,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Enqueue design book assets
-wp_enqueue_style('villa-design-book', get_template_directory_uri() . '/assets/css/design-book.css', [], '1.0.0');
-wp_enqueue_script('villa-design-book', get_template_directory_uri() . '/assets/js/design-book.js', ['jquery'], '1.0.0', true);
+// Enqueue Design Book assets
+wp_enqueue_style('design-book-css', get_template_directory_uri() . '/assets/css/design-book.css', array(), '1.0.3');
+wp_enqueue_script('design-book-js', get_template_directory_uri() . '/assets/js/design-book.js', array('jquery'), '1.0.3', true);
 
 // Localize script for AJAX
-wp_localize_script('villa-design-book', 'villaDesignBook', [
-    'ajaxurl' => admin_url('admin-ajax.php'),
+wp_localize_script('design-book-js', 'migv_ajax', [
+    'ajax_url' => admin_url('admin-ajax.php'),
     'nonce' => wp_create_nonce('migv_nonce'),
     'themeUrl' => get_template_directory_uri()
 ]);
