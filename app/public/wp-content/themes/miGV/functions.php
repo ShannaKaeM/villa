@@ -213,14 +213,6 @@ function migv_add_to_context($context) {
         return __($text, $domain);
     };
     
-    // Add theme options
-    $context['theme_options'] = array(
-        'copyright_text' => mi_get_theme_option('mi_copyright_text'),
-        'contact_email' => mi_get_theme_option('mi_contact_email'),
-        'phone_number' => mi_get_theme_option('mi_phone_number'),
-        'address' => mi_get_theme_option('mi_address'),
-    );
-    
     // Add sidebar
     $context['sidebar'] = Timber\Timber::get_widgets('sidebar-1');
     $context['footer_widgets'] = Timber\Timber::get_widgets('footer-1');
@@ -232,9 +224,7 @@ function migv_add_to_context($context) {
  * Add to Twig
  */
 function migv_add_to_twig($twig) {
-    // Add custom functions to Twig
-    $twig->addFunction(new Twig\TwigFunction('mi_get_meta', 'mi_get_meta'));
-    $twig->addFunction(new Twig\TwigFunction('mi_get_theme_option', 'mi_get_theme_option'));
+    // Add custom functions to Twig if needed
     
     return $twig;
 }
