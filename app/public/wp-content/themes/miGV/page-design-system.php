@@ -22,10 +22,10 @@ wp_localize_script('villa-design-book', 'villaDesignBook', [
 
 // Get Timber context
 $context = Timber::context();
-$context['post'] = new Timber\Post();
+$context['post'] = Timber::get_post();
 
-// Add design system specific context
-$context['design_system'] = [
+// Add design book specific context
+$context['design_book'] = [
     'current_page' => 'typography',
     'navigation' => [
         ['name' => 'Typography', 'slug' => 'typography', 'active' => true],
@@ -35,6 +35,6 @@ $context['design_system'] = [
     ]
 ];
 
-// Render the design system dashboard
-Timber::render('design-system/design-system-dashboard.twig', $context);
+// Render the design book dashboard
+Timber::render('blocks/dashboard-layout.twig', $context);
 ?>
