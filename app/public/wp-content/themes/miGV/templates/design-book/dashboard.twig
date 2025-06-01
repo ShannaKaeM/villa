@@ -1,0 +1,287 @@
+{% extends "base.twig" %}
+
+{% block content %}
+<div class="design-book-dashboard">
+    <div class="design-book-container">
+        <!-- Header -->
+        <header class="design-book-header">
+            <div class="design-book-logo">
+                <h1>🎨 Design Book</h1>
+                <p>Visual Design System Manager</p>
+            </div>
+        </header>
+
+        <!-- Navigation Grid -->
+        <div class="design-book-nav-grid">
+            {% for item in design_book.navigation %}
+            <a href="{{ item.url }}" class="design-book-nav-card {{ item.active ? 'active' : '' }}">
+                <div class="nav-card-icon">
+                    {% if item.slug == 'typography' %}
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 7V4H20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M9 20H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    {% elseif item.slug == 'colors' %}
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 2A10 10 0 0 0 12 22A10 10 0 0 1 12 2Z" fill="currentColor"/>
+                        </svg>
+                    {% elseif item.slug == 'layout' %}
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9 3V21" stroke="currentColor" stroke-width="2"/>
+                            <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    {% elseif item.slug == 'components' %}
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    {% endif %}
+                </div>
+                <div class="nav-card-content">
+                    <h3>{{ item.name }}</h3>
+                    <p>
+                        {% if item.slug == 'typography' %}
+                            Manage fonts, sizes, and text styles
+                        {% elseif item.slug == 'colors' %}
+                            Define color palettes and themes
+                        {% elseif item.slug == 'layout' %}
+                            Configure spacing and grid systems
+                        {% elseif item.slug == 'components' %}
+                            Build and manage UI components
+                        {% endif %}
+                    </p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="design-book-stats">
+            <div class="stat-card">
+                <h4>Typography Styles</h4>
+                <span class="stat-number">12</span>
+            </div>
+            <div class="stat-card">
+                <h4>Color Tokens</h4>
+                <span class="stat-number">24</span>
+            </div>
+            <div class="stat-card">
+                <h4>Components</h4>
+                <span class="stat-number">8</span>
+            </div>
+            <div class="stat-card">
+                <h4>Layout Tokens</h4>
+                <span class="stat-number">16</span>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="design-book-activity">
+            <h3>Recent Updates</h3>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <span class="activity-icon">🎨</span>
+                    <div class="activity-content">
+                        <p><strong>Typography updated</strong></p>
+                        <small>Base font size adjusted to 16px</small>
+                    </div>
+                    <span class="activity-time">2 hours ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon">🌈</span>
+                    <div class="activity-content">
+                        <p><strong>Color palette refined</strong></p>
+                        <small>Primary blue updated for better contrast</small>
+                    </div>
+                    <span class="activity-time">1 day ago</span>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon">📐</span>
+                    <div class="activity-content">
+                        <p><strong>Spacing tokens added</strong></p>
+                        <small>New responsive spacing scale implemented</small>
+                    </div>
+                    <span class="activity-time">3 days ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.design-book-dashboard {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+}
+
+.design-book-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.design-book-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.design-book-header h1 {
+    font-size: 3rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.design-book-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.design-book-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.design-book-nav-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.design-book-nav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: #333;
+}
+
+.nav-card-icon {
+    margin-bottom: 1rem;
+    color: #667eea;
+}
+
+.nav-card-content h3 {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.nav-card-content p {
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.design-book-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.stat-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.design-book-activity {
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.design-book-activity h3 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.5rem;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+}
+
+.activity-icon {
+    font-size: 1.5rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content p {
+    margin: 0 0 0.25rem 0;
+}
+
+.activity-content small {
+    opacity: 0.8;
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .design-book-dashboard {
+        padding: 1rem;
+    }
+    
+    .design-book-header h1 {
+        font-size: 2rem;
+    }
+    
+    .design-book-nav-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .design-book-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+{% endblock %}

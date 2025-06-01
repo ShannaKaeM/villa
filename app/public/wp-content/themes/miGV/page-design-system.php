@@ -24,17 +24,29 @@ wp_localize_script('villa-design-book', 'villaDesignBook', [
 $context = Timber::context();
 $context['post'] = Timber::get_post();
 
+// Simulate user for Design Book (since it's a design tool, not user-specific)
+$context['user'] = (object) [
+    'display_name' => 'Design Book User',
+    'user_email' => 'designer@villa.com'
+];
+
 // Add design book specific context
 $context['design_book'] = [
-    'current_page' => 'typography',
+    'current_section' => 'dashboard',
     'navigation' => [
-        ['name' => 'Typography', 'slug' => 'typography', 'active' => true],
-        ['name' => 'Colors', 'slug' => 'colors', 'active' => false],
-        ['name' => 'Layout', 'slug' => 'layout', 'active' => false],
-        ['name' => 'Components', 'slug' => 'components', 'active' => false]
+        ['name' => 'Typography', 'slug' => 'typography', 'url' => '/design-book/typography/', 'active' => false],
+        ['name' => 'Colors', 'slug' => 'colors', 'url' => '/design-book/colors/', 'active' => false],
+        ['name' => 'Layout', 'slug' => 'layout', 'url' => '/design-book/layout/', 'active' => false],
+        ['name' => 'Components', 'slug' => 'components', 'url' => '/design-book/components/', 'active' => false]
+    ],
+    'breadcrumbs' => [
+        ['name' => 'Design Book', 'url' => '/design-book/', 'active' => true]
     ]
 ];
 
+// Set current tab for dashboard layout
+$context['current_tab'] = 'design-book';
+
 // Render the design book dashboard
-Timber::render('blocks/dashboard-layout.twig', $context);
+Timber::render('design-book/dashboard.twig', $context);
 ?>
